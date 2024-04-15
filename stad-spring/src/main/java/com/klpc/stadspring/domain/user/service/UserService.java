@@ -4,6 +4,7 @@ import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.domain.user.service.command.FindMemberByIdCommand;
 import com.klpc.stadspring.domain.user.service.command.UpdateProfileImgCommand;
+import com.klpc.stadspring.domain.user.service.command.UpdateUserInfoCommand;
 import com.klpc.stadspring.domain.user.service.command.WithdrawUserCommand;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
@@ -53,6 +54,14 @@ public class UserService {
     User user = userRepository.findById(command.getUserId())
             .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
     user.withdraw();
+    return;
+  }
+
+  public void updateUserInfo(UpdateUserInfoCommand command) {
+    log.info("UpdateUserInfoCommand: "+command);
+    User user = userRepository.findById(command.getUserId())
+            .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+    user.update(command);
     return;
   }
 }
