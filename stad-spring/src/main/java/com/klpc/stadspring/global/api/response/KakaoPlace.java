@@ -1,4 +1,4 @@
-package com.klpc.stadspring.util.api.response;
+package com.klpc.stadspring.global.api.response;
 
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;

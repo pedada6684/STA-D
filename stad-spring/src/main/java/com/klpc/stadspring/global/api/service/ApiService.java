@@ -1,4 +1,4 @@
-package com.klpc.stadspring.util.api.service;
+package com.klpc.stadspring.global.api.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
