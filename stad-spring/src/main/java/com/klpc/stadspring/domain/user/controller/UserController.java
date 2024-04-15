@@ -6,7 +6,7 @@ import com.klpc.stadspring.domain.user.controller.response.GetMemberInfoResponse
 import com.klpc.stadspring.domain.user.controller.response.UpdateProfileResponse;
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.service.UserService;
-import com.klpc.stadspring.domain.user.service.command.FindMemberByIdCommand;
+import com.klpc.stadspring.domain.user.service.command.FindUserByIdCommand;
 import com.klpc.stadspring.domain.user.service.command.WithdrawUserCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -46,10 +46,10 @@ public class UserController {
   @Operation(summary = "유저 정보 요청", description = "유저 정보 요청")
   @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMemberInfoResponse.class)))
   public ResponseEntity<GetMemberInfoResponse> getMemberInfo(@RequestParam("userId") Long userId) {
-    FindMemberByIdCommand command = FindMemberByIdCommand.builder()
+    FindUserByIdCommand command = FindUserByIdCommand.builder()
             .id(userId)
             .build();
-    User user = userService.findMemberById(command);
+    User user = userService.findUserById(command);
     GetMemberInfoResponse response = GetMemberInfoResponse.from(user);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
