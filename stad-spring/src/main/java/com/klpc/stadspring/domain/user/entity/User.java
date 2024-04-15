@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.user.entity;
 
+import com.klpc.stadspring.domain.user.service.command.UpdateUserInfoCommand;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -51,5 +52,29 @@ public class User {
   public void withdraw(){
     this.status = 0L;
     this.delDate = LocalDateTime.now();
+  }
+
+  public void update(UpdateUserInfoCommand command) {
+    if (command.getEmail() != null) {
+      this.email = command.getEmail();
+    }
+    if (command.getPassword() != null) {
+      this.password = command.getPassword();
+    }
+    if (command.getNickname() != null) {
+      this.nickname = command.getNickname();
+    }
+    if (command.getName() != null) {
+      this.name = command.getName();
+    }
+    if (command.getCompany() != null) {
+      this.company = command.getCompany();
+    }
+    if (command.getDepartment() != null) {
+      this.department = command.getDepartment();
+    }
+    if (command.getComNo() != null) {
+      this.comNo = command.getComNo();
+    }
   }
 }

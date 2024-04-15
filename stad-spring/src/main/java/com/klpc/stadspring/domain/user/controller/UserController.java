@@ -1,6 +1,7 @@
 package com.klpc.stadspring.domain.user.controller;
 
 import com.klpc.stadspring.domain.user.controller.request.UpdateProfileImgRequest;
+import com.klpc.stadspring.domain.user.controller.request.UpdateUserInfoRequest;
 import com.klpc.stadspring.domain.user.controller.response.GetMemberInfoResponse;
 import com.klpc.stadspring.domain.user.controller.response.UpdateProfileResponse;
 import com.klpc.stadspring.domain.user.entity.User;
@@ -55,12 +56,21 @@ public class UserController {
 
   @GetMapping("/withdraw")
   @Operation(summary = "회원 탈퇴", description = "회원 탈퇴")
-  @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UpdateProfileResponse.class)))
+  @ApiResponse(responseCode = "200", description = "회원탈퇴가 성공적으로 진행되었습니다.")
   public ResponseEntity<?> withdrawUser(@RequestParam("userId") Long userId) {
     WithdrawUserCommand command = WithdrawUserCommand.builder()
             .userId(userId)
             .build();
     userService.withdrawUser(command);
+    return ResponseEntity.ok().build();
+  }
+
+  @PostMapping("/update")
+  @Operation(summary = "유저 정보 변경", description = "유저 정보 변경")
+  @ApiResponse(responseCode = "200", description = "유저 정보 수정이 성공적으로 진행되었습니다.")
+  public ResponseEntity<UpdateProfileResponse> updateUserInfo(UpdateUserInfoRequest request) {
+    log.info("UpdateUserInfoRequest: " + request);
+    userService.updateUserInfo(request.toCommand());
     return ResponseEntity.ok().build();
   }
 }
