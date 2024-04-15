@@ -1,4 +1,4 @@
-package com.klpc.stadspring.util.api.service.command;
+package com.klpc.stadspring.global.api.service.command;
 
 import lombok.Builder;
 import lombok.Data;

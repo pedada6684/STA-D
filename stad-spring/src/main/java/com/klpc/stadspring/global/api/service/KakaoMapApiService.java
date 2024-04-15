@@ -1,8 +1,8 @@
-package com.klpc.stadspring.util.api.service;
+package com.klpc.stadspring.global.api.service;
 
-import com.klpc.stadspring.util.api.response.KakaoPlace;
-import com.klpc.stadspring.util.api.service.command.SearchKakaoPlaceCommand;
-import com.klpc.stadspring.util.api.service.command.searchBFCommand;
+import com.klpc.stadspring.global.api.response.KakaoPlace;
+import com.klpc.stadspring.global.api.service.command.searchBFCommand;
+import com.klpc.stadspring.global.api.service.command.SearchKakaoPlaceCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
