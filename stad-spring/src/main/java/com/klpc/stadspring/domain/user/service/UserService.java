@@ -4,6 +4,7 @@ import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.domain.user.service.command.FindMemberByIdCommand;
 import com.klpc.stadspring.domain.user.service.command.UpdateProfileImgCommand;
+import com.klpc.stadspring.domain.user.service.command.WithdrawUserCommand;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import com.klpc.stadspring.util.S3Util;
@@ -45,5 +46,13 @@ public class UserService {
     URL S3Url = s3Util.uploadImageToS3(command.getProfileImg(), "user_profile", user.getId().toString());
     Objects.requireNonNull(S3Url);
     return S3Url.toString();
+  }
+
+  public void withdrawUser(WithdrawUserCommand command) {
+    log.info("WithdrawUserCommand: "+command);
+    User user = userRepository.findById(command.getUserId())
+            .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+    user.withdraw();
+    return;
   }
 }
