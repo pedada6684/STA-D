@@ -2,10 +2,10 @@ package com.klpc.stadspring.domain.user.service;
 
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
-import com.klpc.stadspring.domain.user.service.command.FindMemberByIdCommand;
-import com.klpc.stadspring.domain.user.service.command.UpdateProfileImgCommand;
-import com.klpc.stadspring.domain.user.service.command.UpdateUserInfoCommand;
-import com.klpc.stadspring.domain.user.service.command.WithdrawUserCommand;
+import com.klpc.stadspring.domain.user.service.command.*;
+import com.klpc.stadspring.global.auth.controller.response.LoginResult;
+import com.klpc.stadspring.global.auth.jwt.AuthTokenGenerator;
+import com.klpc.stadspring.global.auth.service.RefreshTokenService;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import com.klpc.stadspring.util.S3Util;
@@ -24,10 +24,12 @@ import java.util.Objects;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final AuthTokenGenerator authTokenGenerator;
+  private final RefreshTokenService refreshTokenService;
   private final S3Util s3Util;
 
 
-  public User findMemberById(FindMemberByIdCommand command){
+  public User findUserById(FindUserByIdCommand command){
     User user = userRepository.findById(command.getId())
             .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
     return user;
@@ -62,6 +64,45 @@ public class UserService {
     User user = userRepository.findById(command.getUserId())
             .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
     user.update(command);
+    return;
+  }
+
+
+  public LoginResult appLogin(AppLoginCommand command) {
+    log.info("AppLoginCommand: "+command);
+    User user = userRepository.findByEmail(command.getEmail())
+            .orElseGet(// 신규 유저인 경우 회원 가입
+                    ()->joinMember(command.convertToJoinUserCommand())
+            );
+    LoginResult result = LoginResult.builder()
+            .accessToken(authTokenGenerator.generateAT(user.getId()))
+            .refreshToken(authTokenGenerator.generateRT(user.getId()))
+            .build();
+    return result;
+  }
+
+  @Transactional(readOnly = false)
+  public User joinMember(JoinUserCommand command) {
+    log.info("JoinMemberCommand: "+command);
+    User newMember = User.createNewUser(
+            command.getEmail(),
+            null,
+            command.getNickname(),
+            command.getName(),
+            1L
+    );
+    newMember = userRepository.save(newMember);
+
+    //트랜젝션 유의
+    URL S3Url = s3Util.uploadImageToS3(command.getProfileImage(), "profile", newMember.getId().toString());
+    Objects.requireNonNull(S3Url);
+    newMember.updateProfileUrl(S3Url.toString());
+    return newMember;
+  }
+
+  public void logout(LogoutCommand command) {
+    log.info("LogoutCommand: "+command);
+    refreshTokenService.removeRefreshToken(command.getUserId());
     return;
   }
 }

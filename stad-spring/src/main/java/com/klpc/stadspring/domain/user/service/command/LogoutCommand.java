@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @Builder
-public class FindMemberByIdCommand {
-    Long id;
+public class LogoutCommand {
+    Long userId;
 }

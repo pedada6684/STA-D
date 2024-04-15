@@ -77,4 +77,8 @@ public class User {
       this.comNo = command.getComNo();
     }
   }
+
+  public void updateProfileUrl(String profile) {
+    this.profile = profile;
+  }
 }
