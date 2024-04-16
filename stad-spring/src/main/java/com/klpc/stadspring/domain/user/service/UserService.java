@@ -68,6 +68,7 @@ public class UserService {
   }
 
 
+  @Transactional(readOnly = false)
   public LoginResult appLogin(AppLoginCommand command) {
     log.info("AppLoginCommand: "+command);
     User user = userRepository.findByEmail(command.getEmail())
@@ -92,7 +93,6 @@ public class UserService {
             1L
     );
     newMember = userRepository.save(newMember);
-
     //트랜젝션 유의
     URL S3Url = s3Util.uploadImageToS3(command.getProfileImage(), "profile", newMember.getId().toString());
     Objects.requireNonNull(S3Url);
