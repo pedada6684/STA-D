@@ -3,7 +3,7 @@ spring:
     url: jdbc:mysql://localhost:3306/stad
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   redis:
     host: localhost
     port: 6379
