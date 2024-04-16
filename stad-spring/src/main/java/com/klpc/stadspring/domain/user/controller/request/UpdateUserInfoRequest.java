@@ -19,6 +19,7 @@ public class UpdateUserInfoRequest {
     private String company;
     private String department;
     private String comNo;
+    private String phone;
 
     public UpdateUserInfoCommand toCommand(){
         return UpdateUserInfoCommand.builder()
@@ -30,6 +31,7 @@ public class UpdateUserInfoRequest {
                 .company(company)
                 .department(department)
                 .comNo(comNo)
+                .phone(phone)
                 .build();
     }
 }

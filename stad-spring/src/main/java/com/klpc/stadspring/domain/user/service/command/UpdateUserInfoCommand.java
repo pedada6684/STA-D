@@ -15,4 +15,5 @@ public class UpdateUserInfoCommand {
     private String company;
     private String department;
     private String comNo;
+    private String phone;
 }

@@ -22,6 +22,7 @@ public class User {
   private String password;
   private String nickname;
   private String name;
+  private String phone;
   private String profile = null;
   private Long type;
   private Long status; // 탈퇴 0, 정상 1
@@ -75,6 +76,9 @@ public class User {
     }
     if (command.getComNo() != null) {
       this.comNo = command.getComNo();
+    }
+    if (command.getPhone() != null) {
+      this.phone = command.getPhone();
     }
   }
 

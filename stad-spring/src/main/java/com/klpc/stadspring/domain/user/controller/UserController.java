@@ -45,7 +45,7 @@ public class UserController {
   @GetMapping
   @Operation(summary = "유저 정보 요청", description = "유저 정보 요청")
   @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMemberInfoResponse.class)))
-  public ResponseEntity<GetMemberInfoResponse> getMemberInfo(@RequestParam("userId") Long userId) {
+  public ResponseEntity<GetMemberInfoResponse> getUserInfo(@RequestParam("userId") Long userId) {
     FindUserByIdCommand command = FindUserByIdCommand.builder()
             .id(userId)
             .build();
