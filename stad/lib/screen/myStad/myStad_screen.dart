@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stad/component/app_bar.dart';
 import 'package:stad/component/button.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/main.dart';
+import 'package:stad/screen/home/home_screen.dart';
 import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/mycommercial_screen.dart';
 import 'package:stad/screen/myStad/mycontents_screen.dart';
@@ -15,6 +18,16 @@ class MyStadScreen extends StatefulWidget {
 }
 
 class _MyStadScreenState extends State<MyStadScreen> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  Future<void> _handleSignout() async {
+    try {
+      await _googleSignIn.signOut();
+    } catch (error) {
+      print('로그아웃 실패');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,10 +65,24 @@ class _MyStadScreenState extends State<MyStadScreen> {
                 );
               },
             ),
+            _buildHeadListTile(
+                title: '로그아웃',
+                onTap: () {
+                  _handleSignout().then((_) {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                            (Route<dynamic> route) => false);
+                  });
+                }),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginScreen(),
+                  ),
+                );
               },
               child: Text('로그인'),
             )
