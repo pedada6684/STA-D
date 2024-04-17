@@ -32,7 +32,7 @@ public class User {
     private String department;
     private String comNo;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_youtube_info_id")
     private UserYoutubeInfo youtubeInfo = null;
 
