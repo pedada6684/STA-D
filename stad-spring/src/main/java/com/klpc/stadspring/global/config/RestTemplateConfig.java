@@ -14,17 +14,13 @@ import java.time.Duration;
 @Configuration
 public class RestTemplateConfig {
 
-  @Bean
-  public RestTemplate restTemplate(
-      RestTemplateBuilder restTemplateBuilder) {
-    return restTemplateBuilder.requestFactory(
-            () -> new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()))
-        .setConnectTimeout(
-            Duration.ofMillis(10000)) // connection-timeout
-        .setReadTimeout(Duration.ofMillis(10000)) // read-timeout
-        .additionalMessageConverters(new StringHttpMessageConverter(Charset.forName("UTF-8")))
-        .build();
-  }
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder){
+        return restTemplateBuilder.requestFactory(() ->new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()))
+                .setConnectTimeout(Duration.ofMillis(10000))
+                .setReadTimeout(Duration.ofMillis(10000))
+                .additionalMessageConverters(new StringHttpMessageConverter(Charset.forName("UTF-8")))
+                .build();
+    }
+
 }
-
-
