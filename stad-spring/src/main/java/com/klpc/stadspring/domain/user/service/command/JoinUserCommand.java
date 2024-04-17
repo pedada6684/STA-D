@@ -10,4 +10,5 @@ public class JoinUserCommand {
     String name;
     String email;
     String profileImage;
+    String googleAT;
 }
