@@ -29,12 +29,11 @@ public class UserService {
     private final S3Util s3Util;
 
 
-    public User findUserById(FindUserByIdCommand command){
-        User user = userRepository.findById(command.getId())
+    public User findUserById(Long userId){
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return user;
     }
-
 
     /**
      * 프로필 사진 변경 메서드
@@ -44,10 +43,11 @@ public class UserService {
     @Transactional(readOnly = false)
     public String updateProfileImg(UpdateProfileImgCommand command) {
         log.info("UpdateProfileImgCommand: "+command);
-        User user = userRepository.findById(command.getMemberId())
+        User user = userRepository.findById(command.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        URL S3Url = s3Util.uploadImageToS3(command.getProfileImg(), "user_profile", user.getId().toString());
+        URL S3Url = s3Util.uploadImageToS3(command.getProfile(), "user_profile", user.getId().toString());
         Objects.requireNonNull(S3Url);
+        user.updateProfileUrl(S3Url.toString());
         return S3Url.toString();
     }
 
@@ -59,12 +59,17 @@ public class UserService {
         return;
     }
 
-    public void updateUserInfo(UpdateUserInfoCommand command) {
+    public User updateUserInfo(UpdateUserInfoCommand command) {
         log.info("UpdateUserInfoCommand: "+command);
-        User user = userRepository.findById(command.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        User user = findUserById(command.getUserId());
+        if (command.getPassword() != null //기업 정보 변경인 경우
+                && !user.getPassword().equals(command.getPassword())
+        ){
+            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+        updateProfileImg(command.convertToUPICommand());
         user.update(command);
-        return;
+        return user;
     }
     @Transactional(readOnly = false)
     public LoginResult JoinCompanyUser(JoinCompanyUserCommand command) {

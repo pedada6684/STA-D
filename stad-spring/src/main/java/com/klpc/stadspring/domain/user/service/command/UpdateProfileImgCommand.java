@@ -7,6 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 @Builder
 public class UpdateProfileImgCommand {
-    Long memberId;
-    MultipartFile profileImg;
+    Long userId;
+    MultipartFile profile;
 }

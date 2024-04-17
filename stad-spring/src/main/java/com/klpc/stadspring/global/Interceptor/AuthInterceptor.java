@@ -1,7 +1,6 @@
 package com.klpc.stadspring.global.Interceptor;
 
 import com.klpc.stadspring.domain.user.service.UserService;
-import com.klpc.stadspring.domain.user.service.command.FindUserByIdCommand;
 import com.klpc.stadspring.global.auth.jwt.AccessToken;
 import com.klpc.stadspring.global.auth.jwt.AuthTokenGenerator;
 import com.klpc.stadspring.global.auth.jwt.JwtTokenProvider;
@@ -77,10 +76,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         //유저 존재여부 확인
         String strUserId = jwtTokenProvider.extractSubject(accessToken);
         long userId = Long.parseLong(strUserId);
-        FindUserByIdCommand command = FindUserByIdCommand.builder()
-                .id(Long.parseLong(strUserId))
-                .build();
-        userService.findUserById(command);
+        userService.findUserById(userId);
 
         //AT RT 재발급
         AccessToken newAccessToken = authTokenGenerator.generateAT(userId);
