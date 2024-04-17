@@ -43,7 +43,7 @@ public class AuthController {
      *     String profileImage;
      * @return body AT, header RT
      */
-    @PostMapping("/appLogin")
+    @PostMapping("/applogin")
     @Operation(summary = "앱 로그인 (일반)", description = "로그인 후 토큰 생성")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = AuthToken.class)))
     public ResponseEntity<?> appLogin(AppLoginRequest request, HttpServletResponse response) {
