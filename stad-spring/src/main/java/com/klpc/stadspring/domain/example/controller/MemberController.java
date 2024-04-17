@@ -24,32 +24,32 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "example 컨트롤러", description = "예시) 사용자 API 입니다.")
 public class MemberController {
 
-  private final MemberService memberService;
+    private final MemberService memberService;
 
-  @PostMapping("/profile")
-  @Operation(summary = "예시) 프로필 이미지 변경", description = "예시) 프로필 이미지 변경")
-  @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UpdateProfileResponse.class)))
-  public ResponseEntity<UpdateProfileResponse> updateProfileImg(@ModelAttribute UpdateProfileImgRequest request) {
-    log.info("UpdateProfileRequest: " + request);
-    //유저 아이디 검증 메서드 하나 추가해야함 with jwt
-    String profileImgUrl = memberService.updateProfileImg(request.toCommand());
+    @PostMapping("/profile")
+    @Operation(summary = "예시) 프로필 이미지 변경", description = "예시) 프로필 이미지 변경")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UpdateProfileResponse.class)))
+    public ResponseEntity<UpdateProfileResponse> updateProfileImg(@ModelAttribute UpdateProfileImgRequest request) {
+        log.info("UpdateProfileRequest: " + request);
+        //유저 아이디 검증 메서드 하나 추가해야함 with jwt
+        String profileImgUrl = memberService.updateProfileImg(request.toCommand());
 
-    UpdateProfileResponse response = UpdateProfileResponse.builder()
-        .profileImgUrl(profileImgUrl)
-        .build();
-    return new ResponseEntity<>(response, HttpStatus.OK);
-  }
-
-
-  @GetMapping
-  @Operation(summary = "예시) 유저 정보 요청", description = "예시) 유저 정보 요청")
-  @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMemberInfoResponse.class)))
-  public ResponseEntity<GetMemberInfoResponse> getMemberInfo(@RequestParam("memberId") Long memberId) {
-    FindMemberByIdCommand command = FindMemberByIdCommand.builder()
-            .id(memberId)
+        UpdateProfileResponse response = UpdateProfileResponse.builder()
+            .profileImgUrl(profileImgUrl)
             .build();
-    Member member = memberService.findMemberById(command);
-    GetMemberInfoResponse response = GetMemberInfoResponse.from(member);
-    return new ResponseEntity<>(response, HttpStatus.OK);
-  }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @GetMapping
+    @Operation(summary = "예시) 유저 정보 요청", description = "예시) 유저 정보 요청")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMemberInfoResponse.class)))
+    public ResponseEntity<GetMemberInfoResponse> getMemberInfo(@RequestParam("memberId") Long memberId) {
+        FindMemberByIdCommand command = FindMemberByIdCommand.builder()
+                .id(memberId)
+                .build();
+        Member member = memberService.findMemberById(command);
+        GetMemberInfoResponse response = GetMemberInfoResponse.from(member);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
