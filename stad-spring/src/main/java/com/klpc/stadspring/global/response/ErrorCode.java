@@ -13,6 +13,9 @@ public enum ErrorCode {
     /* S3 업로드 실패 */
     FAIL_TO_UPLOAD_S3(HttpStatus.BAD_GATEWAY, "S3 서버의 업로드를 실패했습니다."),
 
+    /* 패스워드 불일치 */
+    PASSWORD_NOT_MATCH(HttpStatus.NOT_ACCEPTABLE, "패스워드가 일치하지 않습니다."),
+
     /* JWT Token Error */
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 토큰"),
     INVALID_TOKEN(HttpStatus.FORBIDDEN, "잘못된 토큰"),

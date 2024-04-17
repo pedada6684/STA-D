@@ -1,4 +1,4 @@
-package com.klpc.stadspring.domain.example.controller.response;
+package com.klpc.stadspring.domain.user.controller.response;
 
 import lombok.Builder;
 import lombok.Data;
