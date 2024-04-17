@@ -38,13 +38,13 @@ dependencies {
 	//aws
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
-	// Swagger
+	//Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
 	//json parsing
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
-	// JWT
+	//JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
@@ -52,7 +52,7 @@ dependencies {
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-	// 쿼리문 상세
+	//쿼리문 상세
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 }
 
