@@ -1,0 +1,12 @@
+.content {
+  padding-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  margin: 0 5.5rem;
+}
+
+.title {
+  margin: 1rem 0;
+  font-size: 2rem;
+  font-weight: 800;
+}
