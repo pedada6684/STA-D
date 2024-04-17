@@ -30,7 +30,10 @@ public enum ErrorCode {
     ENTITIY_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 존재하는 정보입니다."),
 
     /* URI */
-    URI_SYNTAX_ERROR(HttpStatus.BAD_GATEWAY, "외부 API 호출 중 오류가 발생했습니다.");
+    URI_SYNTAX_ERROR(HttpStatus.BAD_GATEWAY, "외부 API 호출 중 오류가 발생했습니다."),
+
+    /* encoding UTF-8 에러 */
+    ENCODING_UTF_8(HttpStatus.BAD_REQUEST, "UTF-8 변환 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
