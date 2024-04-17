@@ -1,0 +1,107 @@
+.container {
+  height: 5rem;
+  width: 100%;
+  display: flex;
+  top: 0;
+  position: fixed;
+  z-index: 2;
+  background-color: white;
+}
+
+.logo {
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logoIcon {
+  width: 10rem;
+}
+
+.menus {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.navMenu {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.dropDownTitle:hover {
+  color: #00127a;
+}
+
+.dropDown {
+  list-style-type: none;
+  position: relative;
+  width: 8rem;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.dropDownMenu {
+  list-style-type: none;
+  /* display: none; */
+  /* transition 적용을 위해 */
+  opacity: 0;
+  visibility: hidden;
+  transition: visibility 0s, opacity 0.5s linear;
+  position: absolute;
+  background-color: white;
+  width: 8rem;
+  z-index: 1;
+  font-size: 1.1rem;
+}
+
+.dropDownMenu li {
+  margin: 2rem 0rem;
+}
+
+.dropDownMenu li:hover {
+  color: #00127a;
+}
+
+.dropDown:hover .dropDownMenu {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 2rem;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+  text-align: center;
+  padding: 0.4rem 2rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  justify-content: center;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.login {
+  border: 1px solid #00127a;
+  background-color: white;
+  color: #00127a;
+}
+
+.signup {
+  background-color: #00127a;
+  color: white;
+}
