@@ -17,13 +17,13 @@ public class JoinCompanyUserCommand {
 
     public UpdateUserInfoCommand convertToUpdateCommand(){
         return UpdateUserInfoCommand.builder()
-                .email(email)
                 .name(name)
+                .nickname(name)
                 .phone(phone)
-                .password(password)
                 .company(company)
                 .comNo(comNo)
                 .department(department)
+                .password(password)
                 .build();
     }
 }

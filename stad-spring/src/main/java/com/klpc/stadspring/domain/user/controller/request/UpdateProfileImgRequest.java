@@ -12,8 +12,8 @@ public class UpdateProfileImgRequest {
     MultipartFile profileImg;
     public UpdateProfileImgCommand toCommand(){
         return UpdateProfileImgCommand.builder()
-                .memberId(memberId)
-                .profileImg(profileImg)
+                .userId(memberId)
+                .profile(profileImg)
                 .build();
     }
 }

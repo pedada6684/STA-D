@@ -7,19 +7,25 @@ import lombok.Data;
 @Data
 @Builder
 public class GetMemberInfoResponse {
-    private Long id;
-    private String email;
+    private Long userId;
     private String nickname;
-    private String username;
-    private String profileUrl;
+    private String email;
+    private String phone;
+    private String company;
+    private String name;
+    private String comNo;
+    private String profile;
 
     public static GetMemberInfoResponse from(User user){
         return GetMemberInfoResponse.builder()
-                .id(user.getId())
-                .email(user.getEmail())
+                .userId(user.getId())
                 .nickname(user.getNickname())
-                .username(user.getName())
-                .profileUrl(user.getProfile())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .company(user.getCompany())
+                .name(user.getName())
+                .comNo(user.getComNo())
+                .profile(user.getProfile())
                 .build();
     }
 }
