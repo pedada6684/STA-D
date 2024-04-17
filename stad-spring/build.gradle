@@ -34,7 +34,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //	testImplementation 'org.springframework.batch:spring-batch-test'
 //	testImplementation 'org.springframework.kafka:spring-kafka-test'
-
+	//json
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 	//aws
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
