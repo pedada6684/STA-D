@@ -34,14 +34,20 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  http: ^1.2.1
   cupertino_icons: ^1.0.6
   google_sign_in: ^6.2.1
   flutter_native_splash: ^2.4.0
   flutter_launcher_icons: ^0.13.1
   flutter_carousel_widget: ^2.2.0
+  flutter_secure_storage: ^9.0.0
   qr_code_scanner: ^1.0.1
   animations: ^2.0.0
   marquee: ^2.2.3
+  firebase_core: ^2.29.0
+  firebase_auth: ^4.19.2
+  firebase_ui_oauth_google: ^1.3.1
+
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +80,9 @@ flutter:
     - family: LogoFont
       fonts:
         - asset: assets/font/PyeongChangPeace-Bold.ttf
+    - family: GoogleFont
+      fonts:
+        - asset: assets/font/Roboto-Medium.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
