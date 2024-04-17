@@ -1,6 +1,7 @@
 package com.klpc.stadspring.domain.user.service;
 
 import com.klpc.stadspring.domain.user.entity.User;
+import com.klpc.stadspring.domain.user.entity.UserYoutubeInfo;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.domain.user.service.command.*;
 import com.klpc.stadspring.global.auth.controller.response.LoginResult;
@@ -112,6 +113,8 @@ public class UserService {
                 .orElseGet(// 신규 유저인 경우 회원 가입
                         ()->joinMember(command.convertToJoinUserCommand())
                 );
+
+
         LoginResult result = LoginResult.builder()
                 .accessToken(authTokenGenerator.generateAT(user.getId()))
                 .refreshToken(authTokenGenerator.generateRT(user.getId()))
@@ -122,19 +125,28 @@ public class UserService {
     @Transactional(readOnly = false)
     public User joinMember(JoinUserCommand command) {
         log.info("JoinMemberCommand: "+command);
+        //유저 회원가입
         User newMember = User.createNewUser(
                 command.getEmail(),
                 null,
                 command.getNickname(),
                 command.getName(),
                 1L
-      );
-      newMember = userRepository.save(newMember);
-      //트랜젝션 유의
-      URL S3Url = s3Util.uploadImageToS3(command.getProfileImage(), "profile", newMember.getId().toString());
-      Objects.requireNonNull(S3Url);
-      newMember.updateProfileUrl(S3Url.toString());
-      return newMember;
+        );
+        newMember = userRepository.save(newMember);
+        //유저 프로필 사진 저장
+        URL S3Url = s3Util.uploadImageToS3(command.getProfileImage(), "profile", newMember.getId().toString());
+        Objects.requireNonNull(S3Url);
+        newMember.updateProfileUrl(S3Url.toString());
+        //유저 구독채널 저장
+        String youtubeInfo = getUserYoutubeInfo(command.getGoogleAT());
+        newMember.updateYoutubeInfo(youtubeInfo);
+        return newMember;
+    }
+
+    private String getUserYoutubeInfo(String googleAT) {
+        //TODO: 유튜브에 api통신을 통해 채널을 가져오고 pasing해 하나의 스트링으로 만드는 코드를 만들어주길 부탁
+        return null;
     }
 
     public void logout(LogoutCommand command) {

@@ -32,6 +32,10 @@ public class User {
     private String department;
     private String comNo;
 
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "user_youtube_info_id")
+    private UserYoutubeInfo youtubeInfo = null;
+
     public static User createNewUser(
             String email,
             String password,
@@ -78,5 +82,9 @@ public class User {
 
     public void updateProfileUrl(String profile) {
         this.profile = profile;
+    }
+
+    public void updateYoutubeInfo(String youtubeInfo){
+        this.youtubeInfo = UserYoutubeInfo.createNewUserYoutubeInfo(youtubeInfo);
     }
 }
