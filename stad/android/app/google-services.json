@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "823385552651",
+    "project_id": "stad-734a2",
+    "storage_bucket": "stad-734a2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823385552651:android:a02d2eea44614fd40a140e",
+        "android_client_info": {
+          "package_name": "stad.live.stad"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTI9puxl1i8yA8roKz8QM7L6rvfZMgOfY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
