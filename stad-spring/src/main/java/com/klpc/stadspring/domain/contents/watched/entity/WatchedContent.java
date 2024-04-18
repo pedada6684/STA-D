@@ -16,7 +16,7 @@ public class WatchedContent {
     private Long id;
 
     @ManyToOne
-    @Column(name = "content_detail_id")
+    @JoinColumn(name = "content_detail_id")
     private ContentDetail contentDetail;
 
     @Column(name = "user_id")
