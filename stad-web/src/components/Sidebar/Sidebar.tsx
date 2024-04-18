@@ -7,16 +7,23 @@ import DropDownMenu from "./DropDownMenu";
 import { MouseEvent } from "react";
 import { tab } from "../../pages/MyPage/MyPage";
 
-interface SideBarProps {
+export interface SideBarProps {
   activeTab: tab;
-  onClickTab: (tab: tab) => (e: MouseEvent<HTMLDivElement>) => void;
+  onClickTab: (tab: tab) => (e: MouseEvent<HTMLElement>) => void;
 }
 
 export default function Sidebar({ activeTab, onClickTab }: SideBarProps) {
   return (
     <div className={`${styles.container}`}>
       <ul className={`${styles.content}`}>
-        <li className={`${styles.item}`}>
+        <li
+          className={
+            activeTab === "enterprise-info"
+              ? `${styles.item} ${styles.active}`
+              : styles.item
+          }
+          onClick={onClickTab("enterprise-info")}
+        >
           <div>
             <img src={company} className={`${styles.icon}`} alt="회사" />
           </div>
@@ -28,7 +35,7 @@ export default function Sidebar({ activeTab, onClickTab }: SideBarProps) {
           </div>
           <div className={`${styles.text}`}>판매관리</div>
           <div>
-            <DropDownMenu />
+            <DropDownMenu activeTab={activeTab} onClickTab={onClickTab} />
           </div>
         </li>
       </ul>

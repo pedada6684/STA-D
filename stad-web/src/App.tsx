@@ -13,6 +13,7 @@ import Advertisement from "./components/Enroll/Advertisement";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Review from "./pages/Review/Review";
 import Merchandise from "./components/Enroll/Merchandise";
+import EnrolledAdList from "./pages/MyPage/SalesManagement/EnrolledAdList";
 
 function App() {
   const queryClient = new QueryClient();
@@ -26,8 +27,9 @@ function App() {
             <Route path="/loading" element={<LandingPage />} />
             <Route path="/web-main" element={<WebMain />} />
             <Route path="/my-page" element={<MyPage />}>
-              <Route path="info" element={<EnterprisePage />} />
+              <Route path="enterprise-info" element={<EnterprisePage />} />
               <Route path="enroll-list" element={<EnrolledGoodsList />} />
+              <Route path="enroll-adList" element={<EnrolledAdList />} />
             </Route>
             <Route path="/ad-management" element={<AdManagement />} />
             <Route path="/ad-enroll" element={<Advertisement />}>
