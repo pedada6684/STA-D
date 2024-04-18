@@ -36,10 +36,10 @@ public class ProductOrder {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "product_order_id")
+    @OneToMany(mappedBy = "productOrder")
     private List<Product> products;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "product_order_id")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "productOrder")
     private Delivery delivery;
 
 }
