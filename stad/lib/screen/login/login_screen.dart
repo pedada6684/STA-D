@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/main.dart';
 import 'package:stad/models/user_model.dart';
@@ -51,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           SizedBox(height: 50),
           ElevatedButton(
-            onPressed: () => _handleSignIn,
+            onPressed: () => _handleSignIn(),
             style: ElevatedButton.styleFrom(
               backgroundColor: mainWhite, // 버튼 배경 색상
               padding: EdgeInsets.all(8.0),
@@ -79,7 +77,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Colors.black.withOpacity(0.54), // 텍스트 색상 및 투명도
                       ),
                     ),
-                    SizedBox(width: 24),
                     // 텍스트 끝 여백
                   ],
                 ),
