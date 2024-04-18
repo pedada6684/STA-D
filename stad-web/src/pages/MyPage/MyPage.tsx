@@ -8,18 +8,19 @@ import EnterprisePage from "./Enterprise/EnterprisePage";
 import EnrolledAdList from "./SalesManagement/EnrolledAdList";
 import EnrolledGoodsList from "./SalesManagement/EnrolledGoodsList";
 import Review from "../Review/Review";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 export type tab =
-  | "enterprise"
-  | "enrollAdList"
-  | "enrollGoodsList"
-  | "reviewList";
+  | "enterprise-info"
+  | "enroll-adList"
+  | "enroll-list"
+  | "review";
 
 export default function MyPage() {
   const navigate = useNavigate();
   // 마이페이지 처음 들어갔을 때 디폴트는 기업정보 탭으로
-  const [activeTab, setActiveTab] = useState<tab>("enterprise");
-  const handleClickTab = (tab: tab) => (e: MouseEvent<HTMLDivElement>) => {
+  const [activeTab, setActiveTab] = useState<tab>("enterprise-info");
+  const handleClickTab = (tab: tab) => (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
     setActiveTab(tab);
     navigate(`${tab}`);
@@ -27,13 +28,13 @@ export default function MyPage() {
 
   function renderComponent() {
     switch (activeTab) {
-      case "enterprise":
+      case "enterprise-info":
         return <EnterprisePage />;
-      case "enrollAdList":
+      case "enroll-adList":
         return <EnrolledAdList />;
-      case "enrollGoodsList":
+      case "enroll-list":
         return <EnrolledGoodsList />;
-      case "reviewList":
+      case "review":
         return <Review />;
     }
   }
@@ -43,7 +44,21 @@ export default function MyPage() {
         <WebNav />
         <div className={styles.content}>
           <div className={`${styles.title}`}>마이페이지</div>
-          <Sidebar activeTab={activeTab} onClickTab={handleClickTab} />
+          <div className={`${styles.page}`}>
+            <Sidebar activeTab={activeTab} onClickTab={handleClickTab} />
+            <SwitchTransition mode="out-in">
+              <CSSTransition
+                key={activeTab}
+                addEndListener={(node, done) =>
+                  node.addEventListener("transitionend", done, false)
+                }
+                classNames="fade"
+                timeout={300}
+              >
+                <div className={`${styles.render}`}>{renderComponent()}</div>
+              </CSSTransition>
+            </SwitchTransition>
+          </div>
         </div>
       </Container>
     </div>
