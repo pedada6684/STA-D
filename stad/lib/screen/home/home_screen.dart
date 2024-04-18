@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:marquee/marquee.dart';
 import 'package:stad/constant/colors.dart';
 
@@ -59,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             color: mainNavy,
             child: _isActive
                 ? Marquee(
-                    text: 'WELCOME TO STA:D!                  ',
+                    text: '💫 BEYOND THE SCREEN! 💫                 ',
                     style: TextStyle(
                         color: mainWhite,
                         fontSize: 18.0,
@@ -75,6 +77,34 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     decelerationCurve: Curves.easeOut,
                   )
                 : Container(),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 4.0),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0), // 테두리 둥글기 설정
+                  child: Image.asset('assets/image/thumbnail.png'), // 이미지 파일
+                ),
+                Positioned(
+                  top: 20,
+                  left: 15,
+                  child: Container(
+                    padding: EdgeInsets.all(8.0), // 텍스트 패딩
+                    child: Text(
+                      '지금 보는 콘텐츠',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22.0, // 텍스트 사이즈
+                        fontWeight: FontWeight.bold, // 글씨 굵기
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

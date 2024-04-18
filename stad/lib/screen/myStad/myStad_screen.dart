@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stad/component/app_bar.dart';
 import 'package:stad/component/button.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/main.dart';
-import 'package:stad/screen/home/home_screen.dart';
 import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/mycommercial_screen.dart';
 import 'package:stad/screen/myStad/mycontents_screen.dart';
@@ -23,8 +23,15 @@ class _MyStadScreenState extends State<MyStadScreen> {
   Future<void> _handleSignout() async {
     try {
       await _googleSignIn.signOut();
+      final storage = FlutterSecureStorage();
+      await storage.delete(key: 'accessToken');
+      await storage.delete(key: 'refreshToken');
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MyApp()),
+          (Route<dynamic> route) => false);
     } catch (error) {
-      print('로그아웃 실패');
+      print('로그아웃 실패: $error');
     }
   }
 
@@ -72,7 +79,7 @@ class _MyStadScreenState extends State<MyStadScreen> {
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => MyApp()),
-                            (Route<dynamic> route) => false);
+                        (Route<dynamic> route) => false);
                   });
                 }),
             ElevatedButton(
