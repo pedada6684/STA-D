@@ -1,14 +1,10 @@
 package com.klpc.stadspring.domain.contents.bookmark.entity;
 
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
-import com.klpc.stadspring.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
