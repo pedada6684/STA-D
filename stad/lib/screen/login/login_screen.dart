@@ -14,60 +14,23 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  User? user;
+  final UserService _userService = UserService();
 
-  Future<void> signInWithGoogle(BuildContext context) async {
-    GoogleSignIn _googleSignIn = GoogleSignIn();
-    GoogleSignInAccount? _account = await _googleSignIn.signIn();
-    if (_account != null) {
-      GoogleSignInAuthentication _authentication =
-          await _account.authentication;
+  void _handleSignIn() async {
+    UserModel? user = await _userService.signInWithGoogle();
 
-      print('authentication : ${_authentication}');
-
-      OAuthCredential _googleCredential = GoogleAuthProvider.credential(
-        idToken: _authentication.idToken,
-        accessToken: _authentication.accessToken,
+    if (user != null) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => MyApp()),
+        (Route<dynamic> route) => false,
       );
-
-      print('googleCredential : ${_googleCredential}');
-
-      UserCredential _credential =
-          await _firebaseAuth.signInWithCredential(_googleCredential);
-
-      print(_credential);
-      if (_credential.user != null) {
-        user = _credential.user;
-
-        print('user user user user user : $user');
-
-        UserModel userModel = UserModel(
-          email: user!.email,
-          phone: user!.phoneNumber,
-          nickname: user!.displayName,
-          profilePicture: user!.photoURL,
-          googleAccessToken: _authentication.accessToken,
-        );
-
-        print('user Mode user Model User Model : ${userModel.profilePicture}');
-
-        debugPrint('디버깅 디버깅 구글 로그인 디버깅 로그인 스크린${user!.email}');
-
-        await UserService().sendUserProfile(userModel);
-
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => MyApp()),
-            (Route<dynamic> route) => false);
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('환영합니다!'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('로그인 실패'),
+        ),
+      );
     }
   }
 
@@ -88,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           SizedBox(height: 50),
           ElevatedButton(
-            onPressed: () => signInWithGoogle(context),
+            onPressed: () => _handleSignIn,
             style: ElevatedButton.styleFrom(
               backgroundColor: mainWhite, // 버튼 배경 색상
               padding: EdgeInsets.all(8.0),

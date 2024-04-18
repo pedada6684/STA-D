@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:stad/models/user_model.dart';
 
 class UserService {
   final String _baseUrl = 'http://10.0.2.2:8080/api/v1/auth/applogin';
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   final storage = FlutterSecureStorage();
 
@@ -41,5 +45,47 @@ class UserService {
       print('An error occurred while sending user profile: $e');
       // Here you might want to handle the error more gracefully
     }
+  }
+
+  //구글 로그인
+  Future<UserModel?> signInWithGoogle() async {
+    try {
+      GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return null;
+
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential =
+          await _firebaseAuth.signInWithCredential(credential);
+      User? user = userCredential.user;
+
+      if (user != null) {
+        UserModel userModel = UserModel(
+          email: user.email,
+          phone: user.phoneNumber,
+          nickname: user.displayName,
+          profilePicture: user.photoURL,
+          googleAccessToken: googleAuth.accessToken,
+        );
+        await UserService().sendUserProfile(userModel);
+        return userModel;
+      }
+    } catch (e) {
+      print("Error signing in with Google: $e");
+      return null;
+    }
+    return null;
+  }
+
+  
+  //구글 로그아웃
+  Future<void> signOut() async {
+    await _googleSignIn.signOut();
+    await _firebaseAuth.signOut();
   }
 }

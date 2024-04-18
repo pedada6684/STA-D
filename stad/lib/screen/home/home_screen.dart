@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   child: Container(
                     padding: EdgeInsets.all(8.0), // 텍스트 패딩
                     child: Text(
-                      '나만 보는 콘텐츠',
+                      '지금 보는 콘텐츠',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 22.0, // 텍스트 사이즈
