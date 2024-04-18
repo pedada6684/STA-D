@@ -10,16 +10,12 @@ import EnrolledGoodsList from "./SalesManagement/EnrolledGoodsList";
 import Review from "../Review/Review";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 
-export type tab =
-  | "enterprise-info"
-  | "enroll-adList"
-  | "enroll-list"
-  | "review";
+export type tab = "enterprise" | "enroll-adList" | "enroll-list" | "review";
 
 export default function MyPage() {
   const navigate = useNavigate();
   // 마이페이지 처음 들어갔을 때 디폴트는 기업정보 탭으로
-  const [activeTab, setActiveTab] = useState<tab>("enterprise-info");
+  const [activeTab, setActiveTab] = useState<tab>("enterprise");
   const handleClickTab = (tab: tab) => (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
     setActiveTab(tab);
@@ -28,7 +24,7 @@ export default function MyPage() {
 
   function renderComponent() {
     switch (activeTab) {
-      case "enterprise-info":
+      case "enterprise":
         return <EnterprisePage />;
       case "enroll-adList":
         return <EnrolledAdList />;

@@ -1,0 +1,43 @@
+.profile {
+  border-bottom: 2px solid #afb0b4;
+}
+
+.circle {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  padding: 1rem;
+  border: 1px solid black;
+}
+
+.icon {
+  display: flex;
+  padding: 0.2rem;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+}
+
+.name {
+  display: flex;
+}
+
+.title {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.edit {
+  color: #00127a;
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 2rem;
+  padding-bottom: 1rem;
+  cursor: pointer;
+}

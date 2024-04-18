@@ -1,17 +1,25 @@
+import { MouseEvent, useState } from "react";
+import EnterpriseInfo from "./EnterpriseInfo";
 import styles from "./EnterprisePage.module.css";
-import company from "../../../assets/mdi_company.png";
+import Profile from "./Profile";
+import EnterpriseEdit from "./EnterprisesEdit";
 export default function EnterprisePage() {
+  const [editMode, setEditMode] = useState(false);
+  const handleToggleEditMode = (e: MouseEvent<HTMLDivElement>) => {
+    setEditMode(true);
+  };
+
+  // const handleSaveClick = (e: MouseEvent<HTMLDivElement>) => {
+  //   setEditMode(false);
+  // };
   return (
     <div className={styles.container}>
-      <div className={`${styles.profile}`}>
-        <div>
-          <div>
-            <img src={company} alt="회사" className={styles.icon} />
-          </div>
-          <div className={`${styles.title}`}>회사명</div>
-        </div>
-        <div>수정</div>
-      </div>
+      <Profile onEditClick={handleToggleEditMode} />
+      {editMode ? (
+        <EnterpriseEdit onSaveClick={handleToggleEditMode} />
+      ) : (
+        <EnterpriseInfo />
+      )}
     </div>
   );
 }
