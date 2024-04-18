@@ -91,4 +91,31 @@ public class S3Util {
             throw new CustomException(ErrorCode.FAIL_TO_UPLOAD_S3);
         }
     }
+
+    /**
+     * 비디오 파일 S3 저장 메서드
+     * @param file  비디오 소스 파일
+     * @param folder  비디오 저장 폴더 이름
+     * @param name 비디오 이름 (alt)
+     * @return S3 url
+     */
+    public URL uploadVideoToS3(MultipartFile file, String folder , String name){
+        // set metadata
+        try {
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            log.info("******* "+file.getContentType());
+            metadata.setContentLength(file.getSize());
+            InputStream videoInputStream = file.getInputStream();
+            amazonS3Client.putObject(
+                    bucket,
+                    folder+"/"+name,
+                    videoInputStream,
+                    metadata
+            );
+            return amazonS3Client.getUrl(bucket, folder+"/"+name);
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.FAIL_TO_UPLOAD_S3);
+        }
+    }
 }
