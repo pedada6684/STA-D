@@ -27,7 +27,7 @@ function App() {
             <Route path="/loading" element={<LandingPage />} />
             <Route path="/web-main" element={<WebMain />} />
             <Route path="/my-page" element={<MyPage />}>
-              <Route path="enterprise-info" element={<EnterprisePage />} />
+              <Route path="enterprise" element={<EnterprisePage />} />
               <Route path="enroll-list" element={<EnrolledGoodsList />} />
               <Route path="enroll-adList" element={<EnrolledAdList />} />
             </Route>
