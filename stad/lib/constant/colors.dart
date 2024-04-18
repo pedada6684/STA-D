@@ -11,3 +11,5 @@ const backGray = Color(0xffF4F4F4);
 const mainGray = Color(0xffDDDDDD);
 
 const darkGray = Color(0xff565656);
+
+const midGray = Color(0xffA8A8A8);
