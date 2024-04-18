@@ -1,8 +1,6 @@
 .contentC {
   padding-top: 5rem;
-  height: inherit;
   display: flex;
-  height: 90.2vh;
   overflow-y: hidden;
   animation: fadein 2.3s;
 }
@@ -48,11 +46,15 @@
   margin-top: 2rem;
   width: 25rem;
   padding: 0.8rem 2rem;
-  background-color: #00127a;
+  background-color: white;
   border-radius: 50px;
   border: 0;
   font-size: 1.2rem;
   font-weight: 800;
-  color: white;
+  color: black;
   cursor: pointer;
+}
+
+.btn:hover {
+  color: #00127a;
 }
