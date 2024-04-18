@@ -30,12 +30,12 @@ function App() {
               <Route path="enterprise" element={<EnterprisePage />} />
               <Route path="enroll-list" element={<EnrolledGoodsList />} />
               <Route path="enroll-adList" element={<EnrolledAdList />} />
+              <Route path="review" element={<Review />} />
             </Route>
             <Route path="/ad-management" element={<AdManagement />} />
             <Route path="/ad-enroll" element={<Advertisement />}>
               <Route path="mer-enroll" element={<Merchandise />} />
             </Route>
-            <Route path="/review" element={<Review />} />
           </Routes>
         </div>
       </BrowserRouter>
