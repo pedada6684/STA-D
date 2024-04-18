@@ -1,0 +1,76 @@
+.profile {
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #afb0b4;
+  margin-right: 3rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.profileSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.circle {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  padding: 1rem;
+  border: 2px solid #a8a8a8;
+}
+
+.icon {
+  display: flex;
+  padding: 0.2rem;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+}
+
+.name {
+  display: flex;
+  width: 100%;
+}
+
+.title,
+.edit {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.edit {
+  width: 10%;
+  color: #00127a;
+  font-size: 1.4rem;
+  font-weight: 700;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.btnUpload {
+  position: absolute;
+  cursor: pointer;
+  padding: 0.2rem 0.8rem;
+  bottom: 0.1rem; /* circle 아래에 위치하되, 일부 겹치게 조정 */
+  z-index: 1;
+  background-color: #a8a8a8;
+  color: white;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.imageInput {
+  display: none;
+}
