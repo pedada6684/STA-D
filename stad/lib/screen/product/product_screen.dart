@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stad/component/app_bar.dart';
+import 'package:stad/component/button.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/screen/product/product_detail_screen.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -38,9 +40,20 @@ class _ProductScreenState extends State<ProductScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
-          Center(child: Text('상품 상세 내용')),
+          ProductDetailScreen(),
           Center(child: Text('리뷰 내용')),
         ],
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: CustomElevatedButton(
+            text: '주문하기',
+            textColor: mainWhite,
+            backgroundColor: mainNavy,
+            onPressed: () {},
+          ),
+        ),
       ),
     );
   }
