@@ -1,6 +1,7 @@
 package com.klpc.stadspring.domain.productOrder.entity;
 
 import com.klpc.stadspring.domain.delivery.entity.Delivery;
+import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -23,8 +24,6 @@ public class ProductOrder {
 
     private LocalDateTime orderDate;
 
-    private Long cnt;
-
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
@@ -41,5 +40,8 @@ public class ProductOrder {
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "productOrder")
     private Delivery delivery;
+
+    @OneToMany(mappedBy = "productOrder")
+    private List<OrderProduct> orderProducts;
 
 }
