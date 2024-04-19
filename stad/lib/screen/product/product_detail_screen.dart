@@ -149,7 +149,8 @@ class ProductDetailScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 20.0), // 섹션 제목과 내용 사이 간격 추가
+                    Divider(),
+                    // SizedBox(height: 20.0), // 섹션 제목과 내용 사이 간격 추가
                     _buildInformationRow('품명 및 모델명', '민형이네 딸기밭'),
                     SizedBox(height: 10.0), // 각 정보 텍스트 사이 간격 추가
                     _buildInformationRow('제조연월일', '당일 수확 후 배송'),
