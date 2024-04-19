@@ -35,4 +35,17 @@ public class AdvertVideo {
     @JoinColumn(name = "advert_id")
     private Advert advert;
 
+    public static AdvertVideo createToAdvertVideo(Long len, String videoUrl){
+        AdvertVideo advertVideo = new AdvertVideo();
+        advertVideo.len=len;
+        advertVideo.videoUrl=videoUrl;
+        advertVideo.spreadCnt=0L;
+        advertVideo.clickCnt=0L;
+        return advertVideo;
+    }
+
+    public void linkAdvert(Advert advert){
+        this.advert=advert;
+    }
+
 }

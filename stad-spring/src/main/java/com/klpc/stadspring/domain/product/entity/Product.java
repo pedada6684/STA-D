@@ -1,10 +1,13 @@
 package com.klpc.stadspring.domain.product.entity;
 
 import com.klpc.stadspring.domain.advert.entity.Advert;
+import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.productOrder.entity.ProductOrder;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,4 +25,11 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_order_id")
     private ProductOrder productOrder;
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderProduct> orderProduct;
+
+    public void linkAdvert(Advert advert){
+        this.advert=advert;
+    }
 }
