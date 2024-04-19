@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ContentCategoryRelationship {
     @Id
-    @Column(name = "content_category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
