@@ -55,7 +55,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       fontWeight: FontWeight.bold),
                   tabs: const [
                     Tab(text: '상품상세'),
-                    Tab(text: '리뷰'),
+                    Tab(text: '후기'),
                   ],
                 ),
               ),
