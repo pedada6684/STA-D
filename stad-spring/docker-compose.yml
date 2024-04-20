@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  mysql-scenergy:
+    image: mysql:latest
+    container_name: mysql-stad
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: stad
+      MYSQL_ROOT_HOST: '%'
+  redis:
+    image: redis:latest
+    container_name: redis
+    hostname: redis
+    ports:
+      - "6379:6379"
