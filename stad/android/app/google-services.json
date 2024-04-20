@@ -12,7 +12,20 @@
           "package_name": "stad.live.stad"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "823385552651-mqrijamj502pd7idrblmmhqsrq7u2e4m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "stad.live.stad",
+            "certificate_hash": "874e938bb00718bc93490c28ec4691b9f884081c"
+          }
+        },
+        {
+          "client_id": "823385552651-0aqaivn23to1ma4bl21end61su8iun0t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDTI9puxl1i8yA8roKz8QM7L6rvfZMgOfY"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "823385552651-0aqaivn23to1ma4bl21end61su8iun0t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

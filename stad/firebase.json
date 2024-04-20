@@ -1,0 +1,21 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "stad-734a2",
+          "appId": "1:823385552651:android:a02d2eea44614fd40a140e",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "stad-734a2",
+          "configurations": {
+            "android": "1:823385552651:android:a02d2eea44614fd40a140e"
+          }
+        }
+      }
+    }
+  }
+}
