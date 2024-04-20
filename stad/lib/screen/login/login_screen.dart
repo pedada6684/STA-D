@@ -15,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final UserService _userService = UserService();
 
   void _handleSignIn() async {
-    User? user = await _userService.signInWithGoogle();
+    User? user = await _userService.signInWithGoogle(context);
 
     print('useruseruseruseruseruser: $user');
 

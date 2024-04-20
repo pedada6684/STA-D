@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'package:stad/component/bottom_bar.dart';
 import 'package:stad/constant/animated_indexed_stack.dart';
 import 'package:stad/firebase_options.dart';
+import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/cart/cart_screen.dart';
 import 'package:stad/screen/home/home_screen.dart';
 import 'package:stad/screen/myStad/myStad_screen.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // 필수: Flutter 엔진과 위젯 트리 바인딩
+  WidgetsFlutterBinding.ensureInitialized(); // Flutter 엔진과 위젯 트리 바인딩
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -34,22 +36,26 @@ class _MyAppState extends State<MyApp> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      // print(_selectedIndex);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: AnimatedIndexedStack(
-          index: _selectedIndex,
-          children: _widgetOptions,
-        ),
-        bottomNavigationBar: CustomBottomNavigationBar(
-          selectedIndex: _selectedIndex,
-          onItemSelected: _onItemTapped,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()), // UserProvider 추가
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          body: AnimatedIndexedStack(
+            index: _selectedIndex,
+            children: _widgetOptions,
+          ),
+          bottomNavigationBar: CustomBottomNavigationBar(
+            selectedIndex: _selectedIndex,
+            onItemSelected: _onItemTapped,
+          ),
         ),
       ),
     );
