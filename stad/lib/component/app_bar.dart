@@ -6,6 +6,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final TextStyle? titleStyle;
   final bool showBackButton;
+  final TabController? tabController;
 
   const CustomAppBar({
     super.key,
@@ -13,6 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.titleStyle,
     this.showBackButton = false,
+    this.tabController,
   });
 
   @override
@@ -20,21 +22,49 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       leading: showBackButton
           ? IconButton(
-              icon: Icon(Icons.arrow_back),
-              color: mainWhite, // 뒤로가기 버튼의 아이콘 색상을 mainWhite로 지정
-              onPressed: () {
-                Navigator.pop(context); // 뒤로가기 버튼 클릭 시 이전 화면으로 이동
-              },
+              icon: Icon(Icons.arrow_back_ios_new_rounded),
+              color: mainWhite,
+              onPressed: () => Navigator.pop(context),
             )
           : null,
       centerTitle: true,
       title: Text(title, style: titleStyle ?? TextStyle()),
       actions: actions,
       backgroundColor: mainNavy,
+      bottom: tabController != null
+          ? PreferredSize(
+              preferredSize: Size.fromHeight(48.0),
+              child: Material(
+                color: mainWhite,
+                child: TabBar(
+                  controller: tabController,
+                  indicator: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: mainNavy, width: 3.0),
+                    ),
+                  ),
+                  indicatorPadding: EdgeInsets.symmetric(horizontal: 32.0),
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  labelStyle: TextStyle(
+                      color: mainNavy,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold),
+                  unselectedLabelStyle: TextStyle(
+                      color: mainNavy,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold),
+                  tabs: const [
+                    Tab(text: '상품상세'),
+                    Tab(text: '후기'),
+                  ],
+                ),
+              ),
+            )
+          : null,
     );
   }
 
   @override
-  //사이즈 지정
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize =>
+      Size.fromHeight(kToolbarHeight + (tabController != null ? 48.0 : 0.0));
 }

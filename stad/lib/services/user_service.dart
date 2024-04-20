@@ -1,89 +1,80 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:provider/provider.dart';
 import 'package:stad/models/user_model.dart';
+import 'package:stad/providers/user_provider.dart';
 
 class UserService {
-  final String _baseUrl = 'http://10.0.2.2:8080/api/v1/auth/applogin';
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final Dio dio = Dio();
 
-  final storage = FlutterSecureStorage();
+  Future<User?> signInWithGoogle(BuildContext context) async {
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    if (googleUser == null) return null;
 
-  Future<void> sendUserProfile(UserModel user) async {
-    try {
-      final response = await http.post(
-        Uri.parse(_baseUrl),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          'email': user.email,
-          'phone': user.phone,
-          'nickname': user.nickname,
-          'profile': user.profilePicture,
-          'googleAT': user.googleAccessToken,
-        }),
-      );
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+    final OAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
 
-      print('Response from the backend: ${response.body}');
+    final UserCredential userCredential =
+        await _firebaseAuth.signInWithCredential(credential);
+    final User? user = userCredential.user;
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        await storage.write(
-            key: 'accessToken', value: responseData['accessToken']);
-        await storage.write(
-            key: 'refreshToken', value: response.headers['Set-Cookie']);
-      } else {
-        print('Error with status code: ${response.statusCode}');
-        throw Exception(
-            'Failed to load user profile. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('An error occurred while sending user profile: $e');
-      // Here you might want to handle the error more gracefully
-    }
-  }
-
-  //구글 로그인
-  Future<UserModel?> signInWithGoogle() async {
-    try {
-      GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) return null;
-
-      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      OAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      UserCredential userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
-      User? user = userCredential.user;
-
-      if (user != null) {
-        UserModel userModel = UserModel(
-          email: user.email,
-          phone: user.phoneNumber,
-          nickname: user.displayName,
-          profilePicture: user.photoURL,
-          googleAccessToken: googleAuth.accessToken,
-        );
-        await UserService().sendUserProfile(userModel);
-        return userModel;
-      }
-    } catch (e) {
-      print("Error signing in with Google: $e");
-      return null;
+    if (user != null) {
+      await sendUserProfile(context, user, googleAuth.accessToken);
+      print('User signed in : ${user}');
+      return user;
     }
     return null;
   }
 
-  
-  //구글 로그아웃
+  Future<void> sendUserProfile(
+      BuildContext context, User user, String? googleAccessToken) async {
+    final userProfile =
+        UserModel.fromFirebaseUser(user, googleAccessToken).toJson();
+
+    try {
+      final response = await dio.post(
+        'http://10.0.2.2:8080/api/v1/auth/applogin',
+        data: json.encode(userProfile),
+        options: Options(
+            followRedirects: false, validateStatus: (status) => status! < 500),
+      );
+
+      if (response.statusCode == 200) {
+        //토큰
+        String responseHeader = response.headers['Authorization']![0];
+        String token = responseHeader.replaceFirst('Bearer ', '');
+        Provider.of<UserProvider>(context, listen: false).setToken(token);
+
+        Map<String, dynamic> payload = Jwt.parseJwt(token);
+        String userIdStr = payload['sub'] as String;
+        int userId = int.tryParse(userIdStr) ?? 0;
+
+        print('payload : $payload');
+
+        Provider.of<UserProvider>(context, listen: false).setUserId(userId);
+
+        //쿠키
+        Provider.of<UserProvider>(context, listen: false)
+            .setCookie(response.headers['Set-Cookie']![0]);
+      } else {
+        throw Exception(
+            'Failed to send user profile: Status code ${response.statusCode}, Body: ${response}');
+      }
+    } catch (e) {
+      print('Error sending user profile: $e');
+    }
+  }
+
   Future<void> signOut() async {
     await _googleSignIn.signOut();
     await _firebaseAuth.signOut();

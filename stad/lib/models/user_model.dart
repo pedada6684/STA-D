@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 class UserModel {
   final String? email;
   final String? phone;
@@ -12,4 +14,24 @@ class UserModel {
     this.profilePicture,
     this.googleAccessToken,
   });
+
+  factory UserModel.fromFirebaseUser(User user, String? googleAccessToken) {
+    return UserModel(
+      email: user.email,
+      phone: user.phoneNumber,
+      nickname: user.displayName,
+      profilePicture: user.photoURL,
+      googleAccessToken: googleAccessToken,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'email': email ?? '',
+      'phone': phone ?? '',
+      'nickname': nickname ?? '',
+      'profile': profilePicture ?? '',
+      'googleAT': googleAccessToken ?? '',
+    };
+  }
 }
