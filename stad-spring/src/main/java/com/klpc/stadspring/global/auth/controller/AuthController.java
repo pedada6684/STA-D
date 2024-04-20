@@ -46,7 +46,7 @@ public class AuthController {
     @PostMapping("/applogin")
     @Operation(summary = "앱 로그인 (일반)", description = "로그인 후 토큰 생성")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = AuthToken.class)))
-    public ResponseEntity<?> appLogin(AppLoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> appLogin(@RequestBody AppLoginRequest request, HttpServletResponse response) {
         log.info("AppLoginRequest: " + request);
         LoginResult result = userService.appLogin(request.toCommand());
         tokenInsert(response, result);
@@ -65,7 +65,7 @@ public class AuthController {
     @PostMapping("/weblogin")
     @Operation(summary = "웹 로그인 (기업)", description = "로그인 후 토큰 생성")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = AuthToken.class)))
-    public ResponseEntity<?> webLogin(WebLoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> webLogin(@RequestBody WebLoginRequest request, HttpServletResponse response) {
         log.info("WebLoginRequest: " + request);
         LoginResult result = userService.webLogin(request.toCommand());
         tokenInsert(response, result);
@@ -84,7 +84,7 @@ public class AuthController {
     @PostMapping("/webjoin")
     @Operation(summary = "웹 회원가입 (기업)", description = "회원가입 후 토큰 생성")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = AuthToken.class)))
-    public ResponseEntity<?> webJoin(WebJoinRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> webJoin(@RequestBody WebJoinRequest request, HttpServletResponse response) {
         log.info("WebJoinRequest: " + request);
         LoginResult result= userService.JoinCompanyUser(request.toCommand());
 
