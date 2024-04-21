@@ -32,14 +32,14 @@ class _ProductScreenState extends State<ProductScreen>
     return Scaffold(
       appBar: CustomAppBar(
         title: '상품명임',
-        titleStyle: TextStyle(
+        titleStyle: const TextStyle(
             fontSize: 18, color: mainWhite, fontWeight: FontWeight.bold),
         showBackButton: true,
         tabController: _tabController,
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
+        children: const [
           ProductDetailScreen(),
           Center(child: Text('리뷰 내용')),
         ],

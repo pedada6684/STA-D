@@ -16,7 +16,7 @@ class ProductDetailScreen extends StatelessWidget {
             // const SizedBox(height: 10.0),
             Container(
               color: mainWhite,
-              child: Padding(
+              child: const Padding(
                 padding: const EdgeInsets.symmetric(
                     vertical: 10.0, horizontal: 20.0),
                 child: Column(
@@ -65,7 +65,7 @@ class ProductDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+           const SizedBox(
               height: 10.0,
             ),
             Container(
@@ -75,7 +75,7 @@ class ProductDetailScreen extends StatelessWidget {
                     horizontal: 20.0, vertical: 16.0),
                 child: Column(
                   children: [
-                    Row(
+                    const Row(
                       children: [
                         Text(
                           '상품정보',
@@ -84,10 +84,10 @@ class ProductDetailScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16.0,
                     ),
-                    Row(
+                    const Row(
                       children: [
                         Text(
                           '제조사',
@@ -99,7 +99,7 @@ class ProductDetailScreen extends StatelessWidget {
                         Text('민형이네 딸기밭')
                       ],
                     ),
-                    Row(
+                    const Row(
                       children: [
                         Text(
                           '상품명',
@@ -111,7 +111,7 @@ class ProductDetailScreen extends StatelessWidget {
                         Text('민형이가 좋아하는 딸기')
                       ],
                     ),
-                    Row(
+                    const Row(
                       children: [
                         Text(
                           '원산지',
@@ -123,7 +123,7 @@ class ProductDetailScreen extends StatelessWidget {
                         Text('국산(충청남도 논산시)')
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16.0,
                     ),
                     Image.asset('assets/image/detail1.png'),
@@ -132,37 +132,37 @@ class ProductDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             Container(
               color: mainWhite,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       '상품정보 제공 고시',
                       style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Divider(),
+                    const Divider(),
                     // SizedBox(height: 20.0), // 섹션 제목과 내용 사이 간격 추가
                     _buildInformationRow('품명 및 모델명', '민형이네 딸기밭'),
-                    SizedBox(height: 10.0), // 각 정보 텍스트 사이 간격 추가
+                    const SizedBox(height: 10.0), // 각 정보 텍스트 사이 간격 추가
                     _buildInformationRow('제조연월일', '당일 수확 후 배송'),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     _buildInformationRow('원산지', '국산(충청남도 논산시)'),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     _buildInformationRow('생산자', '박지운'),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     _buildInformationRow('상품 구성', '킹스베리 특 1팩(400g, 9~10과)'),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     _buildInformationRow('보관방법', '상품 수령 후 냉장보관 plz'),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     _buildInformationRow('소비자상담 관련 전화번호', '1577-1577'),
                   ],
                 ),
@@ -180,13 +180,13 @@ class ProductDetailScreen extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14.0,
           ),
         ),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14.0,
           ),
         ),
