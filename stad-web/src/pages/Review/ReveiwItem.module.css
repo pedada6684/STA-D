@@ -1,0 +1,40 @@
+.container {
+  margin-top: 2rem;
+  display: flex;
+  width: 100%;
+}
+
+.nc {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+}
+.nickname {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.createdAt {
+  margin-top: 0.8rem;
+  color: #807f7f;
+  font-weight: 600;
+}
+.gci {
+  font-size: 1.1rem;
+  width: 80%;
+}
+.goods {
+  color: #807f7f;
+  margin-bottom: 1rem;
+}
+.content {
+  margin-bottom: 2rem;
+}
+.image {
+  display: flex;
+  width: 10rem;
+  height: 10rem;
+  border: 1px solid gray;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
