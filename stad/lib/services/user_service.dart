@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
+import 'package:stad/main.dart';
 import 'package:stad/models/user_model.dart';
 import 'package:stad/providers/user_provider.dart';
 
@@ -13,9 +14,9 @@ class UserService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final Dio dio = Dio();
 
-  Future<User?> signInWithGoogle(BuildContext context) async {
+  Future<void> signInWithGoogle(BuildContext context) async {
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-    if (googleUser == null) return null;
+    if (googleUser == null) return;
 
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
@@ -29,18 +30,30 @@ class UserService {
     final User? user = userCredential.user;
 
     if (user != null) {
-      await sendUserProfile(context, user, googleAuth.accessToken);
-      print('User signed in : ${user}');
-      return user;
+      UserModel userModel =
+          UserModel.fromFirebaseUser(user, googleAuth.accessToken);
+
+      // 서버로 사용자 프로필을 전송하고 응답을 기다림
+      bool profileSent =
+          await sendUserProfile(context, user, googleAuth.accessToken);
+      if (profileSent) {
+        await Provider.of<UserProvider>(context, listen: false)
+            .setUser(userModel);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MyApp()),
+        );
+      } else {
+        // 에러 처리 로직
+        print('Failed to send user profile');
+      }
     }
-    return null;
   }
 
-  Future<void> sendUserProfile(
+  Future<bool> sendUserProfile(
       BuildContext context, User user, String? googleAccessToken) async {
     final userProfile =
         UserModel.fromFirebaseUser(user, googleAccessToken).toJson();
-
     try {
       final response = await dio.post(
         'http://10.0.2.2:8080/api/v1/auth/applogin',
@@ -50,29 +63,22 @@ class UserService {
       );
 
       if (response.statusCode == 200) {
-        //토큰
-        String responseHeader = response.headers['Authorization']![0];
-        String token = responseHeader.replaceFirst('Bearer ', '');
+        String token =
+            response.headers['Authorization']![0].replaceFirst('Bearer ', '');
         Provider.of<UserProvider>(context, listen: false).setToken(token);
 
         Map<String, dynamic> payload = Jwt.parseJwt(token);
-        String userIdStr = payload['sub'] as String;
-        int userId = int.tryParse(userIdStr) ?? 0;
-
-        print('payload : $payload');
-
+        int userId = int.tryParse(payload['sub'] as String) ?? 0;
         Provider.of<UserProvider>(context, listen: false).setUserId(userId);
-
-        //쿠키
         Provider.of<UserProvider>(context, listen: false)
             .setCookie(response.headers['Set-Cookie']![0]);
-      } else {
-        throw Exception(
-            'Failed to send user profile: Status code ${response.statusCode}, Body: ${response}');
+
+        return true;
       }
     } catch (e) {
       print('Error sending user profile: $e');
     }
+    return false;
   }
 
   Future<void> signOut() async {

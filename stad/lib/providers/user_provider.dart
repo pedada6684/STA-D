@@ -1,5 +1,6 @@
 //사용자 인증상태, 토큰, 쿠키 관리하기
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stad/models/user_model.dart';
 
@@ -20,9 +21,12 @@ class UserProvider with ChangeNotifier {
 
   bool get isLoggedIn => _isLoggedIn;
 
-  void setUser(UserModel user) {
+  Future<void> setUser(UserModel user) async {
     _user = user;
     _isLoggedIn = true;
+    print('User updated: ${user.toJson()}');
+    print('User updated: ${user.toJson()}');
+    print('User updated: ${user.toJson()}');
     notifyListeners();
   }
 
@@ -38,7 +42,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setUserId(int UserId) {
+  void setUserId(int userId) {
     _userId = userId;
     print('사용자 userId : $userId');
     notifyListeners();
@@ -50,5 +54,15 @@ class UserProvider with ChangeNotifier {
     _cookie = null;
     _isLoggedIn = false;
     notifyListeners();
+  }
+
+  Future<void> fetchUser() async {
+    User? firebaseUser = FirebaseAuth.instance.currentUser;
+    if (firebaseUser != null) {
+      String? accessToken;
+      UserModel userModel =
+          UserModel.fromFirebaseUser(firebaseUser, accessToken);
+      setUser(userModel);
+    }
   }
 }

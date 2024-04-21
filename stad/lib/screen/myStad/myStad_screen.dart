@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import 'package:stad/component/app_bar.dart';
 import 'package:stad/component/button.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/main.dart';
+import 'package:stad/models/user_model.dart';
+import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/mycommercial_screen.dart';
 import 'package:stad/screen/myStad/mycontents_screen.dart';
@@ -18,6 +21,13 @@ class MyStadScreen extends StatefulWidget {
 }
 
 class _MyStadScreenState extends State<MyStadScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+        () => Provider.of<UserProvider>(context, listen: false).fetchUser());
+  }
+
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Future<void> _handleSignout() async {
@@ -37,6 +47,11 @@ class _MyStadScreenState extends State<MyStadScreen> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel? userModel =
+        Provider.of<UserProvider>(context, listen: true).user;
+
+    print('이거는 나오려나 ${userModel?.toJson()}');
+
     return Scaffold(
       backgroundColor: backGray,
       appBar: CustomAppBar(
@@ -47,7 +62,7 @@ class _MyStadScreenState extends State<MyStadScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            buildContainer(),
+            UserInfoContainer(),
             _buildHeadListTile(title: '주문 내역'),
             _buildHeadListTile(title: '배송지 관리'),
             _buildHeadListTile(title: '상품 리뷰'),
@@ -71,6 +86,9 @@ class _MyStadScreenState extends State<MyStadScreen> {
                   MaterialPageRoute(builder: (context) => MyContentsScreen()),
                 );
               },
+            ),
+            SizedBox(
+              height: 10.0,
             ),
             _buildHeadListTile(
                 title: '로그아웃',
@@ -118,88 +136,88 @@ class _MyStadScreenState extends State<MyStadScreen> {
   }
 }
 
-class buildContainer extends StatelessWidget {
-  const buildContainer({
+class UserInfoContainer extends StatelessWidget {
+  const UserInfoContainer({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 230,
-      width: MediaQuery.of(context).size.width,
-      color: mainNavy,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.settings_rounded,
-                color: mainWhite,
-                size: 32.0,
-              ),
-            ),
-          ),
-          Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  CircleAvatar(
-                    backgroundColor: mainWhite,
-                    radius: 48.0,
-                    child: Icon(
-                      Icons.person,
-                      color: mainNavy,
-                      size: 48.0,
+    return Consumer<UserProvider>(
+      builder: (context, userProvider, child) {
+        final userModel = userProvider.user;
+        print(userModel?.toJson());
+        print(userModel);
+        print(userModel);
+        print(userModel);
+        return Container(
+          height: 230,
+          width: MediaQuery.of(context).size.width,
+          color: mainNavy,
+          child: userModel != null
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.settings_rounded,
+                            color: mainWhite, size: 32.0),
+                      ),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        CircleAvatar(
+                          backgroundColor: mainWhite,
+                          radius: 48.0,
+                          child:
+                              Icon(Icons.person, color: mainNavy, size: 48.0),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              userModel.nickname ?? '닉네임을 설정해주세요.',
+                              style: TextStyle(
+                                  color: mainWhite,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 4.0),
+                            Text(
+                              userModel.email ?? '이메일 없음',
+                              style:
+                                  TextStyle(color: mainWhite, fontSize: 16.0),
+                            ),
+                            SizedBox(height: 4.0),
+                            Text(
+                              userModel.phone ?? '연락처를 추가해주세요.',
+                              style:
+                                  TextStyle(color: mainWhite, fontSize: 16.0),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.0),
+                    CustomElevatedButton(
+                      text: '새 기기 연결하기',
+                      onPressed: () => _navigateToQRScreen(context),
+                      textColor: mainNavy,
+                      backgroundColor: mainWhite,
+                    )
+                  ],
+                )
+              : Center(
+                  child: Text(
+                    '로그인 정보를 불러오는 중...',
+                    style: TextStyle(color: mainWhite),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        '박지운',
-                        style: TextStyle(
-                            color: mainWhite,
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 4.0,
-                      ),
-                      Text(
-                        'zizi@naver.com',
-                        style: TextStyle(color: mainWhite, fontSize: 16.0),
-                      ),
-                      SizedBox(
-                        height: 4.0,
-                      ),
-                      Text(
-                        '010-1004-1004',
-                        style: TextStyle(color: mainWhite, fontSize: 16.0),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 16.0,
-              ),
-              CustomElevatedButton(
-                text: '새 기기 연결하기',
-                onPressed: () {
-                  _navigateToQRScreen(context);
-                },
-                textColor: mainNavy,
-                backgroundColor: mainWhite,
-              )
-            ],
-          ),
-        ],
-      ),
+                ),
+        );
+      },
     );
   }
 
