@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
-import 'package:stad/main.dart';
 import 'package:stad/services/user_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,23 +13,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final UserService _userService = UserService();
 
   void _handleSignIn() async {
-    User? user = await _userService.signInWithGoogle(context);
-
-    print('useruseruseruseruseruser: $user');
-
-    if (user != null) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => MyApp()),
-        (Route<dynamic> route) => false,
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('로그인 실패'),
-        ),
-      );
-    }
+    await _userService.signInWithGoogle(context);
   }
 
   @override
