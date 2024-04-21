@@ -146,10 +146,7 @@ class UserInfoContainer extends StatelessWidget {
     return Consumer<UserProvider>(
       builder: (context, userProvider, child) {
         final userModel = userProvider.user;
-        print(userModel?.toJson());
-        print(userModel);
-        print(userModel);
-        print(userModel);
+
         return Container(
           height: 230,
           width: MediaQuery.of(context).size.width,
@@ -172,8 +169,10 @@ class UserInfoContainer extends StatelessWidget {
                         CircleAvatar(
                           backgroundColor: mainWhite,
                           radius: 48.0,
-                          child:
-                              Icon(Icons.person, color: mainNavy, size: 48.0),
+                          backgroundImage: userModel?.profilePicture != null
+                              ? NetworkImage(userModel.profilePicture!)
+                              : AssetImage('assets/image/default_profile.png')
+                                  as ImageProvider,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
