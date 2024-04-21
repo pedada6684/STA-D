@@ -10,16 +10,13 @@ import EnrolledGoodsList from "./pages/MyPage/SalesManagement/EnrolledGoodsList"
 import AdManagement from "./pages/AdManagement/AdManagement";
 import SignUp from "./pages/WebLogin/SignUp";
 import Advertisement from "./components/Enroll/Advertisement";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Review from "./pages/Review/Review";
 import Merchandise from "./components/Enroll/Merchandise";
 import EnrolledAdList from "./pages/MyPage/SalesManagement/EnrolledAdList";
 
 function App() {
-  const queryClient = new QueryClient();
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <BrowserRouter>
         <div className="App">
           <Routes>
@@ -40,8 +37,7 @@ function App() {
           </Routes>
         </div>
       </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    </>
   );
 }
 
