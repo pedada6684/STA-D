@@ -169,7 +169,7 @@ class UserInfoContainer extends StatelessWidget {
                         CircleAvatar(
                           backgroundColor: mainWhite,
                           radius: 48.0,
-                          backgroundImage: userModel?.profilePicture != null
+                          backgroundImage: userModel.profilePicture != null
                               ? NetworkImage(userModel.profilePicture!)
                               : AssetImage('assets/image/default_profile.png')
                                   as ImageProvider,
@@ -181,7 +181,7 @@ class UserInfoContainer extends StatelessWidget {
                               userModel.nickname ?? '닉네임을 설정해주세요.',
                               style: TextStyle(
                                   color: mainWhite,
-                                  fontSize: 24.0,
+                                  fontSize: 22.0,
                                   fontWeight: FontWeight.bold),
                             ),
                             SizedBox(height: 4.0),

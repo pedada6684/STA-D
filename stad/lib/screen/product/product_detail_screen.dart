@@ -26,7 +26,7 @@ class ProductDetailScreen extends StatelessWidget {
                       '상품명임',
                       style: TextStyle(
                         fontSize: 20.0,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     Text(
