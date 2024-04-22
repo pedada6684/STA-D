@@ -35,9 +35,6 @@ public class ProductOrder {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "productOrder")
-    private List<Product> products;
-
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "productOrder")
     private Delivery delivery;
 
