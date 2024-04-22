@@ -13,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ContentCategory {
     @Id
-    @Column(name = "content_category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
