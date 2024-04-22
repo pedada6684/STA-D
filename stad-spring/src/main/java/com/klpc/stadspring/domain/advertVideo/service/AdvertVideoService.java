@@ -1,11 +1,9 @@
 package com.klpc.stadspring.domain.advertVideo.service;
 
-import com.klpc.stadspring.domain.advertVideo.controller.response.AddVideoListResponse;
-import com.klpc.stadspring.domain.advertVideo.controller.response.DeleteResponse;
-import com.klpc.stadspring.domain.advertVideo.controller.response.GetAdvertVideoResponse;
-import com.klpc.stadspring.domain.advertVideo.controller.response.ModifyVideoResponse;
+import com.klpc.stadspring.domain.advertVideo.controller.response.*;
 import com.klpc.stadspring.domain.advertVideo.entity.AdvertVideo;
 import com.klpc.stadspring.domain.advertVideo.repository.AdvertVideoRepository;
+import com.klpc.stadspring.domain.advertVideo.service.command.request.AddBannerImgRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddVideoListRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVideoRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.response.AddVideoListResponseCommand;
@@ -61,6 +59,7 @@ public class AdvertVideoService {
      * @return
      */
     public ModifyVideoResponse modifyVideo(ModifyVideoRequestCommand command){
+        System.out.println("******"+command.getVideoId());
         AdvertVideo advertVideo = advertVideoRepository.findById(command.getVideoId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         MultipartFile file = command.getVideo();
@@ -78,5 +77,13 @@ public class AdvertVideoService {
         advertVideoRepository.delete(advertVideo);
 
         return DeleteResponse.builder().result("success").build();
+    }
+
+    public AddBannerImgResponse addBannerImg(AddBannerImgRequestCommand command){
+        MultipartFile file = command.getImg();
+        String fileName = UUID.randomUUID().toString().replaceAll("-","")+file.getName();
+        URL imgUrl = s3Util.uploadImageToS3(file,"bannerImg",fileName);
+
+        return AddBannerImgResponse.builder().bannerUrl(imgUrl.toString()).build();
     }
 }
