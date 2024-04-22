@@ -1,10 +1,13 @@
 package com.klpc.stadspring.domain.advert.service;
 
 import com.klpc.stadspring.domain.advert.controller.response.AddAdvertResponse;
+import com.klpc.stadspring.domain.advert.controller.response.ModifyAdvertResponse;
 import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertRequestCommand;
+import com.klpc.stadspring.domain.advert.service.command.request.ModifyAdvertRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.entity.AdvertVideo;
+import com.klpc.stadspring.domain.advertVideo.repository.AdvertVideoRepository;
 import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
 import com.klpc.stadspring.domain.selectedContent.entity.SelectedContent;
@@ -15,12 +18,14 @@ import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.bytedeco.javacv.FFmpegFrameGrabber;
 
 @Service
 @RequiredArgsConstructor
 public class AdvertService {
 
     private final AdvertRepository advertRepository;
+    private final AdvertVideoRepository advertVideoRepository;
     private final AdvertVideoService advertVideoService;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
@@ -46,7 +51,14 @@ public class AdvertService {
             selectedContent.linkAdvert(advert);
         }
         for(String i : command.getAdvertVideoUrlList()){
-            AdvertVideo advertVideo = AdvertVideo.createToAdvertVideo(0L,i);
+            Long len = 0L;
+            try (FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(i)) {
+                grabber.start();
+                len = (Long) (grabber.getLengthInTime() / 1000); // Convert to milliseconds
+            } catch (Exception e) {
+                throw new CustomException(ErrorCode.AWSS3_ERROR);
+            }
+            AdvertVideo advertVideo = AdvertVideo.createToAdvertVideo(len,i);
             advertVideo.linkAdvert(advert);
         }
 
@@ -57,6 +69,36 @@ public class AdvertService {
             addAdvertResponse = AddAdvertResponse.builder().result("fail").build();
 
         return addAdvertResponse;
+    }
+
+    public ModifyAdvertResponse modifyAdvertResponse(ModifyAdvertRequestCommand command){
+        Advert advert = advertRepository.findById(command.getAdvertId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        advert.modifyAdvert(
+                command.getTitle(),
+                command.getDescription(),
+                command.getStartDate(),
+                command.getEndDate(),
+                command.getCategory(),
+                command.getDirectVideoUrl(),
+                command.getBannerImgUrl()
+        );
+        if(!command.getSelectedContentList().isEmpty()) {
+            selectedContentRepository.deleteAll(advert.getSelectedContents());
+            for (Long i : command.getSelectedContentList()) {
+                SelectedContent sc = SelectedContent.createToSelectedContent(i);
+                SelectedContent selectedContent = selectedContentRepository.save(sc);
+                selectedContent.linkAdvert(advert);
+            }
+        }
+
+        ModifyAdvertResponse modifyAdvertResponse;
+        if(advert.getId()>0)
+            modifyAdvertResponse = ModifyAdvertResponse.builder().result("success").build();
+        else
+            modifyAdvertResponse = ModifyAdvertResponse.builder().result("fail").build();
+
+        return modifyAdvertResponse;
     }
 
 }
