@@ -1,6 +1,8 @@
 package com.klpc.stadspring.domain.advert.entity;
 
 import com.klpc.stadspring.domain.advertVideo.entity.AdvertVideo;
+import com.klpc.stadspring.domain.product.entity.Product;
+import com.klpc.stadspring.domain.selectedContent.entity.SelectedContent;
 import com.klpc.stadspring.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

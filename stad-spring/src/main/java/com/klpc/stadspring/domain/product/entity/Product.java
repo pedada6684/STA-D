@@ -2,11 +2,13 @@ package com.klpc.stadspring.domain.product.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.klpc.stadspring.domain.advert.entity.Advert;
+import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.product.service.command.UpdateProductInfoCommand;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
