@@ -41,9 +41,9 @@ public class ProductReviewController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/regist")
+    @PostMapping(value = "/regist", consumes = "multipart/form-data", produces = "application/json")
     @Operation(summary = "리뷰 등록", description = "리뷰 등록")
-    public ResponseEntity<?> registReview(@RequestBody ProductReviewPostRequest request) {
+    public ResponseEntity<?> registReview(@ModelAttribute ProductReviewPostRequest request) {
         log.info("ProductReviewPostRequest: " + request);
         try {
             ProductReview review = productReviewService.registReview(request.toCommand());
