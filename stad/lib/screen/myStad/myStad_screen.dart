@@ -169,7 +169,7 @@ class UserInfoContainer extends StatelessWidget {
                         CircleAvatar(
                           backgroundColor: mainWhite,
                           radius: 48.0,
-                          backgroundImage: userModel?.profilePicture != null
+                          backgroundImage: userModel.profilePicture != null
                               ? NetworkImage(userModel.profilePicture!)
                               : AssetImage('assets/image/default_profile.png')
                                   as ImageProvider,

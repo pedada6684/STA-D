@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stad/component/app_bar.dart';
 import 'package:stad/component/button.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/screen/product/option_bottom_sheet.dart';
 import 'package:stad/screen/product/product_detail_screen.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -51,7 +52,9 @@ class _ProductScreenState extends State<ProductScreen>
             text: '주문하기',
             textColor: mainWhite,
             backgroundColor: mainNavy,
-            onPressed: () {},
+            onPressed: () {
+              showProductOptionBottomSheet(context);
+            },
           ),
         ),
       ),
