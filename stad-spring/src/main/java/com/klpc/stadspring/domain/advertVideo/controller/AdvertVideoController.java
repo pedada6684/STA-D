@@ -2,6 +2,7 @@ package com.klpc.stadspring.domain.advertVideo.controller;
 
 import com.klpc.stadspring.domain.advertVideo.controller.request.ModifyVideoRequest;
 import com.klpc.stadspring.domain.advertVideo.controller.response.AddVideoListResponse;
+import com.klpc.stadspring.domain.advertVideo.controller.response.DeleteResponse;
 import com.klpc.stadspring.domain.advertVideo.controller.response.GetAdvertVideoResponse;
 import com.klpc.stadspring.domain.advertVideo.controller.response.ModifyVideoResponse;
 import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
@@ -48,5 +49,13 @@ public class AdvertVideoController {
         ModifyVideoResponse response = advertVideoService.modifyVideo(command);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete-video")
+    public ResponseEntity<DeleteResponse> deleteVideo(@RequestParam("advertVideoId") Long advertVideoId){
+        DeleteResponse response = advertVideoService.deleteResponse(advertVideoId);
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
 
 }
