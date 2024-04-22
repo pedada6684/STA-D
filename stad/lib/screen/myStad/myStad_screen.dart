@@ -181,7 +181,7 @@ class UserInfoContainer extends StatelessWidget {
                               userModel.nickname ?? '닉네임을 설정해주세요.',
                               style: TextStyle(
                                   color: mainWhite,
-                                  fontSize: 24.0,
+                                  fontSize: 22.0,
                                   fontWeight: FontWeight.bold),
                             ),
                             SizedBox(height: 4.0),
