@@ -56,4 +56,8 @@ public class AdvertVideo {
         this.clickCnt++;
     }
 
+    public void modifyAdvertVideoUrl(String videoUrl){
+        this.videoUrl=videoUrl;
+    }
+
 }
