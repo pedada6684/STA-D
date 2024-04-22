@@ -48,4 +48,12 @@ public class AdvertVideo {
         this.advert=advert;
     }
 
+    public void increaseSpreadCnt(){
+        this.spreadCnt++;
+    }
+
+    public void increaseClickCnt(){
+        this.clickCnt++;
+    }
+
 }

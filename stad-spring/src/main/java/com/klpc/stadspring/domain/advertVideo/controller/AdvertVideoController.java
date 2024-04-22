@@ -2,8 +2,10 @@ package com.klpc.stadspring.domain.advertVideo.controller;
 
 import com.klpc.stadspring.domain.advertVideo.controller.request.AddVideoListRequest;
 import com.klpc.stadspring.domain.advertVideo.controller.response.AddVideoListResponse;
+import com.klpc.stadspring.domain.advertVideo.controller.response.GetAdvertVideoResponse;
 import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddVideoListRequestCommand;
+import io.lettuce.core.dynamic.annotation.Param;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,12 @@ public class AdvertVideoController {
     @PostMapping("/add-video-list")
     public ResponseEntity<AddVideoListResponse> addVideoList(@RequestPart List<MultipartFile> videoList){
         AddVideoListResponse response = advertVideoService.addVideoList(AddVideoListRequestCommand.builder().list(videoList).build());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/spread-advert")
+    public ResponseEntity<GetAdvertVideoResponse> getAdvertVideo(@RequestParam Long advertVideoId){
+        GetAdvertVideoResponse response = advertVideoService.getAdvertVideo(advertVideoId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
