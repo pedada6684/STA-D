@@ -16,11 +16,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ContentDetail {
     @Id
-    @Column(name = "content_detail_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "content_concept_id")
     private Long contentConceptId;
 
     @Column(length = 5)
@@ -29,7 +27,6 @@ public class ContentDetail {
     @Column(length = 10)
     private String playtime;
 
-    @Column(name = "video_url")
     private String videoUrl;
 
     @OneToMany(mappedBy = "contentDetail")
