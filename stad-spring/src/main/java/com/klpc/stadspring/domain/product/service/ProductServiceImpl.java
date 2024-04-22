@@ -12,10 +12,14 @@ import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import com.klpc.stadspring.util.S3Util;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService{
 
     private final ProductRepository productRepository;
+    private final S3Util s3Util;
 
     // 상품 리스트
 //    @Override
@@ -51,12 +56,19 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Product addProduct(AddProductCommand command) {
         log.info("AddProductCommand: "+command);
+
+        URL thumbnailUrl = s3Util.uploadImageToS3(command.getThumbnail(), "product_thumbnail", UUID.randomUUID().toString());
+        Objects.requireNonNull(thumbnailUrl);
+
+        URL introductionUrl = s3Util.uploadImageToS3(command.getIntroduction(), "product_introduction", UUID.randomUUID().toString());
+        Objects.requireNonNull(introductionUrl);
+
         Product newProduct = Product.createNewProduct(
                 command.getName(),
                 command.getPrice(),
                 command.getQuantity(),
-                command.getIntroduction(),
-                command.getThumbnail(),
+                introductionUrl.toString(),
+                thumbnailUrl.toString(),
                 command.getCategory(),
                 command.getSellStart(),
                 command.getSellEnd(),

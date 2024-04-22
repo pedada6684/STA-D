@@ -4,6 +4,7 @@ import com.klpc.stadspring.domain.product.controller.response.GetProductInfoResp
 import com.klpc.stadspring.domain.product.entity.Product;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -16,8 +17,8 @@ public class AddProductCommand {
     String name;
     Long price;
     Long quantity;
-    String introduction;
-    String thumbnail;
+    MultipartFile introduction;
+    MultipartFile thumbnail;
     String category;
     LocalDateTime sellStart;
     LocalDateTime sellEnd;

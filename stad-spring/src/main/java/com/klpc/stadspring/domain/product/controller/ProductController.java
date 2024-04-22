@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.product.controller;
 
+import com.klpc.stadspring.domain.product.controller.request.ProductPostRequest;
 import com.klpc.stadspring.domain.product.controller.response.GetProductInfoResponse;
 import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdverseResponse;
 import com.klpc.stadspring.domain.product.entity.Product;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,16 +56,17 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/regist")
+    @PostMapping(value = "/regist", consumes = "multipart/form-data", produces = "application/json")
     @Operation(summary = "상품 등록", description = "상품 등록")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "상품 등록 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    public ResponseEntity<?> addNewProduct(@RequestBody AddProductCommand command) {
+    public ResponseEntity<?> addNewProduct(@ModelAttribute ProductPostRequest request) {
+        log.info("ProductPostRequest: "+request);
         try {
-            productService.addProduct(command);
+            productService.addProduct(request.toCommand());
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

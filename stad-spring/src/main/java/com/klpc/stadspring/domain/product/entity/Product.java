@@ -128,6 +128,9 @@ public class Product {
         this.thumbnail = thumbnail;
     }
 
+    public void updateProductIntroduction(String introduction){
+        this.introduction = introduction;
+    }
     public void linkAdvert(Advert advert){
         this.advert=advert;
     }
