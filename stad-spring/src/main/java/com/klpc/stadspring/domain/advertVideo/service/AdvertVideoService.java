@@ -1,6 +1,7 @@
 package com.klpc.stadspring.domain.advertVideo.service;
 
 import com.klpc.stadspring.domain.advertVideo.controller.response.AddVideoListResponse;
+import com.klpc.stadspring.domain.advertVideo.controller.response.DeleteResponse;
 import com.klpc.stadspring.domain.advertVideo.controller.response.GetAdvertVideoResponse;
 import com.klpc.stadspring.domain.advertVideo.controller.response.ModifyVideoResponse;
 import com.klpc.stadspring.domain.advertVideo.entity.AdvertVideo;
@@ -54,6 +55,11 @@ public class AdvertVideoService {
         return response;
     }
 
+    /**
+     * 영상 수정
+     * @param command
+     * @return
+     */
     public ModifyVideoResponse modifyVideo(ModifyVideoRequestCommand command){
         AdvertVideo advertVideo = advertVideoRepository.findById(command.getVideoId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
@@ -64,5 +70,13 @@ public class AdvertVideoService {
         advertVideo.modifyAdvertVideoUrl(videoUrl.toString());
 
         return ModifyVideoResponse.builder().videoUrl(videoUrl.toString()).build();
+    }
+
+    public DeleteResponse deleteResponse(Long id){
+        AdvertVideo advertVideo = advertVideoRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        advertVideoRepository.delete(advertVideo);
+
+        return DeleteResponse.builder().result("success").build();
     }
 }
