@@ -1,11 +1,12 @@
 package com.klpc.stadspring.domain.advertVideo.controller;
 
-import com.klpc.stadspring.domain.advertVideo.controller.request.AddVideoListRequest;
+import com.klpc.stadspring.domain.advertVideo.controller.request.ModifyVideoRequest;
 import com.klpc.stadspring.domain.advertVideo.controller.response.AddVideoListResponse;
 import com.klpc.stadspring.domain.advertVideo.controller.response.GetAdvertVideoResponse;
+import com.klpc.stadspring.domain.advertVideo.controller.response.ModifyVideoResponse;
 import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddVideoListRequestCommand;
-import io.lettuce.core.dynamic.annotation.Param;
+import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVideoRequestCommand;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +33,19 @@ public class AdvertVideoController {
     }
 
     @GetMapping("/spread-advert")
-    public ResponseEntity<GetAdvertVideoResponse> getAdvertVideo(@RequestParam Long advertVideoId){
+    public ResponseEntity<GetAdvertVideoResponse> getAdvertVideo(@RequestParam("advertVideoId") Long advertVideoId){
         GetAdvertVideoResponse response = advertVideoService.getAdvertVideo(advertVideoId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/modify-video")
+    public ResponseEntity<ModifyVideoResponse> modifyVideo(@ModelAttribute ModifyVideoRequest request){
+        ModifyVideoRequestCommand command = ModifyVideoRequestCommand.builder()
+                .videoId(request.getVideoId())
+                .video(request.getVideo())
+                .build();
+
+        ModifyVideoResponse response = advertVideoService.modifyVideo(command);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
