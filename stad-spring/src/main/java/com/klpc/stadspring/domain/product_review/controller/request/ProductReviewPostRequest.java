@@ -3,6 +3,7 @@ package com.klpc.stadspring.domain.product_review.controller.request;
 import com.klpc.stadspring.domain.product.service.command.UpdateProductInfoCommand;
 import com.klpc.stadspring.domain.product_review.service.command.AddReviewCommand;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +22,8 @@ public class ProductReviewPostRequest {
     private Long productId;
     private String title;
     private String content;
+    private Double score;
+    private MultipartFile reviewImg;
 
     public AddReviewCommand toCommand(){
         return AddReviewCommand.builder()
@@ -28,6 +31,8 @@ public class ProductReviewPostRequest {
                 .productId(productId)
                 .title(title)
                 .content(content)
+                .score(score)
+                .reviewImg(reviewImg)
                 .build();
     }
 }
