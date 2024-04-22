@@ -1,14 +1,13 @@
 package com.klpc.stadspring.domain.advertVideo.controller;
 
 import com.klpc.stadspring.domain.advertVideo.controller.request.ModifyVideoRequest;
-import com.klpc.stadspring.domain.advertVideo.controller.response.AddVideoListResponse;
-import com.klpc.stadspring.domain.advertVideo.controller.response.DeleteResponse;
-import com.klpc.stadspring.domain.advertVideo.controller.response.GetAdvertVideoResponse;
-import com.klpc.stadspring.domain.advertVideo.controller.response.ModifyVideoResponse;
+import com.klpc.stadspring.domain.advertVideo.controller.response.*;
 import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
+import com.klpc.stadspring.domain.advertVideo.service.command.request.AddBannerImgRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddVideoListRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVideoRequestCommand;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,7 +27,7 @@ public class AdvertVideoController {
     private final AdvertVideoService advertVideoService;
 
     @PostMapping("/add-video-list")
-    public ResponseEntity<AddVideoListResponse> addVideoList(@RequestPart List<MultipartFile> videoList){
+    public ResponseEntity<AddVideoListResponse> addVideoList(@RequestPart("videoList") List<MultipartFile> videoList){
         AddVideoListResponse response = advertVideoService.addVideoList(AddVideoListRequestCommand.builder().list(videoList).build());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -39,8 +38,9 @@ public class AdvertVideoController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping("/modify-video")
+    @PostMapping("/modify-video")
     public ResponseEntity<ModifyVideoResponse> modifyVideo(@ModelAttribute ModifyVideoRequest request){
+        System.out.println("#######"+request.getVideoId());
         ModifyVideoRequestCommand command = ModifyVideoRequestCommand.builder()
                 .videoId(request.getVideoId())
                 .video(request.getVideo())
@@ -57,5 +57,12 @@ public class AdvertVideoController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+    @PostMapping("/add-banner")
+    public ResponseEntity<AddBannerImgResponse> addBannerImg(@RequestPart("bannerImg") MultipartFile bannerImg){
+        AddBannerImgRequestCommand command = AddBannerImgRequestCommand.builder().img(bannerImg).build();
+
+        AddBannerImgResponse response = advertVideoService.addBannerImg(command);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
 }
