@@ -1,7 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/component/custom_dropdown.dart';
+import 'package:stad/component/quantity_changer.dart';
 
 // 모달 바텀 시트를 띄우는 함수
 void showProductOptionBottomSheet(BuildContext context) {
@@ -101,7 +101,7 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
               onToggle: toggleOptionExpanded,
               onSelect: selectOption,
             ),
-            _buildQuantityChanger(),
+            QuantityChanger(),
             _buildTotalPrice(),
             _buildActionButtons(context),
           ],
@@ -109,156 +109,6 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
       ),
     );
   }
-}
-
-class CustomDropdown extends StatelessWidget {
-  final String title;
-  final List<String> options;
-  final String? selectedOption;
-  final bool isExpanded;
-  final Function() onToggle;
-  final Function(String?) onSelect;
-
-  const CustomDropdown({
-    Key? key,
-    required this.title,
-    required this.options,
-    this.selectedOption,
-    required this.isExpanded,
-    required this.onToggle,
-    required this.onSelect,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      // margin: const EdgeInsets.only(bottom: 8.0), // 간격 추가
-      decoration: BoxDecoration(
-        border: Border.all(color: midGray, width: 1),
-        borderRadius: BorderRadius.circular(5.0),
-      ),
-      child: Column(
-        children: [
-          ListTile(
-            title: Text(title,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            // 제목 스타일 조정
-            subtitle: Text(selectedOption ?? '선택해주세요',
-                style: TextStyle(color: mainNavy)),
-            // 서브타이틀 스타일 조정
-            trailing: Icon(
-              isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-              color: darkGray,
-            ),
-            onTap: onToggle,
-          ),
-          if (isExpanded) // 옵션 위에 구분선 추가
-            ...options.map((option) {
-              bool isSelected = selectedOption == option;
-              return Column(
-                children: [
-                  Divider(
-                    height: 1,
-                  ),
-                  ListTile(
-                    title: Text(option),
-                    leading: isSelected
-                        ? Icon(Icons.check_circle, color: mainNavy)
-                        : Icon(Icons.radio_button_unchecked, color: mainNavy),
-                    // 체크박스 아이콘 조정
-                    onTap: () {
-                      onSelect(isSelected ? null : option); // 선택된 항목을 다시 탭하면 해제
-                    },
-                  ),
-                  // Divider(height: 1), // 옵션 사이의 구분선 추가
-                ],
-              );
-            }).toList(),
-        ],
-      ),
-    );
-  }
-}
-
-Widget _buildQuantityChanger() {
-  // You can use a stateful widget to manage the state of quantity
-  int quantity = 0; // Example static quantity
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '민형이가 좋아하는 딸기',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            IconButton(
-                iconSize: 30.0,
-                onPressed: () {},
-                icon: Icon(
-                  Icons.cancel_rounded,
-                  color: mainGray,
-                ))
-          ],
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: midGray),
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(5.0)),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _buildCounterButton(Icons.remove, () {
-                    // 수량 감소
-                  }),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(
-                      '$quantity',
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                  ),
-                  _buildCounterButton(Icons.add, () {
-                    // 수량 증가
-                  }),
-                ],
-              ),
-            ),
-            Text('53,400원',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          ],
-        ),
-      ),
-    ],
-  );
-}
-
-Widget _buildCounterButton(IconData icon, VoidCallback onPressed) {
-  return GestureDetector(
-    onTap: onPressed,
-    child: Container(
-      color: Colors.transparent, // 버튼 배경 색상을 지정할 수 있습니다.
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Icon(
-        icon,
-        color: darkGray,
-      ),
-    ),
-  );
 }
 
 Widget _buildTotalPrice() {
