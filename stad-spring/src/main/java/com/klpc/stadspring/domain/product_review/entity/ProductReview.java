@@ -5,6 +5,7 @@ import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -35,6 +36,12 @@ public class ProductReview {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "score")
+    private Double score;
+
+    @Column(name = "review_img")
+    private String reviewImg;
+
     @Column(name = "reg_date")
     private LocalDateTime regDate;
 
@@ -43,6 +50,8 @@ public class ProductReview {
           Product product,
           String title,
           String content,
+          Double score,
+          String reviewImg,
           String regDate
     ) {
         ProductReview review = new ProductReview();
@@ -50,6 +59,8 @@ public class ProductReview {
         review.product = product;
         review.title = title;
         review.content = content;
+        review.score = score;
+        review.reviewImg = reviewImg;
         review.regDate = LocalDateTime.now();
         return review;
     }
