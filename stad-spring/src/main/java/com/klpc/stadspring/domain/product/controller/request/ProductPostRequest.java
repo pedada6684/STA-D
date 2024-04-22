@@ -1,6 +1,9 @@
 package com.klpc.stadspring.domain.product.controller.request;
 
+import com.klpc.stadspring.domain.product.service.command.AddProductCommand;
+import com.klpc.stadspring.domain.product.service.command.UpdateProductInfoCommand;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -18,8 +21,8 @@ public class ProductPostRequest {
     String name;
     Long price;
     Long quantity;
-    String introduction;
-    String thumbnail;
+    MultipartFile introduction;
+    MultipartFile thumbnail;
     String category;
     LocalDateTime sellStart;
     LocalDateTime sellEnd;
@@ -28,4 +31,22 @@ public class ProductPostRequest {
     LocalDateTime expStart;
     LocalDateTime expEnd;
     LocalDateTime deliveryDate;
+
+    public AddProductCommand toCommand(){
+        return AddProductCommand.builder()
+                .name(name)
+                .price(price)
+                .introduction(introduction)
+                .thumbnail(thumbnail)
+                .category(category)
+                .sellStart(sellStart)
+                .sellEnd(sellEnd)
+                .cityDeliveryFee(cityDeliveryFee)
+                .mtDeliveryFee(mtDeliveryFee)
+                .expStart(expStart)
+                .expEnd(expEnd)
+                .deliveryDate(deliveryDate)
+                .build();
+    }
+
 }
