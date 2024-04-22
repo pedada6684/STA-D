@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
 
@@ -49,7 +51,7 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   void selectOption(String? option) {
     setState(() {
       selectedOption = option;
-      // isOptionExpanded = false;
+      isOptionExpanded = false;
     });
   }
 
@@ -59,8 +61,8 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
       decoration: BoxDecoration(
         color: mainWhite,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(15.0),
-          topRight: Radius.circular(15.0),
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
         ),
       ),
       child: Padding(
@@ -73,7 +75,7 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
               height: 4,
               margin: const EdgeInsets.only(bottom: 8.0),
               decoration: BoxDecoration(
-                color: mainNavy,
+                color: darkGray,
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -130,10 +132,10 @@ class CustomDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 8.0), // 간격 추가
+      // margin: const EdgeInsets.only(bottom: 8.0), // 간격 추가
       decoration: BoxDecoration(
-        border: Border.all(color: mainBlack),
-        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(color: midGray, width: 1),
+        borderRadius: BorderRadius.circular(5.0),
       ),
       child: Column(
         children: [
@@ -181,40 +183,81 @@ class CustomDropdown extends StatelessWidget {
 Widget _buildQuantityChanger() {
   // You can use a stateful widget to manage the state of quantity
   int quantity = 0; // Example static quantity
-  return Row(
+  return Column(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Text(
-        '민형이가 좋아하는 딸기',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
+      Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '민형이가 좋아하는 딸기',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            IconButton(
+                iconSize: 30.0,
+                onPressed: () {},
+                icon: Icon(
+                  Icons.cancel_rounded,
+                  color: mainGray,
+                ))
+          ],
         ),
       ),
-      Row(
-        children: [
-          _buildCounterButton(Icons.remove, () {
-            // 수량 감소
-          }),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('$quantity'),
-          ),
-          _buildCounterButton(Icons.add, () {
-            // 수량 증가
-          }),
-        ],
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: midGray),
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(5.0)),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildCounterButton(Icons.remove, () {
+                    // 수량 감소
+                  }),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      '$quantity',
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                  ),
+                  _buildCounterButton(Icons.add, () {
+                    // 수량 증가
+                  }),
+                ],
+              ),
+            ),
+            Text('53,400원',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          ],
+        ),
       ),
-      Text('53,400원',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
     ],
   );
 }
 
 Widget _buildCounterButton(IconData icon, VoidCallback onPressed) {
-  return IconButton(
-    icon: Icon(icon, color: mainNavy),
-    onPressed: onPressed,
+  return GestureDetector(
+    onTap: onPressed,
+    child: Container(
+      color: Colors.transparent, // 버튼 배경 색상을 지정할 수 있습니다.
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Icon(
+        icon,
+        color: darkGray,
+      ),
+    ),
   );
 }
 
@@ -235,7 +278,7 @@ Widget _buildActionButtons(BuildContext context) {
               textStyle: TextStyle(
                 fontSize: 18,
               ),
-              side: BorderSide(color: mainNavy, width: 2),
+              side: BorderSide(color: mainNavy, width: 1),
               surfaceTintColor: mainWhite,
               backgroundColor: mainWhite,
               padding: EdgeInsets.symmetric(vertical: 16),
