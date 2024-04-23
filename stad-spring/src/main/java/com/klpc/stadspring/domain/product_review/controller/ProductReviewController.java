@@ -2,6 +2,7 @@ package com.klpc.stadspring.domain.product_review.controller;
 
 import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdverseResponse;
 import com.klpc.stadspring.domain.product.entity.Product;
+import com.klpc.stadspring.domain.product_review.controller.request.GetProductReviewListByUserIdRequest;
 import com.klpc.stadspring.domain.product_review.controller.request.ProductReviewPostRequest;
 import com.klpc.stadspring.domain.product_review.controller.response.GetProductReviewListResponse;
 import com.klpc.stadspring.domain.product_review.controller.response.GetProductReviewResponse;
@@ -41,9 +42,9 @@ public class ProductReviewController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/regist")
+    @PostMapping(value = "/regist", consumes = "multipart/form-data", produces = "application/json")
     @Operation(summary = "리뷰 등록", description = "리뷰 등록")
-    public ResponseEntity<?> registReview(@RequestBody ProductReviewPostRequest request) {
+    public ResponseEntity<?> registReview(@ModelAttribute ProductReviewPostRequest request) {
         log.info("ProductReviewPostRequest: " + request);
         try {
             ProductReview review = productReviewService.registReview(request.toCommand());
@@ -68,10 +69,21 @@ public class ProductReviewController {
     // 리뷰 리스트 조회
     @GetMapping("/list/{productId}")
     @Operation(summary = "특정 상품에 속한 리뷰 리스트 조회", description = "특정 상품에 속한 리뷰 리스트 조회")
-    public ResponseEntity<?> getProductListByAdverseId(@PathVariable Long productId) {
+    public ResponseEntity<?> getProductReviewListByAdverseId(@PathVariable Long productId) {
         List<ProductReview> list = productReviewService.getReviewListByProductId(productId);
 
         // GetProductListByAdverseResponse.from 메서드를 호출하여 Product 리스트를 GetProductListByAdverseResponse로 변환
+        GetProductReviewListResponse response = GetProductReviewListResponse.from(list);
+
+        // 변환된 응답을 ResponseEntity에 담아 반환
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/mypage/list")
+    @Operation(summary = "유저가 작성한 리뷰 목록", description = "유저가 작성한 리뷰 목록")
+    public ResponseEntity<?> getProductReviewListByUserId(GetProductReviewListByUserIdRequest request) {
+        List<ProductReview> list = productReviewService.getProductReviewListByUserId(request.getUserId());
+
         GetProductReviewListResponse response = GetProductReviewListResponse.from(list);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
