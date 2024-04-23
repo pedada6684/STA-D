@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:stad/component/bottom_bar.dart';
 import 'package:stad/constant/animated_indexed_stack.dart';
@@ -14,6 +15,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await dotenv.load(fileName: ".env");
+  dotenv.load();
   runApp(const MyApp());
 }
 
@@ -41,10 +44,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => UserProvider()), // UserProvider 추가
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        // UserProvider 추가
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

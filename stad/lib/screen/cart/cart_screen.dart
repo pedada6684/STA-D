@@ -17,9 +17,9 @@ class _CartScreenState extends State<CartScreen> {
       appBar: CustomAppBar(
         title: '장바구니',
         titleStyle: TextStyle(
-          color: mainWhite,
+          color: mainNavy,
           fontWeight: FontWeight.bold,
-          fontSize: 18.0,
+          fontSize: 20.0,
         ),
       ),
       body:

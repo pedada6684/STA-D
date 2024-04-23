@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:stad/constant/colors.dart';
 import 'package:stad/component/custom_dropdown.dart';
+import 'package:stad/component/page_animation.dart';
 import 'package:stad/component/quantity_changer.dart';
+import 'package:stad/constant/colors.dart';
+import 'package:stad/screen/order/order_screen.dart';
 
 // 모달 바텀 시트를 띄우는 함수
 void showProductOptionBottomSheet(BuildContext context) {
@@ -166,7 +168,10 @@ Widget _buildActionButtons(BuildContext context) {
               ),
             ),
             onPressed: () {
-              //장바구니 담기
+              Navigator.push(
+                context,
+                CustomPageRoute(builder: (context) => OrderScreen()),
+              );
             },
             child: Text(
               '구매하기',
