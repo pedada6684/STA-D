@@ -18,24 +18,29 @@ public class ProductPostRequest {
     /**
      *  상품 등록 요청
      */
-    String name;
-    Long price;
-    Long quantity;
-    List<MultipartFile> images;
-    MultipartFile thumbnail;
-    String category;
-    LocalDateTime sellStart;
-    LocalDateTime sellEnd;
-    Long cityDeliveryFee;
-    Long mtDeliveryFee;
-    LocalDateTime expStart;
-    LocalDateTime expEnd;
-    LocalDateTime deliveryDate;
+    private Long userId;
+    private Long advertId;
+    private String name;
+    private Long price;
+    private Long quantity;
+    private List<MultipartFile> images;
+    private MultipartFile thumbnail;
+    private String category;
+    private LocalDateTime sellStart;
+    private LocalDateTime sellEnd;
+    private Long cityDeliveryFee;
+    private Long mtDeliveryFee;
+    private LocalDateTime expStart;
+    private LocalDateTime expEnd;
+    private LocalDateTime deliveryDate;
 
     public AddProductCommand toCommand(){
         return AddProductCommand.builder()
+                .userId(userId)
+                .advertId(advertId)
                 .name(name)
                 .price(price)
+                .quantity(quantity)
                 .images(images)
                 .thumbnail(thumbnail)
                 .category(category)
