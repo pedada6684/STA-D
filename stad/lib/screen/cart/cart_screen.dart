@@ -30,9 +30,7 @@ class _CartScreenState extends State<CartScreen> {
 }
 
 class _buildEmptyCart extends StatelessWidget {
-  const _buildEmptyCart({
-    super.key,
-  });
+  const _buildEmptyCart();
 
   @override
   Widget build(BuildContext context) {

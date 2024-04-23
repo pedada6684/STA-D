@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/models/delivery_address.dart';
-import 'package:stad/screen/product/option_bottom_sheet.dart';
 import 'package:stad/widget/address_screen.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
+import 'package:stad/widget/product_card.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
@@ -51,7 +51,7 @@ class _OrderScreenState extends State<OrderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainWhite,
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: '주문서 작성',
         titleStyle: TextStyle(
             color: mainNavy, fontSize: 20, fontWeight: FontWeight.bold),
@@ -61,9 +61,93 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Column(
           children: [
             _buildOrderHeadContainer(),
-            divider(),
+            const divider(),
             _buildSelectAds(context),
-            divider(),
+            const divider(),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
+              color: mainWhite, // 배경색 설정
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '결제금액',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 20.0), // 텍스트 사이의 간격
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '주문금액',
+                        style: TextStyle(fontSize: 18.0),
+                      ),
+                      Text(
+                        '53,400 원', // 예시 금액
+                        style: TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8.0),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '상품할인금액',
+                          style: TextStyle(fontSize: 16.0, color: midGray),
+                        ),
+                        Text(
+                          '19,500 원', // 예시 금액
+                          style: TextStyle(fontSize: 16.0, color: midGray),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '배송비',
+                          style: TextStyle(fontSize: 16.0, color: midGray),
+                        ),
+                        Text(
+                          '0 원', // 예시 금액
+                          style: TextStyle(fontSize: 16.0, color: midGray),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 40.0,
+                  ), // 구분선
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '총 결제금액',
+                        style: TextStyle(
+                            fontSize: 22.0, fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        '53,400 원', // 예시 금액
+                        style: TextStyle(
+                            fontSize: 22.0, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -71,11 +155,12 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: CustomElevatedButton(
-            text: '주문하기',
+            text: '결제하기',
             textColor: mainWhite,
             backgroundColor: mainNavy,
             onPressed: () {
-              showProductOptionBottomSheet(context);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => ProductCard()));
             },
           ),
         ),
@@ -94,7 +179,7 @@ class _OrderScreenState extends State<OrderScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   '배송지',
                   style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                 ),
@@ -104,9 +189,9 @@ class _OrderScreenState extends State<OrderScreen> {
                         context: context,
                         isScrollControlled: true,
                         useSafeArea: true,
-                        builder: (_) => AddressScreen());
+                        builder: (_) => const AddressScreen());
                   },
-                  child: Text(
+                  child: const Text(
                     '배송지추가',
                     style: TextStyle(
                         decoration: TextDecoration.underline,
@@ -118,8 +203,8 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
             deliveryAddresses.isNotEmpty
                 ? _buildDeliveryAddressButtons()
-                : Padding(
-                    padding: const EdgeInsets.all(16.0),
+                : const Padding(
+                    padding: EdgeInsets.all(16.0),
                     child: Text('배송지를 추가해주세요.'),
                   ),
             if (selectedDeliveryAddress != null)
@@ -139,21 +224,21 @@ class _OrderScreenState extends State<OrderScreen> {
       children: [
         Text(
           selectedDeliveryAddress!.name,
-          style: TextStyle(
+          style: const TextStyle(
               fontWeight: FontWeight.bold, fontSize: 16.0, color: mainBlack),
         ),
-        _gap(),
+        const _gap(),
         Text(
           selectedDeliveryAddress!.phone,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16.0,
             color: darkGray,
           ),
         ),
-        _gap(),
+        const _gap(),
         Text(
           selectedDeliveryAddress!.location,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16.0,
             color: darkGray,
           ),
@@ -166,26 +251,32 @@ class _OrderScreenState extends State<OrderScreen> {
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ExpansionTile(
-          title: Text(
-            selectedProduct ?? '주문 상품',
-            style: TextStyle(color: mainBlack),
+        child: Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+            title: Text(
+              selectedProduct ?? '주문 상품',
+              style: const TextStyle(
+                  color: mainBlack,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0),
+            ),
+            trailing: Icon(
+              isExpanded
+                  ? Icons.keyboard_arrow_up_rounded
+                  : Icons.keyboard_arrow_down_rounded,
+              color: mainNavy,
+            ),
+            onExpansionChanged: (bool expanded) {
+              setState(() {
+                isExpanded = expanded;
+              });
+            },
+            children: const <Widget>[
+              //백에서 받아오기
+              ProductCard(),
+            ],
           ),
-          trailing: Icon(
-            isExpanded
-                ? Icons.keyboard_arrow_up_rounded
-                : Icons.keyboard_arrow_down_rounded,
-            color: mainNavy,
-          ),
-          onExpansionChanged: (bool expanded) {
-            setState(() {
-              isExpanded = expanded;
-            });
-          },
-          children: <Widget>[
-            //백에서 받아오기
-            ListTile(title: Text('상품 1')),
-          ],
         ),
       ),
     );
@@ -208,8 +299,8 @@ class _OrderScreenState extends State<OrderScreen> {
                 ),
               ),
               showCheckmark: false,
-              side: BorderSide(color: mainNavy),
-              shape: RoundedRectangleBorder(
+              side: const BorderSide(color: mainNavy),
+              shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),
                 ),
@@ -217,11 +308,13 @@ class _OrderScreenState extends State<OrderScreen> {
               selected: isSelected,
               selectedColor: mainNavy,
               onSelected: (bool selected) {
-                setState(() {
-                  if (selected) {
-                    selectedDeliveryAddress = address;
-                  }
-                });
+                setState(
+                  () {
+                    if (selected) {
+                      selectedDeliveryAddress = address;
+                    }
+                  },
+                );
               },
             ),
           );
@@ -238,7 +331,7 @@ class divider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Divider(
+    return const Divider(
       height: 10,
       thickness: 5,
       color: mainGray,
@@ -247,13 +340,11 @@ class divider extends StatelessWidget {
 }
 
 class _gap extends StatelessWidget {
-  const _gap({
-    super.key,
-  });
+  const _gap();
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return const SizedBox(
       height: 8.0,
     );
   }
