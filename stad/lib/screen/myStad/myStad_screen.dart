@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:stad/component/app_bar.dart';
-import 'package:stad/component/button.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/main.dart';
 import 'package:stad/models/user_model.dart';
@@ -12,6 +10,8 @@ import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/mycommercial_screen.dart';
 import 'package:stad/screen/myStad/mycontents_screen.dart';
 import 'package:stad/screen/myStad/qr_screen.dart';
+import 'package:stad/widget/app_bar.dart';
+import 'package:stad/widget/button.dart';
 
 class MyStadScreen extends StatefulWidget {
   const MyStadScreen({super.key});

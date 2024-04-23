@@ -1,8 +1,11 @@
 //api 받아오기
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
-import 'package:stad/component/button.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/providers/user_provider.dart';
+import 'package:stad/services/order_service.dart';
+import 'package:stad/widget/button.dart';
 
 class AddressScreen extends StatefulWidget {
   const AddressScreen({super.key});
@@ -102,6 +105,32 @@ class _AddressScreenState extends State<AddressScreen> {
     }
   }
 
+  void someFunctionToCallService() {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    print(userProvider.userId);
+    print(userProvider.userId);
+    print(userProvider.userId);
+    print(userProvider.userId);
+    print(userProvider.userId);
+    print(userProvider.userId);
+    print(userProvider.userId);
+    print(userProvider.userId);
+    print(userProvider.userId);
+    if (userProvider.userId != null) {
+      final orderService = OrderService();
+
+      orderService.sendAddressData(
+        userProvider.userId!,
+        _addressController.text,
+        _nameController.text,
+        _phoneController.text,
+        _adnickController.text,
+      );
+    } else {
+      print('로그인이 필요합니다.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -147,7 +176,7 @@ class _AddressScreenState extends State<AddressScreen> {
             CustomElevatedButton(
               text: '완료',
               textColor: mainWhite,
-              onPressed: isFormFilled ? () {} : null,
+              onPressed: isFormFilled ? someFunctionToCallService : null,
               backgroundColor: mainNavy,
             )
           ],

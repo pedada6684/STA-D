@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:stad/component/app_bar.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/widget/app_bar.dart';
 
 class QRScreen extends StatefulWidget {
   const QRScreen({Key? key}) : super(key: key);
