@@ -9,6 +9,8 @@ import com.klpc.stadspring.domain.advert.service.AdvertService;
 import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertRequestCommand;
 import com.klpc.stadspring.domain.advert.service.command.request.ModifyAdvertRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.controller.response.ModifyVideoResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,8 @@ public class AdvertController {
     private final AdvertService advertService;
 
     @PostMapping
+    @Operation(summary = "광고 등록", description = "광고 등록")
+    @ApiResponse(responseCode = "200", description = "광고가 등록 되었습니다.")
     public ResponseEntity<AddAdvertResponse> addAdvert(@RequestBody AddAdvertRequest request){
         AddAdvertRequestCommand command = AddAdvertRequestCommand.builder()
                 .userId(request.getUserId())
@@ -45,6 +49,8 @@ public class AdvertController {
     }
 
     @PutMapping
+    @Operation(summary = "광고 수정", description = "광고 수정")
+    @ApiResponse(responseCode = "200", description = "광고가 수정 되었습니다.")
     public ResponseEntity<ModifyAdvertResponse> modifyAdvert(@RequestBody ModifyAdvertRequest request){
         ModifyAdvertRequestCommand command = ModifyAdvertRequestCommand.builder()
                 .advertId(request.getAdvertId())
@@ -63,6 +69,8 @@ public class AdvertController {
     }
 
     @DeleteMapping
+    @Operation(summary = "광고 삭제", description = "광고 삭제")
+    @ApiResponse(responseCode = "200", description = "광고가 삭제되었습니다.")
     public ResponseEntity<DeleteAdvertResponse> deleteAdvert(@RequestParam Long advertId){
         DeleteAdvertResponse response = advertService.deleteAdvert(advertId);
 
