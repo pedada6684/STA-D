@@ -1,6 +1,7 @@
 package com.klpc.stadspring.domain.advert.service;
 
 import com.klpc.stadspring.domain.advert.controller.response.AddAdvertResponse;
+import com.klpc.stadspring.domain.advert.controller.response.DeleteAdvertResponse;
 import com.klpc.stadspring.domain.advert.controller.response.ModifyAdvertResponse;
 import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
@@ -31,6 +32,12 @@ public class AdvertService {
     private final ProductRepository productRepository;
     private final SelectedContentRepository selectedContentRepository;
 
+    /**
+     * 광고 추가
+     * 순서 : 광고 엔티티(title, description 등) 생성 -> 연관 관계 엔티티 생성 & 광고 엔티티 입력
+     * @param command
+     * @return
+     */
     public AddAdvertResponse addAdvert(AddAdvertRequestCommand command){
         User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new CustomException(ErrorCode.REQUEST_NOT_FOUND));
 
@@ -71,7 +78,13 @@ public class AdvertService {
         return addAdvertResponse;
     }
 
-    public ModifyAdvertResponse modifyAdvertResponse(ModifyAdvertRequestCommand command){
+    /**
+     * 광고 수정
+     * 영상은 각자 별도 수정 진행됨
+     * @param command
+     * @return
+     */
+    public ModifyAdvertResponse modifyAdvert(ModifyAdvertRequestCommand command){
         Advert advert = advertRepository.findById(command.getAdvertId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         advert.modifyAdvert(
@@ -99,6 +112,13 @@ public class AdvertService {
             modifyAdvertResponse = ModifyAdvertResponse.builder().result("fail").build();
 
         return modifyAdvertResponse;
+    }
+
+    public DeleteAdvertResponse deleteAdvert(Long id){
+        Advert advert = advertRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        advertRepository.delete(advert);
+        return DeleteAdvertResponse.builder().result("success").build();
     }
 
 }

@@ -3,10 +3,12 @@ package com.klpc.stadspring.domain.advert.controller;
 import com.klpc.stadspring.domain.advert.controller.request.AddAdvertRequest;
 import com.klpc.stadspring.domain.advert.controller.request.ModifyAdvertRequest;
 import com.klpc.stadspring.domain.advert.controller.response.AddAdvertResponse;
+import com.klpc.stadspring.domain.advert.controller.response.DeleteAdvertResponse;
 import com.klpc.stadspring.domain.advert.controller.response.ModifyAdvertResponse;
 import com.klpc.stadspring.domain.advert.service.AdvertService;
 import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertRequestCommand;
 import com.klpc.stadspring.domain.advert.service.command.request.ModifyAdvertRequestCommand;
+import com.klpc.stadspring.domain.advertVideo.controller.response.ModifyVideoResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,12 +40,12 @@ public class AdvertController {
                 .advertVideoUrlList(request.getAdvertVideoUrlList())
                 .advertBannerImgUrl(request.getBannerImgUrl())
                 .build();
-        AddAdvertResponse result = advertService.addAdvert(command);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        AddAdvertResponse response = advertService.addAdvert(command);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<ModifyAdvertRequest> modifyAdvert(@RequestBody ModifyAdvertRequest request){
+    public ResponseEntity<ModifyAdvertResponse> modifyAdvert(@RequestBody ModifyAdvertRequest request){
         ModifyAdvertRequestCommand command = ModifyAdvertRequestCommand.builder()
                 .advertId(request.getAdvertId())
                 .title(request.getTitle())
@@ -56,8 +58,15 @@ public class AdvertController {
                 .selectedContentList(request.getSelectedContentList())
                 .advertBannerImgUrl(request.getBannerImgUrl())
                 .build();
-        ModifyAdvertResponse result = advertService.modifyAdvertResponse(command);
-        return new ResponseEntity<>(request, HttpStatus.OK);
+        ModifyAdvertResponse response = advertService.modifyAdvert(command);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<DeleteAdvertResponse> deleteAdvert(@RequestParam Long advertId){
+        DeleteAdvertResponse response = advertService.deleteAdvert(advertId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
