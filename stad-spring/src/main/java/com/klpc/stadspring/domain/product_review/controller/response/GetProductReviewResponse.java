@@ -17,6 +17,8 @@ public class GetProductReviewResponse {
     private Long productId;
     private String title;
     private String content;
+    private Double score;
+    private String reviewImg;
     private LocalDateTime regDate;
 
     public static GetProductReviewResponse from(ProductReview productReview){
@@ -25,6 +27,8 @@ public class GetProductReviewResponse {
                 .productId(productReview.getProduct().getId())
                 .title(productReview.getTitle())
                 .content(productReview.getContent())
+                .score(productReview.getScore())
+                .reviewImg(productReview.getReviewImg())
                 .regDate(productReview.getRegDate())
                 .build();
     }

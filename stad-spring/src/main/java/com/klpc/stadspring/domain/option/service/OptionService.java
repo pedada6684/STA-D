@@ -5,6 +5,7 @@ import com.klpc.stadspring.domain.option.repository.OptionRepository;
 import com.klpc.stadspring.domain.option.service.command.AddOptionCommand;
 import com.klpc.stadspring.domain.option.service.command.DeleteOptionCommand;
 import com.klpc.stadspring.domain.product.entity.Product;
+import com.klpc.stadspring.domain.product.repository.ProductRepository;
 import com.klpc.stadspring.domain.product.service.command.AddProductCommand;
 import com.klpc.stadspring.domain.product.service.command.DeleteProductCommand;
 import com.klpc.stadspring.global.response.ErrorCode;
@@ -21,6 +22,7 @@ import java.util.List;
 public class OptionService {
 
     private final OptionRepository optionRepository;
+    private final ProductRepository productRepository;
     /**
      * 옵션 리스트 받아오기
      */
@@ -35,7 +37,12 @@ public class OptionService {
     // 상품 등록
     public ProductOption addProductOption(AddOptionCommand command) {
         log.info("AddOptionCommand: "+command);
+
+        Product product = productRepository.findById(command.getProductId())
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
         ProductOption newOption = ProductOption.createNewOption(
+                product,
                 command.getName(),
                 command.getValue()
         );

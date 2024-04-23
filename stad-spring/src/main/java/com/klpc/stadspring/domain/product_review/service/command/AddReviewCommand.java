@@ -16,6 +16,6 @@ public class AddReviewCommand {
     private String title;
     private String content;
     private Double score;
-    private MultipartFile reviewImg;
+    private String reviewImg;
     private String regDate;
 }
