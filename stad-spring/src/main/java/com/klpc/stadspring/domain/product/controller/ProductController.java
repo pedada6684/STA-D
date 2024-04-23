@@ -1,5 +1,7 @@
 package com.klpc.stadspring.domain.product.controller;
 
+import com.klpc.stadspring.domain.image.product_image.service.ProductImageService;
+import com.klpc.stadspring.domain.product.controller.request.ProductPostRequest;
 import com.klpc.stadspring.domain.product.controller.response.GetProductInfoResponse;
 import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdverseResponse;
 import com.klpc.stadspring.domain.product.entity.Product;
@@ -16,8 +18,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.List;
@@ -30,6 +34,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/product")
 public class ProductController {
     private final ProductService productService;
+    private final ProductImageService productImageService;
 
 //    @Operation(summary = "상품 목록 조회", description = "상품 목록 조회")
 //    @GetMapping("/product/list/{adverse_id}")
@@ -54,16 +59,17 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/regist")
+    @PostMapping(value = "/regist", consumes = "multipart/form-data", produces = "application/json")
     @Operation(summary = "상품 등록", description = "상품 등록")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "상품 등록 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    public ResponseEntity<?> addNewProduct(@RequestBody AddProductCommand command) {
+    public ResponseEntity<?> addNewProduct(@ModelAttribute ProductPostRequest request) {
+        log.info("ProductPostRequest: "+request);
         try {
-            productService.addProduct(command);
+            productService.addProduct(request.toCommand());
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -130,4 +136,17 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping(value = "/{productId}/image", consumes = "multipart/form-data", produces = "application/json")
+    @Operation(summary = "사진만 등록(수정 시)", description = "사진만 등록(수정시)")
+    public ResponseEntity<?> addImage(@PathVariable Long productId, @RequestParam("image") MultipartFile file) {
+        productImageService.addImage(productId, file);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{productId}/{imageId}")
+    @Operation(summary = "사진만 삭제(수정시)", description = "사진만 삭제(수정시)")
+    public ResponseEntity<?> deleteImage(@PathVariable Long productId, @PathVariable Long imageId) {
+        productImageService.deleteImage(productId, imageId);
+        return ResponseEntity.ok().build();
+    }
 }

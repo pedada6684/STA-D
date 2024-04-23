@@ -1,5 +1,11 @@
 package com.klpc.stadspring.domain.product.service;
 
+import com.klpc.stadspring.domain.advert.entity.Advert;
+import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
+import com.klpc.stadspring.domain.image.product_image.entity.ProductImage;
+import com.klpc.stadspring.domain.image.product_image.repository.ProductImageRepository;
+import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
+import com.klpc.stadspring.domain.orderProduct.repository.OrderProductRepository;
 import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdverseResponse;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
@@ -7,15 +13,21 @@ import com.klpc.stadspring.domain.product.service.command.AddProductCommand;
 import com.klpc.stadspring.domain.product.service.command.DeleteProductCommand;
 import com.klpc.stadspring.domain.product.service.command.GetProductListByAdverseCommand;
 import com.klpc.stadspring.domain.product.service.command.UpdateProductInfoCommand;
+import com.klpc.stadspring.domain.productOrder.entity.ProductOrder;
+import com.klpc.stadspring.domain.productOrder.repository.ProductOrderRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import com.klpc.stadspring.util.S3Util;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -23,6 +35,9 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService{
 
     private final ProductRepository productRepository;
+    private final ProductImageRepository productImageRepository;
+    private final AdvertRepository advertRepository;
+    private final S3Util s3Util;
 
     // 상품 리스트
 //    @Override
@@ -43,7 +58,11 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Product getProductInfo(Long productId){
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        // 이미지를 초기화
+        if (product.getImages() != null) {
+            product.getImages().size();
+        }
         return product;
     }
 
@@ -51,12 +70,19 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Product addProduct(AddProductCommand command) {
         log.info("AddProductCommand: "+command);
+
+        Advert advert = advertRepository.findById(command.getAdvertId())
+                .orElseThrow(NullPointerException::new);
+
+        URL thumbnailUrl = s3Util.uploadImageToS3(command.getThumbnail(), "product_thumbnail", UUID.randomUUID().toString());
+        Objects.requireNonNull(thumbnailUrl);
+
         Product newProduct = Product.createNewProduct(
+                advert,
                 command.getName(),
                 command.getPrice(),
                 command.getQuantity(),
-                command.getIntroduction(),
-                command.getThumbnail(),
+                thumbnailUrl.toString(),
                 command.getCategory(),
                 command.getSellStart(),
                 command.getSellEnd(),
@@ -68,6 +94,14 @@ public class ProductServiceImpl implements ProductService{
         );
 
         productRepository.save(newProduct);
+
+        command.getImages().forEach(image -> {
+            URL imageUrl = s3Util.uploadImageToS3(image, "product_introduction", UUID.randomUUID().toString());
+            if (imageUrl != null) {
+                ProductImage productImage = new ProductImage(null, imageUrl.toString(), newProduct);
+                productImageRepository.save(productImage);
+            }
+        });
 
         return newProduct;
     }

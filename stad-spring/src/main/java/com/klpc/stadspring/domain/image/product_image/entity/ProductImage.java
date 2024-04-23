@@ -1,8 +1,12 @@
 package com.klpc.stadspring.domain.image.product_image.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.klpc.stadspring.domain.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,7 +22,18 @@ public class ProductImage {
     @Column(name = "img")
     String img;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     Product product;
+
+    public static ProductImage createNewProductImage(
+            String img,
+            Product product
+    ) {
+        ProductImage productImage = new ProductImage();
+        productImage.img = img;
+        productImage.product = product;
+        return productImage;
+    }
 }
