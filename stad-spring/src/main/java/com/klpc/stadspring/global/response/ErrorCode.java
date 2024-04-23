@@ -36,7 +36,10 @@ public enum ErrorCode {
     URI_SYNTAX_ERROR(HttpStatus.BAD_GATEWAY, "외부 API 호출 중 오류가 발생했습니다."),
 
     /* encoding UTF-8 에러 */
-    ENCODING_UTF_8(HttpStatus.BAD_REQUEST, "UTF-8 변환 중 오류가 발생했습니다.");
+    ENCODING_UTF_8(HttpStatus.BAD_REQUEST, "UTF-8 변환 중 오류가 발생했습니다."),
+
+    /* S3 파일 오류 */
+    AWSS3_ERROR(HttpStatus.BAD_GATEWAY, "AWS S3 호출 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
