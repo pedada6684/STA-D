@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "advert 컨트롤러", description = "광고 API 입니다.")
 public class AdvertController {
 
-    private AdvertService advertService;
+    private final AdvertService advertService;
 
     @PostMapping
     public ResponseEntity<AddAdvertResponse> addAdvert(@RequestBody AddAdvertRequest request){
