@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:stad/component/custom_dropdown.dart';
-import 'package:stad/component/page_animation.dart';
-import 'package:stad/component/quantity_changer.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/screen/order/order_screen.dart';
+import 'package:stad/widget/custom_dropdown.dart';
+import 'package:stad/widget/page_animation.dart';
+import 'package:stad/widget/quantity_changer.dart';
 
 // 모달 바텀 시트를 띄우는 함수
 void showProductOptionBottomSheet(BuildContext context) {
