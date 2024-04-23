@@ -15,10 +15,11 @@ public class ModifyAdvertRequestCommand {
     private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String category;
+    private String type;
     private String directVideoUrl;
     private String bannerImgUrl;
     private List<Long> selectedContentList;
     private String advertBannerImgUrl;
+    private String category;
 
 }
