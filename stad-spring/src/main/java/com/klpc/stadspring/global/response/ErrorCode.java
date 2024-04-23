@@ -39,7 +39,10 @@ public enum ErrorCode {
     ENCODING_UTF_8(HttpStatus.BAD_REQUEST, "UTF-8 변환 중 오류가 발생했습니다."),
 
     /* S3 파일 오류 */
-    AWSS3_ERROR(HttpStatus.BAD_GATEWAY, "AWS S3 호출 중 오류가 발생했습니다.");
+    AWSS3_ERROR(HttpStatus.BAD_GATEWAY, "AWS S3 호출 중 오류가 발생했습니다."),
+
+    /* 내림차순 정렬 출력 오류 */
+    ORDERBYDESC_ERROR(HttpStatus.NOT_FOUND, "DB 내림차순 정렬 출력이 실패하였습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
