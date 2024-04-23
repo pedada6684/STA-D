@@ -4,7 +4,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/main.dart';
-import 'package:stad/models/user_model.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/mycommercial_screen.dart';
@@ -47,10 +46,6 @@ class _MyStadScreenState extends State<MyStadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? userModel =
-        Provider.of<UserProvider>(context, listen: true).user;
-
-    // print('이거는 나오려나 ${userModel?.toJson()}');
 
     return Scaffold(
       backgroundColor: mainWhite,
