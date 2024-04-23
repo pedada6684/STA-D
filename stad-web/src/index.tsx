@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "./store";
+import { CookiesProvider } from "react-cookie";
 
 const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(
@@ -16,7 +17,9 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <App />
+        <CookiesProvider>
+          <App />
+        </CookiesProvider>
       </PersistGate>
     </Provider>
     <ReactQueryDevtools initialIsOpen={false} />
