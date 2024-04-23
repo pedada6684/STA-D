@@ -13,7 +13,10 @@ const tokenSlice = createSlice({
   initialState,
   reducers: {
     getAccessToken: (state, action) => {
-      state.accessToken = action.payload;
+      state.accessToken = action.payload; // 문자열로 바로 저장
+    },
+    logoutUser: (state) => {
+      state.accessToken = null;
     },
   },
 });
