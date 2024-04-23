@@ -1,7 +1,5 @@
 //api 받아오기
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:stad/component/button.dart';
 import 'package:stad/constant/colors.dart';
@@ -22,14 +20,66 @@ class _AddressScreenState extends State<AddressScreen> {
   final TextEditingController _addressDetailController =
       TextEditingController();
   bool isDefaultAddress = false;
+  bool isFormFilled = false;
+  bool isPhoneError = false;
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Map<String, String> formData = {};
 
   Widget _gap() {
     return const SizedBox(
       height: 15,
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // 각각의 컨트롤러에 리스너를 추가
+    _nameController.addListener(validateForm);
+    _adnickController.addListener(validateForm);
+    _phoneController.addListener(validateForm);
+    _phoneController.addListener(() => validateNumber(_phoneController.text));
+    _postcodeController.addListener(validateForm);
+    _addressController.addListener(validateForm);
+    _addressDetailController.addListener(validateForm);
+  }
+
+  @override
+  void dispose() {
+    // 컨트롤러 리스너를 제거하여 리소스 누수 방지
+    _nameController.removeListener(validateForm);
+    _adnickController.removeListener(validateForm);
+    _phoneController.removeListener(validateForm);
+    _phoneController
+        .removeListener(() => validateNumber(_phoneController.text));
+    _postcodeController.removeListener(validateForm);
+    _addressController.removeListener(validateForm);
+    _addressDetailController.removeListener(validateForm);
+    super.dispose();
+  }
+
+  // 입력값이 모두 채워졌는지 검증
+  void validateForm() {
+    bool filled = _nameController.text.isNotEmpty &&
+        _adnickController.text.isNotEmpty &&
+        _phoneController.text.isNotEmpty &&
+        _postcodeController.text.isNotEmpty &&
+        _addressController.text.isNotEmpty &&
+        _addressDetailController.text.isNotEmpty;
+
+    setState(() {
+      isFormFilled = filled;
+    });
+  }
+
+  void validateNumber(String input) {
+    final phonePattern = r'^01([0|1|6|7|8|9])-(\d{3,4})-(\d{4})$';
+
+    setState(() {
+      isPhoneError = !RegExp(r'^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$')
+          .hasMatch(input);
+    });
   }
 
   void _searchAddress(BuildContext context) async {
@@ -75,7 +125,8 @@ class _AddressScreenState extends State<AddressScreen> {
             _gap(),
             Text(
               '배송지 입력',
-              style: TextStyle(fontSize: 18.0),
+              style: TextStyle(
+                  fontSize: 18.0, fontWeight: FontWeight.w600, color: mainNavy),
             ),
             SizedBox(
               height: 20,
@@ -91,45 +142,15 @@ class _AddressScreenState extends State<AddressScreen> {
             _buildTextField(_addressController, '기본주소', readOnly: true),
             _gap(),
             _buildTextField(_addressDetailController, '상세주소'),
-            _buildCustomCheckbox(),
+            _gap(),
+            _gap(),
             CustomElevatedButton(
-                text: '완료', textColor: mainWhite, backgroundColor: mainNavy)
+              text: '완료',
+              textColor: mainWhite,
+              onPressed: isFormFilled ? () {} : null,
+              backgroundColor: mainNavy,
+            )
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCustomCheckbox() {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          isDefaultAddress = !isDefaultAddress;
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15.0),
-        child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Icon(
-                isDefaultAddress
-                    ? Icons.check_circle
-                    : Icons.check_circle_outline,
-                color: isDefaultAddress ? mainNavy : midGray,
-                size: 32.0,
-              ),
-              SizedBox(width: 8.0),
-              Text(
-                '기본 배송지로 설정',
-                style: TextStyle(
-                  color: mainBlack,
-                  fontSize: 16.0
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
@@ -141,15 +162,14 @@ class _AddressScreenState extends State<AddressScreen> {
       readOnly: true,
       style: TextStyle(color: mainBlack),
       decoration: InputDecoration(
+        floatingLabelBehavior: FloatingLabelBehavior.never,
         labelText: '우편번호',
         labelStyle: TextStyle(color: midGray),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: mainNavy),
-          borderRadius: BorderRadius.all(Radius.circular(5)),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: midGray),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: mainNavy),
-        ),
+        focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: mainNavy, width: 2)),
         suffixIcon: TextButton(
           style: TextButton.styleFrom(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -164,28 +184,42 @@ class _AddressScreenState extends State<AddressScreen> {
       ),
     );
   }
-}
 
-Widget _buildTextField(
-  TextEditingController controller,
-  String placeholder, {
-  bool readOnly = false,
-  bool isFixedLabel = false,
-}) {
-  return TextFormField(
-    controller: controller,
-    readOnly: readOnly,
-    style: TextStyle(color: mainBlack),
-    decoration: InputDecoration(
-      labelText: placeholder,
-      labelStyle: TextStyle(color: midGray),
-      floatingLabelBehavior: isFixedLabel ? FloatingLabelBehavior.always : null,
-      enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: mainNavy),
-          borderRadius: BorderRadius.all(Radius.circular(5))),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: mainNavy),
+  Widget _buildTextField(
+    TextEditingController controller,
+    String placeholder, {
+    bool readOnly = false,
+    bool isFixedLabel = false,
+  }) {
+    bool isError = placeholder == '핸드폰 번호' && isPhoneError;
+
+    return TextFormField(
+      controller: controller,
+      readOnly: readOnly,
+      cursorColor: mainNavy,
+      style: TextStyle(color: mainBlack),
+      decoration: InputDecoration(
+        labelText: placeholder,
+        labelStyle: TextStyle(color: midGray),
+        floatingLabelBehavior:
+            isFixedLabel ? FloatingLabelBehavior.always : null,
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: midGray),
+        ),
+        focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: mainNavy, width: 2)),
+        errorBorder: isError
+            ? UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.red, width: 2),
+              )
+            : null,
+        focusedErrorBorder: isError
+            ? UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.red, width: 2),
+              )
+            : null,
+        errorText: isError ? '번호를 입력해주세요.' : null,
       ),
-    ),
-  );
+    );
+  }
 }
