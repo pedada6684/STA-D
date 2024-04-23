@@ -2,6 +2,7 @@ package com.klpc.stadspring.domain.product.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.klpc.stadspring.domain.advert.entity.Advert;
+import com.klpc.stadspring.domain.image.product_image.entity.ProductImage;
 import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.product.service.command.UpdateProductInfoCommand;
 import jakarta.persistence.*;
@@ -27,8 +28,8 @@ public class Product {
     @JoinColumn(name = "advert_id")
     private Advert advert;
 
-    @OneToMany(mappedBy = "product")
-    private List<OrderProduct> orderProduct;
+//    @OneToMany(mappedBy = "product")
+//    private List<OrderProduct> orderProduct;
 
     @Column(name = "name")
     private String name;
@@ -39,8 +40,8 @@ public class Product {
     @Column(name = "quantity")
     private Long quantity;
 
-    @Column(name = "introduction")
-    private String introduction;
+    @OneToMany(mappedBy = "product")
+    private List<ProductImage> images;
 
     @Column(name = "thumbnail")
     private String thumbnail;
@@ -74,7 +75,6 @@ public class Product {
             String name,
             Long price,
             Long quantity,
-            String introduction,
             String thumbnail,
             String category,
             LocalDateTime sellStart,
@@ -90,7 +90,6 @@ public class Product {
         product.name = name;              // 상품명 설정
         product.price = price;            // 가격 설정
         product.quantity = quantity;      // 수량 설정
-        product.introduction = introduction; // 상품 소개 설정
         product.thumbnail = thumbnail;    // 썸네일 이미지 경로 설정
         product.category = category;      // 카테고리 설정
         product.sellStart = sellStart;
@@ -113,9 +112,6 @@ public class Product {
         if (command.getQuantity() != null) {
             this.quantity = command.getQuantity();
         }
-        if (command.getIntroduction() != null) {
-            this.introduction = command.getIntroduction();
-        }
         if (command.getThumbnail() != null) {
             this.thumbnail = command.getThumbnail();
         }
@@ -128,9 +124,6 @@ public class Product {
         this.thumbnail = thumbnail;
     }
 
-    public void updateProductIntroduction(String introduction){
-        this.introduction = introduction;
-    }
     public void linkAdvert(Advert advert){
         this.advert=advert;
     }
