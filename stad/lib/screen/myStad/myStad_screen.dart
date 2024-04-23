@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:stad/component/app_bar.dart';
-import 'package:stad/component/button.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/main.dart';
-import 'package:stad/models/user_model.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/mycommercial_screen.dart';
 import 'package:stad/screen/myStad/mycontents_screen.dart';
 import 'package:stad/screen/myStad/qr_screen.dart';
+import 'package:stad/widget/app_bar.dart';
+import 'package:stad/widget/button.dart';
 
 class MyStadScreen extends StatefulWidget {
   const MyStadScreen({super.key});
@@ -47,48 +46,89 @@ class _MyStadScreenState extends State<MyStadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? userModel =
-        Provider.of<UserProvider>(context, listen: true).user;
-
-    print('이거는 나오려나 ${userModel?.toJson()}');
 
     return Scaffold(
-      backgroundColor: backGray,
+      backgroundColor: mainWhite,
       appBar: CustomAppBar(
         title: '마이스테디',
         titleStyle: TextStyle(
-            color: mainWhite, fontWeight: FontWeight.bold, fontSize: 18.0),
+            color: mainNavy, fontWeight: FontWeight.bold, fontSize: 20.0),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             UserInfoContainer(),
-            _buildHeadListTile(title: '주문 내역'),
-            _buildHeadListTile(title: '배송지 관리'),
-            _buildHeadListTile(title: '상품 리뷰'),
-            SizedBox(
-              height: 10.0,
+            Divider(
+              height: 1,
+              color: mainGray,
             ),
-            _buildHeadListTile(
-              title: '내가 본 광고',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyCommercialScreen()),
-                );
-              },
+            Container(
+              color: mainWhite,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 24.0),
+                    child: Text(
+                      'Shop',
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: darkGray),
+                    ),
+                  ),
+                  _buildHeadListTile(title: '주문 내역'),
+                  _buildHeadListTile(title: '배송지 관리'),
+                  _buildHeadListTile(title: '상품 리뷰'),
+                ],
+              ),
             ),
-            _buildHeadListTile(
-              title: '내가 본 콘텐츠',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyContentsScreen()),
-                );
-              },
+            Divider(
+              height: 1,
+              color: mainGray,
             ),
-            SizedBox(
-              height: 10.0,
+            Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 24.0),
+                    child: Text(
+                      'Stad',
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: darkGray),
+                    ),
+                  ),
+                  _buildHeadListTile(
+                    title: '내가 본 광고',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyCommercialScreen()),
+                      );
+                    },
+                  ),
+                  _buildHeadListTile(
+                    title: '내가 본 콘텐츠',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyContentsScreen()),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              height: 1,
+              color: mainGray,
             ),
             _buildHeadListTile(
                 title: '로그아웃',
@@ -150,7 +190,7 @@ class UserInfoContainer extends StatelessWidget {
         return Container(
           height: 230,
           width: MediaQuery.of(context).size.width,
-          color: mainNavy,
+          color: mainWhite,
           child: userModel != null
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -160,7 +200,7 @@ class UserInfoContainer extends StatelessWidget {
                       child: IconButton(
                         onPressed: () {},
                         icon: Icon(Icons.settings_rounded,
-                            color: mainWhite, size: 32.0),
+                            color: mainNavy, size: 32.0),
                       ),
                     ),
                     Row(
@@ -180,7 +220,7 @@ class UserInfoContainer extends StatelessWidget {
                             Text(
                               userModel.nickname ?? '닉네임을 설정해주세요.',
                               style: TextStyle(
-                                  color: mainWhite,
+                                  color: mainBlack,
                                   fontSize: 22.0,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -188,13 +228,13 @@ class UserInfoContainer extends StatelessWidget {
                             Text(
                               userModel.email ?? '이메일 없음',
                               style:
-                                  TextStyle(color: mainWhite, fontSize: 16.0),
+                                  TextStyle(color: mainBlack, fontSize: 16.0),
                             ),
                             SizedBox(height: 4.0),
                             Text(
                               userModel.phone ?? '연락처를 추가해주세요.',
                               style:
-                                  TextStyle(color: mainWhite, fontSize: 16.0),
+                                  TextStyle(color: mainBlack, fontSize: 16.0),
                             ),
                           ],
                         ),
@@ -204,8 +244,8 @@ class UserInfoContainer extends StatelessWidget {
                     CustomElevatedButton(
                       text: '새 기기 연결하기',
                       onPressed: () => _navigateToQRScreen(context),
-                      textColor: mainNavy,
-                      backgroundColor: mainWhite,
+                      textColor: mainWhite,
+                      backgroundColor: mainNavy,
                     )
                   ],
                 )

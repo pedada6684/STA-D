@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stad/component/app_bar.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:stad/widget/app_bar.dart';
 
 class MyContentsScreen extends StatefulWidget {
   const MyContentsScreen({super.key});

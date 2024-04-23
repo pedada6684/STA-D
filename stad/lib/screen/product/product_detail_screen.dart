@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
 
 class ProductDetailScreen extends StatelessWidget {
-  const ProductDetailScreen({Key? key}) : super(key: key);
+  const ProductDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

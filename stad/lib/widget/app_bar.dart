@@ -20,17 +20,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      scrolledUnderElevation: 0,
       leading: showBackButton
           ? IconButton(
               icon: Icon(Icons.arrow_back_ios_new_rounded),
-              color: mainWhite,
+              color: mainNavy,
               onPressed: () => Navigator.pop(context),
             )
           : null,
       centerTitle: true,
       title: Text(title, style: titleStyle ?? TextStyle()),
       actions: actions,
-      backgroundColor: mainNavy,
+      backgroundColor: mainWhite,
       bottom: tabController != null
           ? PreferredSize(
               preferredSize: Size.fromHeight(48.0),
@@ -40,7 +41,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   controller: tabController,
                   indicator: BoxDecoration(
                     border: Border(
-                      bottom: BorderSide(color: mainNavy, width: 3.0),
+                      bottom: BorderSide(color: mainNavy, width: 5.0),
                     ),
                   ),
                   indicatorPadding: EdgeInsets.symmetric(horizontal: 32.0),
