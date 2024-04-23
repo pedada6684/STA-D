@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.List;
 
 public interface OptionRepository extends JpaRepository<ProductOption, Long> {
-    @Query("SELECT o FROM Product o Where id = :id")
+    @Query("SELECT o FROM ProductOption o Where o.product.id = :id")
     Optional<List<ProductOption>> getOptionList(@Param("id") Long id);
 
 }
