@@ -61,6 +61,10 @@ dependencies {
 	//쿼리문 상세
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 
+	//영상 길이 추출
+	implementation 'org.bytedeco:javacv-platform:1.5.7'
+	implementation group: 'org.bytedeco', name: 'ffmpeg-platform', version: '6.0-1.5.9'
+
 	// https://mvnrepository.com/artifact/org.springframework.batch/spring-batch-core
 	// spring batch
 //	implementation group: 'org.springframework.batch', name: 'spring-batch-core', version: '5.1.1'
