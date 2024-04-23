@@ -34,7 +34,7 @@ class _ProductScreenState extends State<ProductScreen>
       appBar: CustomAppBar(
         title: '상품명임',
         titleStyle: const TextStyle(
-            fontSize: 18, color: mainWhite, fontWeight: FontWeight.bold),
+            fontSize: 20, color: mainNavy, fontWeight: FontWeight.bold),
         showBackButton: true,
         tabController: _tabController,
       ),

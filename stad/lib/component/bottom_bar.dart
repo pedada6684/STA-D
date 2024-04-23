@@ -22,14 +22,14 @@ class CustomBottomNavigationBar extends StatelessWidget {
               color: mainWhite,
               size: 32.0,
             ),
-            label: '홈'),
+            label: 'home'),
         BottomNavigationBarItem(
           icon: Icon(
             Icons.shopping_cart_outlined,
             color: mainWhite,
             size: 32.0,
           ),
-          label: '장바구니',
+          label: 'cart',
         ),
         BottomNavigationBarItem(
             icon: Icon(
@@ -37,7 +37,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
               color: mainWhite,
               size: 32.0,
             ),
-            label: '마이스테디'),
+            label: 'my'),
       ],
       currentIndex: selectedIndex,
       selectedItemColor: mainWhite,
