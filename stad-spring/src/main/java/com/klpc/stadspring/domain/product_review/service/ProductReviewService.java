@@ -7,6 +7,7 @@ import com.klpc.stadspring.domain.product_review.entity.ProductReview;
 import com.klpc.stadspring.domain.product_review.repository.ProductReviewRepository;
 import com.klpc.stadspring.domain.product_review.service.command.AddReviewCommand;
 import com.klpc.stadspring.domain.product_review.service.command.DeleteReviewCommand;
+import com.klpc.stadspring.domain.product_review.service.command.ProductReviewListCommand;
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
@@ -74,6 +75,12 @@ public class ProductReviewService {
     public List<ProductReview> getReviewListByProductId(Long productId) {
 
         List<ProductReview> productReviewList = productReviewRepository.getReviewListByProductId(productId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        return productReviewList;
+    }
+
+    public List<ProductReview> getProductReviewListByUserId(Long userId) {
+        List<ProductReview> productReviewList = productReviewRepository.getReviewListByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return productReviewList;
     }

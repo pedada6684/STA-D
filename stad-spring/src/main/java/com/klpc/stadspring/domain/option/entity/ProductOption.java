@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.option.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.klpc.stadspring.domain.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -18,7 +19,8 @@ public class ProductOption {
     @Column(name = "option_id")
     Long id;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     Product product;
 
@@ -29,10 +31,12 @@ public class ProductOption {
     String value;
 
     public static ProductOption createNewOption(
+            Product product,
             String name,
             String value
     ) {
         ProductOption productOption = new ProductOption();
+        productOption.product = product;
         productOption.name = name;
         productOption.value = value;
         return productOption;

@@ -23,7 +23,7 @@ public class ProductReviewPostRequest {
     private String title;
     private String content;
     private Double score;
-    private MultipartFile reviewImg;
+    private String reviewImg;
 
     public AddReviewCommand toCommand(){
         return AddReviewCommand.builder()
