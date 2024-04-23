@@ -1,6 +1,5 @@
 package com.klpc.stadspring.domain.advert.service.command.request;
 
-import com.klpc.stadspring.domain.advert.entity.AdvertCategory;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,11 +15,12 @@ public class AddAdvertRequestCommand {
     private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String category;
+    private String type;
     private String directVideoUrl;
     private String bannerImgUrl;
     private List<Long> selectedContentList;
     private List<String> advertVideoUrlList;
     private String advertBannerImgUrl;
+    private String category;
 
 }

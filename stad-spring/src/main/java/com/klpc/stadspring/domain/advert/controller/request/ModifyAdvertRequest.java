@@ -13,7 +13,7 @@ public class ModifyAdvertRequest {
     private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String category;
+    private String type;
     private String directVideoUrl;
     private String bannerImgUrl;
     private List<Long> selectedContentList;

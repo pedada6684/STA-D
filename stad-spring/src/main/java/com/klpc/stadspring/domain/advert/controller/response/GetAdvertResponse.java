@@ -16,8 +16,9 @@ public class GetAdvertResponse {
     String endDate;
     String directVideoUrl;
     String bannerImgUrl;
-    String category;
+    String type;
     List<Long> selectedContentList;
     List<String> advertVideoUrlList;
+    String category;
 
 }
