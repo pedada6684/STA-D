@@ -81,8 +81,10 @@ class UserService {
     return false;
   }
 
-  Future<void> signOut() async {
+  Future<void> signOut(BuildContext context) async {
     await _googleSignIn.signOut();
     await _firebaseAuth.signOut();
+
+    Provider.of<UserProvider>(context, listen: false).clearUser();
   }
 }
