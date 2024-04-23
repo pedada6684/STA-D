@@ -18,5 +18,7 @@ public interface ProductReviewRepository extends JpaRepository<ProductReview, Lo
     @Query("SELECT r FROM ProductReview r Where r.product.id = :productId")
     Optional<List<ProductReview>> getReviewListByProductId(@Param("productId") Long productId);
 
-
+    // 유저로 조회
+    @Query("SELECT r FROM ProductReview r Where r.user.id = :userId")
+    Optional<List<ProductReview>> getReviewListByUserId(@Param("userId") Long userId);
 }
