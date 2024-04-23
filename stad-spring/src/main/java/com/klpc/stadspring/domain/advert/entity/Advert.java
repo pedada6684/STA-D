@@ -84,4 +84,25 @@ public class Advert {
 
         return advert;
     }
+
+    public void modifyAdvert(
+            String title,
+            String description,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            String advertCategory,
+            String directVideoUrl,
+            String bannerImgUrl
+    ){
+        this.title=title;
+        this.description=description;
+        this.startDate=startDate;
+        this.endDate=endDate;
+        if(advertCategory.equals("PRODUCT"))
+            this.advertCategory=AdvertCategory.PRODUCT;
+        else
+            this.advertCategory=AdvertCategory.NOTPRODUCT;
+        this.directVideoUrl = directVideoUrl;
+        this.bannerImgUrl=bannerImgUrl;
+    }
 }
