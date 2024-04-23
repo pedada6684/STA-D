@@ -40,7 +40,6 @@ public class AdvertVideoController {
 
     @PostMapping("/modify-video")
     public ResponseEntity<ModifyVideoResponse> modifyVideo(@ModelAttribute ModifyVideoRequest request){
-        System.out.println("#######"+request.getVideoId());
         ModifyVideoRequestCommand command = ModifyVideoRequestCommand.builder()
                 .videoId(request.getVideoId())
                 .video(request.getVideo())
