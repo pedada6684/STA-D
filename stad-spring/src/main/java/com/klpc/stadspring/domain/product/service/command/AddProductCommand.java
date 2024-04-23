@@ -7,6 +7,7 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,7 +18,7 @@ public class AddProductCommand {
     String name;
     Long price;
     Long quantity;
-    MultipartFile introduction;
+    List<MultipartFile> images;
     MultipartFile thumbnail;
     String category;
     LocalDateTime sellStart;
@@ -28,14 +29,9 @@ public class AddProductCommand {
     LocalDateTime expEnd;
     LocalDateTime deliveryDate;
 
-//    public static AddProductCommand ConvertAddProductCommand(Long advertId, Product product){
+//    public static AddProductCommand ConvertAddProductImageCommand(Product product){
 //        return AddProductCommand.builder()
 //                .name(product.getName())
-//                .price(product.getPrice())
-//                .quantity(product.getQuantity())
-//                .introduction(product.getIntroduction())
-//                .thumbnail(product.getThumbnail())
-//                .category(product.getCategory())
 //                .build();
 //    }
 }

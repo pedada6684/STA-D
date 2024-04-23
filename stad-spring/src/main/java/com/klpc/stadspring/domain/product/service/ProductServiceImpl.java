@@ -1,5 +1,7 @@
 package com.klpc.stadspring.domain.product.service;
 
+import com.klpc.stadspring.domain.image.product_image.entity.ProductImage;
+import com.klpc.stadspring.domain.image.product_image.repository.ProductImageRepository;
 import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdverseResponse;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
@@ -27,6 +29,7 @@ import java.util.UUID;
 public class ProductServiceImpl implements ProductService{
 
     private final ProductRepository productRepository;
+    private final ProductImageRepository productImageRepository;
     private final S3Util s3Util;
 
     // 상품 리스트
@@ -48,7 +51,11 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Product getProductInfo(Long productId){
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        // 이미지를 초기화
+        if (product.getImages() != null) {
+            product.getImages().size();
+        }
         return product;
     }
 
@@ -60,14 +67,12 @@ public class ProductServiceImpl implements ProductService{
         URL thumbnailUrl = s3Util.uploadImageToS3(command.getThumbnail(), "product_thumbnail", UUID.randomUUID().toString());
         Objects.requireNonNull(thumbnailUrl);
 
-        URL introductionUrl = s3Util.uploadImageToS3(command.getIntroduction(), "product_introduction", UUID.randomUUID().toString());
-        Objects.requireNonNull(introductionUrl);
+
 
         Product newProduct = Product.createNewProduct(
                 command.getName(),
                 command.getPrice(),
                 command.getQuantity(),
-                introductionUrl.toString(),
                 thumbnailUrl.toString(),
                 command.getCategory(),
                 command.getSellStart(),
@@ -80,6 +85,14 @@ public class ProductServiceImpl implements ProductService{
         );
 
         productRepository.save(newProduct);
+
+        command.getImages().forEach(image -> {
+            URL imageUrl = s3Util.uploadImageToS3(image, "product_introduction", UUID.randomUUID().toString());
+            if (imageUrl != null) {
+                ProductImage productImage = new ProductImage(null, imageUrl.toString(), newProduct);
+                productImageRepository.save(productImage);
+            }
+        });
 
         return newProduct;
     }

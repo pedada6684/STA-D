@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,11 +18,10 @@ public class ProductPostRequest {
     /**
      *  상품 등록 요청
      */
-
     String name;
     Long price;
     Long quantity;
-    MultipartFile introduction;
+    List<MultipartFile> images;
     MultipartFile thumbnail;
     String category;
     LocalDateTime sellStart;
@@ -36,7 +36,7 @@ public class ProductPostRequest {
         return AddProductCommand.builder()
                 .name(name)
                 .price(price)
-                .introduction(introduction)
+                .images(images)
                 .thumbnail(thumbnail)
                 .category(category)
                 .sellStart(sellStart)
@@ -48,5 +48,4 @@ public class ProductPostRequest {
                 .deliveryDate(deliveryDate)
                 .build();
     }
-
 }

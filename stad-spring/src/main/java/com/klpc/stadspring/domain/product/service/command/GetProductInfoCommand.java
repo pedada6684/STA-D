@@ -5,6 +5,8 @@ import com.klpc.stadspring.domain.product.entity.Product;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class GetProductInfoCommand {
@@ -16,7 +18,7 @@ public class GetProductInfoCommand {
     String name;
     Long price;
     Long quantity;
-    String introduction;
+    List<String> images;
     String thumbnail;
     String category;
 
@@ -26,7 +28,6 @@ public class GetProductInfoCommand {
                 .name(product.getName())
                 .price(product.getPrice())
                 .quantity(product.getQuantity())
-                .introduction(product.getIntroduction())
                 .thumbnail(product.getThumbnail())
                 .category(product.getCategory())
                 .build();
