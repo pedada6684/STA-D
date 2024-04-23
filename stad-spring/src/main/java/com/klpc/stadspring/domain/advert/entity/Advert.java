@@ -31,13 +31,15 @@ public class Advert {
     private LocalDateTime endDate;
 
     @Enumerated(EnumType.STRING)
-    private AdvertCategory advertCategory;  //PRODUCT, NOTPRODUCT
+    private AdvertType advertType;  //PRODUCT, NOTPRODUCT
 
     @Column(length = 3000)
     private String directVideoUrl;
 
     @Column(length = 3000)
     private String bannerImgUrl;
+
+    private String category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -60,7 +62,8 @@ public class Advert {
             String advertCategory,
             String directVideoUrl,
             String bannerImgUrl,
-            User user
+            User user,
+            String category
 //            List<AdvertVideo> advertVideos,
 //            List<SelectedContent> selectedContents,
 //            List<Product> products
@@ -71,13 +74,14 @@ public class Advert {
         advert.startDate=startDate;
         advert.endDate=endDate;
         if(advertCategory.equals("PRODUCT"))
-            advert.advertCategory=AdvertCategory.PRODUCT;
+            advert.advertType=AdvertType.PRODUCT;
         else
-            advert.advertCategory=AdvertCategory.NOTPRODUCT;
+            advert.advertType=AdvertType.NOTPRODUCT;
         if(advert.directVideoUrl!=null && !advert.directVideoUrl.isBlank())
             advert.directVideoUrl=directVideoUrl;
         advert.bannerImgUrl=bannerImgUrl;
         advert.user=user;
+        advert.category=category;
 //        advert.advertVideos=advertVideos;
 //        advert.selectedContents=selectedContents;
 //        advert.products=products;
@@ -92,17 +96,19 @@ public class Advert {
             LocalDateTime endDate,
             String advertCategory,
             String directVideoUrl,
-            String bannerImgUrl
+            String bannerImgUrl,
+            String category
     ){
         this.title=title;
         this.description=description;
         this.startDate=startDate;
         this.endDate=endDate;
         if(advertCategory.equals("PRODUCT"))
-            this.advertCategory=AdvertCategory.PRODUCT;
+            this.advertType=AdvertType.PRODUCT;
         else
-            this.advertCategory=AdvertCategory.NOTPRODUCT;
+            this.advertType=AdvertType.NOTPRODUCT;
         this.directVideoUrl = directVideoUrl;
         this.bannerImgUrl=bannerImgUrl;
+        this.category=category;
     }
 }

@@ -10,6 +10,7 @@ import com.klpc.stadspring.domain.advertVideo.controller.response.ModifyVideoRes
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class AdvertController {
                 .description(request.getDescription())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
-                .category(request.getCategory())
+                .type(request.getType())
                 .directVideoUrl(request.getDirectVideoUrl())
                 .bannerImgUrl(request.getBannerImgUrl())
                 .selectedContentList(request.getSelectedContentList())
@@ -56,7 +57,7 @@ public class AdvertController {
                 .description(request.getDescription())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
-                .category(request.getCategory())
+                .type(request.getType())
                 .directVideoUrl(request.getDirectVideoUrl())
                 .bannerImgUrl(request.getBannerImgUrl())
                 .selectedContentList(request.getSelectedContentList())
@@ -89,6 +90,22 @@ public class AdvertController {
     @ApiResponse(responseCode = "200", description = "광고 리스트가 조회 되었습니다.")
     public ResponseEntity<GetAdvertListResponse> getAdvertList(@RequestParam("userId") Long userId){
         GetAdvertListResponse response = advertService.getAdvertList(userId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+//    @GetMapping("get-list-by-content")
+//    @Operation(summary = "컨텐츠 별 광고 리스트 조회", description = "컨텐츠 별 광고 리스트 조회")
+//    @ApiResponse(responseCode = "200", description = "광고 리스트가 조회 되었습니다.")
+//    public ResponseEntity<GetAdvertListByContentResponse> getAdvertListByContent(@RequestParam("contentId") Long contentId){
+//
+//    }
+
+    @GetMapping("get-list-by-click")
+    @Operation(summary = "인기 광고 리스트 조회", description = "인기 광고 리스트 조회")
+    @ApiResponse(responseCode = "200", description = "광고 리스트가 조회 되었습니다.")
+    public ResponseEntity<GetAdvertListByClickResponse> getAdvertListByClick(){
+        GetAdvertListByClickResponse response = advertService.getAdvertListByClick();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class GetAdvertResponseCommand {
+public class GetAdvertListByContentResponseCommand {
 
     Long advertId;
     String title;
