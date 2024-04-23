@@ -1,7 +1,11 @@
 package com.klpc.stadspring.domain.product.service;
 
+import com.klpc.stadspring.domain.advert.entity.Advert;
+import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.image.product_image.entity.ProductImage;
 import com.klpc.stadspring.domain.image.product_image.repository.ProductImageRepository;
+import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
+import com.klpc.stadspring.domain.orderProduct.repository.OrderProductRepository;
 import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdverseResponse;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
@@ -9,6 +13,8 @@ import com.klpc.stadspring.domain.product.service.command.AddProductCommand;
 import com.klpc.stadspring.domain.product.service.command.DeleteProductCommand;
 import com.klpc.stadspring.domain.product.service.command.GetProductListByAdverseCommand;
 import com.klpc.stadspring.domain.product.service.command.UpdateProductInfoCommand;
+import com.klpc.stadspring.domain.productOrder.entity.ProductOrder;
+import com.klpc.stadspring.domain.productOrder.repository.ProductOrderRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +36,7 @@ public class ProductServiceImpl implements ProductService{
 
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
+    private final AdvertRepository advertRepository;
     private final S3Util s3Util;
 
     // 상품 리스트
@@ -64,12 +71,14 @@ public class ProductServiceImpl implements ProductService{
     public Product addProduct(AddProductCommand command) {
         log.info("AddProductCommand: "+command);
 
+        Advert advert = advertRepository.findById(command.getAdvertId())
+                .orElseThrow(NullPointerException::new);
+
         URL thumbnailUrl = s3Util.uploadImageToS3(command.getThumbnail(), "product_thumbnail", UUID.randomUUID().toString());
         Objects.requireNonNull(thumbnailUrl);
 
-
-
         Product newProduct = Product.createNewProduct(
+                advert,
                 command.getName(),
                 command.getPrice(),
                 command.getQuantity(),

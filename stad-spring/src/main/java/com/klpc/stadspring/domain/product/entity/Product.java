@@ -5,6 +5,7 @@ import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.image.product_image.entity.ProductImage;
 import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.product.service.command.UpdateProductInfoCommand;
+import com.klpc.stadspring.domain.productOrder.entity.ProductOrder;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,8 +29,8 @@ public class Product {
     @JoinColumn(name = "advert_id")
     private Advert advert;
 
-//    @OneToMany(mappedBy = "product")
-//    private List<OrderProduct> orderProduct;
+    @OneToMany(mappedBy = "product")
+    private List<OrderProduct> orderProduct;
 
     @Column(name = "name")
     private String name;
@@ -40,7 +41,7 @@ public class Product {
     @Column(name = "quantity")
     private Long quantity;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE,  orphanRemoval = true)
     private List<ProductImage> images;
 
     @Column(name = "thumbnail")
@@ -71,7 +72,7 @@ public class Product {
     private LocalDateTime deliveryDate;
 
     public static Product createNewProduct(
-//            Long adverseId,
+            Advert advert,
             String name,
             Long price,
             Long quantity,
@@ -86,7 +87,7 @@ public class Product {
             LocalDateTime deliveryDate
     ) {
         Product product = new Product();
-//        product.adverseId = advert.getId();
+        product.advert= advert;
         product.name = name;              // 상품명 설정
         product.price = price;            // 가격 설정
         product.quantity = quantity;      // 수량 설정
