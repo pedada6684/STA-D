@@ -16,10 +16,8 @@ public class UpdateProductInfoRequest {
     private String name;
     private Long price;
     private Long quantity;
-    private String introduction;
     private String thumbnail;
     private String category;
-    private List<ProductImage> images;
     private String sellStart;
     private String sellEnd;
     private Long cityDeliveryFee;
@@ -34,10 +32,8 @@ public class UpdateProductInfoRequest {
                 .name(name)
                 .price(price)
                 .quantity(quantity)
-                .introduction(introduction)
                 .thumbnail(thumbnail)
                 .category(category)
-                .images(images)
                 .sellStart(sellStart)
                 .sellEnd(sellEnd)
                 .cityDeliveryFee(cityDeliveryFee)
