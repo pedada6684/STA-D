@@ -18,6 +18,8 @@ void showProductOptionBottomSheet(BuildContext context) {
 
 // 바텀 시트의 내용을 관리할 StatefulWidget
 class ProductOptionBottomSheet extends StatefulWidget {
+  const ProductOptionBottomSheet({super.key});
+
   @override
   _ProductOptionBottomSheetState createState() =>
       _ProductOptionBottomSheetState();
