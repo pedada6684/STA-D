@@ -22,7 +22,6 @@ public class UpdateProductInfoCommand {
     private String introduction;
     private String thumbnail;
     private String category;
-    private List<ProductImage> images ;
     private String sellStart;
     private String sellEnd;
     private Long cityDeliveryFee;
