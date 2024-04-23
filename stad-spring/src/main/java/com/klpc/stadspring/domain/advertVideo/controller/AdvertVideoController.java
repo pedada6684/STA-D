@@ -6,6 +6,8 @@ import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddBannerImgRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddVideoListRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVideoRequestCommand;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,18 +29,24 @@ public class AdvertVideoController {
     private final AdvertVideoService advertVideoService;
 
     @PostMapping("/add-video-list")
+    @Operation(summary = "광고 영상 업로드", description = "광고 영상 업로드")
+    @ApiResponse(responseCode = "200", description = "광고 영상이 업로드 되었습니다.")
     public ResponseEntity<AddVideoListResponse> addVideoList(@RequestPart("videoList") List<MultipartFile> videoList){
         AddVideoListResponse response = advertVideoService.addVideoList(AddVideoListRequestCommand.builder().list(videoList).build());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/spread-advert")
+    @Operation(summary = "광고 영상 조회", description = "광고 영상 조회")
+    @ApiResponse(responseCode = "200", description = "광고 영상이 조회 되었습니다.")
     public ResponseEntity<GetAdvertVideoResponse> getAdvertVideo(@RequestParam("advertVideoId") Long advertVideoId){
         GetAdvertVideoResponse response = advertVideoService.getAdvertVideo(advertVideoId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/modify-video")
+    @Operation(summary = "광고 영상 수정", description = "광고 영상 수정")
+    @ApiResponse(responseCode = "200", description = "광고 영상이 수정 되었습니다.")
     public ResponseEntity<ModifyVideoResponse> modifyVideo(@ModelAttribute ModifyVideoRequest request){
         ModifyVideoRequestCommand command = ModifyVideoRequestCommand.builder()
                 .videoId(request.getVideoId())
@@ -50,6 +58,8 @@ public class AdvertVideoController {
     }
 
     @DeleteMapping("/delete-video")
+    @Operation(summary = "광고 영상 삭제", description = "광고 영상 삭제")
+    @ApiResponse(responseCode = "200", description = "광고 영상이 삭제 되었습니다.")
     public ResponseEntity<DeleteResponse> deleteVideo(@RequestParam("advertVideoId") Long advertVideoId){
         DeleteResponse response = advertVideoService.deleteResponse(advertVideoId);
 
@@ -57,6 +67,8 @@ public class AdvertVideoController {
     }
 
     @PostMapping("/add-banner")
+    @Operation(summary = "광고 배너 이미지 업로드", description = "광고 배너 이미지 업로드")
+    @ApiResponse(responseCode = "200", description = "광고 배너 이미지가 업로드 되었습니다.")
     public ResponseEntity<AddBannerImgResponse> addBannerImg(@RequestPart("bannerImg") MultipartFile bannerImg){
         AddBannerImgRequestCommand command = AddBannerImgRequestCommand.builder().img(bannerImg).build();
 
