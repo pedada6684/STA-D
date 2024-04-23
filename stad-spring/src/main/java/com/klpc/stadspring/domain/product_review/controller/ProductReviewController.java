@@ -84,7 +84,6 @@ public class ProductReviewController {
     public ResponseEntity<?> getProductReviewListByUserId(GetProductReviewListByUserIdRequest request) {
         List<ProductReview> list = productReviewService.getProductReviewListByUserId(request.getUserId());
 
-        // GetProductListByAdverseResponse.from 메서드를 호출하여 Product 리스트를 GetProductListByAdverseResponse로 변환
         GetProductReviewListResponse response = GetProductReviewListResponse.from(list);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
