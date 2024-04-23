@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.product.controller;
 
+import com.klpc.stadspring.domain.image.product_image.service.ProductImageService;
 import com.klpc.stadspring.domain.product.controller.request.ProductPostRequest;
 import com.klpc.stadspring.domain.product.controller.response.GetProductInfoResponse;
 import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdverseResponse;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.List;
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/product")
 public class ProductController {
     private final ProductService productService;
+    private final ProductImageService productImageService;
 
 //    @Operation(summary = "상품 목록 조회", description = "상품 목록 조회")
 //    @GetMapping("/product/list/{adverse_id}")
@@ -133,4 +136,17 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping(value = "/{productId}/image", consumes = "multipart/form-data", produces = "application/json")
+    @Operation(summary = "사진만 등록(수정 시)", description = "사진만 등록(수정시)")
+    public ResponseEntity<?> addImage(@PathVariable Long productId, @RequestParam("image") MultipartFile file) {
+        productImageService.addImage(productId, file);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{productId}/{imageId}")
+    @Operation(summary = "사진만 삭제(수정시)", description = "사진만 삭제(수정시)")
+    public ResponseEntity<?> deleteImage(@PathVariable Long productId, @PathVariable Long imageId) {
+        productImageService.deleteImage(productId, imageId);
+        return ResponseEntity.ok().build();
+    }
 }
