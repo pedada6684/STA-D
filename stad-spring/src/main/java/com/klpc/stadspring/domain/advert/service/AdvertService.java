@@ -1,12 +1,11 @@
 package com.klpc.stadspring.domain.advert.service;
 
-import com.klpc.stadspring.domain.advert.controller.response.AddAdvertResponse;
-import com.klpc.stadspring.domain.advert.controller.response.DeleteAdvertResponse;
-import com.klpc.stadspring.domain.advert.controller.response.ModifyAdvertResponse;
+import com.klpc.stadspring.domain.advert.controller.response.*;
 import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertRequestCommand;
 import com.klpc.stadspring.domain.advert.service.command.request.ModifyAdvertRequestCommand;
+import com.klpc.stadspring.domain.advert.service.command.response.GetAdvertResponseCommand;
 import com.klpc.stadspring.domain.advertVideo.entity.AdvertVideo;
 import com.klpc.stadspring.domain.advertVideo.repository.AdvertVideoRepository;
 import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
@@ -20,6 +19,9 @@ import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -114,11 +116,85 @@ public class AdvertService {
         return modifyAdvertResponse;
     }
 
+    /**
+     * 광고 삭제
+     * @param id
+     * @return
+     */
     public DeleteAdvertResponse deleteAdvert(Long id){
         Advert advert = advertRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         advertRepository.delete(advert);
         return DeleteAdvertResponse.builder().result("success").build();
+    }
+
+    /**
+     * 광고 정보 조회
+     * @param id : advertId
+     * @return
+     */
+    public GetAdvertResponse getAdvert(Long id){
+        Advert advert = advertRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        List<Long> selectedContentList = new ArrayList<>();
+        for(SelectedContent i : advert.getSelectedContents())
+            selectedContentList.add(i.getId());
+
+        List<String> advertVideoUrlList = new ArrayList<>();
+        for(AdvertVideo i : advert.getAdvertVideos())
+            advertVideoUrlList.add(i.getVideoUrl());
+
+        GetAdvertResponse response = GetAdvertResponse.builder()
+                .title(advert.getTitle())
+                .description(advert.getDescription())
+                .startDate(advert.getStartDate().toLocalDate().toString())
+                .endDate(advert.getEndDate().toLocalDate().toString())
+                .category(advert.getAdvertCategory().toString())
+                .directVideoUrl(advert.getDirectVideoUrl())
+                .bannerImgUrl(advert.getBannerImgUrl())
+                .selectedContentList(selectedContentList)
+                .advertVideoUrlList(advertVideoUrlList)
+                .build();
+
+        return response;
+    }
+
+    /**
+     * 광고 리스트 조회
+     * @param id : userId
+     * @return
+     */
+    public GetAdvertListResponse getAdvertList(Long id){
+        User user = userRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        List<Advert> listByUser = advertRepository.findAllByUser(user);
+
+        List<GetAdvertResponseCommand> responseList = new ArrayList<>();
+        for(Advert advert : listByUser){
+            List<Long> selectedContentList = new ArrayList<>();
+            for(SelectedContent i : advert.getSelectedContents())
+                selectedContentList.add(i.getId());
+
+            List<String> advertVideoUrlList = new ArrayList<>();
+            for(AdvertVideo i : advert.getAdvertVideos())
+                advertVideoUrlList.add(i.getVideoUrl());
+
+            GetAdvertResponseCommand response = GetAdvertResponseCommand.builder()
+                    .advertId(advert.getId())
+                    .title(advert.getTitle())
+                    .description(advert.getDescription())
+                    .startDate(advert.getStartDate().toLocalDate().toString())
+                    .endDate(advert.getEndDate().toLocalDate().toString())
+                    .category(advert.getAdvertCategory().toString())
+                    .directVideoUrl(advert.getDirectVideoUrl())
+                    .bannerImgUrl(advert.getBannerImgUrl())
+                    .selectedContentList(selectedContentList)
+                    .advertVideoUrlList(advertVideoUrlList)
+                    .build();
+
+            responseList.add(response);
+        }
+
+        return GetAdvertListResponse.builder().data(responseList).build();
     }
 
 }

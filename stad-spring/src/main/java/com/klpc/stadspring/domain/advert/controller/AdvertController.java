@@ -2,9 +2,7 @@ package com.klpc.stadspring.domain.advert.controller;
 
 import com.klpc.stadspring.domain.advert.controller.request.AddAdvertRequest;
 import com.klpc.stadspring.domain.advert.controller.request.ModifyAdvertRequest;
-import com.klpc.stadspring.domain.advert.controller.response.AddAdvertResponse;
-import com.klpc.stadspring.domain.advert.controller.response.DeleteAdvertResponse;
-import com.klpc.stadspring.domain.advert.controller.response.ModifyAdvertResponse;
+import com.klpc.stadspring.domain.advert.controller.response.*;
 import com.klpc.stadspring.domain.advert.service.AdvertService;
 import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertRequestCommand;
 import com.klpc.stadspring.domain.advert.service.command.request.ModifyAdvertRequestCommand;
@@ -70,9 +68,27 @@ public class AdvertController {
 
     @DeleteMapping
     @Operation(summary = "광고 삭제", description = "광고 삭제")
-    @ApiResponse(responseCode = "200", description = "광고가 삭제되었습니다.")
-    public ResponseEntity<DeleteAdvertResponse> deleteAdvert(@RequestParam Long advertId){
+    @ApiResponse(responseCode = "200", description = "광고가 삭제 되었습니다.")
+    public ResponseEntity<DeleteAdvertResponse> deleteAdvert(@RequestParam("advertId") Long advertId){
         DeleteAdvertResponse response = advertService.deleteAdvert(advertId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("get")
+    @Operation(summary = "광고 조회", description = "광고 조회")
+    @ApiResponse(responseCode = "200", description = "광고가 조회 되었습니다.")
+    public ResponseEntity<GetAdvertResponse> getAdvert(@RequestParam("advertId") Long advertId){
+        GetAdvertResponse response = advertService.getAdvert(advertId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("get-list")
+    @Operation(summary = "광고 리스트 조회", description = "광고 리스트 조회")
+    @ApiResponse(responseCode = "200", description = "광고 리스트가 조회 되었습니다.")
+    public ResponseEntity<GetAdvertListResponse> getAdvertList(@RequestParam("userId") Long userId){
+        GetAdvertListResponse response = advertService.getAdvertList(userId);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
