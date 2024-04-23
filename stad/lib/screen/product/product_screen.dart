@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:stad/component/app_bar.dart';
-import 'package:stad/component/button.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/screen/product/option_bottom_sheet.dart';
 import 'package:stad/screen/product/product_detail_screen.dart';
+import 'package:stad/widget/app_bar.dart';
+import 'package:stad/widget/button.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -34,7 +34,7 @@ class _ProductScreenState extends State<ProductScreen>
       appBar: CustomAppBar(
         title: '상품명임',
         titleStyle: const TextStyle(
-            fontSize: 18, color: mainWhite, fontWeight: FontWeight.bold),
+            fontSize: 20, color: mainNavy, fontWeight: FontWeight.bold),
         showBackButton: true,
         tabController: _tabController,
       ),

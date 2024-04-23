@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:stad/component/app_bar.dart';
-import 'package:stad/component/button.dart';
+
 import 'package:stad/constant/colors.dart';
+import 'package:stad/widget/app_bar.dart';
+import 'package:stad/widget/button.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -17,9 +18,9 @@ class _CartScreenState extends State<CartScreen> {
       appBar: CustomAppBar(
         title: '장바구니',
         titleStyle: TextStyle(
-          color: mainWhite,
+          color: mainNavy,
           fontWeight: FontWeight.bold,
-          fontSize: 18.0,
+          fontSize: 20.0,
         ),
       ),
       body:
@@ -29,9 +30,7 @@ class _CartScreenState extends State<CartScreen> {
 }
 
 class _buildEmptyCart extends StatelessWidget {
-  const _buildEmptyCart({
-    super.key,
-  });
+  const _buildEmptyCart();
 
   @override
   Widget build(BuildContext context) {

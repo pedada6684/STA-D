@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
 
 class QuantityChanger extends StatefulWidget {
+  const QuantityChanger({super.key});
+
   @override
   _QuantityChangerState createState() => _QuantityChangerState();
 }
