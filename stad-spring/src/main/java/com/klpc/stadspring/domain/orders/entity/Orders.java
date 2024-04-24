@@ -1,8 +1,7 @@
-package com.klpc.stadspring.domain.productOrder.entity;
+package com.klpc.stadspring.domain.orders.entity;
 
 import com.klpc.stadspring.domain.delivery.entity.Delivery;
 import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
-import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,10 +14,9 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProductOrder {
+public class Orders {
 
     @Id
-    @Column(name = "order_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -35,10 +33,10 @@ public class ProductOrder {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "productOrder")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "orders")
     private Delivery delivery;
 
-    @OneToMany(mappedBy = "productOrder")
+    @OneToMany(mappedBy = "orders")
     private List<OrderProduct> orderProducts;
 
 }
