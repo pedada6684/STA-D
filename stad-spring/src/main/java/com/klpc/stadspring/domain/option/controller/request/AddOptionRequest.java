@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OptionPostRequest {
+public class AddOptionRequest {
     private Long productId;
     private String name;
     private String value;
