@@ -84,6 +84,9 @@ flutter:
     - .env
 
   fonts:
+    - family: MainFont
+      fonts:
+        - asset: assets/font/NanumSquareR.ttf
     - family: LogoFont
       fonts:
         - asset: assets/font/PyeongChangPeace-Bold.ttf

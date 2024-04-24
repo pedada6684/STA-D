@@ -44,15 +44,18 @@ class _ProductScreenState extends State<ProductScreen>
         ],
       ),
       bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: CustomElevatedButton(
-            text: '주문하기',
-            textColor: mainWhite,
-            backgroundColor: mainNavy,
-            onPressed: () {
-              showProductOptionBottomSheet(context);
-            },
+        child: Container(
+          color: mainWhite,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: CustomElevatedButton(
+              text: '주문하기',
+              textColor: mainWhite,
+              backgroundColor: mainNavy,
+              onPressed: () {
+                showProductOptionBottomSheet(context);
+              },
+            ),
           ),
         ),
       ),
