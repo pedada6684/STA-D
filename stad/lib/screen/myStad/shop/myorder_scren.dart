@@ -20,9 +20,39 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
       'description': 'Product Description $index',
       'isNewDate': isNewDate,
       'date':
-          isNewDate ? '2024.04.${randomDay.toString().padLeft(2, '0')}' : '',
+          isNewDate ? '2024.04.${randomDay.toString().padLeft(2, '1')}' : '',
     };
   });
+
+  double _progress = 0.0;
+  bool _isLoading = false;
+
+  void simulateLoading() async {
+    setState(() {
+      _isLoading = true;
+      _progress = 0.0;
+    });
+
+    int maxSteps = 100; // 예를 들어 100단계의 작업으로 설정
+    for (int i = 0; i <= maxSteps; i++) {
+      await Future.delayed(Duration(milliseconds: 5), () {
+        setState(() {
+          _progress = i / maxSteps;
+        });
+      });
+    }
+
+    setState(() {
+      _isLoading = false;
+      _progress = 0.0;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    simulateLoading(); // 로딩 시뮬레이션 시작
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +61,8 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
       appBar: CustomAppBar(
         title: '주문 내역',
         showBackButton: true,
+        isLoading: _isLoading,
+        progressValue: _progress,
       ),
       body: Stack(
         children: [

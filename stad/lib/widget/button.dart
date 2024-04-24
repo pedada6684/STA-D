@@ -20,6 +20,7 @@ class CustomElevatedButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         minimumSize: Size(340, 50),
+        surfaceTintColor: mainWhite,
         foregroundColor: textColor,
         backgroundColor: onPressed != null ? backgroundColor : mainGray,
         disabledForegroundColor: mainWhite,

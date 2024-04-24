@@ -1,5 +1,4 @@
 //나중에 서버에서 받아올 것
-
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -45,27 +44,27 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
-  Route _createRoute() {
-    return PageRouteBuilder(
-      transitionDuration: Duration(milliseconds: 250),
-      reverseTransitionDuration: Duration(milliseconds: 250),
-      pageBuilder: (context, animation, secondaryAnimation) => ProductScreen(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(1.0, 0.0); // 오른쪽
-        var end = Offset.zero;
-        var curve = Curves.ease;
-
-        var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var offsetAnimation = animation.drive(tween);
-
-        return SlideTransition(
-          position: offsetAnimation,
-          child: child,
-        );
-      },
-    );
-  }
+  // Route _createRoute() {
+  //   return PageRouteBuilder(
+  //     transitionDuration: Duration(milliseconds: 250),
+  //     reverseTransitionDuration: Duration(milliseconds: 250),
+  //     pageBuilder: (context, animation, secondaryAnimation) => ProductScreen(),
+  //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+  //       var begin = Offset(1.0, 0.0); // 오른쪽
+  //       var end = Offset.zero;
+  //       var curve = Curves.ease;
+  //
+  //       var tween =
+  //           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+  //       var offsetAnimation = animation.drive(tween);
+  //
+  //       return SlideTransition(
+  //         position: offsetAnimation,
+  //         child: child,
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +136,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               imagePath: 'assets/image/advertising.png',
               buttonText: '지금 보는 광고 구매하기',
               onPressed: () {
-                Navigator.of(context).push(_createRoute());
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ProductScreen()));
               },
             )
           ],
