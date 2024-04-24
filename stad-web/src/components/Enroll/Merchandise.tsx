@@ -4,6 +4,8 @@ import ToggleButton from "../Button/ToggleButton";
 import InputContainer from "../Container/InputContainer";
 import plus from "../../assets/plus.png";
 import EnrollButton from "../Button/EnrollButton";
+import DateRange from "../Calendar/DateRange";
+import CalendarIcon from "../Calendar/CalendarIcon";
 interface merchanForm {
   name: string;
   price: number;
@@ -20,22 +22,25 @@ export default function Merchandise() {
     const { name, value } = e.target;
   };
   const [isMerNameExpanded, setMerNameExpanded] = useState(false);
-  const [isMerIntroductionExpanded, setMerIntroductionExpanded] =
-    useState(false);
   const [isMerOptionExpanded, setMerOptionExpanded] = useState(false);
   const [isMerPriceExpanded, setMerPriceExpanded] = useState(false);
   const [isMerQuantityExpanded, setMerQuantityExpanded] = useState(false);
   const [isMerThumbnailExpanded, setMerThumbnailExpanded] = useState(false);
+  const [isMerShipPriceExpanded, setMerShipPriceExpanded] = useState(false);
+  const [isExpDateExpanded, setExpDateExpanded] = useState(false);
+  const [isDeliveryDateExpanded, setDeliveryDateExpanded] = useState(false);
   const toggleMerName = () => setMerNameExpanded(!isMerNameExpanded);
-  const toggleMerIntroduction = () =>
-    setMerIntroductionExpanded(!isMerIntroductionExpanded);
   const toggleMerOptions = () => setMerOptionExpanded(!isMerOptionExpanded);
   const toggleMerPrice = () => setMerPriceExpanded(!isMerPriceExpanded);
   const toggleMerQuantity = () =>
     setMerQuantityExpanded(!isMerQuantityExpanded);
   const toggleMerThumbnail = () =>
     setMerThumbnailExpanded(!isMerThumbnailExpanded);
-
+  const toggleMerShipPrice = () =>
+    setMerShipPriceExpanded(!isMerShipPriceExpanded);
+  const toggleExpDate = () => setExpDateExpanded(!isExpDateExpanded);
+  const toggleDeliveryDate = () =>
+    setDeliveryDateExpanded(!isDeliveryDateExpanded);
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.item}`}>
@@ -61,34 +66,6 @@ export default function Merchandise() {
             </div>
             <div className={`${styles.caution}`}>
               * 가이드에 맞지않은 상품명 입력 시 별도 고지없이 제재 될 수
-              있습니다.
-            </div>
-          </InputContainer>
-        )}
-      </div>
-      <div className={`${styles.item}`}>
-        <div className={`${styles.title}`}>
-          <div className={`${styles.name}`}>
-            상품설명<span>*</span>
-          </div>
-          <ToggleButton
-            isExpanded={isMerIntroductionExpanded}
-            onToggle={toggleMerIntroduction}
-          />
-        </div>
-        {isMerIntroductionExpanded && (
-          <InputContainer>
-            <div>
-              <input
-                type="text"
-                name="merchandise-introduction"
-                onChange={handleChange}
-                className={`${styles.input}`}
-                required
-              />
-            </div>
-            <div className={`${styles.caution}`}>
-              * 가이드에 맞지않은 상품설명 입력 시 별도 고지없이 제재 될 수
               있습니다.
             </div>
           </InputContainer>
@@ -128,6 +105,27 @@ export default function Merchandise() {
                 </div>
               </div>
             </div>
+            <div className={`${styles.merDesImages}`}>
+              <div className={`${styles.subTitle}`}>상품 설명 내용 이미지</div>
+              <div className={`${styles.imageContainer}`}>
+                <div className={`${styles.image}`}>
+                  <input
+                    type="file"
+                    name="file"
+                    id="file"
+                    onChange={handleChange}
+                    className={`${styles.imageInput} ${styles.input}`}
+                  />
+                  <label htmlFor="file" className={`${styles.btnUpload}`}>
+                    <img src={plus} alt="업로드" />
+                  </label>
+                </div>
+                <div className={`${styles.caution}`}>
+                  * 가이드에 맞지않은 상품 이미지 등록 시 별도 고지없이 제재 될
+                  수 있습니다.
+                </div>
+              </div>
+            </div>
           </InputContainer>
         )}
       </div>
@@ -148,7 +146,9 @@ export default function Merchandise() {
       </div>
       <div className={`${styles.item}`}>
         <div className={`${styles.title}`}>
-          <div className={`${styles.name}`}>판매가</div>
+          <div className={`${styles.name}`}>
+            판매가<span>*</span>
+          </div>
           <ToggleButton
             isExpanded={isMerPriceExpanded}
             onToggle={toggleMerPrice}
@@ -156,22 +156,40 @@ export default function Merchandise() {
         </div>
         {isMerPriceExpanded && (
           <InputContainer>
-            <div>
-              <input
-                type="number"
-                name="merchandise-price"
-                onChange={handleChange}
-                className={`${styles.input}`}
-                required
-              />
-              <span>원</span>
+            <div className={`${styles.sell}`}>
+              <div className={`${styles.subTitle}`}>
+                판매가<span>*</span>
+              </div>
+              <div className={`${styles.priceContainer}`}>
+                <input
+                  type="number"
+                  name="merchandise-price"
+                  onChange={handleChange}
+                  className={`${styles.input}`}
+                  required
+                  placeholder="숫자만 입력"
+                />
+                <div className={`${styles.letter}`}>원</div>
+              </div>
+            </div>
+            <div className={`${styles.sellPeriod}`}>
+              <div className={`${styles.subTitle}`}>
+                판매기간<span>*</span>
+              </div>
+              <div className={`${styles.sellContainer}`}>
+                <div className={`${styles.calendar}`}>
+                  <DateRange />
+                </div>
+              </div>
             </div>
           </InputContainer>
         )}
       </div>
       <div className={`${styles.item}`}>
         <div className={`${styles.title}`}>
-          <div className={`${styles.name}`}>재고수량</div>
+          <div className={`${styles.name}`}>
+            재고수량<span>*</span>
+          </div>
           <ToggleButton
             isExpanded={isMerQuantityExpanded}
             onToggle={toggleMerQuantity}
@@ -179,19 +197,104 @@ export default function Merchandise() {
         </div>
         {isMerQuantityExpanded && (
           <InputContainer>
-            <div>
+            <div className={`${styles.bond}`}>
               <input
                 type="number"
                 name="merchandise-quantity"
                 onChange={handleChange}
                 className={`${styles.input}`}
                 required
+                placeholder="숫자만 입력"
               />
-              <span>개</span>
+              <div className={`${styles.letter}`}>개</div>
             </div>
           </InputContainer>
         )}
       </div>
+      <div className={`${styles.item}`}>
+        <div className={`${styles.title}`}>
+          <div className={`${styles.name}`}>
+            배송비<span>*</span>
+          </div>
+          <ToggleButton
+            isExpanded={isMerShipPriceExpanded}
+            onToggle={toggleMerShipPrice}
+          />
+        </div>
+        {isMerShipPriceExpanded && (
+          <InputContainer>
+            <div className={`${styles.city}`}>
+              <div className={`${styles.subTitle}`}>
+                도심지역<span>*</span>
+              </div>
+              <div className={`${styles.priceContainer}`}>
+                <input
+                  type="number"
+                  name="merchandise-shipping-price-city"
+                  onChange={handleChange}
+                  className={`${styles.input}`}
+                  required
+                  placeholder="숫자만 입력"
+                />
+                <div className={`${styles.letter}`}>원</div>
+              </div>
+            </div>
+            <div className={`${styles.jejuMountain}`}>
+              <div className={`${styles.subTitle}`}>
+                제주, 산간지역<span>*</span>
+              </div>
+              <div className={`${styles.priceContainer}`}>
+                <input
+                  type="number"
+                  name="merchandise-shipping-price-jeju"
+                  onChange={handleChange}
+                  className={`${styles.input}`}
+                  required
+                  placeholder="숫자만 입력"
+                />
+                <div className={`${styles.letter}`}>원</div>
+              </div>
+            </div>
+          </InputContainer>
+        )}
+      </div>
+      <div className={`${styles.item}`}>
+        <div className={`${styles.title}`}>
+          <div className={`${styles.name}`}>
+            유통기한<span>*</span>
+          </div>
+          <ToggleButton
+            isExpanded={isExpDateExpanded}
+            onToggle={toggleExpDate}
+          />
+        </div>
+        {isExpDateExpanded && (
+          <InputContainer>
+            <div className={`${styles.calendar}`}>
+              <DateRange />
+            </div>
+          </InputContainer>
+        )}
+      </div>
+      <div className={`${styles.item}`}>
+        <div className={`${styles.title}`}>
+          <div className={`${styles.name}`}>
+            배송예정일 등록<span>*</span>
+          </div>
+          <ToggleButton
+            isExpanded={isDeliveryDateExpanded}
+            onToggle={toggleDeliveryDate}
+          />
+        </div>
+        {isDeliveryDateExpanded && (
+          <InputContainer>
+            <div className={`${styles.calendar}`}>
+              <CalendarIcon />
+            </div>
+          </InputContainer>
+        )}
+      </div>
+
       <EnrollButton />
     </div>
   );

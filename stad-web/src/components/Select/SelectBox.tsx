@@ -24,6 +24,25 @@ export function SelectReviewSortBox() {
   return <Select options={options} />;
 }
 
+export function SelectContentsBox() {
+  const options = [
+    { value: "무한도전", label: "무한도전" },
+    { value: "런닝맨", label: "런닝맨" },
+    { value: "신서유기6", label: "신서유기6" },
+    { value: "위플래시", label: "위플래시" },
+  ];
+
+  return (
+    <Select
+      isMulti
+      name="colors"
+      options={options}
+      className="basic-multi-select"
+      classNamePrefix="select"
+    />
+  );
+}
+
 export function SelectAdCategory() {
   type OptionType = { value: string; label: string };
   type SubCategoryOptions = {
