@@ -3,7 +3,7 @@ import top from "../../assets/flowbite_angle-top-solid.png";
 import plus from "../../assets/plus.png";
 import { ChangeEvent, useState } from "react";
 import DateRange from "../Calendar/DateRange";
-import { SelectAdCategory } from "../Select/SelectBox";
+import { SelectAdCategory, SelectContentsBox } from "../Select/SelectBox";
 import Modal from "../Modal/Modal";
 import ToggleButton from "../Button/ToggleButton";
 import InputContainer from "../Container/InputContainer";
@@ -194,7 +194,10 @@ export default function Advertisement() {
                 컨텐츠 선택하기
               </button>
               <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
-                <div>테스트</div>
+                <div className={`${styles.modalContent}`}>
+                  <div className={`${styles.modalTitle}`}>컨텐츠 선택하기</div>
+                  <SelectContentsBox />
+                </div>
               </Modal>
             </div>
             <div className={`${styles.caution}`}>

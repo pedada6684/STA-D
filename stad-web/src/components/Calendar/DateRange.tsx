@@ -22,7 +22,7 @@ export default function DateRange() {
           toggleCalendarOnIconClick
         />
       </div>
-      <div>~</div>
+      <div className={`${styles.letter}`}>~</div>
       <div className={`${styles.calendar}`}>
         <DatePicker
           dateFormat="yyyy-MM-dd"
