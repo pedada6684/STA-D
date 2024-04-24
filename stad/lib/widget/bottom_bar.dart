@@ -15,28 +15,27 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: mainNavy,
-      items: const <BottomNavigationBarItem>[
+      showSelectedLabels: true,
+      showUnselectedLabels: false,
+      items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home_outlined,
-              color: mainWhite,
-              size: 32.0,
+            icon: Image.asset(
+              'assets/image/home1.png',
+              width: 25,
+              height: 25,
             ),
             label: 'home'),
         BottomNavigationBarItem(
-          icon: Icon(
-            Icons.shopping_cart_outlined,
-            color: mainWhite,
-            size: 32.0,
+          icon: Image.asset(
+            'assets/image/cart.png',
+            width: 25,
+            height: 25,
           ),
           label: 'cart',
         ),
         BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person_outline_rounded,
-              color: mainWhite,
-              size: 32.0,
-            ),
+            icon: Image.asset('assets/image/my.png', width: 25,
+              height: 25,),
             label: 'my'),
       ],
       currentIndex: selectedIndex,
