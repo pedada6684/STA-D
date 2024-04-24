@@ -21,6 +21,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       scrolledUnderElevation: 0,
+      shape: Border(bottom: BorderSide(color: mainGray)),
       leading: showBackButton
           ? IconButton(
               icon: Icon(Icons.arrow_back_ios_new_rounded),

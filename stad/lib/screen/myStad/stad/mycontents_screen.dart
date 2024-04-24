@@ -21,6 +21,7 @@ class _MyContentsScreenState extends State<MyContentsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: mainWhite,
       appBar: CustomAppBar(
         title: '내가 본 콘텐츠',
         showBackButton: true,

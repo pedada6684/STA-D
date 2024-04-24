@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:stad/constant/animated_indexed_stack.dart';
@@ -7,8 +7,8 @@ import 'package:stad/firebase_options.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/cart/cart_screen.dart';
 import 'package:stad/screen/home/home_screen.dart';
-import 'package:stad/screen/myStad/myStad_screen.dart';
 
+import 'screen/myStad/myStad_screen.dart';
 import 'widget/bottom_bar.dart';
 
 Future<void> main() async {
