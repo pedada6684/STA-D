@@ -61,7 +61,7 @@ public class AdvertVideoController {
     @Operation(summary = "광고 영상 삭제", description = "광고 영상 삭제")
     @ApiResponse(responseCode = "200", description = "광고 영상이 삭제 되었습니다.")
     public ResponseEntity<DeleteResponse> deleteVideo(@RequestParam("advertVideoId") Long advertVideoId){
-        DeleteResponse response = advertVideoService.deleteResponse(advertVideoId);
+        DeleteResponse response = advertVideoService.deleteVideo(advertVideoId);
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
