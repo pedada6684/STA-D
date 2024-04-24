@@ -46,15 +46,6 @@ public class Product {
     @Column(name = "thumbnail")
     private String thumbnail;
 
-    @Column(name = "category")
-    private String category;
-
-    @Column(name = "sell_start")
-    private LocalDateTime sellStart;
-
-    @Column(name = "sell_end")
-    private LocalDateTime sellEnd;
-
     @Column(name = "city_delivery_fee")
     private Long cityDeliveryFee;
 
@@ -67,23 +58,16 @@ public class Product {
     @Column(name = "exp_end")
     private LocalDateTime expEnd;
 
-    @Column(name = "delivery_date")
-    private LocalDateTime deliveryDate;
-
     public static Product createNewProduct(
             Advert advert,
             String name,
             Long price,
             Long quantity,
             String thumbnail,
-            String category,
-            LocalDateTime sellStart,
-            LocalDateTime sellEnd,
             Long cityDeliveryFee,
             Long mtDeliveryFee,
             LocalDateTime expStart,
-            LocalDateTime expEnd,
-            LocalDateTime deliveryDate
+            LocalDateTime expEnd
     ) {
         Product product = new Product();
         product.advert= advert;
@@ -91,14 +75,10 @@ public class Product {
         product.price = price;            // 가격 설정
         product.quantity = quantity;      // 수량 설정
         product.thumbnail = thumbnail;    // 썸네일 이미지 경로 설정
-        product.category = category;      // 카테고리 설정
-        product.sellStart = sellStart;
-        product.sellEnd = sellEnd;
         product.cityDeliveryFee = cityDeliveryFee;
         product.mtDeliveryFee = mtDeliveryFee;
         product.expStart = expStart;
         product.expEnd = expEnd;
-        product.deliveryDate = deliveryDate;
         return product;
     }
 
@@ -114,9 +94,6 @@ public class Product {
         }
         if (command.getThumbnail() != null) {
             this.thumbnail = command.getThumbnail();
-        }
-        if (command.getCategory() != null) {
-            this.category = command.getCategory();
         }
     }
 
