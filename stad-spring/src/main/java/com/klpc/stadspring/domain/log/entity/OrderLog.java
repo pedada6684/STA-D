@@ -41,6 +41,7 @@ public class OrderLog {
     private LocalDateTime updateDate;
 
     public static OrderLog createNewOrderLog(
+        Long advertVideoId,
         Long userId,
         Long contentId,
         Long productId,
@@ -49,6 +50,7 @@ public class OrderLog {
         LocalDateTime updateDate
     ) {
         OrderLog orderLog = new OrderLog();
+        orderLog.advertVideoId = advertVideoId;
         orderLog.userId = userId;
         orderLog.contentId = contentId;
         orderLog.productId = productId;
