@@ -25,7 +25,7 @@ class ProductDetailScreen extends StatelessWidget {
                     Text(
                       '상품명임',
                       style: TextStyle(
-                        fontSize: 20.0,
+                        fontSize: 18.0,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -43,7 +43,7 @@ class ProductDetailScreen extends StatelessWidget {
                         Text(
                           '24,300원',
                           style: TextStyle(
-                              fontSize: 22.0,
+                              fontSize: 20.0,
                               fontWeight: FontWeight.w900,
                               color: mainGray,
                               decoration: TextDecoration.lineThrough,
@@ -65,7 +65,7 @@ class ProductDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-           const SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             Container(
@@ -80,7 +80,7 @@ class ProductDetailScreen extends StatelessWidget {
                         Text(
                           '상품정보',
                           style: TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.bold),
+                              fontSize: 16.0, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -138,14 +138,15 @@ class ProductDetailScreen extends StatelessWidget {
             Container(
               color: mainWhite,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       '상품정보 제공 고시',
                       style: TextStyle(
-                        fontSize: 18.0,
+                        fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
