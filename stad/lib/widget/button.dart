@@ -20,6 +20,7 @@ class CustomElevatedButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         minimumSize: Size(340, 50),
+        surfaceTintColor: mainWhite,
         foregroundColor: textColor,
         backgroundColor: onPressed != null ? backgroundColor : mainGray,
         disabledForegroundColor: mainWhite,
@@ -32,7 +33,7 @@ class CustomElevatedButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: Text(
           text,
-          style: TextStyle(fontSize: 18.0),
+          style: TextStyle(fontSize: 16.0),
         ),
       ),
     );
