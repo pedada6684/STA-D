@@ -105,3 +105,16 @@
   background-color: #00127a;
   color: white;
 }
+
+.myPage {
+  border: 0;
+  color: #00127a;
+  background-color: transparent;
+  font-weight: 400;
+  font-size: 1.3rem;
+}
+
+.myPage:hover {
+  text-decoration: underline;
+  text-decoration-color: #00127a;
+}

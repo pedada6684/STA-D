@@ -9,6 +9,7 @@ import EnrolledAdList from "./SalesManagement/EnrolledAdList";
 import EnrolledGoodsList from "./SalesManagement/EnrolledGoodsList";
 import Review from "../Review/Review";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
+import Content from "../../components/Container/Content";
 
 export type tab = "enterprise" | "enroll-adList" | "enroll-list" | "review";
 
@@ -38,7 +39,7 @@ export default function MyPage() {
     <div>
       <Container>
         <WebNav />
-        <div className={styles.content}>
+        <Content>
           <div className={`${styles.title}`}>마이페이지</div>
           <div className={`${styles.page}`}>
             <Sidebar activeTab={activeTab} onClickTab={handleClickTab} />
@@ -55,7 +56,7 @@ export default function MyPage() {
               </CSSTransition>
             </SwitchTransition>
           </div>
-        </div>
+        </Content>
       </Container>
     </div>
   );
