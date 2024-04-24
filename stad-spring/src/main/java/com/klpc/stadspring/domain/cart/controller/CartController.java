@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.cart.controller;
 
+import com.klpc.stadspring.domain.cart.controller.request.AddCartProductRequest;
 import com.klpc.stadspring.domain.cart.controller.request.CartProductDeleteRequest;
 import com.klpc.stadspring.domain.cart.controller.request.CartProductPostRequest;
 import com.klpc.stadspring.domain.cart.controller.request.UpdateCartProductCountRequest;
@@ -39,7 +40,7 @@ public class CartController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    public ResponseEntity<?> addNewCartProduct(@RequestBody CartProductPostRequest request) {
+    public ResponseEntity<?> addNewCartProduct(@RequestBody AddCartProductRequest request) {
         log.info("AddProductToCartCommand: "+ request);
 
         try {

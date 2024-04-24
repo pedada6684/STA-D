@@ -30,8 +30,8 @@ public class CartProduct {
     @Column(name = "quantity")
     private Long quantity;
 
-    @Column(name = "adverse_id")
-    private Long adverseId;
+    @Column(name = "advert_id")
+    private Long advertId;
 
     @Column(name = "content_id")
     private Long contentId;
@@ -40,14 +40,14 @@ public class CartProduct {
             Cart cart,
             Product product,
             Long quantity,
-            Long adverseId,
+            Long advertId,
             Long contentId
     ) {
         CartProduct cartProduct = new CartProduct();
         cartProduct.cart = cart;
         cartProduct.product = product;
         cartProduct.quantity = quantity;
-        cartProduct.adverseId = adverseId;
+        cartProduct.advertId = advertId;
         cartProduct.contentId = contentId;
         return cartProduct;
     }
