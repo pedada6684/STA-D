@@ -10,7 +10,7 @@ export default function VideoDetail() {
   //   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const videoLoader = () => {
-    return "http://localhost:8080/api/contents/streaming/1"; // 1 대신 contentId 보내면 됨
+    return "http://localhost:8080/api/contents-detail/streaming/1"; // 1 대신 contentId 보내면 됨
   };
 
   const videoUrl = videoLoader(); // videoLoader 함수를 호출하여 URL을 얻습니다.
