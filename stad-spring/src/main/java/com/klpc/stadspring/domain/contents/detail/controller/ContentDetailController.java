@@ -17,7 +17,7 @@ public class ContentDetailController {
     private final ContentDetailService service;
 
     @GetMapping("/streaming/{contentId}")
-    ResponseEntity<ResourceRegion> streamingPublicVideo(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long contentId){
+    ResponseEntity<ResourceRegion> streamingPublicVideo(@RequestHeader HttpHeaders httpHeaders, @PathVariable("contentId") Long contentId){
         String videoUrl = service.getVideoUrlById(contentId);
         return service.streamingPublicVideo(httpHeaders, videoUrl);
     }
