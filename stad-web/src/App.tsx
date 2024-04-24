@@ -9,16 +9,15 @@ import EnterprisePage from "./pages/MyPage/Enterprise/EnterprisePage";
 import EnrolledGoodsList from "./pages/MyPage/SalesManagement/EnrolledGoodsList";
 import AdManagement from "./pages/AdManagement/AdManagement";
 import SignUp from "./pages/WebLogin/SignUp";
-import Advertisement from "./components/Enroll/Advertisement";
-import { QueryClient, QueryClientProvider } from "react-query";
 import Review from "./pages/Review/Review";
 import Merchandise from "./components/Enroll/Merchandise";
 import EnrolledAdList from "./pages/MyPage/SalesManagement/EnrolledAdList";
+import AdEnroll from "./pages/AdEnroll/AdEnroll";
+import Digital from "./components/Enroll/Digital";
 
 function App() {
-  const queryClient = new QueryClient();
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <BrowserRouter>
         <div className="App">
           <Routes>
@@ -33,13 +32,11 @@ function App() {
               <Route path="review" element={<Review />} />
             </Route>
             <Route path="/ad-management" element={<AdManagement />} />
-            <Route path="/ad-enroll" element={<Advertisement />}>
-              <Route path="mer-enroll" element={<Merchandise />} />
-            </Route>
+            <Route path="/ad-enroll/*" element={<AdEnroll />} />
           </Routes>
         </div>
       </BrowserRouter>
-    </QueryClientProvider>
+    </>
   );
 }
 
