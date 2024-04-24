@@ -7,6 +7,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TextStyle? titleStyle;
   final bool showBackButton;
   final TabController? tabController;
+  final bool isLoading; // 로딩 상태 추가
+  final double progressValue;
 
   const CustomAppBar({
     super.key,
@@ -15,6 +17,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleStyle,
     this.showBackButton = false,
     this.tabController,
+    this.isLoading = false,
+    this.progressValue = 0.0, // 초기값 false
   });
 
   @override
@@ -38,40 +42,52 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   fontSize: 18.0)),
       actions: actions,
       backgroundColor: mainWhite,
-      bottom: tabController != null
+      bottom: isLoading
           ? PreferredSize(
-              preferredSize: Size.fromHeight(48.0),
-              child: Material(
-                color: mainWhite,
-                child: TabBar(
-                  controller: tabController,
-                  indicator: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: mainNavy, width: 5.0),
-                    ),
-                  ),
-                  indicatorPadding: EdgeInsets.symmetric(horizontal: 32.0),
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  labelStyle: TextStyle(
-                    color: mainNavy,
-                    fontSize: 14.0,
-                  ),
-                  unselectedLabelStyle: TextStyle(
-                    color: mainNavy,
-                    fontSize: 14.0,
-                  ),
-                  tabs: const [
-                    Tab(text: '상품상세'),
-                    Tab(text: '후기'),
-                  ],
-                ),
+              preferredSize: Size.fromHeight(4.0),
+              child: LinearProgressIndicator(
+                value: progressValue,
+                backgroundColor: mainWhite,
+                valueColor: AlwaysStoppedAnimation<Color>(mainNavy),
               ),
             )
-          : null,
+          : tabController != null
+              ? PreferredSize(
+                  preferredSize: Size.fromHeight(48.0),
+                  child: Material(
+                    color: mainWhite,
+                    child: TabBar(
+                      controller: tabController,
+                      indicator: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: mainNavy, width: 5.0),
+                        ),
+                      ),
+                      indicatorPadding: EdgeInsets.symmetric(horizontal: 32.0),
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      indicatorColor: mainNavy,
+                      indicatorWeight: 2,
+                      labelStyle: TextStyle(
+                        color: mainNavy,
+                        fontSize: 14.0,
+                      ),
+                      unselectedLabelStyle: TextStyle(
+                        color: mainNavy,
+                        fontSize: 14.0,
+                      ),
+                      tabs: const [
+                        Tab(text: '상품상세'),
+                        Tab(text: '후기'),
+                      ],
+                    ),
+                  ),
+                )
+              : null,
     );
   }
 
   @override
-  Size get preferredSize =>
-      Size.fromHeight(kToolbarHeight + (tabController != null ? 48.0 : 0.0));
+  Size get preferredSize => Size.fromHeight(kToolbarHeight +
+      (tabController != null ? 48.0 : 0.0) +
+      (isLoading ? 4.0 : 0.0));
 }
