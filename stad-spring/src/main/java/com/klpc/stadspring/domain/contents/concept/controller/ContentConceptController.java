@@ -57,11 +57,10 @@ public class ContentConceptController {
     @Operation(summary = "시리즈 카테고리별 영상 목록", description = "시리즈 카테고리별 영상 목록")
     ResponseEntity<List<GetConceptResponse>> getSeriesContentByCategory(@PathVariable String category) {
         Long categoryId = categoryService.getIdByIsMovieAndName(false, category);
-        List<Long> contentIdList = categoryRelationshipService.getContentIdByCategory(categoryId);
+        List<Long> conceptIdList = categoryRelationshipService.getContentIdByCategory(categoryId);
         List<GetConceptResponse> responseList = new ArrayList<>();
-        for (int i = 0; i < contentIdList.size(); i++) {
-            ContentDetail detail = detailService.getContentDetailById(contentIdList.get(i));
-            ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
+        for (int i = 0; i < conceptIdList.size(); i++) {
+            ContentConcept concept = conceptService.getContentConceptById(conceptIdList.get(i));
 
             responseList.add(GetConceptResponse.from(concept));
         }
@@ -92,11 +91,10 @@ public class ContentConceptController {
     @Operation(summary = "영화 카테고리별 영상 목록", description = "영화 카테고리별 영상 목록")
     ResponseEntity<List<GetConceptResponse>> getMovieContentByCategory(@PathVariable String category) {
         Long categoryId = categoryService.getIdByIsMovieAndName(true, category);
-        List<Long> contentIdList = categoryRelationshipService.getContentIdByCategory(categoryId);
+        List<Long> conceptIdList = categoryRelationshipService.getContentIdByCategory(categoryId);
         List<GetConceptResponse> responseList = new ArrayList<>();
-        for (int i = 0; i < contentIdList.size(); i++) {
-            ContentDetail detail = detailService.getContentDetailById(contentIdList.get(i));
-            ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
+        for (int i = 0; i < conceptIdList.size(); i++) {
+            ContentConcept concept = conceptService.getContentConceptById(conceptIdList.get(i));
 
             responseList.add(GetConceptResponse.from(concept));
         }
@@ -109,8 +107,6 @@ public class ContentConceptController {
         List<ContentConcept> conceptList = conceptService.getContentConceptByKeyword(keyword);
         List<GetConceptResponse> responseList = new ArrayList<>();
         for (int i = 0; i < conceptList.size(); i++) {
-            ContentDetail detail = detailService.getContentDetailByConceptId(conceptList.get(i).getId());
-
             responseList.add(GetConceptResponse.from(conceptList.get(i)));
         }
         return ResponseEntity.ok(responseList);
