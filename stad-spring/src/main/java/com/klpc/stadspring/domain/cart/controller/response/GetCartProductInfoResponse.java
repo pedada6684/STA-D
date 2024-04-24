@@ -24,7 +24,7 @@ public class GetCartProductInfoResponse {
                 cartId(cartProduct.getCart().getId()).
                 productId(cartProduct.getProduct().getId()).
                 quantity(cartProduct.getQuantity()).
-                adverseId(cartProduct.getAdverseId()).
+                adverseId(cartProduct.getAdvertId()).
                 contentId(cartProduct.getContentId()).
                 build();
     }
