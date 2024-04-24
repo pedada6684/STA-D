@@ -1,16 +1,10 @@
 package com.klpc.stadspring.domain.option.controller;
 
-import com.klpc.stadspring.domain.option.controller.request.OptionPostRequest;
+import com.klpc.stadspring.domain.option.controller.request.AddOptionRequest;
 import com.klpc.stadspring.domain.option.controller.response.GetOptionListByProductIdResponse;
 import com.klpc.stadspring.domain.option.entity.ProductOption;
 import com.klpc.stadspring.domain.option.service.OptionService;
-import com.klpc.stadspring.domain.option.service.command.AddOptionCommand;
 import com.klpc.stadspring.domain.option.service.command.DeleteOptionCommand;
-import com.klpc.stadspring.domain.product.controller.response.GetProductInfoResponse;
-import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdverseResponse;
-import com.klpc.stadspring.domain.product.entity.Product;
-import com.klpc.stadspring.domain.product.service.command.AddProductCommand;
-import com.klpc.stadspring.domain.product.service.command.DeleteProductCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -52,7 +46,7 @@ public class OptionController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    public ResponseEntity<?> addNewOption(@RequestBody OptionPostRequest request) {
+    public ResponseEntity<?> addNewOption(@RequestBody AddOptionRequest request) {
         try {
             optionService.addProductOption(request.toCommand());
 
