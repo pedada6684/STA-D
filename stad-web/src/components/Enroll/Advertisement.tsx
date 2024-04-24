@@ -143,7 +143,7 @@ export default function Advertisement() {
             광고기간<span>*</span>
           </div>
           <ToggleButton
-            isExpanded={isAdVideoExpanded}
+            isExpanded={isAdPeriodExpanded}
             onToggle={toggleAdPeriod}
           />
         </div>
@@ -190,7 +190,9 @@ export default function Advertisement() {
         {isAdContentExpanded && (
           <InputContainer>
             <div>
-              <button onClick={openModal}>컨텐츠 선택하기</button>
+              <button className={`${styles.contents}`} onClick={openModal}>
+                컨텐츠 선택하기
+              </button>
               <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
                 <div>테스트</div>
               </Modal>
