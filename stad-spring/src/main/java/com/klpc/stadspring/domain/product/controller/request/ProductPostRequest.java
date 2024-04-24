@@ -25,14 +25,10 @@ public class ProductPostRequest {
     private Long quantity;
     private List<MultipartFile> images;
     private MultipartFile thumbnail;
-    private String category;
-    private LocalDateTime sellStart;
-    private LocalDateTime sellEnd;
     private Long cityDeliveryFee;
     private Long mtDeliveryFee;
     private LocalDateTime expStart;
     private LocalDateTime expEnd;
-    private LocalDateTime deliveryDate;
 
     public AddProductCommand toCommand(){
         return AddProductCommand.builder()
@@ -43,14 +39,10 @@ public class ProductPostRequest {
                 .quantity(quantity)
                 .images(images)
                 .thumbnail(thumbnail)
-                .category(category)
-                .sellStart(sellStart)
-                .sellEnd(sellEnd)
                 .cityDeliveryFee(cityDeliveryFee)
                 .mtDeliveryFee(mtDeliveryFee)
                 .expStart(expStart)
                 .expEnd(expEnd)
-                .deliveryDate(deliveryDate)
                 .build();
     }
 }
