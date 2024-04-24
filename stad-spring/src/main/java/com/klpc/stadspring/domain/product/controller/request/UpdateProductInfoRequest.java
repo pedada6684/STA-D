@@ -17,14 +17,10 @@ public class UpdateProductInfoRequest {
     private Long price;
     private Long quantity;
     private String thumbnail;
-    private String category;
-    private String sellStart;
-    private String sellEnd;
     private Long cityDeliveryFee;
     private Long mtDeliveryFee;
     private String expStart;
     private String expEnd;
-    private String deliveryDate;
 
     public UpdateProductInfoCommand toCommand(){
         return UpdateProductInfoCommand.builder()
@@ -33,14 +29,10 @@ public class UpdateProductInfoRequest {
                 .price(price)
                 .quantity(quantity)
                 .thumbnail(thumbnail)
-                .category(category)
-                .sellStart(sellStart)
-                .sellEnd(sellEnd)
                 .cityDeliveryFee(cityDeliveryFee)
                 .mtDeliveryFee(mtDeliveryFee)
                 .expStart(expStart)
                 .expEnd(expEnd)
-                .deliveryDate(deliveryDate)
                 .build();
     }
 }

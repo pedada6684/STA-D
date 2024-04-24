@@ -28,14 +28,10 @@ public class GetProductInfoResponse {
     private Long quantity;
     private List<ProductImage> images ;
     private String thumbnail;
-    private String category;
-    private LocalDateTime sellStart;
-    private LocalDateTime sellEnd;
     private Long cityDeliveryFee;
     private Long mtDeliveryFee;
     private LocalDateTime expStart;
     private LocalDateTime expEnd;
-    private LocalDateTime deliveryDate;
 
     public static GetProductInfoResponse from(Product product){
         return GetProductInfoResponse.builder()
@@ -45,14 +41,10 @@ public class GetProductInfoResponse {
                 .quantity(product.getQuantity())
                 .images(product.getImages())
                 .thumbnail(product.getThumbnail())
-                .category(product.getCategory())
-                .sellStart(product.getSellStart())
-                .sellEnd(product.getSellEnd())
                 .cityDeliveryFee(product.getCityDeliveryFee())
                 .mtDeliveryFee(product.getMtDeliveryFee())
                 .expStart(product.getExpStart())
                 .expEnd(product.getExpEnd())
-                .deliveryDate(product.getDeliveryDate())
                 .build();
     }
 }

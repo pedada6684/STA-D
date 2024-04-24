@@ -22,9 +22,6 @@ public class AddProductCommand {
     private Long quantity;
     private List<MultipartFile> images;
     private MultipartFile thumbnail;
-    private String category;
-    private LocalDateTime sellStart;
-    private LocalDateTime sellEnd;
     private Long cityDeliveryFee;
     private Long mtDeliveryFee;
     private LocalDateTime expStart;
