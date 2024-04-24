@@ -11,18 +11,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookmarkedContent {
     @Id
-    @Column(name = "watched_content_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "content_detail_id")
     private ContentDetail contentDetail;
 
-    @Column(name = "user_id")
     private Long userId;
 
-//    @ManyToOne
+//    @ManyToOne(fetch = FetchType.LAZY)
 //    @Column(name = "user_id")
 //    private User user;
 }
