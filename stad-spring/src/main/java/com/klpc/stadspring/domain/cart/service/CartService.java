@@ -1,9 +1,14 @@
 package com.klpc.stadspring.domain.cart.service;
 
+import com.klpc.stadspring.domain.advert.entity.Advert;
+import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
+import com.klpc.stadspring.domain.cart.controller.request.AddCartProductRequest;
+import com.klpc.stadspring.domain.cart.controller.request.CartProductPostRequest;
 import com.klpc.stadspring.domain.cart.entity.Cart;
 import com.klpc.stadspring.domain.cart.entity.CartProduct;
 import com.klpc.stadspring.domain.cart.repository.CartProductRepository;
 import com.klpc.stadspring.domain.cart.repository.CartRepository;
+import com.klpc.stadspring.domain.cart.service.command.AddCartProductCommand;
 import com.klpc.stadspring.domain.cart.service.command.AddProductToCartCommand;
 import com.klpc.stadspring.domain.cart.service.command.DeleteProductInCartCommand;
 import com.klpc.stadspring.domain.cart.service.command.UpdateCartProductCountCommand;
@@ -20,6 +25,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -33,24 +39,34 @@ public class CartService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public Cart addProductToCart(AddProductToCartCommand command) {
-        log.info("AddProductInCartCommand: "+command);
+    public List<CartProduct> addProductToCart(AddProductToCartCommand command) {
+        log.info("AddProductInCartCommand: " + command);
+
         User user = userRepository.findById(command.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
         Cart cart = cartRepository.findByUserId(command.getUserId())
                 .orElseGet(() -> createCartForUser(user));
-        Product product = productRepository.findById(command.getProductId())
-                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-        CartProduct newCartProduct = CartProduct.createNewCartProduct(
-                cart,
-                product,
-                command.getQuantity(),
-                command.getAdverseId(),
-                command.getContentId()
-        );
-        cartProductRepository.save(newCartProduct);
-        return cart;
+        List<CartProduct> addedProducts = new ArrayList<>();
+
+        for (CartProductPostRequest cartProductPostRequest : command.getCartProductList()) {
+            Product product = productRepository.findById(cartProductPostRequest.getProductId())
+                    .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+
+            CartProduct newCartProduct = CartProduct.createNewCartProduct(
+                    cart,
+                    product,
+                    cartProductPostRequest.getQuantity(),
+                    cartProductPostRequest.getAdvertId(),
+                    cartProductPostRequest.getContentId()
+            );
+            cartProductRepository.save(newCartProduct);
+            addedProducts.add(newCartProduct);
+        }
+
+        return addedProducts;
     }
 
     private Cart createCartForUser(User user) {
