@@ -20,21 +20,21 @@ class CustomBottomNavigationBar extends StatelessWidget {
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
             icon: Image.asset(
-              'assets/image/home1.png',
+              'assets/image/bottombar/home1.png',
               width: 25,
               height: 25,
             ),
             label: 'home'),
         BottomNavigationBarItem(
           icon: Image.asset(
-            'assets/image/cart.png',
+            'assets/image/bottombar/cart.png',
             width: 25,
             height: 25,
           ),
           label: 'cart',
         ),
         BottomNavigationBarItem(
-            icon: Image.asset('assets/image/my.png', width: 25,
+            icon: Image.asset('assets/image/bottombar/my.png', width: 25,
               height: 25,),
             label: 'my'),
       ],

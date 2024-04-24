@@ -53,8 +53,6 @@ class _OrderScreenState extends State<OrderScreen> {
       backgroundColor: mainWhite,
       appBar: const CustomAppBar(
         title: '주문서 작성',
-        titleStyle: TextStyle(
-            color: mainNavy, fontSize: 20, fontWeight: FontWeight.bold),
         showBackButton: true,
       ),
       body: SingleChildScrollView(
@@ -308,7 +306,6 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
               selected: isSelected,
               selectedColor: mainNavy,
-
               onSelected: (bool selected) {
                 setState(
                   () {
