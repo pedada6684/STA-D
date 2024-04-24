@@ -67,7 +67,6 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.springframework.batch/spring-batch-core
 	// spring batch
-//	implementation group: 'org.springframework.batch', name: 'spring-batch-core', version: '5.1.1'
 //	implementation 'org.springframework.boot:spring-boot-starter-batch'
 }
 
