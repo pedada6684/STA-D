@@ -15,8 +15,6 @@ class _MyCommercialScreenState extends State<MyCommercialScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: '내가 본 광고',
-        titleStyle: TextStyle(
-            fontSize: 18, color: mainWhite, fontWeight: FontWeight.bold),
         showBackButton: true,
       ),
     );

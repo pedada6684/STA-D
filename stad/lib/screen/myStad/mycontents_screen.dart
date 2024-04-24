@@ -23,8 +23,6 @@ class _MyContentsScreenState extends State<MyContentsScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: '내가 본 콘텐츠',
-        titleStyle: TextStyle(
-            fontSize: 18, color: mainWhite, fontWeight: FontWeight.bold),
         showBackButton: true,
       ),
       body: Center(

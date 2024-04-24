@@ -29,7 +29,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
       centerTitle: true,
-      title: Text(title, style: titleStyle ?? TextStyle()),
+      title: Text(title,
+          style: titleStyle ??
+              TextStyle(
+                  color: mainNavy,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0)),
       actions: actions,
       backgroundColor: mainWhite,
       bottom: tabController != null
