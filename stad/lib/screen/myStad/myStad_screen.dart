@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -6,11 +7,13 @@ import 'package:stad/constant/colors.dart';
 import 'package:stad/main.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/login/login_screen.dart';
-import 'package:stad/screen/myStad/mycommercial_screen.dart';
-import 'package:stad/screen/myStad/mycontents_screen.dart';
 import 'package:stad/screen/myStad/qr_screen.dart';
+import 'package:stad/screen/myStad/shop/myorder_scren.dart';
+import 'package:stad/screen/myStad/stad/mycommercial_screen.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
+
+import 'stad/mycontents_screen.dart';
 
 class MyStadScreen extends StatefulWidget {
   const MyStadScreen({super.key});
@@ -68,12 +71,19 @@ class _MyStadScreenState extends State<MyStadScreen> {
                     child: Text(
                       'Shop',
                       style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: darkGray),
                     ),
                   ),
-                  _buildHeadListTile(title: '주문 내역'),
+                  _buildHeadListTile(
+                      title: '주문 내역',
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyOrderScreen()));
+                      }),
                   _buildHeadListTile(title: '배송지 관리'),
                   _buildHeadListTile(title: '상품 리뷰'),
                 ],
@@ -93,7 +103,7 @@ class _MyStadScreenState extends State<MyStadScreen> {
                     child: Text(
                       'Stad',
                       style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: darkGray),
                     ),
@@ -165,6 +175,7 @@ class _MyStadScreenState extends State<MyStadScreen> {
       trailing: Icon(
         Icons.chevron_right,
         color: darkGray,
+        size: 30.0,
       ),
       onTap: onTap,
     );
@@ -181,59 +192,82 @@ class UserInfoContainer extends StatelessWidget {
     return Consumer<UserProvider>(
       builder: (context, userProvider, child) {
         final userModel = userProvider.user;
-
         return Container(
           height: 230,
           width: MediaQuery.of(context).size.width,
           color: mainWhite,
           child: userModel != null
               ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.settings_rounded,
-                            color: mainNavy, size: 32.0),
+                    // Align(
+                    //   alignment: Alignment.topRight,
+                    //   child: TextButton(
+                    //     onPressed: () {},
+                    //     child: Text(
+                    //       '내 정보 수정하기',
+                    //       style: TextStyle(color: mainNavy),
+                    //     ),
+                    //   ),
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 4.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: mainNavy,
+                                radius: 40.0,
+                                backgroundImage: userModel.profilePicture !=
+                                        null
+                                    ? NetworkImage(userModel.profilePicture!)
+                                    : AssetImage(
+                                            'assets/image/default_profile.png')
+                                        as ImageProvider,
+                              ),
+                              SizedBox(
+                                width: 16.0,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    userModel.nickname ?? '닉네임을 설정해주세요.',
+                                    style: TextStyle(
+                                        color: mainBlack,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(height: 4.0),
+                                  Text(
+                                    userModel.email ?? '이메일 없음',
+                                    style: TextStyle(
+                                        color: mainBlack, fontSize: 16.0),
+                                  ),
+                                  SizedBox(height: 4.0),
+                                  Text(
+                                    userModel.phone ?? '연락처를 추가해주세요.',
+                                    style: TextStyle(
+                                        color: mainBlack, fontSize: 16.0),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.chevron_right,
+                              color: darkGray,
+                              size: 30.0,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        CircleAvatar(
-                          backgroundColor: mainWhite,
-                          radius: 48.0,
-                          backgroundImage: userModel.profilePicture != null
-                              ? NetworkImage(userModel.profilePicture!)
-                              : AssetImage('assets/image/default_profile.png')
-                                  as ImageProvider,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              userModel.nickname ?? '닉네임을 설정해주세요.',
-                              style: TextStyle(
-                                  color: mainBlack,
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 4.0),
-                            Text(
-                              userModel.email ?? '이메일 없음',
-                              style:
-                                  TextStyle(color: mainBlack, fontSize: 16.0),
-                            ),
-                            SizedBox(height: 4.0),
-                            Text(
-                              userModel.phone ?? '연락처를 추가해주세요.',
-                              style:
-                                  TextStyle(color: mainBlack, fontSize: 16.0),
-                            ),
-                          ],
-                        ),
-                      ],
                     ),
                     SizedBox(height: 16.0),
                     CustomElevatedButton(
