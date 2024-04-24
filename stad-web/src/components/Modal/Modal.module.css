@@ -16,6 +16,7 @@
   padding: 2rem;
   border-radius: 5px;
   width: 50%;
+  height: 30%;
   position: relative;
 }
 
@@ -33,6 +34,9 @@
 }
 
 .apply {
+  position: absolute;
+  left: 40%;
+  bottom: 1rem;
   display: flex;
   justify-content: center;
 }
