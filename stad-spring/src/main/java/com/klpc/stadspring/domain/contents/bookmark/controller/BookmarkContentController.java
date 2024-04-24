@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/contents-bookmark")
-@Tag(name = "북마크 디테일 컨트롤러", description = "Bookmark Content Controller API")
+@Tag(name = "북마크 콘텐츠 컨트롤러", description = "Bookmark Content Controller API")
 public class BookmarkContentController {
     private final BookmarkedContentService service;
 
