@@ -21,7 +21,8 @@
   align-items: center;
   margin-left: 1rem;
 }
-.title span {
+.title span,
+.subTitle span {
   color: #ff1a1a;
 }
 
@@ -48,25 +49,40 @@
 
 .advideoList,
 .adBanner,
-.merImage {
+.merImage,
+.merDesImages,
+.sell,
+.sellPeriod,
+.priceContainer,
+.sellContainer,
+.city,
+.jejuMountain {
   display: flex;
 }
-.advideoList {
+.advideoList,
+.merImage,
+.sell {
   border-bottom: 1px solid #afb0b4;
   padding-bottom: 1rem;
 }
 
-.adBanner {
+.adBanner,
+.merDesImages,
+.sellPeriod,
+.jejuMountain {
   padding-top: 2rem;
 }
 .subTitle {
   width: 10%;
 }
 .videoContainer,
-.imageContainer {
+.imageContainer,
+.priceContainer,
+.sellContainer {
   margin-left: 3rem;
   width: 80%;
 }
+
 .video,
 .image {
   border: 1px dashed #afb0b4;
@@ -92,4 +108,22 @@
   display: flex;
   justify-content: space-around;
   margin: 5rem;
+}
+.bond {
+  display: flex;
+}
+.letter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  margin-left: 1rem;
+}
+.modalContent {
+  display: flex;
+  flex-direction: column;
+}
+.modalTitle {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
 }

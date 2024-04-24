@@ -19,7 +19,9 @@ export default function Modal({
           <img className={styles.close} src={close} alt="닫기" />
         </button>
         {children}
-        <button className={styles.applyBtn}>적용</button>
+        <div className={`${styles.apply}`}>
+          <button className={styles.applyBtn}>적용</button>
+        </div>
       </div>
     </div>
   );
