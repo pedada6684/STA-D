@@ -1,0 +1,94 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+.item {
+  border: 1px solid #565656;
+  margin-bottom: 1rem;
+  /* padding: 1rem; */
+}
+.title {
+  padding: 1rem 0;
+  border-bottom: 1px solid #565656;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+.name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 1rem;
+}
+.title span {
+  color: #ff1a1a;
+}
+
+.input {
+  width: 95%;
+  border: 1px solid #d9d9d9;
+  background-color: #f4f4f4;
+  padding: 1rem 0 1rem 1rem;
+  border-radius: 5px;
+}
+.calendar {
+  display: flex;
+}
+.caution,
+.caution2 {
+  font-size: 0.8rem;
+  color: #00127a;
+}
+
+.caution {
+  margin-top: 1rem;
+}
+
+.advideoList,
+.adBanner,
+.merImage {
+  display: flex;
+}
+.advideoList {
+  border-bottom: 1px solid #afb0b4;
+  padding-bottom: 1rem;
+}
+
+.adBanner {
+  padding-top: 2rem;
+}
+.subTitle {
+  width: 10%;
+}
+.videoContainer,
+.imageContainer {
+  margin-left: 3rem;
+  width: 80%;
+}
+.video,
+.image {
+  border: 1px dashed #afb0b4;
+  width: 10rem;
+  height: 10rem;
+}
+.videoInput,
+.imageInput {
+  display: none;
+}
+.btnUpload {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+.btnUpload img {
+  cursor: pointer;
+  width: 3rem;
+}
+.buttonContainer {
+  display: flex;
+  justify-content: space-around;
+  margin: 5rem;
+}
