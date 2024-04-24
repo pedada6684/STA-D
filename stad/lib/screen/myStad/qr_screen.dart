@@ -19,8 +19,6 @@ class _QRScreenState extends State<QRScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: '새 기기 연결하기',
-        titleStyle: TextStyle(
-            fontSize: 18, color: mainWhite, fontWeight: FontWeight.bold),
         showBackButton: true,
       ),
       body: Column(

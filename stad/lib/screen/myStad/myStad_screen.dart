@@ -46,14 +46,9 @@ class _MyStadScreenState extends State<MyStadScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: mainWhite,
-      appBar: CustomAppBar(
-        title: '마이스테디',
-        titleStyle: TextStyle(
-            color: mainNavy, fontWeight: FontWeight.bold, fontSize: 20.0),
-      ),
+      appBar: CustomAppBar(title: '마이스테디'),
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -53,8 +53,6 @@ class _OrderScreenState extends State<OrderScreen> {
       backgroundColor: mainWhite,
       appBar: const CustomAppBar(
         title: '주문서 작성',
-        titleStyle: TextStyle(
-            color: mainNavy, fontSize: 20, fontWeight: FontWeight.bold),
         showBackButton: true,
       ),
       body: SingleChildScrollView(
@@ -292,6 +290,7 @@ class _OrderScreenState extends State<OrderScreen> {
             padding: const EdgeInsets.only(right: 16.0),
             child: ChoiceChip(
               surfaceTintColor: mainWhite,
+              backgroundColor: mainWhite,
               label: Text(
                 address.locationNick,
                 style: TextStyle(
