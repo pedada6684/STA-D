@@ -18,6 +18,7 @@ import ProfilePick from "./pages/TVLogin/ProfilePick";
 import TVMain from "./pages/Main/TVMain";
 import TVSeries from "./pages/Category/TVSeries";
 import TVSearch from "./pages/Search/TVSearch";
+import VideoDetail from "./pages/Streaming/VideoDetail";
 
 function App() {
   return (
@@ -43,7 +44,10 @@ function App() {
             <Route path="/tv-profile" element={<ProfilePick />} />
             <Route path="/tv-main" element={<TVMain />} />
             <Route path="/tv-series" element={<TVSeries />} />
-            <Route path="/tv-search" element={<TVSearch />} />
+            <Route path="/tv-search" element={<TVSearch />}>
+              <Route path=":videoTitle" element={<TVSearch />} />
+            </Route>
+            <Route path="/tv/:videoId" element={<VideoDetail />} />
           </Routes>
         </div>
       </BrowserRouter>
