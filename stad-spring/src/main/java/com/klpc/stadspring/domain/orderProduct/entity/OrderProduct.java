@@ -1,7 +1,7 @@
 package com.klpc.stadspring.domain.orderProduct.entity;
 
 import com.klpc.stadspring.domain.product.entity.Product;
-import com.klpc.stadspring.domain.productOrder.entity.ProductOrder;
+import com.klpc.stadspring.domain.orders.entity.Orders;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,8 +19,8 @@ public class OrderProduct {
     private Long cnt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productOrder_id")
-    private ProductOrder productOrder;
+    @JoinColumn(name = "orders_id")
+    private Orders orders;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

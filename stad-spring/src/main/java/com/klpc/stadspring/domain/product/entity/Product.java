@@ -5,7 +5,6 @@ import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.image.product_image.entity.ProductImage;
 import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.product.service.command.UpdateProductInfoCommand;
-import com.klpc.stadspring.domain.productOrder.entity.ProductOrder;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,6 +1,6 @@
 package com.klpc.stadspring.domain.delivery.entity;
 
-import com.klpc.stadspring.domain.productOrder.entity.ProductOrder;
+import com.klpc.stadspring.domain.orders.entity.Orders;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,5 +29,5 @@ public class Delivery {
 
     @OneToOne
     @JoinColumn(name = "delivery_id")
-    private ProductOrder productOrder;
+    private Orders orders;
 }
