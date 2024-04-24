@@ -34,7 +34,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               TextStyle(
                   color: mainNavy,
                   fontWeight: FontWeight.bold,
-                  fontSize: 20.0)),
+                  fontSize: 18.0)),
       actions: actions,
       backgroundColor: mainWhite,
       bottom: tabController != null
@@ -53,11 +53,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   indicatorSize: TabBarIndicatorSize.tab,
                   labelStyle: TextStyle(
                     color: mainNavy,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                   ),
                   unselectedLabelStyle: TextStyle(
                     color: mainNavy,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                   ),
                   tabs: const [
                     Tab(text: '상품상세'),

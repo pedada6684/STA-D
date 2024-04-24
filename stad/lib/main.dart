@@ -51,6 +51,14 @@ class _MyAppState extends State<MyApp> {
         // UserProvider 추가
       ],
       child: MaterialApp(
+        theme: ThemeData(
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            },
+          ),
+          fontFamily: 'MainFont',
+        ),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           body: AnimatedIndexedStack(
