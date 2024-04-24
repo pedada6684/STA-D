@@ -37,7 +37,7 @@ public class ContentDetailService {
         }
         // 파일 존재 확인
         try {
-            UrlResource video = new UrlResource("file:"+pathStr);
+            UrlResource video = new UrlResource(pathStr);
             // - 파일 시스템 경로에 접근하기 위해서는 "file:"로 시작
             // - HTTP 프로토콜을 통해 자원에 접근하기 위해서는 "https:"로 시작
             // - FTP를 통해서 접근하기 위해서는 "ftp:"로 시작
