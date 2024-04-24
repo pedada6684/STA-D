@@ -292,6 +292,7 @@ class _OrderScreenState extends State<OrderScreen> {
             padding: const EdgeInsets.only(right: 16.0),
             child: ChoiceChip(
               surfaceTintColor: mainWhite,
+              backgroundColor: mainWhite,
               label: Text(
                 address.locationNick,
                 style: TextStyle(
@@ -307,6 +308,7 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
               selected: isSelected,
               selectedColor: mainNavy,
+
               onSelected: (bool selected) {
                 setState(
                   () {
