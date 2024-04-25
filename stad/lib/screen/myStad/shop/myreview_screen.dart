@@ -172,7 +172,27 @@ class ReviewCard extends StatelessWidget {
               text: review.reviewContent,
               maxLength: 100,
             ),
-
+            SizedBox(
+              height: 16.0,
+            ),
+            SizedBox(
+              width: 60,
+              height: 35,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: mainNavy,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0)),
+                child: Text(
+                  '삭제',
+                  style: TextStyle(color: mainWhite),
+                ),
+              ),
+            ),
           ],
         ),
       ),
