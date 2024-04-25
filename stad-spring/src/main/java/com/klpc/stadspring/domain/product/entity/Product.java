@@ -2,6 +2,7 @@ package com.klpc.stadspring.domain.product.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.klpc.stadspring.domain.advert.entity.Advert;
+import com.klpc.stadspring.domain.cart.entity.CartProduct;
 import com.klpc.stadspring.domain.image.product_image.entity.ProductImage;
 import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.product.service.command.UpdateProductInfoCommand;

@@ -25,11 +25,8 @@ public class CartProduct {
     private Cart cart;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    @OneToMany(mappedBy = "productType", cascade = CascadeType.REMOVE,  orphanRemoval = true)
-    private List<ProductType> productType;
+    @JoinColumn(name = "product_type_id")
+    private ProductType productType;
 
     @Setter
     @Column(name = "quantity")
@@ -43,14 +40,14 @@ public class CartProduct {
 
     public static CartProduct createNewCartProduct(
             Cart cart,
-            Product product,
+            ProductType productType,
             Long quantity,
             Long advertId,
             Long contentId
     ) {
         CartProduct cartProduct = new CartProduct();
         cartProduct.cart = cart;
-        cartProduct.product = product;
+        cartProduct.productType = productType;
         cartProduct.quantity = quantity;
         cartProduct.advertId = advertId;
         cartProduct.contentId = contentId;
