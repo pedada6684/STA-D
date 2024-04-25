@@ -20,7 +20,7 @@ public class SchedulingConfig {
     private Job logCountJob; // 로그 카운트 Job
 
     // 30초마다 작업 실행
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(fixedDelay = 300000)
     public void runBatchJob() {
         try {
             JobParameters params = new JobParametersBuilder()

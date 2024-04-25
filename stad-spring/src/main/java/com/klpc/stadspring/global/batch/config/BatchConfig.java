@@ -173,21 +173,4 @@ public class BatchConfig {
             return RepeatStatus.FINISHED;
         });
     }
-//
-//    @Bean
-//    public Step simpleStep2(JobRepository jobRepository, Tasklet testTasklet, PlatformTransactionManager platformTransactionManager){
-//        return new StepBuilder("simpleStep2", jobRepository)
-//                .tasklet(testTasklet2(), platformTransactionManager).build();
-//    }
-//
-//    @Bean
-//    public Tasklet testTasklet2(){
-//        return ((contribution, chunkContext) -> {
-//
-//            AnnotationBasedAOP.map.clear();
-//            // 클리어 해주기
-//            return RepeatStatus.FINISHED;
-//        });
-//    }
-
 }
