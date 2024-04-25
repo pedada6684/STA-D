@@ -1,6 +1,7 @@
 package com.klpc.stadspring.global.batch.config;
 
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
+import com.klpc.stadspring.domain.advertVideo.repository.AdvertVideoRepository;
 import com.klpc.stadspring.domain.log.entity.AdvertClickLog;
 import com.klpc.stadspring.domain.log.entity.AdvertVideoLog;
 import com.klpc.stadspring.domain.log.repository.AdvertClickLogRepository;
@@ -40,21 +41,47 @@ public class BatchConfig {
     private final OrderLogRepository orderLogRepository;
     private final OrderReturnLogRepository orderReturnLogRepository;
     private final AdvertRepository advertRepository;
+    private final AdvertVideoRepository advertVideoRepository;
 
     @Bean
     public Job LogCountJob(JobRepository jobRepository,
-                           Step AdvertClickCount,
-                           Step simpleStep2
+                           Step advertClickCount,
+                           Step advertVideoCount,
+                           Step orderCount,
+                           Step orderReturnCount
     ) {
         return new JobBuilder("LogCountJob", jobRepository)
-                .start(AdvertClickCount)
-                .next(simpleStep2)
+                .start(advertClickCount)
+                .next(advertVideoCount)
+                .next(orderCount)
+                .next(orderReturnCount)
                 .build();
     }
     @Bean
-    public Step AdvertClickCount(JobRepository jobRepository, Tasklet advertClickCountTasklet, PlatformTransactionManager platformTransactionManager){
+    public Step advertClickCount(JobRepository jobRepository, Tasklet advertClickCountTasklet, PlatformTransactionManager platformTransactionManager){
         return new StepBuilder("advertClickCountStep", jobRepository)
                 .tasklet(advertClickCountTasklet, platformTransactionManager)
+                .build();
+    }
+
+    @Bean
+    public Step advertVideoCount(JobRepository jobRepository, Tasklet advertVideoCountTasklet, PlatformTransactionManager platformTransactionManager){
+        return new StepBuilder("advertVideoCountStep", jobRepository)
+                .tasklet(advertVideoCountTasklet, platformTransactionManager)
+                .build();
+    }
+
+    @Bean
+    public Step orderCount(JobRepository jobRepository, Tasklet orderCountTasklet, PlatformTransactionManager platformTransactionManager){
+        return new StepBuilder("orderCountStep", jobRepository)
+                .tasklet(orderCountTasklet, platformTransactionManager)
+                .build();
+    }
+
+    @Bean
+    public Step orderReturnCount(JobRepository jobRepository, Tasklet orderReturnCountTasklet, PlatformTransactionManager platformTransactionManager){
+        return new StepBuilder("orderReturnCountStep", jobRepository)
+                .tasklet(orderReturnCountTasklet, platformTransactionManager)
                 .build();
     }
     @Bean
@@ -69,16 +96,79 @@ public class BatchConfig {
 
                 clickCountList.put(advertId, clickCount);
             }
-            log.info("list: "+clickCountList);
+            log.info("clickCountList: "+clickCountList);
 
-            // TODO: 2023/06/12 이곳에 movieNameMap을 파일/디비로 저장하는 로직이 필요하다.
-            //  현재는 로깅하도록 하자
+            /**
+             * db 에 저장하는 로직 필요
+             */
 
-//            for (String s : names.keySet()) {
-//                log.info("영화 이름 :" + s + ", 호출 횟수 :" + names.get(s));
-//            }
+            return RepeatStatus.FINISHED;
+        });
+    }
 
-//            AnnotationBasedAOP.map.clear();
+    @Bean
+    public Tasklet advertVideoCountTasklet(){
+        return ((contribution, chunkContext) -> {
+            ArrayList<Long> advertIdList = new ArrayList<>(advertRepository.findAllAdvertIds());
+            HashMap<Long, Long> advertVideoCountList = new HashMap<>();
+
+            for (Long advertId : advertIdList) {
+                Long videoCount = advertVideoLogRepository.countAdvertVideoLog(advertId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+                advertVideoCountList.put(advertId, videoCount);
+            }
+            log.info("advertVideoCountList: "+advertVideoCountList);
+
+            /**
+             * db 에 저장하는 로직 필요
+             */
+
+            return RepeatStatus.FINISHED;
+        });
+    }
+
+    @Bean
+    public Tasklet orderCountTasklet(){
+        return ((contribution, chunkContext) -> {
+            ArrayList<Long> advertVideoIdList = new ArrayList<>(advertVideoRepository.findAllAdvertVideoIds());
+            HashMap<Long, Long> orderCountList = new HashMap<>();
+
+            for (Long advertVideoId : advertVideoIdList) {
+                Long orderCount = orderLogRepository.countOrderLog(advertVideoId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+                orderCountList.put(advertVideoId, orderCount);
+            }
+            log.info("orderCountList: "+orderCountList);
+
+            /**
+             * db 에 저장하는 로직 필요
+             */
+
+            return RepeatStatus.FINISHED;
+        });
+    }
+
+
+    @Bean
+    public Tasklet orderReturnCountTasklet(){
+        return ((contribution, chunkContext) -> {
+            ArrayList<Long> advertIdList = new ArrayList<>(advertRepository.findAllAdvertIds());
+            HashMap<Long, Long> orderReturnCountList = new HashMap<>();
+
+            for (Long advertId : advertIdList) {
+                Long orderReturnCount = orderReturnLogRepository.countOrderReturnLog(advertId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+                orderReturnCountList.put(advertId, orderReturnCount);
+            }
+            log.info("orderReturnCountList: "+orderReturnCountList);
+
+            /**
+             * db 에 저장하는 로직 필요
+             */
+
 
             return RepeatStatus.FINISHED;
         });
