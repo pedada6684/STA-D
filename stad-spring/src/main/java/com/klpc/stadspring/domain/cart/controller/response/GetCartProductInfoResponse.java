@@ -13,7 +13,7 @@ import lombok.Setter;
 public class GetCartProductInfoResponse {
     Long cartProductId;
     Long cartId;
-    Long productId;
+    Long productTypeId;
     Long quantity;
     Long adverseId;
     Long contentId;
@@ -22,7 +22,7 @@ public class GetCartProductInfoResponse {
         return GetCartProductInfoResponse.builder().
                 cartProductId(cartProduct.getId()).
                 cartId(cartProduct.getCart().getId()).
-                productId(cartProduct.getProduct().getId()).
+                productTypeId(cartProduct.getProductType().getId()).
                 quantity(cartProduct.getQuantity()).
                 adverseId(cartProduct.getAdvertId()).
                 contentId(cartProduct.getContentId()).

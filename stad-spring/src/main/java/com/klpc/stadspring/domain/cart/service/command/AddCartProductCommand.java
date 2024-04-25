@@ -10,7 +10,7 @@ import lombok.*;
 public class AddCartProductCommand {
     private Long userId;
     private Long cartId;
-    private Long productId;
+    private Long productTypeId;
     private Long quantity;
     private Long advertId;
     private Long contentId;

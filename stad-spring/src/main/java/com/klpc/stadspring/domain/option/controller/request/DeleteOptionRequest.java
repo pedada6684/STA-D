@@ -9,12 +9,12 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class DeleteOptionRequest {
-    Long productId;
+    Long productTypeId;
     Long id;
 
     public DeleteOptionCommand toCommand() {
         return DeleteOptionCommand.builder()
-                .productId(productId)
+                .productTypeId(productTypeId)
                 .id(id)
                 .build();
     }
