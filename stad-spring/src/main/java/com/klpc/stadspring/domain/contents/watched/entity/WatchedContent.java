@@ -1,6 +1,7 @@
 package com.klpc.stadspring.domain.contents.watched.entity;
 
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
+import com.klpc.stadspring.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,13 +19,35 @@ public class WatchedContent {
     @JoinColumn(name = "content_detail_id")
     private ContentDetail contentDetail;
 
-    private Long userId;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @Column(name = "user_id")
-//    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "user_id")
+    private User user;
 
     private boolean status;
+    // =========수정==========
     private String stopTime;
-    private String watchedDate;
+    // ======================
+
+    public static WatchedContent createToWatchedContent (
+            ContentDetail contentDetail,
+            User user,
+            boolean status,
+            String stopTime
+    ) {
+        WatchedContent watchedContent = new WatchedContent();
+        watchedContent.contentDetail = contentDetail;
+        watchedContent.user = user;
+        watchedContent.status = status;
+        watchedContent.stopTime = stopTime;
+
+        return watchedContent;
+    }
+
+    public void modifyWatchedContent (
+            boolean status,
+            String stopTime
+    ) {
+        this.status = status;
+        this.stopTime = stopTime;
+    }
 }
