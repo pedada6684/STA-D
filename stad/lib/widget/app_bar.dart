@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/main.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
   final TextStyle? titleStyle;
   final bool showBackButton;
+  final bool showHomeButton;
   final TabController? tabController;
   final bool isLoading; // 로딩 상태 추가
   final double progressValue;
@@ -18,11 +20,35 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showBackButton = false,
     this.tabController,
     this.isLoading = false,
-    this.progressValue = 0.0, // 초기값 false
+    this.progressValue = 0.0,
+    this.showHomeButton = false, // 초기값 false
   });
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> allActions = actions ?? [];
+
+    if (showHomeButton) {
+      allActions.add(
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => MyApp()),
+                (Route<dynamic> route) => false,
+              );
+            },
+            child: Image.asset(
+              'assets/image/homeIcon.png',
+              width: 20,
+              color: mainNavy,
+            ),
+          ),
+        ),
+      );
+    }
+
     return AppBar(
       scrolledUnderElevation: 0,
       shape: Border(bottom: BorderSide(color: mainGray)),
@@ -39,8 +65,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               TextStyle(
                   color: mainNavy,
                   fontWeight: FontWeight.bold,
-                  fontSize: 18.0)),
-      actions: actions,
+                  fontSize: 16.0)),
+      actions: allActions,
       backgroundColor: mainWhite,
       bottom: isLoading
           ? PreferredSize(
