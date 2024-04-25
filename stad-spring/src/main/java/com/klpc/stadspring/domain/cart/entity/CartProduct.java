@@ -1,12 +1,14 @@
 package com.klpc.stadspring.domain.cart.entity;
 
 import com.klpc.stadspring.domain.product.entity.Product;
+import com.klpc.stadspring.domain.productType.entity.ProductType;
 import com.klpc.stadspring.domain.product_review.entity.ProductReview;
 import com.klpc.stadspring.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +27,9 @@ public class CartProduct {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @OneToMany(mappedBy = "productType", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    private List<ProductType> productType;
 
     @Setter
     @Column(name = "quantity")
