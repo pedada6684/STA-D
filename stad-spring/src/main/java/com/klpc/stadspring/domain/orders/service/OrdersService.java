@@ -7,11 +7,15 @@ import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.orderProduct.repository.OrderProductRepository;
 import com.klpc.stadspring.domain.orders.controller.request.AddOrdersRequest;
 import com.klpc.stadspring.domain.orders.controller.response.AddOrdersResponse;
+import com.klpc.stadspring.domain.orders.controller.response.GetOrdersListResponse;
 import com.klpc.stadspring.domain.orders.entity.Orders;
 import com.klpc.stadspring.domain.orders.repository.OrdersRepository;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequestCommand;
+import com.klpc.stadspring.domain.orders.service.command.response.GetOrdersListResponseCommand;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
+import com.klpc.stadspring.domain.productType.entity.ProductType;
+import com.klpc.stadspring.domain.productType.repository.ProductTypeRepository;
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
@@ -21,6 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -29,21 +36,26 @@ public class OrdersService {
 
     private final UserRepository userRepository;
     private final DeliveryRepository deliveryRepository;
-    private final ProductRepository productRepository;
+    private final ProductTypeRepository productTypeRepository;
     private final OrderProductRepository orderProductRepository;
     private final OrdersRepository ordersRepository;
 
+    /**
+     * 주문 생성
+     * @param command
+     * @return
+     */
     @Transactional(readOnly = false)
     public AddOrdersResponse addOrders(AddOrderRequestCommand command){
         User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        Product product = productRepository.findById(command.getProductId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        ProductType productType = productTypeRepository.findById(command.getProductTypeId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         Orders orders = Orders.createToOrders(user, command.getContentId(), command.getAdvertId());
         ordersRepository.save(orders);
 
-        OrderProduct orderProduct = OrderProduct.createToOrderProduct(command.getProductCnt());
+        OrderProduct orderProduct = OrderProduct.createToOrderProduct(command.getProductTypeCnt());
         orderProduct.linkedOrders(orders);
-        orderProduct.linkedProduct(product);
+        orderProduct.linkedProductType(productType);
         orderProductRepository.save(orderProduct);
 
         Delivery delivery = Delivery.createToDelivery(
@@ -58,6 +70,44 @@ public class OrdersService {
         deliveryRepository.save(delivery);
 
         return AddOrdersResponse.builder().result("success").build();
+    }
+
+    /**
+     * 주문 목록 조회
+     * @param userId
+     * @return
+     */
+    public GetOrdersListResponse getOrdersList(Long userId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        List<Orders> ordersByUser = ordersRepository.findAllByUser(user);
+        List<GetOrdersListResponseCommand> response = new ArrayList<>();
+        for(Orders orders : ordersByUser){
+            List<Long> productIdList = new ArrayList<>();
+            for(OrderProduct orderProduct : orders.getOrderProducts()){
+                productIdList.add(orderProduct.getProductType().getId());
+            }
+            List<String> productNameList = new ArrayList<>();
+            for(OrderProduct orderProduct : orders.getOrderProducts()){
+                productNameList.add(orderProduct.getProductType().getName());
+            }
+            List<String> productThumbnailUrl = new ArrayList<>();
+            for(OrderProduct orderProduct : orders.getOrderProducts()){
+                productNameList.add(orderProduct.getProductType().getProduct().getThumbnail());
+            }
+            GetOrdersListResponseCommand command = GetOrdersListResponseCommand.builder()
+                    .ordersId(orders.getId())
+                    .orderDate(orders.getOrderDate().toLocalDate().toString())
+                    .contentId(orders.getContentId())
+                    .advertId(orders.getAdvertId())
+                    .deliveryStatus(orders.getDelivery().getStatus().toString())
+                    .productTypeId(productIdList)
+                    .productTypeName(productNameList)
+                    .productTypeThumbnailUrl(productThumbnailUrl)
+                    .build();
+            response.add(command);
+        }
+        return GetOrdersListResponse.builder().data(response).build();
     }
 
 }
