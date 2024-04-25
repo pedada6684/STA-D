@@ -10,10 +10,17 @@ import EnrolledGoodsList from "./pages/MyPage/SalesManagement/EnrolledGoodsList"
 import AdManagement from "./pages/AdManagement/AdManagement";
 import SignUp from "./pages/WebLogin/SignUp";
 import Review from "./pages/Review/Review";
-import Merchandise from "./components/Enroll/Merchandise";
 import EnrolledAdList from "./pages/MyPage/SalesManagement/EnrolledAdList";
 import AdEnroll from "./pages/AdEnroll/AdEnroll";
-import Digital from "./components/Enroll/Digital";
+import TvLogin from "./pages/TVLogin/TVLogin";
+import TVLanding from "./pages/Landing/TVLanding";
+import ProfilePick from "./pages/TVLogin/ProfilePick";
+import TVMain from "./pages/Main/TVMain";
+import TVSeries from "./pages/Category/TVSeries";
+import TVSearch from "./pages/Search/TVSearch";
+import VideoDetail from "./pages/Streaming/VideoDetail";
+import Streaming from "./pages/Streaming/Streaming";
+import TVMovie from "./pages/Category/TVMovie";
 
 function App() {
   return (
@@ -33,6 +40,18 @@ function App() {
             </Route>
             <Route path="/ad-management" element={<AdManagement />} />
             <Route path="/ad-enroll/*" element={<AdEnroll />} />
+            {/* ---------------- 스트리밍 서비스 관련 router ------------------ */}
+            <Route path="/tv-login" element={<TvLogin />} />
+            <Route path="/tv-landing" element={<TVLanding />} />
+            <Route path="/tv-profile" element={<ProfilePick />} />
+            <Route path="/tv-main" element={<TVMain />} />
+            <Route path="/tv-series" element={<TVSeries />} />
+            <Route path="/tv-movie" element={<TVMovie />} />
+            <Route path="/tv-search" element={<TVSearch />}>
+              <Route path=":videoTitle" element={<TVSearch />} />
+            </Route>
+            <Route path="/tv/:videoId" element={<VideoDetail />} />
+            <Route path="/tv/stream/:videoId" element={<Streaming />} />
           </Routes>
         </div>
       </BrowserRouter>
