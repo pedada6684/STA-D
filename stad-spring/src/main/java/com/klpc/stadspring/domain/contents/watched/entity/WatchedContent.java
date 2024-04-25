@@ -1,6 +1,7 @@
 package com.klpc.stadspring.domain.contents.watched.entity;
 
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
+import com.klpc.stadspring.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,11 +19,9 @@ public class WatchedContent {
     @JoinColumn(name = "content_detail_id")
     private ContentDetail contentDetail;
 
-    private Long userId;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @Column(name = "user_id")
-//    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "user_id")
+    private User user;
 
     private boolean status;
     private String stopTime;
