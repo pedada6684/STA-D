@@ -5,12 +5,13 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AddOptionCommand {
+public class AddProductTypeCommand {
     /**
-     *  상품 옵션 등록
+     *  상품 타입 등록
      */
     Long productId;
     String name;
-    String value;
+    Long price;
+    Long quantity;
 
 }
