@@ -8,8 +8,8 @@ import lombok.Getter;
 public class AddOrderRequestCommand {
 
     Long userId;
-    Long productId;
-    Long productCnt;
+    Long productTypeId;
+    Long productTypeCnt;
     Long contentId;
     Long advertId;
     String name;
