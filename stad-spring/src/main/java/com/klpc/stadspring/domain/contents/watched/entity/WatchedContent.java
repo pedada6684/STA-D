@@ -24,6 +24,30 @@ public class WatchedContent {
     private User user;
 
     private boolean status;
+    // =========수정==========
     private String stopTime;
-    private String watchedDate;
+    // ======================
+
+    public static WatchedContent createToWatchedContent (
+            ContentDetail contentDetail,
+            User user,
+            boolean status,
+            String stopTime
+    ) {
+        WatchedContent watchedContent = new WatchedContent();
+        watchedContent.contentDetail = contentDetail;
+        watchedContent.user = user;
+        watchedContent.status = status;
+        watchedContent.stopTime = stopTime;
+
+        return watchedContent;
+    }
+
+    public void modifyWatchedContent (
+            boolean status,
+            String stopTime
+    ) {
+        this.status = status;
+        this.stopTime = stopTime;
+    }
 }
