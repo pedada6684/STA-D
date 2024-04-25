@@ -25,17 +25,22 @@ public class OrderReturnLog {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "advert_id")
+    private Long advertId;
+
     @Column(name = "reg_date")
     private LocalDateTime regDate;
 
     public static OrderReturnLog createNewOrderReturnLog(
             Long orderId,
             Long userId,
+            Long advertId,
             LocalDateTime regDate
     ) {
         OrderReturnLog orderReturnLog = new OrderReturnLog();
         orderReturnLog.orderId = orderId;
         orderReturnLog.userId = userId;
+        orderReturnLog.advertId = advertId;
         orderReturnLog.regDate = regDate;
         return orderReturnLog;
     }
