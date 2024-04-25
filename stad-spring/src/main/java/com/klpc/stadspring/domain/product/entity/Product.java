@@ -5,6 +5,8 @@ import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.image.product_image.entity.ProductImage;
 import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.product.service.command.UpdateProductInfoCommand;
+import com.klpc.stadspring.domain.productType.entity.ProductType;
+import com.klpc.stadspring.domain.product_review.entity.ProductReview;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,6 +32,12 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE,  orphanRemoval = true)
     private List<ProductImage> images;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    private List<ProductType> productType;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    private List<ProductReview> productReview;
 
     @Column(name = "thumbnail")
     private String thumbnail;
