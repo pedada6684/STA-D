@@ -31,15 +31,6 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<OrderProduct> orderProduct;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "price")
-    private Long price;
-
-    @Column(name = "quantity")
-    private Long quantity;
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE,  orphanRemoval = true)
     private List<ProductImage> images;
 
@@ -60,9 +51,6 @@ public class Product {
 
     public static Product createNewProduct(
             Advert advert,
-            String name,
-            Long price,
-            Long quantity,
             String thumbnail,
             Long cityDeliveryFee,
             Long mtDeliveryFee,
@@ -71,9 +59,6 @@ public class Product {
     ) {
         Product product = new Product();
         product.advert= advert;
-        product.name = name;              // 상품명 설정
-        product.price = price;            // 가격 설정
-        product.quantity = quantity;      // 수량 설정
         product.thumbnail = thumbnail;    // 썸네일 이미지 경로 설정
         product.cityDeliveryFee = cityDeliveryFee;
         product.mtDeliveryFee = mtDeliveryFee;
@@ -83,15 +68,6 @@ public class Product {
     }
 
     public void update(UpdateProductInfoCommand command) {
-        if (command.getName() != null) {
-            this.name = command.getName();
-        }
-        if (command.getPrice() != null) {
-            this.price = command.getPrice();
-        }
-        if (command.getQuantity() != null) {
-            this.quantity = command.getQuantity();
-        }
         if (command.getThumbnail() != null) {
             this.thumbnail = command.getThumbnail();
         }

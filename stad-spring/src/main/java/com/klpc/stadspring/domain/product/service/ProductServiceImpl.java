@@ -71,9 +71,6 @@ public class ProductServiceImpl implements ProductService{
 
         Product newProduct = Product.createNewProduct(
                 advert,
-                command.getName(),
-                command.getPrice(),
-                command.getQuantity(),
                 thumbnailUrl.toString(),
                 command.getCityDeliveryFee(),
                 command.getMtDeliveryFee(),
