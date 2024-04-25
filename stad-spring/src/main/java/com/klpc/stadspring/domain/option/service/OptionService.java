@@ -8,6 +8,8 @@ import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
 import com.klpc.stadspring.domain.product.service.command.AddProductCommand;
 import com.klpc.stadspring.domain.product.service.command.DeleteProductCommand;
+import com.klpc.stadspring.domain.productType.entity.ProductType;
+import com.klpc.stadspring.domain.productType.repository.ProductTypeRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +25,14 @@ public class OptionService {
 
     private final OptionRepository optionRepository;
     private final ProductRepository productRepository;
+    private final ProductTypeRepository productTypeRepository;
     /**
      * 옵션 리스트 받아오기
      */
 
-    public List<ProductOption> getOptionList(Long productId) {
+    public List<ProductOption> getOptionList(Long productTypeId) {
 
-        List<ProductOption> optionList = optionRepository.getOptionList(productId)
+        List<ProductOption> optionList = optionRepository.getOptionList(productTypeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return optionList;
     }
@@ -38,11 +41,11 @@ public class OptionService {
     public ProductOption addProductOption(AddOptionCommand command) {
         log.info("AddOptionCommand: "+command);
 
-        Product product = productRepository.findById(command.getProductId())
+        ProductType productType = productTypeRepository.findById(command.getProductTypeId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         ProductOption newOption = ProductOption.createNewOption(
-                product,
+                productType,
                 command.getName(),
                 command.getValue()
         );
