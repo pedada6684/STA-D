@@ -25,7 +25,10 @@ class _MyContentsScreenState extends State<MyContentsScreen> {
 
     return Scaffold(
       backgroundColor: mainWhite,
-      appBar: CustomAppBar(title: '내가 본 콘텐츠'),
+      appBar: CustomAppBar(
+        title: '내가 본 콘텐츠',
+        showBackButton: true,
+      ),
       body: GridView.builder(
         padding: const EdgeInsets.all(16),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
