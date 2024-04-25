@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -27,6 +28,12 @@ public class WatchedContentService {
     private final WatchedContentRepository watchedContentRepository;
     private final UserRepository userRepository;
     private final ContentDetailRepository detailRepository;
+
+    public List<WatchedContent> getWatchedContentByUserId(Long userId) {
+        List<WatchedContent> watchedContentList = watchedContentRepository.findAllByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        return watchedContentList;
+    }
 
     public List<Long> getDetailIdByUserId(Long userId) {
         List<Long> detailIdList = watchedContentRepository.findDetailIdByUserId(userId)
@@ -45,6 +52,7 @@ public class WatchedContentService {
         WatchedContent newWatchedContent = WatchedContent.createToWatchedContent(
                 detail,
                 user,
+                LocalDate.now(),
                 false,
                 "00:00:00");
         watchedContentRepository.save(newWatchedContent);
@@ -58,6 +66,7 @@ public class WatchedContentService {
         WatchedContent updatedWatchedContent = watchedContentRepository.findByUserIdAndDetailId(command.getUserId(), command.getDetailId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         updatedWatchedContent.modifyWatchedContent(
+                LocalDate.now(),
                 command.isStatus(),
                 command.getStopTime()
         );
