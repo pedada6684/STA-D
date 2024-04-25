@@ -13,10 +13,10 @@ public class WatchedContentRepositoryImpl implements WatchedContentRepositoryCus
     private final JPAQueryFactory query;
 
     @Override
-    public Optional<List<Long>> findDetailIdByUserId(Long id) {
+    public Optional<List<Long>> findDetailIdByUserId(Long userId) {
         return Optional.ofNullable(query.select(watchedContent.contentDetail.id)
                 .from(watchedContent)
-                .where(watchedContent.userId.eq(id)
+                .where(watchedContent.user.id.eq(userId)
                         .and(watchedContent.status.isFalse()))
                 .fetch());
     }
