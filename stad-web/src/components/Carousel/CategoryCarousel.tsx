@@ -1,8 +1,20 @@
 import { SmallNextArrow, SmallPrevArrow } from "../Arrow/Arrow";
 import { smallThumbnail } from "./SeriesDummy";
-import "./RecentWatching.css";
+import "./CategoryCarousel.css";
 import Slider from "react-slick";
-export default function RecentWatching() {
+interface CategoryCarouselProps {
+  title?: string;
+  items?: { url: string; title: string }[];
+  marginTop?: string;
+  marginBottom?: string;
+}
+
+export default function CategoryCarousel({
+  title,
+  items = [],
+  marginTop,
+  marginBottom,
+}: CategoryCarouselProps) {
   let setting = {
     dots: true,
     infinite: true,
@@ -25,13 +37,16 @@ export default function RecentWatching() {
     nextArrow: <SmallNextArrow />,
   };
   return (
-    <div className="v-container">
-      <div className="v-title">최근 시청중인 컨텐츠</div>
+    <div
+      className="main-container"
+      style={{ marginTop: marginTop, marginBottom: marginBottom }}
+    >
+      <div className="v-title">{title}</div>
       <div className="thumbnail-container">
         <Slider {...setting}>
-          {smallThumbnail.map((data, index) => (
+          {items.map((data, index) => (
             <div
-              className="s-vid-container"
+              className="xs-vid-container"
               key={index}
               style={{ position: "relative", transition: "all 0.3s" }}
             >
