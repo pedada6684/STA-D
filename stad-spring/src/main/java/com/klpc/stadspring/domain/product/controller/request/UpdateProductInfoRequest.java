@@ -13,9 +13,6 @@ import java.util.List;
 @Builder
 public class UpdateProductInfoRequest {
     private Long id;
-    private String name;
-    private Long price;
-    private Long quantity;
     private String thumbnail;
     private Long cityDeliveryFee;
     private Long mtDeliveryFee;
@@ -25,9 +22,6 @@ public class UpdateProductInfoRequest {
     public UpdateProductInfoCommand toCommand(){
         return UpdateProductInfoCommand.builder()
                 .id(id)
-                .name(name)
-                .price(price)
-                .quantity(quantity)
                 .thumbnail(thumbnail)
                 .cityDeliveryFee(cityDeliveryFee)
                 .mtDeliveryFee(mtDeliveryFee)

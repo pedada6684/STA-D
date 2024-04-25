@@ -16,10 +16,6 @@ public class UpdateProductInfoCommand {
      */
 
     private Long id;
-    private String name;
-    private Long price;
-    private Long quantity;
-    private String introduction;
     private String thumbnail;
     private Long cityDeliveryFee;
     private Long mtDeliveryFee;
