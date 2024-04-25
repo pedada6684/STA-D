@@ -21,14 +21,10 @@ public class GetProductInfoCommand {
     private Long quantity;
     private List<String> images;
     private String thumbnail;
-    private String category;
-    private String sellStart;
-    private String sellEnd;
     private Long cityDeliveryFee;
     private Long mtDeliveryFee;
     private String expStart;
     private String expEnd;
-    private String deliveryDate;
 
     public static GetProductInfoResponse ConvertProductInfoCommand(Product product){
         return GetProductInfoResponse.builder()
@@ -37,14 +33,10 @@ public class GetProductInfoCommand {
                 .price(product.getPrice())
                 .quantity(product.getQuantity())
                 .thumbnail(product.getThumbnail())
-                .category(product.getCategory())
-                .sellStart(product.getSellStart())
-                .sellEnd(product.getSellEnd())
                 .cityDeliveryFee(product.getCityDeliveryFee())
                 .mtDeliveryFee(product.getMtDeliveryFee())
                 .expStart(product.getExpStart())
                 .expEnd(product.getExpEnd())
-                .deliveryDate(product.getDeliveryDate())
                 .build();
     }
 }

@@ -21,9 +21,6 @@ public class UpdateProductInfoCommand {
     private Long quantity;
     private String introduction;
     private String thumbnail;
-    private String category;
-    private String sellStart;
-    private String sellEnd;
     private Long cityDeliveryFee;
     private Long mtDeliveryFee;
     private String expStart;
