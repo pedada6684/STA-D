@@ -15,8 +15,8 @@ public class GetOrdersListResponseCommand {
     Long contentId;
     Long advertId;
     String deliveryStatus;
-    List<Long> productId;
-    List<String> productName;
-    List<String> productThumbnailUrl;
+    List<Long> productTypeId;
+    List<String> productTypeName;
+    List<String> productTypeThumbnailUrl;
 
 }

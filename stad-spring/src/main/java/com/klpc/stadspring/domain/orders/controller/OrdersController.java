@@ -34,8 +34,8 @@ public class OrdersController {
         for(AddOrdersRequest request : requestList) {
             AddOrderRequestCommand command = AddOrderRequestCommand.builder()
                     .userId(request.getUserId())
-                    .productId(request.getProductId())
-                    .productCnt(request.getProductCnt())
+                    .productTypeId(request.getProductId())
+                    .productTypeCnt(request.getProductCnt())
                     .contentId(request.getContentId())
                     .advertId(request.getAdvertId())
                     .name(request.getName())

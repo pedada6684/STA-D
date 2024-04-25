@@ -2,6 +2,7 @@ package com.klpc.stadspring.domain.orderProduct.entity;
 
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.orders.entity.Orders;
+import com.klpc.stadspring.domain.productType.entity.ProductType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,8 +25,8 @@ public class OrderProduct {
     private Orders orders;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "product_type_id")
+    private ProductType productType;
 
     public static OrderProduct createToOrderProduct(Long cnt){
         OrderProduct orderProduct = new OrderProduct();
@@ -37,8 +38,8 @@ public class OrderProduct {
         this.orders = orders;
     }
 
-    public void linkedProduct(Product product){
-        this.product=product;
+    public void linkedProductType(ProductType productType){
+        this.productType=productType;
     }
 
 }
