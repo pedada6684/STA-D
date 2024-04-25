@@ -19,6 +19,7 @@ import TVMain from "./pages/Main/TVMain";
 import TVSeries from "./pages/Category/TVSeries";
 import TVSearch from "./pages/Search/TVSearch";
 import VideoDetail from "./pages/Streaming/VideoDetail";
+import Streaming from "./pages/Streaming/Streaming";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
               <Route path=":videoTitle" element={<TVSearch />} />
             </Route>
             <Route path="/tv/:videoId" element={<VideoDetail />} />
+            <Route path="/tv/stream/:videoId" element={<Streaming />} />
           </Routes>
         </div>
       </BrowserRouter>
