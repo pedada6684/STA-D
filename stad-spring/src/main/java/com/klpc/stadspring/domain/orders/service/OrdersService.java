@@ -14,6 +14,8 @@ import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequest
 import com.klpc.stadspring.domain.orders.service.command.response.GetOrdersListResponseCommand;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
+import com.klpc.stadspring.domain.productType.entity.ProductType;
+import com.klpc.stadspring.domain.productType.repository.ProductTypeRepository;
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
@@ -34,21 +36,26 @@ public class OrdersService {
 
     private final UserRepository userRepository;
     private final DeliveryRepository deliveryRepository;
-    private final ProductRepository productRepository;
+    private final ProductTypeRepository productTypeRepository;
     private final OrderProductRepository orderProductRepository;
     private final OrdersRepository ordersRepository;
 
+    /**
+     * 주문 생성
+     * @param command
+     * @return
+     */
     @Transactional(readOnly = false)
     public AddOrdersResponse addOrders(AddOrderRequestCommand command){
         User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        Product product = productRepository.findById(command.getProductId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        ProductType productType = productTypeRepository.findById(command.getProductTypeId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         Orders orders = Orders.createToOrders(user, command.getContentId(), command.getAdvertId());
         ordersRepository.save(orders);
 
-        OrderProduct orderProduct = OrderProduct.createToOrderProduct(command.getProductCnt());
+        OrderProduct orderProduct = OrderProduct.createToOrderProduct(command.getProductTypeCnt());
         orderProduct.linkedOrders(orders);
-        orderProduct.linkedProduct(product);
+        orderProduct.linkedProductType(productType);
         orderProductRepository.save(orderProduct);
 
         Delivery delivery = Delivery.createToDelivery(
@@ -78,15 +85,15 @@ public class OrdersService {
         for(Orders orders : ordersByUser){
             List<Long> productIdList = new ArrayList<>();
             for(OrderProduct orderProduct : orders.getOrderProducts()){
-                productIdList.add(orderProduct.getProduct().getId());
+                productIdList.add(orderProduct.getProductType().getId());
             }
             List<String> productNameList = new ArrayList<>();
             for(OrderProduct orderProduct : orders.getOrderProducts()){
-                productNameList.add(orderProduct.getProduct().getName());
+                productNameList.add(orderProduct.getProductType().getName());
             }
             List<String> productThumbnailUrl = new ArrayList<>();
             for(OrderProduct orderProduct : orders.getOrderProducts()){
-                productNameList.add(orderProduct.getProduct().getThumbnail());
+                productNameList.add(orderProduct.getProductType().getProduct().getThumbnail());
             }
             GetOrdersListResponseCommand command = GetOrdersListResponseCommand.builder()
                     .ordersId(orders.getId())
@@ -94,9 +101,9 @@ public class OrdersService {
                     .contentId(orders.getContentId())
                     .advertId(orders.getAdvertId())
                     .deliveryStatus(orders.getDelivery().getStatus().toString())
-                    .productId(productIdList)
-                    .productName(productNameList)
-                    .productThumbnailUrl(productThumbnailUrl)
+                    .productTypeId(productIdList)
+                    .productTypeName(productNameList)
+                    .productTypeThumbnailUrl(productThumbnailUrl)
                     .build();
             response.add(command);
         }
