@@ -84,6 +84,7 @@ public class LogService {
         OrderReturnLog newOrderReturnLog = OrderReturnLog.createNewOrderReturnLog(
                 command.getOrderId(),
                 command.getUserId(),
+                command.getAdvertId(),
                 command.getRegDate()
         );
 

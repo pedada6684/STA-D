@@ -22,54 +22,60 @@ import java.util.Collections;
 
 @Configuration
 public class BatchConfig {
-
-    @Bean
-    public Job exampleJob(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-        return new JobBuilder("exampleJob", jobRepository)
-                .start(exampleStep(jobRepository, transactionManager))
-                .build();
-    }
-
-    @Bean
-    public Step exampleStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("exampleStep", jobRepository)
-                .tasklet(new Tasklet() {
-                    @Override
-                    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
-                        System.out.println("Step executed at: " + LocalDateTime.now());
-                        return RepeatStatus.FINISHED;
-                    }
-                }, transactionManager)
-                .build();
-    }
-
 //    @Bean
-//    public Step advertClickCountStep() {
-//        return stepBuilderFactory.get("advertClickCountStep")
-//                .<AdvertClickLog, AdvertClickStats>chunk(10)  // 처리할 항목 수 설정
-//                .reader(advertClickLogReader())
-//                .processor(advertClickLogProcessor())
-//                .writer(advertClickLogWriter())
+//    public Job LogCountJob(JobRepository jobRepository,
+//                           Step simpleStep1,
+//                           Step simpleStep2
+//    ) {
+//        return new JobBuilder("LogCountJob", jobRepository)
+//                .start(simpleStep1)
+//                .next(simpleStep2)
 //                .build();
 //    }
-//
 //    @Bean
-//    public ItemReader<AdvertClickLog> advertClickLogReader() {
-//        return new RepositoryItemReaderBuilder<AdvertClickLog>()
-//                .name("advertClickLogReader")
-//                .repository(advertClickLogRepository)
-//                .methodName("findAll")  // JpaRepository의 findAll 사용
-//                .sorts(Collections.singletonMap("id", Sort.Direction.ASC))
-//                .build();
+//    public Step AdvertClickCount(JobRepository jobRepository, Tasklet advertClickCountTasklet, PlatformTransactionManager platformTransactionManager){
+//        return new StepBuilder("advertClickCountStep", jobRepository)
+//                .tasklet(advertClickCountTasklet, platformTransactionManager).build();
+//    }
+//    @Bean
+//    public Tasklet advertClickCountTasklet(){
+//        return ((contribution, chunkContext) -> {
+//            ArrayList<Long> ids = new ArrayList<>(AnnotationBasedAOP.map.keySet());
+//            HashMap<String, Long> names = new HashMap<>();
+//
+//            List<Movie> movieList = movieRepository.findAllById(ids);
+//
+//            for (Movie movie : movieList) {
+//                names.put(movie.getMovieName(), AnnotationBasedAOP.map.get(movie.getId()));
+//            }
+//
+//            // TODO: 2023/06/12 이곳에 movieNameMap을 파일/디비로 저장하는 로직이 필요하다.
+//            //  현재는 로깅하도록 하자
+//
+//            for (String s : names.keySet()) {
+//                log.info("영화 이름 :" + s + ", 호출 횟수 :" + names.get(s));
+//            }
+//
+////            AnnotationBasedAOP.map.clear();
+//
+//            return RepeatStatus.FINISHED;
+//        });
 //    }
 //
 //    @Bean
-//    public ItemProcessor<AdvertClickLog, AdvertClickStats> advertClickLogProcessor() {
-//        return advertClickLog -> new AdvertClickStats(advertClickLog.getAdvertId(), 1);  // 클릭 수를 집계
+//    public Step simpleStep2(JobRepository jobRepository, Tasklet testTasklet, PlatformTransactionManager platformTransactionManager){
+//        return new StepBuilder("simpleStep2", jobRepository)
+//                .tasklet(testTasklet2(), platformTransactionManager).build();
 //    }
 //
 //    @Bean
-//    public ItemWriter<AdvertClickStats> advertClickLogWriter() {
-//        return items -> items.forEach(item -> System.out.println("Processed: " + item));  // 콘솔에 결과 출력
+//    public Tasklet testTasklet2(){
+//        return ((contribution, chunkContext) -> {
+//
+//            AnnotationBasedAOP.map.clear();
+//            // 클리어 해주기
+//            return RepeatStatus.FINISHED;
+//        });
 //    }
+
 }
