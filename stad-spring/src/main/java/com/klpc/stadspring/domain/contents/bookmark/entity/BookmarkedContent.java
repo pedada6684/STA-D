@@ -22,4 +22,15 @@ public class BookmarkedContent {
     @ManyToOne(fetch = FetchType.LAZY)
     @Column(name = "user_id")
     private User user;
+
+    public static BookmarkedContent createToBookmarkedContent (
+            ContentDetail contentDetail,
+            User user
+            ) {
+        BookmarkedContent bookmarkedContent = new BookmarkedContent();
+        bookmarkedContent.contentDetail = contentDetail;
+        bookmarkedContent.user = user;
+
+        return bookmarkedContent;
+    }
 }
