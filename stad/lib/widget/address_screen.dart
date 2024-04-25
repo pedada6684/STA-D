@@ -107,15 +107,7 @@ class _AddressScreenState extends State<AddressScreen> {
 
   void someFunctionToCallService() {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    print(userProvider.userId);
-    print(userProvider.userId);
-    print(userProvider.userId);
-    print(userProvider.userId);
-    print(userProvider.userId);
-    print(userProvider.userId);
-    print(userProvider.userId);
-    print(userProvider.userId);
-    print(userProvider.userId);
+
     if (userProvider.userId != null) {
       final orderService = OrderService();
 
