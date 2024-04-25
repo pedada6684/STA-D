@@ -19,14 +19,15 @@ public class BookmarkedContentRepositoryImpl implements BookmarkedContentReposit
     public Optional<List<Long>> findDetailIdByUserId(Long userId) {
         return Optional.ofNullable(query.select(bookmarkedContent.contentDetail.id)
                 .from(bookmarkedContent)
-                .where(bookmarkedContent.userId.eq(userId))
+                .where(bookmarkedContent.user.id.eq(userId))
                 .fetch());
     }
 
     @Override
     public Optional<BookmarkedContent> findByUserIdAndContentDetail(Long userId, Long contentId) {
-        return Optional.ofNullable(query.selectFrom(bookmarkedContent)
-                .where(bookmarkedContent.userId.eq(userId)
+        return Optional.ofNullable(query.select(bookmarkedContent)
+                .from(bookmarkedContent)
+                .where(bookmarkedContent.user.id.eq(userId)
                         .and(bookmarkedContent.contentDetail.id.eq(contentId)))
                 .fetchOne());
     }
