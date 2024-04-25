@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.core.annotation.Order;
 
 @Entity
 @Getter
@@ -25,5 +26,19 @@ public class OrderProduct {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    public static OrderProduct createToOrderProduct(Long cnt){
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.cnt=cnt;
+        return orderProduct;
+    }
+
+    public void linkedOrders(Orders orders) {
+        this.orders = orders;
+    }
+
+    public void linkedProduct(Product product){
+        this.product=product;
+    }
 
 }
