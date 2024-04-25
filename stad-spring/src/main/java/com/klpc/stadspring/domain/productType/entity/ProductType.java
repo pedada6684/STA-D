@@ -1,6 +1,8 @@
 package com.klpc.stadspring.domain.productType.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.klpc.stadspring.domain.cart.entity.CartProduct;
+import com.klpc.stadspring.domain.option.entity.ProductOption;
 import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.product.entity.Product;
 import jakarta.persistence.*;
@@ -26,6 +28,12 @@ public class ProductType {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @OneToMany(mappedBy = "productType", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    private List<ProductOption> productOptions;
+
+    @OneToMany(mappedBy = "productType", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    private List<CartProduct> cartProduct;
 
     @OneToMany(mappedBy = "productType")
     private List<OrderProduct> orderProduct;

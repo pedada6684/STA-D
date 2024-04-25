@@ -9,13 +9,13 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class AddOptionRequest {
-    private Long productId;
+    private Long productTypeId;
     private String name;
     private String value;
 
     public AddOptionCommand toCommand() {
         return AddOptionCommand.builder()
-                .productId(productId)
+                .productTypeId(productTypeId)
                 .name(name)
                 .value(value)
                 .build();

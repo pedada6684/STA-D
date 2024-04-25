@@ -14,6 +14,8 @@ import com.klpc.stadspring.domain.cart.service.command.DeleteProductInCartComman
 import com.klpc.stadspring.domain.cart.service.command.UpdateCartProductCountCommand;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
+import com.klpc.stadspring.domain.productType.entity.ProductType;
+import com.klpc.stadspring.domain.productType.repository.ProductTypeRepository;
 import com.klpc.stadspring.domain.product_review.entity.ProductReview;
 import com.klpc.stadspring.domain.product_review.service.command.DeleteReviewCommand;
 import com.klpc.stadspring.domain.user.entity.User;
@@ -36,7 +38,7 @@ public class CartService {
     private final CartRepository cartRepository;
     private final CartProductRepository cartProductRepository;
     private final UserRepository userRepository;
-    private final ProductRepository productRepository;
+    private final ProductTypeRepository productTypeRepository;
 
     @Transactional
     public List<CartProduct> addProductToCart(AddProductToCartCommand command) {
@@ -51,13 +53,12 @@ public class CartService {
         List<CartProduct> addedProducts = new ArrayList<>();
 
         for (CartProductPostRequest cartProductPostRequest : command.getCartProductList()) {
-            Product product = productRepository.findById(cartProductPostRequest.getProductId())
+            ProductType productType = productTypeRepository.findById(cartProductPostRequest.getProductTypeId())
                     .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-
 
             CartProduct newCartProduct = CartProduct.createNewCartProduct(
                     cart,
-                    product,
+                    productType,
                     cartProductPostRequest.getQuantity(),
                     cartProductPostRequest.getAdvertId(),
                     cartProductPostRequest.getContentId()
