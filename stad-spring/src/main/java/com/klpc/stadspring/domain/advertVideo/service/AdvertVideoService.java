@@ -12,6 +12,7 @@ import com.klpc.stadspring.global.response.exception.CustomException;
 import com.klpc.stadspring.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URL;
@@ -21,11 +22,18 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AdvertVideoService {
 
     private final AdvertVideoRepository advertVideoRepository;
     private final S3Util s3Util;
 
+    /**
+     * 광고 영상 리스트 추가
+     * @param requestCommand
+     * @return
+     */
+    @Transactional(readOnly = false)
     public AddVideoListResponse addVideoList(AddVideoListRequestCommand requestCommand){
         List<AddVideoListResponseCommand> list = new ArrayList<>();
         for(MultipartFile file : requestCommand.list) {
@@ -58,6 +66,7 @@ public class AdvertVideoService {
      * @param command
      * @return
      */
+    @Transactional(readOnly = false)
     public ModifyVideoResponse modifyVideo(ModifyVideoRequestCommand command){
         System.out.println("******"+command.getVideoId());
         AdvertVideo advertVideo = advertVideoRepository.findById(command.getVideoId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
@@ -71,7 +80,13 @@ public class AdvertVideoService {
         return ModifyVideoResponse.builder().videoUrl(videoUrl.toString()).build();
     }
 
-    public DeleteResponse deleteResponse(Long id){
+    /**
+     * 영상 삭제
+     * @param id
+     * @return
+     */
+    @Transactional(readOnly = false)
+    public DeleteResponse deleteVideo(Long id){
         AdvertVideo advertVideo = advertVideoRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         advertVideoRepository.delete(advertVideo);
@@ -79,6 +94,12 @@ public class AdvertVideoService {
         return DeleteResponse.builder().result("success").build();
     }
 
+    /**
+     * 배너 이미지 추가
+     * @param command
+     * @return
+     */
+    @Transactional(readOnly = false)
     public AddBannerImgResponse addBannerImg(AddBannerImgRequestCommand command){
         MultipartFile file = command.getImg();
         String fileName = UUID.randomUUID().toString().replaceAll("-","")+file.getName();

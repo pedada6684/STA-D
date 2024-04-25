@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.core.annotation.Order;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,5 +39,19 @@ public class Orders {
 
     @OneToMany(mappedBy = "orders")
     private List<OrderProduct> orderProducts;
+
+    public static Orders createToOrders(
+            User user,
+            Long contentId,
+            Long advertId
+    ){
+        Orders orders = new Orders();
+        orders.user=user;
+        orders.advertId=advertId;
+        orders.contentId=contentId;
+        orders.status=OrderStatus.ORDER;
+        orders.orderDate=LocalDateTime.now();
+        return orders;
+    }
 
 }

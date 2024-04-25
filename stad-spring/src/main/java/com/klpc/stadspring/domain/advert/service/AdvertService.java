@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AdvertService {
 
@@ -43,6 +43,7 @@ public class AdvertService {
      * @param command
      * @return
      */
+    @Transactional(readOnly = false)
     public AddAdvertResponse addAdvert(AddAdvertRequestCommand command){
         User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new CustomException(ErrorCode.REQUEST_NOT_FOUND));
 
@@ -90,6 +91,7 @@ public class AdvertService {
      * @param command
      * @return
      */
+    @Transactional(readOnly = false)
     public ModifyAdvertResponse modifyAdvert(ModifyAdvertRequestCommand command){
         Advert advert = advertRepository.findById(command.getAdvertId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
@@ -126,6 +128,7 @@ public class AdvertService {
      * @param id
      * @return
      */
+    @Transactional(readOnly = false)
     public DeleteAdvertResponse deleteAdvert(Long id){
         Advert advert = advertRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
@@ -138,7 +141,6 @@ public class AdvertService {
      * @param id : advertId
      * @return
      */
-    @Transactional(readOnly = true)
     public GetAdvertResponse getAdvert(Long id){
         Advert advert = advertRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
@@ -170,7 +172,6 @@ public class AdvertService {
      * @param id : userId
      * @return
      */
-    @Transactional(readOnly = true)
     public GetAdvertListResponse getAdvertList(Long id){
         User user = userRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         List<Advert> listByUser = advertRepository.findAllByUser(user);
@@ -210,7 +211,6 @@ public class AdvertService {
      * LIMIT 3
      * @return
      */
-    @Transactional(readOnly = true)
     public GetAdvertListByClickResponse getAdvertListByClick(){
         List<Advert> listOrderClick = new ArrayList<>();
         try {
