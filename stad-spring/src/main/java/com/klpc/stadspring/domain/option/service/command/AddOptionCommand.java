@@ -9,7 +9,7 @@ public class AddOptionCommand {
     /**
      *  상품 옵션 등록
      */
-    Long productId;
+    Long productTypeId;
     String name;
     String value;
 
