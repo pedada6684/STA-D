@@ -11,5 +11,6 @@ import java.time.LocalDateTime;
 public class AddOrderReturnLogCommand {
     private Long orderId;
     private Long userId;
+    private Long advertId;
     private LocalDateTime regDate;
 }
