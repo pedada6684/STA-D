@@ -16,9 +16,6 @@ public class GetProductInfoCommand {
      */
 
     private Long id;
-    private String name;
-    private Long price;
-    private Long quantity;
     private List<String> images;
     private String thumbnail;
     private Long cityDeliveryFee;
@@ -29,9 +26,6 @@ public class GetProductInfoCommand {
     public static GetProductInfoResponse ConvertProductInfoCommand(Product product){
         return GetProductInfoResponse.builder()
                 .id(product.getId())
-                .name(product.getName())
-                .price(product.getPrice())
-                .quantity(product.getQuantity())
                 .thumbnail(product.getThumbnail())
                 .cityDeliveryFee(product.getCityDeliveryFee())
                 .mtDeliveryFee(product.getMtDeliveryFee())
