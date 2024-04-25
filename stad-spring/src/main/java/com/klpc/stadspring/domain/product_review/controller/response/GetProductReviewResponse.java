@@ -6,6 +6,7 @@ import com.klpc.stadspring.domain.user.entity.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -19,7 +20,7 @@ public class GetProductReviewResponse {
     private String content;
     private Double score;
     private String reviewImg;
-    private LocalDateTime regDate;
+    private String regDate;
 
     public static GetProductReviewResponse from(ProductReview productReview){
         return GetProductReviewResponse.builder()
