@@ -11,4 +11,6 @@ public interface AdvertRepository extends JpaRepository<Advert,Long> {
 
     public List<Advert> findAllByUser(User user);
 
+    @Query("SELECT a.id FROM Advert a")
+    public List<Long> findAllAdvertIds();
 }

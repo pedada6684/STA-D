@@ -11,23 +11,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class BatchController {
-
-    @Autowired
-    private JobLauncher jobLauncher;
-
-    @Autowired
-    private Job job; // 이는 구성해야 할 배치 작업을 참조합니다.
-
-    @PostMapping("/start-batch")
-    public ResponseEntity<?> startBatchJob() {
-        try {
-            JobParameters jobParameters = new JobParametersBuilder()
-                    .addLong("time", System.currentTimeMillis())
-                    .toJobParameters();
-            jobLauncher.run(job, jobParameters);
-            return ResponseEntity.ok().body("{\"status\":\"Batch job has been started.\"}");
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("{\"error\":\"Failed to start batch job.\"}");
-        }
-    }
+//
+//    @Autowired
+//    private JobLauncher jobLauncher;
+//
+//    @Autowired
+//    private Job job; // 이는 구성해야 할 배치 작업을 참조합니다.
+//
+//    @PostMapping("/start-batch")
+//    public ResponseEntity<?> startBatchJob() {
+//        try {
+//            JobParameters jobParameters = new JobParametersBuilder()
+//                    .addLong("time", System.currentTimeMillis())
+//                    .toJobParameters();
+//            jobLauncher.run(job, jobParameters);
+//            return ResponseEntity.ok().body("{\"status\":\"Batch job has been started.\"}");
+//        } catch (Exception e) {
+//            return ResponseEntity.internalServerError().body("{\"error\":\"Failed to start batch job.\"}");
+//        }
+//    }
 }
