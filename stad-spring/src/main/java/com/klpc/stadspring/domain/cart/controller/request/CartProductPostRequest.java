@@ -15,15 +15,14 @@ import java.time.LocalDateTime;
 @Builder
 public class CartProductPostRequest {
 
-
-    private Long productId;
+    private Long productTypeId;
     private Long quantity;
     private Long advertId;
     private Long contentId;
 
     public AddCartProductCommand toCommand(){
         return AddCartProductCommand.builder()
-                .productId(productId)
+                .productTypeId(productTypeId)
                 .quantity(quantity)
                 .advertId(advertId)
                 .contentId(contentId)

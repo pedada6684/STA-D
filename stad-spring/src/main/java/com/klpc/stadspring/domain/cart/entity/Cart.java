@@ -24,6 +24,6 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "cartProduct", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.REMOVE,  orphanRemoval = true)
     private List<CartProduct> cartProduct;
 }
