@@ -33,3 +33,31 @@
   display: flex;
   justify-content: center;
 }
+.buttonWrapper {
+  display: flex;
+  margin: 0 1rem;
+}
+.playButton {
+  background-color: white;
+}
+.infoButton {
+  background-color: #afb0b4;
+}
+.infoButton div {
+  color: white;
+}
+.mainButton {
+  border: 0;
+  font-size: 1.2rem;
+  display: flex;
+  padding: 0.5rem 2rem;
+  cursor: pointer;
+  border-radius: 0.5vw;
+}
+.mainButton:hover {
+  transition: all 0.5s;
+  background-color: rgba(255, 255, 255, 0.75);
+}
+.mainButton img {
+  width: 2rem;
+}

@@ -1,0 +1,71 @@
+.v-container {
+  margin: 2rem;
+}
+.v-title {
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+.thumbnail-container .slick-small-next,
+.thumbnail-container .slick-small-prev {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+.thumbnail-container:hover .slick-small-next,
+.thumbnail-container:hover .slick-small-prev {
+  opacity: 1;
+  visibility: visible;
+}
+.s-vid-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s;
+}
+.s-vid-container img {
+  border-radius: 0.5vw;
+  width: 25rem;
+}
+.vidTitle {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  color: #dddddd;
+}
+.dots_custom {
+  display: inline-block;
+  vertical-align: middle;
+  margin: auto 0;
+  padding: 0;
+  position: absolute;
+  top: -2rem;
+  right: 1rem;
+}
+
+.dots_custom li {
+  background-color: #d1d1d1;
+  display: inline-block;
+  height: 2px;
+  width: 40px;
+  /* position: absolute; */
+  right: 10%;
+  top: -10%;
+  margin-left: 7px;
+}
+
+.dots_custom li button {
+  border: none;
+  background: #d1d1d1;
+  color: transparent;
+  cursor: pointer;
+  display: block;
+  height: 2px;
+  /* width: 100%; */
+  padding: 0;
+}
+
+.dots_custom li.slick-active button {
+  background-color: #aaa;
+  width: 100%;
+}
