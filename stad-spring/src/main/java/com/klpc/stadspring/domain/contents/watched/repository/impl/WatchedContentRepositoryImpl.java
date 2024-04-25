@@ -1,6 +1,8 @@
 package com.klpc.stadspring.domain.contents.watched.repository.impl;
 
 import static com.klpc.stadspring.domain.contents.watched.entity.QWatchedContent.watchedContent;
+
+import com.klpc.stadspring.domain.contents.watched.entity.WatchedContent;
 import com.klpc.stadspring.domain.contents.watched.repository.custom.WatchedContentRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +21,23 @@ public class WatchedContentRepositoryImpl implements WatchedContentRepositoryCus
                 .where(watchedContent.user.id.eq(userId)
                         .and(watchedContent.status.isFalse()))
                 .fetch());
+    }
+
+    @Override
+    public Optional<WatchedContent> findByUserIdAndDetailId(Long userId, Long detailId) {
+        return Optional.ofNullable(query.select(watchedContent)
+                .from(watchedContent)
+                .where(watchedContent.user.id.eq(userId)
+                        .and(watchedContent.contentDetail.id.eq(detailId)))
+                .fetchOne());
+    }
+
+    @Override
+    public Long updateWatchedContent(WatchedContent updatedWatchedContent) {
+        return query.update(watchedContent)
+                .set(watchedContent.status, updatedWatchedContent.isStatus())
+                .set(watchedContent.stopTime, updatedWatchedContent.getStopTime())
+                .where(watchedContent.id.eq(updatedWatchedContent.getId()))
+                .execute();
     }
 }
