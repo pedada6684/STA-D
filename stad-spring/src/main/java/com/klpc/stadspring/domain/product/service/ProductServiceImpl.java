@@ -75,14 +75,10 @@ public class ProductServiceImpl implements ProductService{
                 command.getPrice(),
                 command.getQuantity(),
                 thumbnailUrl.toString(),
-                command.getCategory(),
-                command.getSellStart(),
-                command.getSellEnd(),
                 command.getCityDeliveryFee(),
                 command.getMtDeliveryFee(),
                 command.getExpStart(),
-                command.getExpEnd(),
-                command.getDeliveryDate()
+                command.getExpEnd()
         );
 
         productRepository.save(newProduct);
