@@ -20,7 +20,7 @@ public class BookmarkedContent {
     private ContentDetail contentDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     public static BookmarkedContent createToBookmarkedContent (
