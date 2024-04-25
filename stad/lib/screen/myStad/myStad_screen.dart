@@ -8,6 +8,7 @@ import 'package:stad/main.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/qr_screen.dart';
+import 'package:stad/screen/myStad/shop/myaddress_screen.dart';
 import 'package:stad/screen/myStad/shop/myorder_scren.dart';
 import 'package:stad/screen/myStad/stad/mycommercial_screen.dart';
 import 'package:stad/widget/app_bar.dart';
@@ -84,7 +85,16 @@ class _MyStadScreenState extends State<MyStadScreen> {
                             MaterialPageRoute(
                                 builder: (context) => MyOrderScreen()));
                       }),
-                  _buildHeadListTile(title: '배송지 관리'),
+                  _buildHeadListTile(
+                      title: '배송지 관리',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MyAddressScreen(),
+                          ),
+                        );
+                      }),
                   _buildHeadListTile(title: '상품 리뷰'),
                 ],
               ),
