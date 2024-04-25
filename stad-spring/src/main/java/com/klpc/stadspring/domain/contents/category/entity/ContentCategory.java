@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.contents.category.entity;
 
+import com.klpc.stadspring.domain.contents.categoryRelationship.entity.ContentCategoryRelationship;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,9 +14,10 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ContentCategory {
     @Id
-    @Column(name = "content_category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private boolean isMovie;
 
     @Column(length = 30)
     private String name;
