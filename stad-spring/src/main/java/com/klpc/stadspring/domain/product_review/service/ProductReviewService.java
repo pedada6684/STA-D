@@ -56,7 +56,7 @@ public class ProductReviewService {
                 command.getTitle(),
                 command.getContent(),
                 command.getScore(),
-                command.getReviewImg().toString(),
+                reviewImgUrl.toString(),
                 command.getRegDate()
         );
 

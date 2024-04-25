@@ -1,11 +1,18 @@
-package com.klpc.stadspring.domain.option.controller;
+package com.klpc.stadspring.domain.productType.controller;
 
 import com.klpc.stadspring.domain.option.controller.request.AddOptionRequest;
-import com.klpc.stadspring.domain.option.controller.request.DeleteOptionRequest;
 import com.klpc.stadspring.domain.option.controller.response.GetOptionListByProductIdResponse;
 import com.klpc.stadspring.domain.option.entity.ProductOption;
 import com.klpc.stadspring.domain.option.service.OptionService;
 import com.klpc.stadspring.domain.option.service.command.DeleteOptionCommand;
+import com.klpc.stadspring.domain.product.service.ProductService;
+import com.klpc.stadspring.domain.productType.controller.request.AddProductTypeRequest;
+import com.klpc.stadspring.domain.productType.controller.request.DeleteProductTypeRequest;
+import com.klpc.stadspring.domain.productType.controller.response.GetProductTypeListResponse;
+import com.klpc.stadspring.domain.productType.entity.ProductType;
+import com.klpc.stadspring.domain.productType.service.ProductTypeService;
+import com.klpc.stadspring.domain.productType.service.command.AddProductTypeCommand;
+import com.klpc.stadspring.domain.productType.service.command.DeleteProductTypeCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -19,20 +26,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@Tag(name = "옵션 컨트롤러", description = "Option Controller API")
+@Tag(name = "상품 종류 컨트롤러", description = "Product Type Controller API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/option")
-public class OptionController {
+@RequestMapping("/type")
+public class ProductTypeController {
 
-    private final OptionService optionService;
+    private final ProductTypeService productTypeService;
 
     @GetMapping("/list/{productId}")
-    @Operation(summary = "특정 상품의 옵션 리스트 조회", description = "특정 광고에 속한 상품들의 리스트를 조회합니다.")
-    public ResponseEntity<?> getOptionList(@PathVariable Long productId) {
-        List<ProductOption> list = optionService.getOptionList(productId);
+    @Operation(summary = "특정 상품의 타입 리스트 조회", description = "특정 상품에 속한 타입들의 리스트를 조회합니다.")
+    public ResponseEntity<?> getProductTypeList(@PathVariable Long productId) {
+        List<ProductType> list = productTypeService.getProductTypeList(productId);
 
-        GetOptionListByProductIdResponse response = GetOptionListByProductIdResponse.from(list);
+        GetProductTypeListResponse response = GetProductTypeListResponse.from(list);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
         return ResponseEntity.ok(response);
@@ -41,15 +48,15 @@ public class OptionController {
 
 
     @PostMapping("/regist")
-    @Operation(summary = "옵션 등록", description = "옵션 등록")
+    @Operation(summary = "타입 등록", description = "타입 등록")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "옵션 등록 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    public ResponseEntity<?> addNewOption(@RequestBody AddOptionRequest request) {
+    public ResponseEntity<?> addNewProductType(@RequestBody AddProductTypeRequest request) {
         try {
-            optionService.addProductOption(request.toCommand());
+            productTypeService.addProductType(request.toCommand());
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
@@ -58,19 +65,14 @@ public class OptionController {
     }
 
     @DeleteMapping("/delete")
-    @Operation(summary = "옵션 삭제", description = "옵션 삭제")
+    @Operation(summary = "타입 삭제", description = "타입 삭제")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "상품 삭제 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    public ResponseEntity<?> deleteOption(@RequestBody DeleteOptionRequest request) {
-        try {
-            optionService.deleteOption(request.toCommand());
-
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity<?> deleteProductType(@RequestBody DeleteProductTypeRequest request) {
+        productTypeService.deleteProductType(request.toCommand());
+        return ResponseEntity.ok().build();
     }
 }
