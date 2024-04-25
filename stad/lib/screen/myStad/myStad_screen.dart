@@ -10,6 +10,7 @@ import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/qr_screen.dart';
 import 'package:stad/screen/myStad/shop/myaddress_screen.dart';
 import 'package:stad/screen/myStad/shop/myorder_scren.dart';
+import 'package:stad/screen/myStad/shop/myreview_screen.dart';
 import 'package:stad/screen/myStad/stad/mycommercial_screen.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
@@ -95,7 +96,16 @@ class _MyStadScreenState extends State<MyStadScreen> {
                           ),
                         );
                       }),
-                  _buildHeadListTile(title: '상품 리뷰'),
+                  _buildHeadListTile(
+                      title: '상품 리뷰',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MyReviewScreen(),
+                          ),
+                        );
+                      }),
                 ],
               ),
             ),

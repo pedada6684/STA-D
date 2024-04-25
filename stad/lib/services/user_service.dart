@@ -33,6 +33,9 @@ class UserService {
       UserModel userModel =
           UserModel.fromFirebaseUser(user, googleAuth.accessToken);
 
+      print(userModel.nickname);
+      print(userModel.googleAccessToken);
+
       // 서버로 사용자 프로필을 전송하고 응답을 기다림
       bool profileSent =
           await sendUserProfile(context, user, googleAuth.accessToken);
