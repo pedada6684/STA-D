@@ -39,8 +39,8 @@ class _MyAddressScreenState extends State<MyAddressScreen>
 
   @override
   void initState() {
-    _controller =
-        AnimationController(duration: Duration(milliseconds: 400), vsync: this);
+    _controller = AnimationController(
+        duration: const Duration(milliseconds: 400), vsync: this);
   }
 
   @override
@@ -146,15 +146,19 @@ class _MyAddressScreenState extends State<MyAddressScreen>
 
   Widget _buildFlatButton(
       String text, Color color, Color textcolor, VoidCallback onPressed) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: Text(text, style: TextStyle(color: textcolor)),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-            side: BorderSide(color: mainNavy)),
-        elevation: 0,
+    return SizedBox(
+      width: 60,
+      height: 35,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        child: Text(text, style: TextStyle(color: textcolor)),
+        style: ElevatedButton.styleFrom(
+            backgroundColor: color,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                side: BorderSide(color: mainNavy)),
+            elevation: 0,
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
       ),
     );
   }
