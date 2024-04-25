@@ -28,9 +28,6 @@ public class Product {
     @JoinColumn(name = "advert_id")
     private Advert advert;
 
-    @OneToMany(mappedBy = "product")
-    private List<OrderProduct> orderProduct;
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE,  orphanRemoval = true)
     private List<ProductImage> images;
 
