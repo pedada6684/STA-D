@@ -8,6 +8,7 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -43,7 +44,7 @@ public class ProductReview {
     private String reviewImg;
 
     @Column(name = "reg_date")
-    private LocalDateTime regDate;
+    private String regDate;
 
     public static ProductReview createNewReview(
           User user,
@@ -61,7 +62,7 @@ public class ProductReview {
         review.content = content;
         review.score = score;
         review.reviewImg = reviewImg;
-        review.regDate = LocalDateTime.now();
+        review.regDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
         return review;
     }
 
