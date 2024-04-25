@@ -6,5 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class DeleteOptionCommand {
+    Long productId;
     Long id;
 }
