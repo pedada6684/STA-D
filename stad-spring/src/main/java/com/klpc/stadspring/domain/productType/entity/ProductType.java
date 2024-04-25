@@ -1,12 +1,15 @@
 package com.klpc.stadspring.domain.productType.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,6 +26,9 @@ public class ProductType {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @OneToMany(mappedBy = "productType")
+    private List<OrderProduct> orderProduct;
 
     @Column(name = "name")
     private String name;
