@@ -11,18 +11,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ScheduledTasks {
-//
+
 //    @Autowired
 //    private JobLauncher jobLauncher;
 //
 //    @Autowired
-//    private Job updateStatsJob;
+//    private Job LogCountJob;
 //
-//    @Scheduled(fixedDelay = 200000)
+//    @Scheduled(fixedDelay = 60000)
 //    /**
 //     * 1시간마다 실행
 //     */
-////    @Scheduled(cron = "0 0 0/1 * * *")
+//    @Scheduled(cron = "0 0 0/1 * * *")
 //    public void runJob() throws JobExecutionException {
 //        JobParameters jobParameters = new JobParametersBuilder()
 //                .addLong("time", System.currentTimeMillis(), true)
