@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class DeleteOptionCommand {
+public class DeleteProductTypeCommand {
+    Long productId;
     Long id;
 }

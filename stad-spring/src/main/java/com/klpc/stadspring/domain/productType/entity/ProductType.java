@@ -12,33 +12,38 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProductOption {
+public class ProductType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "option_id")
-    Long id;
+    private Long id;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    Product product;
+    private Product product;
 
     @Column(name = "name")
-    String name;
+    private String name;
 
-    @Column(name = "value")
-    String value;
+    @Column(name = "price")
+    private Long price;
 
-    public static ProductOption createNewOption(
+    @Column(name = "quantity")
+    private Long quantity;
+
+    public static ProductType createNewProductType(
             Product product,
             String name,
-            String value
+            Long price,
+            Long quantity
     ) {
-        ProductOption productOption = new ProductOption();
-        productOption.product = product;
-        productOption.name = name;
-        productOption.value = value;
-        return productOption;
+        ProductType productType = new ProductType();
+        productType.product = product;
+        productType.name = name;
+        productType.price = price;
+        productType.quantity = quantity;
+        return productType;
     }
 }
