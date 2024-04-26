@@ -72,7 +72,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   Text(
                     '결제금액',
                     style: TextStyle(
-                      fontSize: 18.0,
+                      fontSize: 16.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -125,8 +125,9 @@ class _OrderScreenState extends State<OrderScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 40.0,
+                  Divider(
+                    height: 40,
+                    color: mainBlack,
                   ), // 구분선
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -134,7 +135,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       Text(
                         '총 결제금액',
                         style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.w500),
+                            fontSize: 16.0, fontWeight: FontWeight.w500),
                       ),
                       Text(
                         '53,400 원', // 예시 금액
@@ -179,7 +180,7 @@ class _OrderScreenState extends State<OrderScreen> {
               children: [
                 const Text(
                   '배송지',
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                 ),
                 TextButton(
                   onPressed: () {
@@ -257,7 +258,7 @@ class _OrderScreenState extends State<OrderScreen> {
               style: const TextStyle(
                   color: mainBlack,
                   fontWeight: FontWeight.bold,
-                  fontSize: 18.0),
+                  fontSize: 16.0),
             ),
             trailing: Icon(
               isExpanded

@@ -147,7 +147,7 @@ class _MyAddressScreenState extends State<MyAddressScreen>
   Widget _buildFlatButton(
       String text, Color color, Color textcolor, VoidCallback onPressed) {
     return SizedBox(
-      width: 60,
+      width: 63,
       height: 35,
       child: ElevatedButton(
         onPressed: onPressed,
