@@ -1,8 +1,8 @@
 //나중에 서버에서 받아올 것
 import 'dart:ui';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/screen/product/product_screen.dart';
 import 'package:stad/widget/advertising_card.dart';
@@ -16,6 +16,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   bool _isActive = true;
+  int _current = 0;
+  final CarouselController _controller = CarouselController();
 
   @override
   void initState() {
@@ -43,28 +45,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       });
     }
   }
-
-  // Route _createRoute() {
-  //   return PageRouteBuilder(
-  //     transitionDuration: Duration(milliseconds: 250),
-  //     reverseTransitionDuration: Duration(milliseconds: 250),
-  //     pageBuilder: (context, animation, secondaryAnimation) => ProductScreen(),
-  //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-  //       var begin = Offset(1.0, 0.0); // 오른쪽
-  //       var end = Offset.zero;
-  //       var curve = Curves.ease;
-  //
-  //       var tween =
-  //           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-  //       var offsetAnimation = animation.drive(tween);
-  //
-  //       return SlideTransition(
-  //         position: offsetAnimation,
-  //         child: child,
-  //       );
-  //     },
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +82,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           children: [
             Stack(
               children: [
-                // 이미지 상단에 그라데이션 효과를 주기 위해 ShaderMask 사용
                 ShaderMask(
                   shaderCallback: (rect) {
                     return LinearGradient(
@@ -115,8 +94,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   },
                   blendMode: BlendMode.dstIn,
                   child: Image.asset(
-                    'assets/image/thumbnail3.png', // 서버에서 받아올 이미지 URL
-                    height: 500,
+                    'assets/image/thumbnail5.jpg', // 서버에서 받아올 이미지 URL
+                    height: 420,
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
@@ -141,14 +120,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         ])),
                   ),
                 ),
-                // 이미지 하단에 '지금 보는 컨텐츠' 텍스트 오버레이
                 Positioned(
-                  bottom: 20,
-                  left: 16,
+                  bottom: 35,
+                  left: 25,
                   child: Text(
                     '지금 보는 컨텐츠',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: mainWhite,
                       shadows: <Shadow>[
@@ -163,43 +141,50 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
               ],
             ),
-            AdvertisingCard(
-              imagePath: 'assets/image/product.png',
-              buttonText: '지금 보는 광고 구매하기',
-              onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ProductScreen()));
-              },
-            ),
             Column(
               children: [
+                AdvertisingCard(
+                  imagePath: 'assets/image/product3.jfif',
+                  buttonText: '지금 보는 광고가 궁금하다면?',
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ProductScreen()));
+                  },
+                ),
                 CarouselSlider(
                   items: [
                     AdvertisingCard(
                       imagePath: 'assets/image/product.png',
-                      buttonText: '지금 보는 광고 구매하기',
+                      buttonText: '지금 보는 광고가 궁금하다면?',
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductScreen()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ProductScreen()));
                       },
                     ),
                     AdvertisingCard(
                       imagePath: 'assets/image/product2.png',
                       buttonText: '콘텐츠 관련 광고 구매하기',
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductScreen()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ProductScreen()));
                       },
                     ),
                   ],
                   options: CarouselOptions(
-                    autoPlay: true,
-                    autoPlayInterval: Duration(seconds: 5),
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
-                    enableInfiniteScroll: true,
-                    aspectRatio: 16/9,
-                    viewportFraction: 0.8,
-                    enlargeCenterPage: true,
-                    scrollDirection: Axis.horizontal,
-                  ),
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 3),
+                      autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      enableInfiniteScroll: true,
+                      aspectRatio: 16 / 9,
+                      viewportFraction: 1,
+                      enlargeCenterPage: true,
+                      scrollDirection: Axis.horizontal,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _current = index;
+                        });
+                      }),
+                  carouselController: _controller,
                 ),
               ],
             ),
