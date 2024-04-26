@@ -31,7 +31,7 @@ class CustomDropdown extends StatelessWidget {
         children: [
           ListTile(
             title: Text(title,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
             // 제목 스타일 조정
             subtitle: Text(selectedOption ?? '선택해주세요',
                 style: TextStyle(color: mainNavy)),
@@ -51,7 +51,7 @@ class CustomDropdown extends StatelessWidget {
                     height: 1,
                   ),
                   ListTile(
-                    title: Text(option),
+                    title: Text(option, style: TextStyle(fontSize: 14.0),),
                     leading: isSelected
                         ? Icon(Icons.check_circle, color: mainNavy)
                         : Icon(Icons.radio_button_unchecked, color: mainNavy),
