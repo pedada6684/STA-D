@@ -1,6 +1,5 @@
 package com.klpc.stadspring.domain.orders.entity;
 
-import com.klpc.stadspring.domain.delivery.entity.Delivery;
 import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -33,9 +32,6 @@ public class Orders {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "orders")
-    private Delivery delivery;
 
     @OneToMany(mappedBy = "orders")
     private List<OrderProduct> orderProducts;
