@@ -35,8 +35,14 @@ public class WatchedContentService {
         return watchedContentList;
     }
 
-    public List<Long> getDetailIdByUserId(Long userId) {
-        List<Long> detailIdList = watchedContentRepository.findDetailIdByUserId(userId)
+    public List<Long> getWatchingContentDetailIdByUserId(Long userId) {
+        List<Long> detailIdList = watchedContentRepository.findWatchingContentDetailIdByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        return detailIdList;
+    }
+
+    public List<Long> getWatchingAndWatchedContentDetailIdByUserId(Long userId) {
+        List<Long> detailIdList = watchedContentRepository.findWatchingAndWatchedContentDetailIdByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return detailIdList;
     }
