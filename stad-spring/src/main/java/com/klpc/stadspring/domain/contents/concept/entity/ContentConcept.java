@@ -29,15 +29,15 @@ public class ContentConcept {
     private List<ContentCategoryRelationship> contentCategoryRelationshipList = new ArrayList<>();
 
     public static ContentConcept createContentConcept (
-            boolean isMovie,
-            String title,
-            String thumbnailUrl,
-            String releaseYear,
             String audienceAge,
-            String creator,
-            String cast,
             String playtime,
-            String description
+            String description,
+            String cast,
+            String creator,
+            boolean isMovie,
+            String releaseYear,
+            String thumbnailUrl,
+            String title
     ) {
         ContentConcept contentConcept = new ContentConcept();
         contentConcept.isMovie = isMovie;
