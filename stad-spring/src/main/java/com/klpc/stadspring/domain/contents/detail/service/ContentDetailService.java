@@ -2,8 +2,10 @@ package com.klpc.stadspring.domain.contents.detail.service;
 
 import com.klpc.stadspring.domain.contents.category.entity.ContentCategory;
 import com.klpc.stadspring.domain.contents.category.repository.ContentCategoryRepository;
+import com.klpc.stadspring.domain.contents.detail.controller.response.AddDetailResponse;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailRepository;
+import com.klpc.stadspring.domain.contents.detail.service.command.request.AddDetailRequestCommand;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import jakarta.transaction.Transactional;
@@ -99,5 +101,18 @@ public class ContentDetailService {
         List<ContentDetail> list = repository.findPopularContentDetail()
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return list;
+    }
+
+    public AddDetailResponse addDetail(AddDetailRequestCommand command) {
+        log.info("AddDetailRequestCommand : " + command);
+
+        ContentDetail newContentDetail = ContentDetail.createContentDetail(
+                command.getContentConceptId(),
+                command.getEpisode(),
+                command.getVideoUrl(),
+                command.getSummary());
+        repository.save(newContentDetail);
+
+        return AddDetailResponse.builder().result("콘텐츠 디테일이 성공적으로 등록되었습니다.").build();
     }
 }

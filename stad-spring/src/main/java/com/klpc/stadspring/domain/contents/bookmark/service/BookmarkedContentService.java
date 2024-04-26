@@ -4,8 +4,8 @@ import com.klpc.stadspring.domain.contents.bookmark.controller.response.AddBookm
 import com.klpc.stadspring.domain.contents.bookmark.controller.response.DeleteBookmarkResponse;
 import com.klpc.stadspring.domain.contents.bookmark.entity.BookmarkedContent;
 import com.klpc.stadspring.domain.contents.bookmark.repository.BookmarkedContentRepository;
-import com.klpc.stadspring.domain.contents.bookmark.service.command.AddBookmarkRequestCommand;
-import com.klpc.stadspring.domain.contents.bookmark.service.command.DeleteBookmarkRequsetCommand;
+import com.klpc.stadspring.domain.contents.bookmark.service.command.request.AddBookmarkRequestCommand;
+import com.klpc.stadspring.domain.contents.bookmark.service.command.request.DeleteBookmarkRequsetCommand;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailRepository;
 import com.klpc.stadspring.domain.user.entity.User;
@@ -49,7 +49,7 @@ public class BookmarkedContentService {
         ContentDetail detail = detailRepository.findById(command.getDetailId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-        BookmarkedContent newBookmarkedContent = BookmarkedContent.createToBookmarkedContent(
+        BookmarkedContent newBookmarkedContent = BookmarkedContent.createBookmarkedContent(
                 detail,
                 user);
         repository.save(newBookmarkedContent);

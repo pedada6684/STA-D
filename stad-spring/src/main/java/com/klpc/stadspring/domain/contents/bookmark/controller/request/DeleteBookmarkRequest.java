@@ -1,6 +1,6 @@
 package com.klpc.stadspring.domain.contents.bookmark.controller.request;
 
-import com.klpc.stadspring.domain.contents.bookmark.service.command.DeleteBookmarkRequsetCommand;
+import com.klpc.stadspring.domain.contents.bookmark.service.command.request.DeleteBookmarkRequsetCommand;
 import lombok.Getter;
 
 @Getter
