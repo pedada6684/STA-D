@@ -28,7 +28,7 @@ public class ContentDetail {
     @OneToMany(mappedBy = "contentDetail")
     private List<WatchedContent> watchedContentList = new ArrayList<>();
 
-    public static ContentDetail createToContentDetail (
+    public static ContentDetail createContentDetail (
             Long contentConceptId,
             int episode,
             String videoUrl,

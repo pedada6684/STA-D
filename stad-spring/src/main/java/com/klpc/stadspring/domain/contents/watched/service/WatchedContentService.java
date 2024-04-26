@@ -55,7 +55,7 @@ public class WatchedContentService {
         ContentDetail detail = detailRepository.findById(command.getDetailId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-        WatchedContent newWatchedContent = WatchedContent.createToWatchedContent(
+        WatchedContent newWatchedContent = WatchedContent.createWatchedContent(
                 detail,
                 user,
                 LocalDate.now(),

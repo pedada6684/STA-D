@@ -28,7 +28,7 @@ public class ContentConcept {
     @OneToMany(mappedBy = "contentConcept")
     private List<ContentCategoryRelationship> contentCategoryRelationshipList = new ArrayList<>();
 
-    public static ContentConcept createToContentConcept (
+    public static ContentConcept createContentConcept (
             boolean isMovie,
             String title,
             String thumbnailUrl,

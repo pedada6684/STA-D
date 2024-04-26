@@ -23,7 +23,7 @@ public class BookmarkedContent {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static BookmarkedContent createToBookmarkedContent (
+    public static BookmarkedContent createBookmarkedContent (
             ContentDetail contentDetail,
             User user
             ) {

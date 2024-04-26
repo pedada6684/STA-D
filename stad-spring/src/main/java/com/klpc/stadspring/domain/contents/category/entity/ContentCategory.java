@@ -25,7 +25,7 @@ public class ContentCategory {
     @OneToMany(mappedBy = "contentCategory")
     private List<ContentCategoryRelationship> contentCategoryRelationshipList = new ArrayList<>();
 
-    public static ContentCategory createToContentCategory (
+    public static ContentCategory createContentCategory (
             boolean isMovie,
             String name
     ) {
