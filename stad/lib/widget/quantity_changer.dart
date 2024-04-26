@@ -37,7 +37,7 @@ class _QuantityChangerState extends State<QuantityChanger> {
               Text(
                 '민형이가 좋아하는 딸기',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -71,7 +71,7 @@ class _QuantityChangerState extends State<QuantityChanger> {
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
                         '$quantity',
-                        style: TextStyle(fontSize: 16.0),
+                        style: TextStyle(fontSize: 14.0),
                       ),
                     ),
                     _buildCounterButton(Icons.add, increment),
