@@ -49,7 +49,7 @@ public class BookmarkedContentService {
         ContentDetail detail = detailRepository.findById(command.getDetailId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-        BookmarkedContent newBookmarkedContent = BookmarkedContent.createToBookmarkedContent(
+        BookmarkedContent newBookmarkedContent = BookmarkedContent.createBookmarkedContent(
                 detail,
                 user);
         repository.save(newBookmarkedContent);

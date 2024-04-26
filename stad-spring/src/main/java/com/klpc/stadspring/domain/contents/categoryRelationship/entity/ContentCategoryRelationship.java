@@ -23,7 +23,7 @@ public class ContentCategoryRelationship {
     @JoinColumn(name = "content_concept_id")
     private ContentConcept contentConcept;
 
-    public static ContentCategoryRelationship createToContentCategoryRelationship (
+    public static ContentCategoryRelationship createContentCategoryRelationship (
             ContentCategory contentCategory,
             ContentConcept contentConcept
     ) {
