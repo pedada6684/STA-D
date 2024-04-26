@@ -1,8 +1,6 @@
 package com.klpc.stadspring.domain.orders.service;
 
 import com.klpc.stadspring.domain.cart.controller.response.GetCartProductInfoResponse;
-import com.klpc.stadspring.domain.delivery.entity.Delivery;
-import com.klpc.stadspring.domain.delivery.repository.DeliveryRepository;
 import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.orderProduct.repository.OrderProductRepository;
 import com.klpc.stadspring.domain.orders.controller.request.AddOrdersRequest;
@@ -35,7 +33,6 @@ import java.util.List;
 public class OrdersService {
 
     private final UserRepository userRepository;
-    private final DeliveryRepository deliveryRepository;
     private final ProductTypeRepository productTypeRepository;
     private final OrderProductRepository orderProductRepository;
     private final OrdersRepository ordersRepository;
@@ -57,17 +54,6 @@ public class OrdersService {
         orderProduct.linkedOrders(orders);
         orderProduct.linkedProductType(productType);
         orderProductRepository.save(orderProduct);
-
-        Delivery delivery = Delivery.createToDelivery(
-                command.getPhoneNumber(),
-                command.getName(),
-                command.getLocation(),
-                command.getLocationDetail(),
-                command.getLocationName(),
-                command.getLocationNum()
-        );
-        delivery.linkedOrders(orders);
-        deliveryRepository.save(delivery);
 
         return AddOrdersResponse.builder().result("success").build();
     }
@@ -100,7 +86,6 @@ public class OrdersService {
                     .orderDate(orders.getOrderDate().toLocalDate().toString())
                     .contentId(orders.getContentId())
                     .advertId(orders.getAdvertId())
-                    .deliveryStatus(orders.getDelivery().getStatus().toString())
                     .productTypeId(productIdList)
                     .productTypeName(productNameList)
                     .productTypeThumbnailUrl(productThumbnailUrl)

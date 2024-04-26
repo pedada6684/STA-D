@@ -23,7 +23,6 @@ public class AddProductCommand {
     private Long mtDeliveryFee;
     private LocalDateTime expStart;
     private LocalDateTime expEnd;
-    private LocalDateTime deliveryDate;
 
 //    public static AddProductCommand ConvertAddProductImageCommand(Product product){
 //        return AddProductCommand.builder()
