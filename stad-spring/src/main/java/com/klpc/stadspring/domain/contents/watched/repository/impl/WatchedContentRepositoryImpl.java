@@ -25,11 +25,20 @@ public class WatchedContentRepositoryImpl implements WatchedContentRepositoryCus
     }
 
     @Override
-    public Optional<List<Long>> findDetailIdByUserId(Long userId) {
+    public Optional<List<Long>> findWatchingContentDetailIdByUserId(Long userId) {
         return Optional.ofNullable(query.select(watchedContent.contentDetail.id)
                 .from(watchedContent)
                 .where(watchedContent.user.id.eq(userId)
                         .and(watchedContent.status.isFalse()))
+                .orderBy(watchedContent.date.desc())
+                .fetch());
+    }
+
+    @Override
+    public Optional<List<Long>> findWatchingAndWatchedContentDetailIdByUserId(Long userId) {
+        return Optional.ofNullable(query.select(watchedContent.contentDetail.id)
+                .from(watchedContent)
+                .where(watchedContent.user.id.eq(userId))
                 .orderBy(watchedContent.date.desc())
                 .fetch());
     }
