@@ -16,7 +16,7 @@ class ProductCard extends StatelessWidget {
             Text(
               '제조사 명',
               style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 14.0,
                   color: mainBlack,
                   fontWeight: FontWeight.w600),
             ),
@@ -36,16 +36,15 @@ class ProductCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('상품명임',
-                        style: TextStyle(fontSize: 16.0, color: mainBlack)),
-
+                        style: TextStyle(fontSize: 14.0, color: mainBlack)),
                     Text('상품선택',
-                        style: TextStyle(fontSize: 16.0, color: midGray)),
+                        style: TextStyle(fontSize: 12.0, color: midGray)),
                     Text('옵션선택',
-                        style: TextStyle(fontSize: 16.0, color: midGray)),
+                        style: TextStyle(fontSize: 12.0, color: midGray)),
                     Text('수량',
-                        style: TextStyle(fontSize: 16.0, color: midGray)),
+                        style: TextStyle(fontSize: 12.0, color: midGray)),
                     Text('얼마얼마 원',
-                        style: TextStyle(fontSize: 18.0, color: mainBlack)),
+                        style: TextStyle(fontSize: 14.0, color: mainBlack)),
                   ],
                 ),
               ],

@@ -72,7 +72,15 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
               itemCount: reviews.length,
               itemBuilder: (context, index) {
                 final review = reviews[index];
-                return ReviewCard(review: review);
+                return Column(
+                  children: [
+                    ReviewCard(review: review),
+                    Divider(
+                      height: 1,
+                      color: mainGray,
+                    ),
+                  ],
+                );
               },
             )
           : Center(
@@ -176,7 +184,7 @@ class ReviewCard extends StatelessWidget {
               height: 16.0,
             ),
             SizedBox(
-              width: 60,
+              width: 63,
               height: 35,
               child: ElevatedButton(
                 onPressed: () {},

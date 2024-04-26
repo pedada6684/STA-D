@@ -130,7 +130,7 @@ Widget _buildActionButtons(BuildContext context) {
             style: ElevatedButton.styleFrom(
               foregroundColor: mainNavy,
               textStyle: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
               ),
               side: BorderSide(color: mainNavy, width: 1),
               surfaceTintColor: mainWhite,
@@ -157,7 +157,7 @@ Widget _buildActionButtons(BuildContext context) {
             style: ElevatedButton.styleFrom(
               foregroundColor: mainWhite,
               textStyle: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
               ),
               surfaceTintColor: mainNavy,
               backgroundColor: mainNavy,
