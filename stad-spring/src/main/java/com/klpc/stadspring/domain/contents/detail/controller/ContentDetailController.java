@@ -3,12 +3,16 @@ package com.klpc.stadspring.domain.contents.detail.controller;
 import com.klpc.stadspring.domain.contents.bookmark.service.BookmarkedContentService;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
+import com.klpc.stadspring.domain.contents.detail.controller.request.AddDetailRequest;
+import com.klpc.stadspring.domain.contents.detail.controller.response.AddDetailResponse;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetContentConceptResponse;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetDetailResponse;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
 import com.klpc.stadspring.domain.contents.watched.service.WatchedContentService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -111,5 +115,22 @@ public class ContentDetailController {
             responseList.add(GetDetailResponse.from(popularList.get(i),concept));
         }
         return ResponseEntity.ok(responseList);
+    }
+
+    @PostMapping("/regist")
+    @Operation(summary = "콘텐츠 디테일 등록", description = "콘텐츠 디테일 등록")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "콘텐츠 콘셉트 등록 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    public ResponseEntity<AddDetailResponse> addDetail(@RequestBody AddDetailRequest request) {
+        try {
+            AddDetailResponse response = detailService.addDetail(request.toCommand());
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

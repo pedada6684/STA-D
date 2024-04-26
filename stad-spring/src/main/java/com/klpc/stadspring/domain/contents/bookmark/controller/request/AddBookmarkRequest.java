@@ -1,6 +1,6 @@
 package com.klpc.stadspring.domain.contents.bookmark.controller.request;
 
-import com.klpc.stadspring.domain.contents.bookmark.service.command.AddBookmarkRequestCommand;
+import com.klpc.stadspring.domain.contents.bookmark.service.command.request.AddBookmarkRequestCommand;
 import lombok.Getter;
 
 @Getter
