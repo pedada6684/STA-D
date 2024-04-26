@@ -21,7 +21,6 @@ public class UpdateProductInfoCommand {
     private Long mtDeliveryFee;
     private String expStart;
     private String expEnd;
-    private String deliveryDate;
 
 
 //    public static GetProductInfoResponse ConvertProductInfoCommand(Product product){
