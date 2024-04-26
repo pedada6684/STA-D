@@ -18,7 +18,7 @@ class AdvertisingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
       child: InkWell(
         onTap: onPressed, // InkWell 사용하여 전체 이미지 탭 가능하게 함
         child: Stack(
