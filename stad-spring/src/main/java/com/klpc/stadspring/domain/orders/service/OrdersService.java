@@ -5,7 +5,9 @@ import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
 import com.klpc.stadspring.domain.orderProduct.repository.OrderProductRepository;
 import com.klpc.stadspring.domain.orders.controller.request.AddOrdersRequest;
 import com.klpc.stadspring.domain.orders.controller.response.AddOrdersResponse;
+import com.klpc.stadspring.domain.orders.controller.response.CancelOrdersResponse;
 import com.klpc.stadspring.domain.orders.controller.response.GetOrdersListResponse;
+import com.klpc.stadspring.domain.orders.controller.response.GetOrdersResponse;
 import com.klpc.stadspring.domain.orders.entity.Orders;
 import com.klpc.stadspring.domain.orders.repository.OrdersRepository;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequestCommand;
@@ -44,6 +46,7 @@ public class OrdersService {
      */
     @Transactional(readOnly = false)
     public AddOrdersResponse addOrders(AddOrderRequestCommand command){
+        log.info("주문 추가 Service"+"\n"+"Command userId : "+command.getUserId());
         User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         ProductType productType = productTypeRepository.findById(command.getProductTypeId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
@@ -93,6 +96,43 @@ public class OrdersService {
             response.add(command);
         }
         return GetOrdersListResponse.builder().data(response).build();
+    }
+
+    /**
+     * 주문 상세 조회
+     * @param ordersId
+     * @return
+     */
+    public GetOrdersResponse getOrders(Long ordersId){
+        Orders orders = ordersRepository.findById(ordersId).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        List<Long> productTypeId = new ArrayList<>();
+        List<String> productTypeName = new ArrayList<>();
+        String productThumbnailUrl = "";
+        for(OrderProduct ops : orders.getOrderProducts()){
+            productTypeId.add(ops.getProductType().getId());
+            productTypeName.add(ops.getProductType().getName());
+            productThumbnailUrl=(ops.getProductType().getProduct().getThumbnail());
+        }
+
+        GetOrdersResponse response = GetOrdersResponse.builder()
+                .ordersId(orders.getId())
+                .orderDate(orders.getOrderDate().toLocalDate().toString())
+                .orderStatus(orders.getStatus().name())
+                .contentId(orders.getContentId())
+                .advertId(orders.getAdvertId())
+                .productThumbnailUrl(productThumbnailUrl)
+                .build();
+
+        return response;
+    }
+
+    public CancelOrdersResponse cancelOrders(Long ordersId){
+        Orders orders = ordersRepository.findById(ordersId).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        orders.cancelOrders();
+
+        return CancelOrdersResponse.builder().result("success").build();
     }
 
 }

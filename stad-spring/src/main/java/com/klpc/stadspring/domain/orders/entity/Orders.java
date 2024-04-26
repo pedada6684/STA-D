@@ -50,4 +50,8 @@ public class Orders {
         return orders;
     }
 
+    public void cancelOrders(){
+        this.status = OrderStatus.CANCEL;
+    }
+
 }
