@@ -1,5 +1,6 @@
 package com.klpc.stadspring.global.batch.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,11 @@ import org.springframework.batch.core.launch.JobLauncher;
 
 @Configuration
 @EnableScheduling
+@RequiredArgsConstructor
 public class SchedulingConfig {
 
-    @Autowired
-    private JobLauncher jobLauncher;
-
-    @Autowired
-    private Job logCountJob; // 로그 카운트 Job
+    private final JobLauncher jobLauncher;
+    private final Job logCountJob; // 로그 카운트 Job
 
     // 30초마다 작업 실행
     @Scheduled(fixedDelay = 300000)
