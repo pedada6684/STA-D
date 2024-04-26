@@ -7,17 +7,16 @@ import 'package:stad/firebase_options.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/cart/cart_screen.dart';
 import 'package:stad/screen/home/home_screen.dart';
-
-import 'screen/myStad/myStad_screen.dart';
-import 'widget/bottom_bar.dart';
+import 'package:stad/screen/myStad/myStad_screen.dart';
+import 'package:stad/widget/bottom_bar.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Flutter 엔진과 위젯 트리 바인딩
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await dotenv.load(fileName: ".env");
-  dotenv.load();
+  await dotenv.load(fileName: ".env"); // .env 파일 로드
+
   runApp(const MyApp());
 }
 
@@ -48,10 +47,11 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
-        // UserProvider 추가
       ],
       child: MaterialApp(
+        title: 'STA:D',
         theme: ThemeData(
+          visualDensity: VisualDensity.adaptivePlatformDensity,
           pageTransitionsTheme: PageTransitionsTheme(
             builders: {
               TargetPlatform.android: CupertinoPageTransitionsBuilder(),
