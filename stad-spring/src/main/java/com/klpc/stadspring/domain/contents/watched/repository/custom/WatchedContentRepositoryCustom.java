@@ -7,7 +7,8 @@ import java.util.Optional;
 
 public interface WatchedContentRepositoryCustom {
     Optional<List<WatchedContent>> findAllByUserId(Long userId);
-    Optional<List<Long>> findDetailIdByUserId(Long userId);
+    Optional<List<Long>> findWatchingContentDetailIdByUserId(Long userId);
+    Optional<List<Long>> findWatchingAndWatchedContentDetailIdByUserId(Long userId);
     Optional<WatchedContent> findByUserIdAndDetailId(Long userId, Long detailId);
     Long updateWatchedContent(WatchedContent updatedWatchedContent);
 }

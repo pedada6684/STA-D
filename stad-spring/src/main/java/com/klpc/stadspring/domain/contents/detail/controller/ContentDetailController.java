@@ -1,8 +1,6 @@
 package com.klpc.stadspring.domain.contents.detail.controller;
 
 import com.klpc.stadspring.domain.contents.bookmark.service.BookmarkedContentService;
-import com.klpc.stadspring.domain.contents.category.service.ContentCategoryService;
-import com.klpc.stadspring.domain.contents.categoryRelationship.service.ContentCategoryRelationshipService;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetContentConceptResponse;
@@ -29,8 +27,6 @@ import java.util.List;
 public class ContentDetailController {
     private final ContentDetailService detailService;
     private final ContentConceptService conceptService;
-    private final ContentCategoryService categoryService;
-    private final ContentCategoryRelationshipService categoryRelationshipService;
     private final WatchedContentService watchedContentService;
     private final BookmarkedContentService bookmarkedContentService;
 
@@ -52,7 +48,21 @@ public class ContentDetailController {
     @GetMapping("/collections/watching")
     @Operation(summary = "시청 중인 영상 목록", description = "시청 중인 영상 목록")
     ResponseEntity<List<GetDetailResponse>> getWatchingContent(@RequestParam("userId")  Long userId) {
-        List<Long> detailIdList = watchedContentService.getDetailIdByUserId(userId);
+        List<Long> detailIdList = watchedContentService.getWatchingContentDetailIdByUserId(userId);
+        List<GetDetailResponse> responseList = new ArrayList<>();
+        for (Long aLong : detailIdList) {
+            ContentDetail detail = detailService.getContentDetailById(aLong);
+            ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
+
+            responseList.add(GetDetailResponse.from(detail, concept));
+        }
+        return ResponseEntity.ok(responseList);
+    }
+
+    @GetMapping("/collections/watchingAndWatched")
+    @Operation(summary = "시청한 모든 영상 목록", description = "시청한 영상 목록")
+    ResponseEntity<List<GetDetailResponse>> getWatchingAndWatchedContent(@RequestParam("userId")  Long userId) {
+        List<Long> detailIdList = watchedContentService.getWatchingAndWatchedContentDetailIdByUserId(userId);
         List<GetDetailResponse> responseList = new ArrayList<>();
         for (Long aLong : detailIdList) {
             ContentDetail detail = detailService.getContentDetailById(aLong);
