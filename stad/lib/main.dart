@@ -55,7 +55,6 @@ class _MyAppState extends State<MyApp> {
           pageTransitionsTheme: PageTransitionsTheme(
             builders: {
               TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
             },
           ),
           fontFamily: 'MainFont',

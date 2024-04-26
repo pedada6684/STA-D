@@ -2,12 +2,13 @@ import 'package:dio/dio.dart';
 
 class OrderService {
   final Dio dio = Dio();
-  final String url = 'http://10.0.2.2:8080/api/user/location';
+  final String locUrl = 'http://10.0.2.2:8080/api/user/location';
+  final String EmUrl = 'http://192.168.31.202:8080/api/user/location';
 
   Future<void> sendAddressData(int userId, String location, String name,
       String phone, String locationNick) async {
     try {
-      final response = await dio.post(url, data: {
+      final response = await dio.post(locUrl, data: {
         'userId': '1',
         'location': location,
         'name': name,
