@@ -72,8 +72,11 @@ public class WatchedContentService {
         );
 
         Long result = watchedContentRepository.updateWatchedContent(updatedWatchedContent);
-        if (result == 0)
+        if (result == 0) {
             return ModifyWatchingContentResponse.builder().result("**컨텐츠 시청 시간이 저장되지 않았습니다.**").build();
+        } else if (command.isStatus()) {
+            return ModifyWatchingContentResponse.builder().result("시청 완료 콘텐츠가 성공적으로 생성되었습니다.").build();
+        }
         return ModifyWatchingContentResponse.builder().result("컨텐츠 시청 시간이 성공적으로 저장되었습니다.").build();
     }
 
