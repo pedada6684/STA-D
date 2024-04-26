@@ -27,4 +27,29 @@ public class ContentConcept {
 
     @OneToMany(mappedBy = "contentConcept")
     private List<ContentCategoryRelationship> contentCategoryRelationshipList = new ArrayList<>();
+
+    public static ContentConcept createContentConcept (
+            String audienceAge,
+            String playtime,
+            String description,
+            String cast,
+            String creator,
+            boolean isMovie,
+            String releaseYear,
+            String thumbnailUrl,
+            String title
+    ) {
+        ContentConcept contentConcept = new ContentConcept();
+        contentConcept.isMovie = isMovie;
+        contentConcept.title = title;
+        contentConcept.thumbnailUrl = thumbnailUrl;
+        contentConcept.releaseYear = releaseYear;
+        contentConcept.audienceAge = audienceAge;
+        contentConcept.creator = creator;
+        contentConcept.cast = cast;
+        contentConcept.playtime = playtime;
+        contentConcept.description = description;
+
+        return contentConcept;
+    }
 }

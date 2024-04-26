@@ -22,4 +22,15 @@ public class ContentCategoryRelationship {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "content_concept_id")
     private ContentConcept contentConcept;
+
+    public static ContentCategoryRelationship createContentCategoryRelationship (
+            ContentCategory contentCategory,
+            ContentConcept contentConcept
+    ) {
+        ContentCategoryRelationship contentCategoryRelationship = new ContentCategoryRelationship();
+        contentCategoryRelationship.contentCategory = contentCategory;
+        contentCategoryRelationship.contentConcept = contentConcept;
+
+        return contentCategoryRelationship;
+    }
 }

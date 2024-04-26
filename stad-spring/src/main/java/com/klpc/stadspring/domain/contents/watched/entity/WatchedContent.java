@@ -36,7 +36,7 @@ public class WatchedContent {
     private String stopTime;
     // ======================
 
-    public static WatchedContent createToWatchedContent (
+    public static WatchedContent createWatchedContent (
             ContentDetail contentDetail,
             User user,
             LocalDate date,
