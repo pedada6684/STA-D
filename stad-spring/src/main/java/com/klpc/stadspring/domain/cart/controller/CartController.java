@@ -66,10 +66,10 @@ public class CartController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/list/{cartId}")
+    @GetMapping("/list/{userId}")
     @Operation(summary = "장바구니 상품 리스트 조회", description = "장바구니 상품 리스트 조회")
-    public ResponseEntity<?> getCartProductListByCartId(@PathVariable Long cartId) {
-        List<CartProduct> list = cartService.getCartProductListByCartId(cartId);
+    public ResponseEntity<?> getCartProductListByCartId(@PathVariable Long userId) {
+        List<CartProduct> list = cartService.getCartProductListByCartId(userId);
 
         GetCartProductListResponse response = GetCartProductListResponse.from(list);
 
