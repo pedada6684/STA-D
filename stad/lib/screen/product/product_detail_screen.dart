@@ -32,7 +32,7 @@ class ProductDetailScreen extends StatelessWidget {
                     Text(
                       '당일 산지 직송 킹스베리 베리 딜리셔스~',
                       style: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 14.0,
                       ),
                     ),
                     SizedBox(
@@ -43,7 +43,7 @@ class ProductDetailScreen extends StatelessWidget {
                         Text(
                           '24,300원',
                           style: TextStyle(
-                              fontSize: 20.0,
+                              fontSize: 16.0,
                               fontWeight: FontWeight.w900,
                               color: mainGray,
                               decoration: TextDecoration.lineThrough,
@@ -55,7 +55,7 @@ class ProductDetailScreen extends StatelessWidget {
                         Text(
                           '17,800원',
                           style: TextStyle(
-                              fontSize: 22.0,
+                              fontSize: 18.0,
                               fontWeight: FontWeight.w900,
                               color: mainBlack),
                         ),
@@ -80,7 +80,7 @@ class ProductDetailScreen extends StatelessWidget {
                         Text(
                           '상품정보',
                           style: TextStyle(
-                              fontSize: 16.0, fontWeight: FontWeight.bold),
+                              fontSize: 14.0, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -146,7 +146,7 @@ class ProductDetailScreen extends StatelessWidget {
                     const Text(
                       '상품정보 제공 고시',
                       style: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 14.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -182,13 +182,13 @@ class ProductDetailScreen extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
-            fontSize: 14.0,
+            fontSize: 12.0,
           ),
         ),
         Text(
           value,
           style: const TextStyle(
-            fontSize: 14.0,
+            fontSize: 12.0,
           ),
         ),
       ],

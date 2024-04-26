@@ -13,6 +13,8 @@ class UserService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final Dio dio = Dio();
+  final EmUrl = Uri.parse('http://192.168.0.9:8080/api/v1/auth/applogin');
+  final locUrl = Uri.parse('http://10.0.2.2:8080/api/v1/auth/applogin');
 
   Future<void> signInWithGoogle(BuildContext context) async {
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -59,7 +61,7 @@ class UserService {
         UserModel.fromFirebaseUser(user, googleAccessToken).toJson();
     try {
       final response = await dio.post(
-        'http://10.0.2.2:8080/api/v1/auth/applogin',
+          EmUrl as String,
         data: json.encode(userProfile),
         options: Options(
             followRedirects: false, validateStatus: (status) => status! < 500),

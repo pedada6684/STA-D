@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -69,11 +68,11 @@ class _MyStadScreenState extends State<MyStadScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 20.0, horizontal: 24.0),
+                        vertical: 16.0, horizontal: 24.0),
                     child: Text(
                       'Shop',
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: darkGray),
                     ),
@@ -119,11 +118,11 @@ class _MyStadScreenState extends State<MyStadScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 20.0, horizontal: 24.0),
+                        vertical: 16.0, horizontal: 24.0),
                     child: Text(
                       'Stad',
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: darkGray),
                     ),
@@ -189,7 +188,7 @@ class _MyStadScreenState extends State<MyStadScreen> {
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
         child: Text(
           title,
-          style: TextStyle(fontSize: 16.0, color: mainBlack),
+          style: TextStyle(fontSize: 14.0, color: mainBlack),
         ),
       ),
       trailing: Icon(
@@ -238,6 +237,7 @@ class UserInfoContainer extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               CircleAvatar(
                                 backgroundColor: mainNavy,
@@ -259,20 +259,20 @@ class UserInfoContainer extends StatelessWidget {
                                     userModel.nickname ?? '닉네임을 설정해주세요.',
                                     style: TextStyle(
                                         color: mainBlack,
-                                        fontSize: 18.0,
+                                        fontSize: 16.0,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(height: 4.0),
                                   Text(
                                     userModel.email ?? '이메일 없음',
                                     style: TextStyle(
-                                        color: mainBlack, fontSize: 16.0),
+                                        color: mainBlack, fontSize: 14.0),
                                   ),
                                   SizedBox(height: 4.0),
                                   Text(
                                     userModel.phone ?? '연락처를 추가해주세요.',
                                     style: TextStyle(
-                                        color: mainBlack, fontSize: 16.0),
+                                        color: mainBlack, fontSize: 14.0),
                                   ),
                                 ],
                               ),
