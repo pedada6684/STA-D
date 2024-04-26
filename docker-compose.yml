@@ -1,27 +1,14 @@
 version: "3.8"
 services:
-  mysql-stad-main:
-    container_name: mysql-stad-main
-    image: mysql:latest
-    hostname: mysql-stad-main
+  stad-spring:
+    image: stad-spring-image
+    container_name: stad-spring
     ports:
-      - "3306:3306"
-    environment:
-      MYSQL_USER: stad
-      MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: stad
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      - "18080:8080"
     networks:
-      - my-network
-  redis:
-    image: redis:latest
-    container_name: redis
-    hostname: redis
-    ports:
-      - "6379:6379"
-    networks:
-      - my-network
+      - ubuntu_my-network
 
 networks:
-  my-network:
-    driver: bridge
+  ubuntu_my-network:
+    external: true
+    name: ubuntu_my-network
