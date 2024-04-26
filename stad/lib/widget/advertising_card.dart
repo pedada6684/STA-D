@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:stad/constant/colors.dart';
 
 class AdvertisingCard extends StatelessWidget {
   final String imagePath;
@@ -32,22 +33,29 @@ class AdvertisingCard extends StatelessWidget {
                   children: [
                     Image.asset(imagePath, fit: BoxFit.cover),
                     BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                      filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
                       child: Container(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withOpacity(0.1),
                       ),
                     ),
                     Positioned(
-                      top: 20,
+                      bottom: 10,
                       left: 15,
                       child: Container(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           buttonText,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: mainWhite,
                             fontSize: 18.0,
                             fontWeight: FontWeight.bold,
+                            shadows: <Shadow>[
+                              Shadow(
+                                offset: Offset(0.0, 0.8),
+                                blurRadius: 3.0,
+                                color: Color.fromARGB(150, 0, 0, 0),
+                              ),
+                            ],
                           ),
                         ),
                       ),

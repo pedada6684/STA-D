@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: mainNavy,
+      backgroundColor: mainWhite,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Text(
               'STA:D',
               style: TextStyle(
-                  fontFamily: 'LogoFont', fontSize: 80.0, color: mainWhite),
+                  fontFamily: 'LogoFont', fontSize: 80.0, color: mainNavy),
             ),
           ),
           SizedBox(height: 50),
@@ -43,6 +43,12 @@ class _LoginScreenState extends State<LoginScreen> {
               elevation: 0,
             ),
             child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: midGray),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               // 컨테이너 내부 여백
               child: IntrinsicHeight(
