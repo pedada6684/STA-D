@@ -61,7 +61,7 @@ public class ProductReviewController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    public ResponseEntity<?> deleteReview(DeleteReviewCommand command) {
+    public ResponseEntity<?> deleteReview(@RequestBody DeleteReviewCommand command) {
         productReviewService.deleteReview(command);
         return ResponseEntity.ok().build();
     }
@@ -70,10 +70,7 @@ public class ProductReviewController {
     @GetMapping("/list/{productId}")
     @Operation(summary = "특정 상품에 속한 리뷰 리스트 조회", description = "특정 상품에 속한 리뷰 리스트 조회")
     public ResponseEntity<?> getProductReviewListByAdverseId(@PathVariable Long productId) {
-        List<ProductReview> list = productReviewService.getReviewListByProductId(productId);
-
-        // GetProductListByAdverseResponse.from 메서드를 호출하여 Product 리스트를 GetProductListByAdverseResponse로 변환
-        GetProductReviewListResponse response = GetProductReviewListResponse.from(list);
+        GetProductReviewListResponse response = productReviewService.getReviewListByProductId(productId);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
         return ResponseEntity.ok(response);
@@ -81,10 +78,8 @@ public class ProductReviewController {
 
     @GetMapping("/mypage/list")
     @Operation(summary = "유저가 작성한 리뷰 목록", description = "유저가 작성한 리뷰 목록")
-    public ResponseEntity<?> getProductReviewListByUserId(GetProductReviewListByUserIdRequest request) {
-        List<ProductReview> list = productReviewService.getProductReviewListByUserId(request.getUserId());
-
-        GetProductReviewListResponse response = GetProductReviewListResponse.from(list);
+    public ResponseEntity<?> getProductReviewListByUserId(@RequestBody GetProductReviewListByUserIdRequest request) {
+        GetProductReviewListResponse response = productReviewService.getProductReviewListByUserId(request.getUserId());
 
         // 변환된 응답을 ResponseEntity에 담아 반환
         return ResponseEntity.ok(response);
