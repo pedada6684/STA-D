@@ -36,20 +36,11 @@ public class ProductController {
     private final ProductService productService;
     private final ProductImageService productImageService;
 
-//    @Operation(summary = "상품 목록 조회", description = "상품 목록 조회")
-//    @GetMapping("/product/list/{adverse_id}")
-//    public ResponseEntity<Optional<GetProductListByAdverseResponse>> getProductInfoList(@PathVariable Long adverse_id) {
-//        Optional<GetProductListByAdverseResponse> productList = productService.getAllProductByAdverseId(adverse_id);
-//        return new ResponseEntity<>(productList, HttpStatus.OK);
-//    }
-
-//    @Operation(summary = "상품 목록 조회", description = "상품 목록 조회")
-//    @GetMapping("/product/info/{id}")
-//    public ResponseEntity<Optional<GetProductListByAdverseResponse>> getProductInfo(@PathVariable Long id) {
-//        Optional<GetProductListByAdverseResponse> productList = productService.getAllProductByAdverseId(id);
-//        return new ResponseEntity<>(productList, HttpStatus.OK);
-//    }
-
+    /**
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("/info/{id}")
     @Operation(summary = "상품 정보 요청", description = "상품 정보 요청")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetProductInfoResponse.class)))
@@ -59,6 +50,11 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     *
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/regist", consumes = "multipart/form-data", produces = "application/json")
     @Operation(summary = "상품 등록", description = "상품 등록")
     @ApiResponses(value = {
@@ -81,6 +77,12 @@ public class ProductController {
 
 
     // 상품 삭제
+
+    /**
+     *
+     * @param command
+     * @return
+     */
     @DeleteMapping("/delete")
     @Operation(summary = "상품 삭제", description = "상품 삭제")
     @ApiResponses(value = {
@@ -88,7 +90,7 @@ public class ProductController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    public ResponseEntity<?> deleteProduct(DeleteProductCommand command) {
+    public ResponseEntity<?> deleteProduct(@RequestBody DeleteProductCommand command) {
         productService.deleteProduct(command);
         return ResponseEntity.ok().build();
     }
@@ -103,8 +105,11 @@ public class ProductController {
 //    }
 
     // 상품 수정
+
     /**
-     * 현재 @RequestBody 지만 이미지 삽입을 위해 modelAttribute 로 수정할 것
+     *
+     * @param request
+     * @return
      */
     @PutMapping("/update")
     @Operation(summary = "상품 정보 변경", description = "상품 정보 변경")
@@ -127,15 +132,18 @@ public class ProductController {
     @GetMapping("/list/{adverseId}")
     @Operation(summary = "특정 광고에 속한 상품 리스트 조회", description = "특정 광고에 속한 상품들의 리스트를 조회합니다.")
     public ResponseEntity<?> getProductListByAdverseId(@PathVariable Long adverseId) {
-        List<Product> list = productService.getProductListByAdverseId(adverseId);
-
-        // GetProductListByAdverseResponse.from 메서드를 호출하여 Product 리스트를 GetProductListByAdverseResponse로 변환
-        GetProductListByAdverseResponse response = GetProductListByAdverseResponse.from(list);
+        GetProductListByAdverseResponse response = productService.getProductListByAdverseId(adverseId);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
         return ResponseEntity.ok(response);
     }
 
+    /**
+     *
+     * @param productId
+     * @param file
+     * @return
+     */
     @PostMapping(value = "/{productId}/image", consumes = "multipart/form-data", produces = "application/json")
     @Operation(summary = "사진만 등록(수정 시)", description = "사진만 등록(수정시)")
     public ResponseEntity<?> addImage(@PathVariable Long productId, @RequestParam("image") MultipartFile file) {
@@ -143,6 +151,12 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     *
+     * @param productId
+     * @param imageId
+     * @return
+     */
     @DeleteMapping("/{productId}/{imageId}")
     @Operation(summary = "사진만 삭제(수정시)", description = "사진만 삭제(수정시)")
     public ResponseEntity<?> deleteImage(@PathVariable Long productId, @PathVariable Long imageId) {

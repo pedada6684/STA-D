@@ -4,15 +4,11 @@ import com.klpc.stadspring.domain.product.controller.response.GetProductListByAd
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.service.command.AddProductCommand;
 import com.klpc.stadspring.domain.product.service.command.DeleteProductCommand;
-import com.klpc.stadspring.domain.product.service.command.GetProductListByAdverseCommand;
 import com.klpc.stadspring.domain.product.service.command.UpdateProductInfoCommand;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface ProductService {
     // 광고에 포함된 상품 리스트
-    List<Product> getProductListByAdverseId(Long adverseId);
+    GetProductListByAdverseResponse getProductListByAdverseId(Long adverseId);
 
     // 상품 상세 페이지
     Product getProductInfo(Long id);
