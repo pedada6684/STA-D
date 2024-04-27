@@ -1,6 +1,7 @@
 package com.klpc.stadspring.domain.productType.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.klpc.stadspring.domain.cart.entity.CartProduct;
 import com.klpc.stadspring.domain.option.entity.ProductOption;
 import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
@@ -21,7 +22,7 @@ public class ProductType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "option_id")
+    @Column(name = "product_type_id")
     private Long id;
 
     @JsonIgnore
@@ -33,6 +34,7 @@ public class ProductType {
     private List<ProductOption> productOptions;
 
     @OneToMany(mappedBy = "productType", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    @JsonIgnore
     private List<CartProduct> cartProduct;
 
     @OneToMany(mappedBy = "productType")
