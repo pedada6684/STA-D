@@ -1,5 +1,8 @@
 package com.klpc.stadspring.domain.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.klpc.stadspring.domain.cart.entity.CartProduct;
+import com.klpc.stadspring.domain.productType.entity.ProductType;
 import com.klpc.stadspring.domain.user.service.command.UpdateUserInfoCommand;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -7,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,6 +39,9 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_youtube_info_id")
     private UserYoutubeInfo youtubeInfo = null;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    private List<CartProduct> cartProduct;
 
     public static User createNewUser(
             String email,

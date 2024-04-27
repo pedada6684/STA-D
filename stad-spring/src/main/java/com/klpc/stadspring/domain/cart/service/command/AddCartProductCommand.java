@@ -9,7 +9,6 @@ import lombok.*;
 @Builder
 public class AddCartProductCommand {
     private Long userId;
-    private Long cartId;
     private Long productTypeId;
     private Long quantity;
     private Long advertId;

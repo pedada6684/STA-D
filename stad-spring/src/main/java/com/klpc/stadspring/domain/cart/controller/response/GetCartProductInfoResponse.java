@@ -12,7 +12,6 @@ import lombok.Setter;
 @Builder
 public class GetCartProductInfoResponse {
     Long cartProductId;
-    Long cartId;
     Long productTypeId;
     Long quantity;
     Long adverseId;
@@ -21,7 +20,6 @@ public class GetCartProductInfoResponse {
     public static GetCartProductInfoResponse from(CartProduct cartProduct){
         return GetCartProductInfoResponse.builder().
                 cartProductId(cartProduct.getId()).
-                cartId(cartProduct.getCart().getId()).
                 productTypeId(cartProduct.getProductType().getId()).
                 quantity(cartProduct.getQuantity()).
                 adverseId(cartProduct.getAdvertId()).
