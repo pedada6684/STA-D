@@ -53,33 +53,28 @@ class _QuantityChangerState extends State<QuantityChanger> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+          padding: const EdgeInsets.all(4.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: midGray),
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _buildCounterButton(Icons.remove, decrement),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        '$quantity',
-                        style: TextStyle(fontSize: 14.0),
-                      ),
-                    ),
-                    _buildCounterButton(Icons.add, increment),
-                  ],
+              _buildCounterButton(Icons.remove, decrement),
+              SizedBox(
+                width: 40,
+                child: TextField(
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  controller: TextEditingController(text: quantity.toString()),
+                  onSubmitted: (newValue) {
+                    int newQuantity = int.tryParse(newValue) ?? 1;
+                    setState(() {
+                      quantity = newQuantity.clamp(1, 99); // 1과 99 사이의 값을 유지합니다.
+                    });
+                  },
                 ),
               ),
-              Text('53,400원',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              _buildCounterButton(Icons.add, increment),
             ],
           ),
         ),
