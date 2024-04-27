@@ -4,11 +4,10 @@ import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.image.product_image.entity.ProductImage;
 import com.klpc.stadspring.domain.image.product_image.repository.ProductImageRepository;
+import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdverseResponse;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
-import com.klpc.stadspring.domain.product.service.command.AddProductCommand;
-import com.klpc.stadspring.domain.product.service.command.DeleteProductCommand;
-import com.klpc.stadspring.domain.product.service.command.UpdateProductInfoCommand;
+import com.klpc.stadspring.domain.product.service.command.*;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.klpc.stadspring.util.S3Util;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -39,11 +39,32 @@ public class ProductServiceImpl implements ProductService{
 //    }
 
     @Override
-    public List<Product> getProductListByAdverseId(Long adverseId) {
+    public GetProductListByAdverseResponse getProductListByAdverseId(Long advertId) {
 
-        List<Product> productList = productRepository.getProductListByAdverseId(adverseId)
+        List<Product> productList = productRepository.getProductListByAdverseId(advertId)
             .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        return productList;
+
+        List<GetProductInfoCommand> responseList = new ArrayList<>();
+
+        for(Product product : productList){
+
+            List<String> productImageList = new ArrayList<>();
+            for(ProductImage i : product.getImages())
+                productImageList.add(i.getImg());
+
+            GetProductInfoCommand response = GetProductInfoCommand.builder()
+                    .id(product.getId())
+                    .images(productImageList)
+                    .thumbnail(product.getThumbnail())
+                    .cityDeliveryFee(product.getCityDeliveryFee())
+                    .mtDeliveryFee(product.getMtDeliveryFee())
+                    .expStart(product.getExpStart().toString())
+                    .expEnd(product.getExpEnd().toString())
+                    .build();
+
+            responseList.add(response);
+        }
+        return GetProductListByAdverseResponse.builder().productList(responseList).build();
     }
 
     // 상품 상세 정보

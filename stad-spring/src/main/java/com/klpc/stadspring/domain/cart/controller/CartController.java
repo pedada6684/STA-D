@@ -66,12 +66,10 @@ public class CartController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/list/{cartId}")
+    @GetMapping("/list/{userId}")
     @Operation(summary = "장바구니 상품 리스트 조회", description = "장바구니 상품 리스트 조회")
-    public ResponseEntity<?> getCartProductListByCartId(@PathVariable Long cartId) {
-        List<CartProduct> list = cartService.getCartProductListByCartId(cartId);
-
-        GetCartProductListResponse response = GetCartProductListResponse.from(list);
+    public ResponseEntity<?> getCartProductListByCartId(@PathVariable Long userId) {
+        GetCartProductListResponse response = cartService.getCartProductListByUserId(userId);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
         return ResponseEntity.ok(response);

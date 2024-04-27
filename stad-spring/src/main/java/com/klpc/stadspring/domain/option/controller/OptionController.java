@@ -30,9 +30,7 @@ public class OptionController {
     @GetMapping("/list/{productTypeId}")
     @Operation(summary = "특정 상품의 옵션 리스트 조회", description = "특정 광고에 속한 상품들의 리스트를 조회합니다.")
     public ResponseEntity<?> getOptionList(@PathVariable Long productTypeId) {
-        List<ProductOption> list = optionService.getOptionList(productTypeId);
-
-        GetOptionListByProductIdResponse response = GetOptionListByProductIdResponse.from(list);
+        GetOptionListByProductIdResponse response = optionService.getOptionList(productTypeId);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
         return ResponseEntity.ok(response);
