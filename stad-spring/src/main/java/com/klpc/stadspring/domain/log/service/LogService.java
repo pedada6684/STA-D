@@ -64,8 +64,10 @@ public class LogService {
         log.info("AddOrderLogCommand: " + command);
 
         OrderLog newOrderLog = OrderLog.createNewOrderLog(
+                command.getAdvertId(),
                 command.getAdvertVideoId(),
                 command.getUserId(),
+                command.getOrderId(),
                 command.getContentId(),
                 command.getProductId(),
                 command.getStatus(),
