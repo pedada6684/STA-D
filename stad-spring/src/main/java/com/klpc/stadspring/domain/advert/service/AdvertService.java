@@ -6,10 +6,14 @@ import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertRequestCommand;
 import com.klpc.stadspring.domain.advert.service.command.request.ModifyAdvertRequestCommand;
 import com.klpc.stadspring.domain.advert.service.command.response.GetAdvertListByClickResponseCommand;
+import com.klpc.stadspring.domain.advert.service.command.response.GetAdvertListByContentResponseCommand;
 import com.klpc.stadspring.domain.advert.service.command.response.GetAdvertResponseCommand;
 import com.klpc.stadspring.domain.advertVideo.entity.AdvertVideo;
 import com.klpc.stadspring.domain.advertVideo.repository.AdvertVideoRepository;
 import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
+import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
+import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
+import com.klpc.stadspring.domain.contents.concept.repository.impl.ContentConceptRepositoryImpl;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
 import com.klpc.stadspring.domain.selectedContent.entity.SelectedContent;
 import com.klpc.stadspring.domain.selectedContent.repository.SelectedContentRepository;
@@ -18,6 +22,7 @@ import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -36,6 +42,7 @@ public class AdvertService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final SelectedContentRepository selectedContentRepository;
+    private final ContentConceptRepository contentConceptRepository;
 
     /**
      * 광고 추가
@@ -246,6 +253,50 @@ public class AdvertService {
         }
 
         return GetAdvertListByClickResponse.builder().data(responseList).build();
+    }
+
+    /**
+     * 컨텐츠 관련 광고 목록 조회
+     * @param contentId
+     * @return
+     */
+    public GetAdvertListByContentResponse getAdvertListByContent(Long contentId){
+        log.info("컨텐츠 관련 광과 목록 조회 Service"+'\n'+"contentId : "+contentId);
+        ContentConcept contentConcept = contentConceptRepository.findById(contentId).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        List<Advert> advertList = advertRepository.findAllByContentId(contentId);
+        List<GetAdvertListByContentResponseCommand> list = new ArrayList<>();
+        List<Long> selectedContentList = new ArrayList<>();
+        List<String> advertVideoUrlList = new ArrayList<>();
+        for(Advert advert : advertList){
+            selectedContentList.clear();
+            advertVideoUrlList.clear();
+
+            for(SelectedContent sc : advert.getSelectedContents()){
+                selectedContentList.add(sc.getFixedContentId());
+            }
+            for(AdvertVideo av : advert.getAdvertVideos()){
+                advertVideoUrlList.add(av.getVideoUrl());
+            }
+
+            GetAdvertListByContentResponseCommand command = GetAdvertListByContentResponseCommand.builder()
+                    .advertId(advert.getId())
+                    .title(advert.getTitle())
+                    .description(advert.getDescription())
+                    .startDate(advert.getStartDate().toLocalDate().toString())
+                    .endDate(advert.getEndDate().toLocalDate().toString())
+                    .type(advert.getAdvertType().name())
+                    .directVideoUrl(advert.getDirectVideoUrl())
+                    .bannerImgUrl(advert.getBannerImgUrl())
+                    .selectedContentList(selectedContentList)
+                    .advertVideoUrlList(advertVideoUrlList)
+                    .category(advert.getCategory())
+                    .build();
+
+            list.add(command);
+        }
+
+        return GetAdvertListByContentResponse.builder().data(list).build();
     }
 
 }
