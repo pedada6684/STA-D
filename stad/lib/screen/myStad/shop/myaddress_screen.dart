@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
-import 'package:stad/models/delivery_address.dart';
+import 'package:stad/models/delivery_address_model.dart';
 import 'package:stad/widget/address_screen.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
