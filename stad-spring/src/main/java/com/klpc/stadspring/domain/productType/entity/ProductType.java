@@ -62,4 +62,8 @@ public class ProductType {
         productType.quantity = quantity;
         return productType;
     }
+
+    public void modifyQuantity(Long cnt){
+        this.quantity += cnt;
+    }
 }
