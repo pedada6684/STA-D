@@ -42,7 +42,10 @@ public enum ErrorCode {
     AWSS3_ERROR(HttpStatus.BAD_GATEWAY, "AWS S3 호출 중 오류가 발생했습니다."),
 
     /* 내림차순 정렬 출력 오류 */
-    ORDERBYDESC_ERROR(HttpStatus.NOT_FOUND, "DB 내림차순 정렬 출력이 실패하였습니다.");
+    ORDERBYDESC_ERROR(HttpStatus.NOT_FOUND, "DB 내림차순 정렬 출력이 실패하였습니다."),
+
+    /* 재고 수량 오류 */
+    QUANTITY_ERROR(HttpStatus.BAD_REQUEST, "재고 수량 보다 주문 수량이 많습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
