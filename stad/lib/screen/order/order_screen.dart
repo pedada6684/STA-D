@@ -66,7 +66,7 @@ class _OrderScreenState extends State<OrderScreen> {
               padding:
                   const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
               color: mainWhite, // 배경색 설정
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
