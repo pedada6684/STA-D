@@ -7,6 +7,14 @@ services:
       - "18080:8080"
     networks:
       - ubuntu_my-network
+    restart: unless-stopped 
+
+  stad-react:
+    image: stad-react-image
+    container_name: stad-react
+    ports:
+      - "3000:3000"
+    restart: unless-stopped 
 
 networks:
   ubuntu_my-network:
