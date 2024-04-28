@@ -20,6 +20,7 @@ class _MyCommercialScreenState extends State<MyCommercialScreen> {
       appBar: CustomAppBar(
         title: '내가 본 광고',
         showBackButton: true,
+        showHomeButton: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
