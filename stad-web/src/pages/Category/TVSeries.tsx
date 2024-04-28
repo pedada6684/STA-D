@@ -4,11 +4,9 @@ import {
   documentaryThumbnail,
   dramaThumbnail,
   foreignThumbnail,
-  smallThumbnail,
   varietyThumbnail,
-} from "../../components/Carousel/SeriesDummy";
+} from "./SeriesDummy";
 import CategoryCarousel from "../../components/Carousel/CategoryCarousel";
-import RecentWatching from "../../components/Carousel/RecentWatching";
 import BillboardContainer from "../../components/Container/BillboardContainer";
 import Content from "../../components/Container/Content";
 import HorizonVignette from "../../components/Container/HorizonVignette";
@@ -17,9 +15,19 @@ import InfoContainer from "../../components/Container/InfoContainer";
 import TVContainer from "../../components/Container/TVContainer";
 import VignetteWrapper from "../../components/Container/VignetteWrapper";
 import TVNav from "../../components/Nav/TVNav";
-import TVCategorySelect from "../../components/Select/TVCategorySelect";
+import TVCategorySelect, {
+  OptionType,
+} from "../../components/Select/TVCategorySelect";
 import styles from "./TVCategory.module.css";
+import { useNavigate } from "react-router-dom";
+import { SingleValue } from "react-select";
 export default function TVSeries() {
+  const navigate = useNavigate();
+  const handleCategoryChange = (selectedOption: SingleValue<OptionType>) => {
+    if (selectedOption) {
+      navigate(`/tv-series/${selectedOption.value}`);
+    }
+  };
   return (
     <div>
       <TVContainer>
@@ -28,7 +36,7 @@ export default function TVSeries() {
           <div className={`${styles.top}`}>
             <div className={`${styles.title}`}>방송</div>
             <div className={`${styles.category}`}>
-              <TVCategorySelect />
+              <TVCategorySelect onChange={handleCategoryChange} />
             </div>
           </div>
           <BillboardContainer>
