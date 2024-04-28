@@ -16,7 +16,7 @@ public interface AdvertRepository extends JpaRepository<Advert,Long> {
 
     @Query("""
            SELECT ad FROM Advert ad
-           WHERE :contetnId in (SELECT ads.fixedContentId FROM ad.selectedContents ads)
+           WHERE :contentId in (SELECT ads.fixedContentId FROM ad.selectedContents ads)
            """)
     public List<Advert> findAllByContentId(Long contentId);
 }
