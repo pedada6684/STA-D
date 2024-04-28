@@ -1,32 +1,23 @@
 package com.klpc.stadspring.domain.log.entity;
 
 import jakarta.persistence.*;
-<<<<<<< HEAD
 import lombok.*;
-=======
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
->>>>>>> 390e18d (feat: Log 집계 테이블 entity 추가)
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
-<<<<<<< HEAD
 @Setter
-=======
->>>>>>> 390e18d (feat: Log 집계 테이블 entity 추가)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AdvertStatistics {
     @Id
     @Column(name = "advert_statistics_id")
-<<<<<<< HEAD
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-=======
->>>>>>> 390e18d (feat: Log 집계 테이블 entity 추가)
     private Long id;
 
     @Column(name = "advert_id")
