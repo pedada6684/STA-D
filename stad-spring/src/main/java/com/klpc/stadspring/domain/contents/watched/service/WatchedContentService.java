@@ -1,7 +1,5 @@
 package com.klpc.stadspring.domain.contents.watched.service;
 
-import com.klpc.stadspring.domain.contents.concept.controller.request.AddConceptRequest;
-import com.klpc.stadspring.domain.contents.concept.controller.response.AddConceptResponse;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailRepository;
 import com.klpc.stadspring.domain.contents.watched.controller.response.AddWatchingContentResponse;
@@ -14,17 +12,10 @@ import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.util.List;

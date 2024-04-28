@@ -1,8 +1,5 @@
 package com.klpc.stadspring.domain.contents.detail.service;
 
-import com.klpc.stadspring.domain.contents.category.entity.ContentCategory;
-import com.klpc.stadspring.domain.contents.category.repository.ContentCategoryRepository;
-import com.klpc.stadspring.domain.contents.detail.controller.response.AddDetailResponse;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailRepository;
 import com.klpc.stadspring.domain.contents.detail.service.command.request.AddDetailRequestCommand;
@@ -103,7 +100,7 @@ public class ContentDetailService {
         return list;
     }
 
-    public AddDetailResponse addDetail(AddDetailRequestCommand command) {
+    public void addDetail(AddDetailRequestCommand command) {
         log.info("AddDetailRequestCommand : " + command);
 
         ContentDetail newContentDetail = ContentDetail.createContentDetail(
@@ -112,7 +109,5 @@ public class ContentDetailService {
                 command.getVideoUrl(),
                 command.getSummary());
         repository.save(newContentDetail);
-
-        return AddDetailResponse.builder().result("콘텐츠 디테일이 성공적으로 등록되었습니다.").build();
     }
 }
