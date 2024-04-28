@@ -43,8 +43,7 @@ public class AdvertStatistics {
         Long advertVideoCount,
         Long advertClickCount,
         Long orderCount,
-        Long revenue,
-        LocalDate date
+        Long revenue
     ){
         AdvertStatistics advertStatistics = new AdvertStatistics();
         advertStatistics.advertId = advertId;
@@ -52,7 +51,7 @@ public class AdvertStatistics {
         advertStatistics.advertClickCount = advertClickCount;
         advertStatistics.orderCount = orderCount;
         advertStatistics.revenue = revenue;
-        advertStatistics.date = date;
+        advertStatistics.date = LocalDate.now();
         return advertStatistics;
     }
 }
