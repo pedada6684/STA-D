@@ -1,4 +1,10 @@
+import { HorizonVignetteProps } from "./HorizonVignette";
 import styles from "./TVContainer.module.css";
-export default function VignetteWrapper(props: any) {
-  return <div className={`${styles.vignetteWrapper}`}></div>;
+interface VignetteWrapperProps {
+  className?: string;
+}
+export default function VignetteWrapper({
+  className = "",
+}: VignetteWrapperProps) {
+  return <div className={`${styles.vignetteWrapper} ${className}`}></div>;
 }

@@ -15,10 +15,16 @@ import { actionDummy, comedyDummy } from "./MovieDummy";
 interface TVDetailProps {
   type: "series" | "movie";
 }
-interface Video {
-  id?: number;
-  url: string;
+export interface Video {
+  id: number;
+  thumbnailUrl: string;
   title: string;
+  playtime?: string;
+  releaseYear?: string;
+  audienceAge?: string;
+  creator?: string;
+  cast?: string;
+  description?: string;
 }
 
 export default function TVSeriesDetail({ type }: TVDetailProps) {
