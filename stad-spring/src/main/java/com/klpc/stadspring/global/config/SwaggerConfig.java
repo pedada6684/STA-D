@@ -29,7 +29,8 @@ public class SwaggerConfig {
         List<Server> servers = new ArrayList<>();
         Server sslServer = new Server();
         Server server = new Server();
-        server.setUrl("http://localhost:8080/api");
+//        server.setUrl("http://localhost:8080/api");
+        server.setUrl("https://www.mystad.com/api");
     //    sslServer.setUrl("https://stad.live/api");
         servers.add(server);
     //    servers.add(sslServer);
