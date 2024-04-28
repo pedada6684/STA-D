@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-import Thumbnail from "./ThumbnailDummy";
+import Thumbnail from "../../pages/Main/ThumbnailDummy";
 import Content from "../Container/Content";
 import "./MainCarousel.css";
 import { MainNextArrow, MainPrevArrow } from "../Arrow/Arrow";

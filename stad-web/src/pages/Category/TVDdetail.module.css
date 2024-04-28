@@ -1,0 +1,19 @@
+.top {
+  display: flex;
+  align-items: center;
+}
+.title {
+  font-size: 1.4rem;
+  color: grey;
+  margin-right: 2rem;
+}
+.genre {
+  font-size: 3rem;
+  color: white;
+}
+.fade-enter {
+  opacity: 0;
+}
+.fadeIn {
+  opacity: 1; /* 페이드 인이 완료된 상태 */
+}
