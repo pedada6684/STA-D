@@ -1,7 +1,13 @@
-import Select from "react-select";
-
-export default function TVCategorySelect() {
-  const options = [
+import Select, { SingleValue } from "react-select";
+export interface OptionType {
+  value: string;
+  label: string;
+}
+export interface TVCategorySelectProps {
+  onChange: (option: SingleValue<OptionType>) => void;
+}
+export default function TVCategorySelect({ onChange }: TVCategorySelectProps) {
+  const options: OptionType[] = [
     { value: "드라마", label: "드라마" },
     { value: "예능", label: "예능" },
     { value: "교양/다큐멘터리", label: "교양/다큐멘터리" },
@@ -35,5 +41,12 @@ export default function TVCategorySelect() {
     }),
   };
 
-  return <Select options={options} placeholder="장르" styles={customStyles} />;
+  return (
+    <Select
+      options={options}
+      placeholder="장르"
+      styles={customStyles}
+      onChange={onChange}
+    />
+  );
 }
