@@ -61,23 +61,18 @@ class _MyAddressScreenState extends State<MyAddressScreen>
       body: deliveryAddresses.isNotEmpty
           ? _buildAddressList()
           : _buildEmptyAddress(),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: CustomElevatedButton(
-            text: '배송지 추가하기',
-            textColor: mainWhite,
-            backgroundColor: mainNavy,
-            onPressed: () {
-              showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  useSafeArea: true,
-                  transitionAnimationController: _controller,
-                  builder: (_) => const AddressScreen());
-            },
-          ),
-        ),
+      bottomNavigationBar: CustomElevatedButton(
+        text: '배송지 추가하기',
+        textColor: mainWhite,
+        backgroundColor: mainNavy,
+        onPressed: () {
+          showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              useSafeArea: true,
+              transitionAnimationController: _controller,
+              builder: (_) => const AddressScreen());
+        },
       ),
     );
   }
