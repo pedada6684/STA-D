@@ -35,7 +35,7 @@ export default function RecentWatching() {
               key={index}
               style={{ position: "relative", transition: "all 0.3s" }}
             >
-              <img src={data.url} alt="비디오 썸네일" />
+              <img src={data.thumbnailUrl} alt="비디오 썸네일" />
               <div className="vidTitle">{data.title}</div>
             </div>
           ))}
