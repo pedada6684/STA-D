@@ -5,13 +5,13 @@ import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailReposi
 import com.klpc.stadspring.domain.contents.detail.service.command.request.AddDetailRequestCommand;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 @Log4j2
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ContentDetailService {
 
@@ -78,10 +78,10 @@ public class ContentDetailService {
     }
 
     // conceptId로 id 조회
-    public ContentDetail getContentDetailByConceptId(Long conceptId) {
-        ContentDetail detail = repository.findContentDetailByConceptId(conceptId)
+    public List<ContentDetail> getContentDetailsByConceptId(Long conceptId) {
+        List<ContentDetail> detailList = repository.findContentDetailByConceptId(conceptId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        return detail;
+        return detailList;
     }
 
     // 인기 영상 목록
@@ -100,6 +100,7 @@ public class ContentDetailService {
         return list;
     }
 
+    @Transactional(readOnly = false)
     public void addDetail(AddDetailRequestCommand command) {
         log.info("AddDetailRequestCommand : " + command);
 

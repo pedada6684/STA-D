@@ -12,17 +12,17 @@ import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class WatchedContentService {
     private final WatchedContentRepository watchedContentRepository;
@@ -47,6 +47,7 @@ public class WatchedContentService {
         return detailIdList;
     }
 
+    @Transactional(readOnly = false)
     public AddWatchingContentResponse addWatchingContent(AddWatchingContentCommand command) {
         log.info("AddWatchingContentCommand : " + command);
 
@@ -66,6 +67,7 @@ public class WatchedContentService {
         return AddWatchingContentResponse.builder().result("시청 중인 컨텐츠가 성공적으로 생성되었습니다.").build();
     }
 
+    @Transactional(readOnly = false)
     public ModifyWatchingContentResponse modifyWatchingContent(ModifyWatchingContentCommand command) {
         log.info("ModifyWatchingContentCommand : " + command);
 

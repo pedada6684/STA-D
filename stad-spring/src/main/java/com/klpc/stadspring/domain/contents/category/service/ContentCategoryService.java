@@ -5,10 +5,10 @@ import com.klpc.stadspring.domain.contents.category.repository.ContentCategoryRe
 import com.klpc.stadspring.domain.contents.category.service.command.request.AddCategoryRequestCommand;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import static com.klpc.stadspring.domain.contents.category.entity.QContentCatego
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ContentCategoryService {
     private final ContentCategoryRepository repository;
@@ -79,6 +79,7 @@ public class ContentCategoryService {
     /**
      * 콘텐츠 카테고리 등록
      */
+    @Transactional(readOnly = false)
     public void addCategory(AddCategoryRequestCommand command) {
         log.info("AddCategoryRequestCommand : " + command);
 
