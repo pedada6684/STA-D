@@ -1,6 +1,5 @@
 package com.klpc.stadspring.domain.contents.concept.service;
 
-import com.klpc.stadspring.domain.contents.concept.controller.response.AddConceptResponse;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
 import com.klpc.stadspring.domain.contents.concept.service.command.request.AddConceptRequestCommand;
@@ -35,7 +34,7 @@ public class ContentConceptService {
     }
 
     // contentConcept 등록
-    public AddConceptResponse addConcept(AddConceptRequestCommand command) {
+    public void addConcept(AddConceptRequestCommand command) {
         log.info("AddConceptRequestCommand : " + command);
 
         ContentConcept newContentConcept = ContentConcept.createContentConcept(
@@ -49,7 +48,5 @@ public class ContentConceptService {
                 command.getThumbnail(),
                 command.getTitle());
         repository.save(newContentConcept);
-
-        return AddConceptResponse.builder().result("콘텐츠 콘셉트가 성공적으로 등록되었습니다.").build();
     }
 }
