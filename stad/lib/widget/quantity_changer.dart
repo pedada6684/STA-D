@@ -2,18 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
 
 class QuantityChanger extends StatefulWidget {
-  const QuantityChanger({super.key});
+  final int initialQuantity;
+  final Function(int) onQuantityChanged;
+
+  const QuantityChanger({
+    super.key,
+    required this.initialQuantity,
+    required this.onQuantityChanged,
+  });
 
   @override
   _QuantityChangerState createState() => _QuantityChangerState();
 }
 
 class _QuantityChangerState extends State<QuantityChanger> {
-  int quantity = 1;
+  late int quantity;
+
+  @override
+  void initState() {
+    super.initState();
+    quantity = widget.initialQuantity;
+  }
 
   void increment() {
     setState(() {
       quantity++;
+      widget.onQuantityChanged(quantity);
     });
   }
 
@@ -21,63 +35,37 @@ class _QuantityChangerState extends State<QuantityChanger> {
     if (quantity == 1) return;
     setState(() {
       quantity--;
+      widget.onQuantityChanged(quantity);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '민형이가 좋아하는 딸기',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              IconButton(
-                iconSize: 30.0,
-                onPressed: () {},
-                icon: Icon(
-                  Icons.cancel_rounded,
-                  color: mainGray,
-                ),
-              ),
-            ],
+        _buildCounterButton(Icons.remove, decrement),
+        Container(
+          width: 40,
+          height: 40,
+          alignment: Alignment.center,
+          child: TextField(
+            textAlign: TextAlign.center,
+            textAlignVertical: TextAlignVertical.center,
+            style: TextStyle(
+              fontSize: 16.0, // 글자 크기를 조절합니다.
+              height: 1.0, // 텍스트의 높이를 조정하여 세로 중앙 정렬이 되도록 합니다.
+            ),
+            controller: TextEditingController(text: quantity.toString()),
+            keyboardType: TextInputType.number,
+            onSubmitted: (newValue) {
+              int newQuantity = int.tryParse(newValue) ?? 1;
+              setState(() {
+                quantity = newQuantity.clamp(1, 99);
+              });
+            },
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _buildCounterButton(Icons.remove, decrement),
-              SizedBox(
-                width: 40,
-                child: TextField(
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                  controller: TextEditingController(text: quantity.toString()),
-                  onSubmitted: (newValue) {
-                    int newQuantity = int.tryParse(newValue) ?? 1;
-                    setState(() {
-                      quantity = newQuantity.clamp(1, 99); // 1과 99 사이의 값을 유지합니다.
-                    });
-                  },
-                ),
-              ),
-              _buildCounterButton(Icons.add, increment),
-            ],
-          ),
-        ),
+        _buildCounterButton(Icons.add, increment),
       ],
     );
   }
@@ -86,11 +74,12 @@ class _QuantityChangerState extends State<QuantityChanger> {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        color: Colors.transparent, // 버튼 배경 색상을 지정할 수 있습니다.
+        color: Colors.transparent,
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Icon(
           icon,
           color: darkGray,
+          size: 18.0,
         ),
       ),
     );

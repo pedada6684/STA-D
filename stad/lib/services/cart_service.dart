@@ -1,39 +1,51 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:stad/models/cart_model.dart';
 
 class CartService {
-  final EmUrl = Uri.parse('http://192.168.0.9:8080/api/cart/list');
-
-  //장바구니 목록 받아오기
-  // Future<List<dynamic>> fetchCartItems(String cartId) async {
-  //   var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/cart/list/$cartId'));
-  //
-  //   if (response.statusCode == 200) {
-  //     var decodedData = json.decode(response.body);
-  //
-  //     if (decodedData is Map<String, dynamic> && decodedData.containsKey('items')) {
-  //       return List<dynamic>.from(decodedData['items']);
-  //     } else {
-  //       throw Exception('Invalid data format: Expected a list of items');
-  //     }
-  //   } else {
-  //     throw Exception('Failed to load cart');
-  //   }
-  // }
-
-  Future<List<dynamic>> fetchCartItems(String cartId) async {
-    // 실제 서버 요청 대신 더미 데이터 반환
-    return Future.delayed(
-        const Duration(milliseconds: 500), () => _dummyCartData());
+  // 더미 데이터를 반환하는 메서드
+  List<CartItem> getDummyCartData() {
+    List<dynamic> dummyData = _dummyCartData();
+    print('더미덤디ㅓ미더미더미더미ㅓ디');
+    print(dummyData);
+    return dummyData.map((data) {
+      return CartItem.fromJson(data);
+    }).toList();
+    
   }
 
-  // CartService 클래스 안에 추가
+  // 서버에서 장바구니 목록을 조회하는 메서드
+  Future<List<CartItem>> fetchCartItems() async {
+    print('fetchCartItems');
+    print('fetchCartItems');
+    print('fetchCartItems');
+    print('fetchCartItems');
+    return getDummyCartData();
+
+    //TODO: 서버에서 데이터 불러오는 코드 필요
+  }
+
+  // 특정 장바구니 항목을 삭제하는 메서드
+  Future<void> deleteCartItem(String id) async {
+    // TODO: http.delete(Uri.parse('https://example.com/api/cart/delete/$id'));
+
+    print('Delete item with id: $id');
+    // 실제로는 서버에 DELETE 요청을 보내야 합니다.
+  }
+
+  // 장바구니에 항목을 추가하는 메서드
+  Future<void> addCartItem(CartItem item) async {
+    // TODO: http.post(Uri.parse('https://example.com/api/cart/add'), body: item.toJson());
+  }
+
+  // TODO: 장바구니 항목 수량을 업데이트
+  Future<void> updateCartItemQuantity(String id, int quantity) async {}
+
+  // 더미 데이터
   List<dynamic> _dummyCartData() {
     return [
       {
         "product": {
           "id": 1,
-          'name':"민형이가 좋아하는 딸기",
+          "name": "민형이가 좋아하는 딸기",
           "thumbnail": "assets/image/product.png",
           "sellStart": "2024-01-01",
           "sellEnd": "2024-12-31",
@@ -50,7 +62,7 @@ class CartService {
       {
         "product": {
           "id": 2,
-          'name':"준호가 좋아하는 애플망고",
+          "name": "준호가 좋아하는 애플망고",
           "thumbnail": "assets/image/product2.png",
           "sellStart": "2024-01-01",
           "sellEnd": "2024-12-31",
@@ -64,7 +76,6 @@ class CartService {
         "adverseId": 123,
         "contentId": 456
       },
-      // 추가적인 더미 데이터 아이템...
     ];
   }
 }
