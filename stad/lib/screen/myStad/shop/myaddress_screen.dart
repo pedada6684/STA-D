@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
-import 'package:stad/models/delivery_address.dart';
+import 'package:stad/models/delivery_address_model.dart';
 import 'package:stad/widget/address_screen.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
@@ -61,23 +61,18 @@ class _MyAddressScreenState extends State<MyAddressScreen>
       body: deliveryAddresses.isNotEmpty
           ? _buildAddressList()
           : _buildEmptyAddress(),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: CustomElevatedButton(
-            text: '배송지 추가하기',
-            textColor: mainWhite,
-            backgroundColor: mainNavy,
-            onPressed: () {
-              showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  useSafeArea: true,
-                  transitionAnimationController: _controller,
-                  builder: (_) => const AddressScreen());
-            },
-          ),
-        ),
+      bottomNavigationBar: CustomElevatedButton(
+        text: '배송지 추가하기',
+        textColor: mainWhite,
+        backgroundColor: mainNavy,
+        onPressed: () {
+          showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              useSafeArea: true,
+              transitionAnimationController: _controller,
+              builder: (_) => const AddressScreen());
+        },
       ),
     );
   }

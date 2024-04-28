@@ -105,7 +105,33 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
               onToggle: toggleOptionExpanded,
               onSelect: selectOption,
             ),
-            QuantityChanger(),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '민형이가 좋아하는 딸기',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    iconSize: 20.0,
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.cancel_rounded,
+                      color: mainGray,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            QuantityChanger(
+              initialQuantity: 1,
+              onQuantityChanged: (newQuantity) {},
+            ),
             _buildTotalPrice(),
             _buildActionButtons(context),
           ],
@@ -135,7 +161,7 @@ Widget _buildActionButtons(BuildContext context) {
               side: BorderSide(color: mainNavy, width: 1),
               surfaceTintColor: mainWhite,
               backgroundColor: mainWhite,
-              padding: EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: 14),
               // Button background color
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -161,7 +187,7 @@ Widget _buildActionButtons(BuildContext context) {
               ),
               surfaceTintColor: mainNavy,
               backgroundColor: mainNavy,
-              padding: EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: 14),
               // Button background color
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
