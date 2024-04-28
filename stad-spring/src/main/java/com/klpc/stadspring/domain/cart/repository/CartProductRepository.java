@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface CartProductRepository extends JpaRepository<CartProduct,Long> {
     @Query("""
-    select 
-        p 
-    from CartProduct p 
+    select
+        p
+    from CartProduct p
     join fetch p.productType
     where p.user.id = :userId""")
     Optional<List<CartProduct>> getCartProductByUserId(@Param("userId") Long userId);
