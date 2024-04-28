@@ -2,9 +2,20 @@ import { SmallNextArrow, SmallPrevArrow } from "../Arrow/Arrow";
 import { smallThumbnail } from "../../pages/Category/SeriesDummy";
 import "./CategoryCarousel.css";
 import Slider from "react-slick";
+import { useNavigate } from "react-router-dom";
 interface CategoryCarouselProps {
   title?: string;
-  items?: { url: string; title: string }[];
+  items?: {
+    id: number;
+    thumbnailUrl: string;
+    title: string;
+    playtime?: string;
+    releaseYear?: string;
+    audienceAge?: string;
+    creator?: string;
+    cast?: string;
+    description?: string;
+  }[];
   marginTop?: string;
   marginBottom?: string;
 }
@@ -36,6 +47,8 @@ export default function CategoryCarousel({
     prevArrow: <SmallPrevArrow />,
     nextArrow: <SmallNextArrow />,
   };
+  const navigate = useNavigate();
+
   return (
     <div
       className="main-container"
@@ -49,8 +62,9 @@ export default function CategoryCarousel({
               className="xs-vid-container"
               key={index}
               style={{ position: "relative", transition: "all 0.3s" }}
+              onClick={() => navigate(`/tv/${data.id}`)}
             >
-              <img src={data.url} alt="비디오 썸네일" />
+              <img src={data.thumbnailUrl} alt="비디오 썸네일" />
               <div className="vidTitle">{data.title}</div>
             </div>
           ))}
