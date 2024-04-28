@@ -1,0 +1,16 @@
+.gridContainer {
+  display: flex;
+  flex-flow: wrap;
+  margin-top: 2rem;
+}
+.thumbnail {
+  padding: 1rem;
+  border-radius: 10px;
+}
+.thumbnail img {
+  width: 17rem;
+  border-radius: 10px;
+}
+.title {
+  color: #dddddd;
+}
