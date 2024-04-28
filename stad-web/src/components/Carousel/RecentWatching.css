@@ -1,5 +1,6 @@
 .v-container {
-  margin: 2rem;
+  margin: 2rem 2rem 0 2rem;
+  padding-bottom: 2rem;
 }
 .v-title {
   font-size: 1.5rem;

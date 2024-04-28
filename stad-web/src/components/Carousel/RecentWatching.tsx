@@ -1,5 +1,5 @@
 import { SmallNextArrow, SmallPrevArrow } from "../Arrow/Arrow";
-import { smallThumbnail } from "./SeriesDummy";
+import { smallThumbnail } from "../../pages/Category/SeriesDummy";
 import "./RecentWatching.css";
 import Slider from "react-slick";
 export default function RecentWatching() {
