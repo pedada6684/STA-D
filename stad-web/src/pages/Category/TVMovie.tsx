@@ -1,7 +1,6 @@
 import InfoButton from "../../components/Button/InfoButton";
 import PlayButton from "../../components/Button/PlayButton";
 import CategoryCarousel from "../../components/Carousel/CategoryCarousel";
-import { dramaThumbnail } from "../../components/Carousel/SeriesDummy";
 import BillboardContainer from "../../components/Container/BillboardContainer";
 import Content from "../../components/Container/Content";
 import HorizonVignette from "../../components/Container/HorizonVignette";
@@ -10,9 +9,19 @@ import InfoContainer from "../../components/Container/InfoContainer";
 import TVContainer from "../../components/Container/TVContainer";
 import VignetteWrapper from "../../components/Container/VignetteWrapper";
 import TVNav from "../../components/Nav/TVNav";
-import TVCategorySelect from "../../components/Select/TVCategorySelect";
+import TVMovieCategorySelect from "../../components/Select/TVMovieCategorySelect";
 import styles from "./TVCategory.module.css";
+import { actionDummy, comedyDummy } from "./MovieDummy";
+import { OptionType } from "../../components/Select/TVCategorySelect";
+import { SingleValue } from "react-select";
+import { useNavigate } from "react-router-dom";
 export default function TVMovie() {
+  const navigate = useNavigate();
+  const handleCategoryChange = (selectedOption: SingleValue<OptionType>) => {
+    if (selectedOption) {
+      navigate(`/tv-movie/${selectedOption.value}`);
+    }
+  };
   return (
     <div>
       <TVContainer>
@@ -21,7 +30,7 @@ export default function TVMovie() {
           <div className={`${styles.top}`}>
             <div className={`${styles.title}`}>영화</div>
             <div className={`${styles.category}`}>
-              <TVCategorySelect />
+              <TVMovieCategorySelect onChange={handleCategoryChange} />
             </div>
           </div>
           <BillboardContainer>
@@ -44,11 +53,16 @@ export default function TVMovie() {
               </InfoContainer>
             </ImageWrapper>
             <CategoryCarousel
-              title="드라마"
-              items={dramaThumbnail}
+              title="액션"
+              items={actionDummy}
               marginTop="30rem"
             />
           </BillboardContainer>
+          <CategoryCarousel
+            title="코메디"
+            items={comedyDummy}
+            marginTop="3rem"
+          />
         </Content>
       </TVContainer>
     </div>
