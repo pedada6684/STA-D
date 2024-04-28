@@ -10,12 +10,14 @@ import 'package:stad/screen/home/home_screen.dart';
 import 'package:stad/screen/myStad/myStad_screen.dart';
 import 'package:stad/widget/bottom_bar.dart';
 
+import 'providers/cart_provider.dart';
+
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Flutter 엔진과 위젯 트리 바인딩
+  WidgetsFlutterBinding.ensureInitialized(); // Flutter 엔진, 위젯 트리 바인딩
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await dotenv.load(fileName: ".env"); // .env 파일 로드
+  await dotenv.load(fileName: ".env");
 
   runApp(const MyApp());
 }
@@ -47,6 +49,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => CartModel()),
       ],
       child: MaterialApp(
         title: 'STA:D',
@@ -65,9 +68,14 @@ class _MyAppState extends State<MyApp> {
             index: _selectedIndex,
             children: _widgetOptions,
           ),
-          bottomNavigationBar: CustomBottomNavigationBar(
-            selectedIndex: _selectedIndex,
-            onItemSelected: _onItemTapped,
+          bottomNavigationBar: Consumer<CartModel>( // Consumer 위젯 사용
+            builder: (context, cart, child) {
+              return CustomBottomNavigationBar(
+                selectedIndex: _selectedIndex,
+                onItemSelected: _onItemTapped,
+                cartItemCount: cart.itemCount, // CartModel로부터 장바구니 아이템 수를 가져옴
+              );
+            },
           ),
         ),
       ),
