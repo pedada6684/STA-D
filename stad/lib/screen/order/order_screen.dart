@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
-import 'package:stad/models/delivery_address.dart';
+import 'package:stad/models/delivery_address_model.dart';
 import 'package:stad/widget/address_screen.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
@@ -66,7 +66,7 @@ class _OrderScreenState extends State<OrderScreen> {
               padding:
                   const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
               color: mainWhite, // 배경색 설정
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(

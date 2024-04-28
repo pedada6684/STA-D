@@ -43,21 +43,13 @@ class _ProductScreenState extends State<ProductScreen>
           Center(child: Text('리뷰 내용')),
         ],
       ),
-      bottomNavigationBar: SafeArea(
-        child: Container(
-          color: mainWhite,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: CustomElevatedButton(
-              text: '주문하기',
-              textColor: mainWhite,
-              backgroundColor: mainNavy,
-              onPressed: () {
-                showProductOptionBottomSheet(context);
-              },
-            ),
-          ),
-        ),
+      bottomNavigationBar: CustomElevatedButton(
+        text: '주문하기',
+        textColor: mainWhite,
+        backgroundColor: mainNavy,
+        onPressed: () {
+          showProductOptionBottomSheet(context);
+        },
       ),
     );
   }
