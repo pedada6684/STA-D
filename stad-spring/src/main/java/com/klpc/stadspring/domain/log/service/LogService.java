@@ -1,12 +1,15 @@
 package com.klpc.stadspring.domain.log.service;
 
+import com.klpc.stadspring.domain.log.controller.response.GetDailyCountResponse;
 import com.klpc.stadspring.domain.log.controller.response.GetTotalLogResponse;
 import com.klpc.stadspring.domain.log.entity.AdvertClickLog;
 import com.klpc.stadspring.domain.log.entity.AdvertVideoLog;
 import com.klpc.stadspring.domain.log.entity.OrderLog;
-import com.klpc.stadspring.domain.log.entity.OrderReturnLog;
 import com.klpc.stadspring.domain.log.repository.*;
 import com.klpc.stadspring.domain.log.service.command.*;
+import com.klpc.stadspring.domain.product_review.controller.response.GetProductReviewListResponse;
+import com.klpc.stadspring.domain.product_review.entity.ProductReview;
+import com.klpc.stadspring.domain.product_review.service.command.ProductReviewInfoCommand;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import jakarta.transaction.Transactional;
@@ -14,8 +17,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -26,7 +31,7 @@ public class LogService {
     private final AdvertVideoLogRepository advertVideoLogRepository;
     private final OrderLogRepository orderLogRepository;
     private final OrderReturnLogRepository orderReturnLogRepository;
-    private final TotalLogRepository totalLogRepository;
+    private final AdvertStatisticsRepository advertStatisticsRepository;
 
     @Transactional
     public AdvertClickLog addAdvertClickLog(AddAdvertClickLogCommand command) {
@@ -88,24 +93,30 @@ public class LogService {
 
     @Transactional
 
-    public OrderReturnLog addOrderReturnLog(AddOrderReturnLogCommand command) {
-        log.info("AddOrderReturnLogCommand: " + command);
+    public OrderLog addOrderCancelLog(AddCancelOrderLogCommand command) {
+        log.info("AddCancelOrderLogCommand: " + command);
 
-        OrderReturnLog newOrderReturnLog = OrderReturnLog.createNewOrderReturnLog(
-                command.getOrderId(),
-                command.getUserId(),
+        OrderLog newOrderLog = OrderLog.createNewOrderLog(
                 command.getAdvertId(),
-                command.getRegDate()
+                command.getAdvertVideoId(),
+                command.getUserId(),
+                command.getOrderId(),
+                command.getContentId(),
+                command.getProductId(),
+                command.getPrice(),
+                command.getStatus(),
+                command.getRegDate(),
+                command.getUpdateDate()
         );
 
-        orderReturnLogRepository.save(newOrderReturnLog);
+        orderLogRepository.save(newOrderLog);
 
-        return newOrderReturnLog;
+        return newOrderLog;
     }
 
     public GetTotalLogResponse getTotalLog(Long advertId) {
         LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
-        Object[] results = totalLogRepository.getTotalLog(advertId, thirtyDaysAgo)
+        Object[] results = advertStatisticsRepository.getTotalLog(advertId, thirtyDaysAgo)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         Object[] result = (Object[]) results[0];
@@ -119,6 +130,46 @@ public class LogService {
                 build();
 
         return response;
+    }
+
+    public GetDailyCountResponse getDailyAdvertCilckCount() {
+
+        LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
+
+        List<GetDailyCountCommand> dailyAdvertClickCountList = advertStatisticsRepository.getDailyAdvertClickCount(thirtyDaysAgo)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        return GetDailyCountResponse.builder().list(dailyAdvertClickCountList).build();
+    }
+
+    public GetDailyCountResponse getDailyAdvertVideoCount() {
+
+        LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
+
+        List<GetDailyCountCommand> dailyAdvertVideoCountList = advertStatisticsRepository.getDailyAdvertVideoCount(thirtyDaysAgo)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        return GetDailyCountResponse.builder().list(dailyAdvertVideoCountList).build();
+    }
+
+    public GetDailyCountResponse getDailyOrderCount() {
+
+        LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
+
+        List<GetDailyCountCommand> dailyOrderCountList = advertStatisticsRepository.getDailyOrderCount(thirtyDaysAgo)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        return GetDailyCountResponse.builder().list(dailyOrderCountList).build();
+    }
+
+    public GetDailyCountResponse getDailyRevenueCount() {
+
+        LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
+
+        List<GetDailyCountCommand> dailyRevenueCountList = advertStatisticsRepository.getDailyRevenue(thirtyDaysAgo)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        return GetDailyCountResponse.builder().list(dailyRevenueCountList).build();
     }
 }
 
