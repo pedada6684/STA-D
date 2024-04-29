@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface ContentDetailRepositoryCustom {
     Optional<String> findVideoUrlById(Long id);
-    Optional<ContentDetail> findContentDetailByConceptId(Long conceptId);
+    Optional<List<ContentDetail>> findContentDetailsByConceptId(Long conceptId);
     Optional<List<ContentDetail>> findPopularContentDetail();
 }

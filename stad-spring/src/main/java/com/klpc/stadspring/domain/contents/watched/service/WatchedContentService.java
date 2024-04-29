@@ -1,7 +1,5 @@
 package com.klpc.stadspring.domain.contents.watched.service;
 
-import com.klpc.stadspring.domain.contents.concept.controller.request.AddConceptRequest;
-import com.klpc.stadspring.domain.contents.concept.controller.response.AddConceptResponse;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailRepository;
 import com.klpc.stadspring.domain.contents.watched.controller.response.AddWatchingContentResponse;
@@ -14,48 +12,51 @@ import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class WatchedContentService {
     private final WatchedContentRepository watchedContentRepository;
     private final UserRepository userRepository;
     private final ContentDetailRepository detailRepository;
 
-    public List<WatchedContent> getWatchedContentByUserId(Long userId) {
-        List<WatchedContent> watchedContentList = watchedContentRepository.findAllByUserId(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        return watchedContentList;
-    }
-
+    /**
+     * 시청 중인 영상 조회
+     * @param userId
+     * @return
+     */
     public List<Long> getWatchingContentDetailIdByUserId(Long userId) {
         List<Long> detailIdList = watchedContentRepository.findWatchingContentDetailIdByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return detailIdList;
     }
 
+    /**
+     * 시청 중인, 완료한 영상 조회
+     * @param userId
+     * @return
+     */
     public List<Long> getWatchingAndWatchedContentDetailIdByUserId(Long userId) {
         List<Long> detailIdList = watchedContentRepository.findWatchingAndWatchedContentDetailIdByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return detailIdList;
     }
 
+    /**
+     * 시청 중인 영상 등록
+     * @param command
+     * @return
+     */
+    @Transactional(readOnly = false)
     public AddWatchingContentResponse addWatchingContent(AddWatchingContentCommand command) {
         log.info("AddWatchingContentCommand : " + command);
 
@@ -75,6 +76,14 @@ public class WatchedContentService {
         return AddWatchingContentResponse.builder().result("시청 중인 컨텐츠가 성공적으로 생성되었습니다.").build();
     }
 
+    /**
+     * 시청 중인 영상 수정
+     * - 시청 시점 변경
+     * - 시청 완료로 변경
+     * @param command
+     * @return
+     */
+    @Transactional(readOnly = false)
     public ModifyWatchingContentResponse modifyWatchingContent(ModifyWatchingContentCommand command) {
         log.info("ModifyWatchingContentCommand : " + command);
 

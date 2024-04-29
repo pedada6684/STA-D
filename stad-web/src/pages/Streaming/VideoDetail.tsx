@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import Content from "../../components/Container/Content";
-import ImageWrapper from "../../components/Container/ImageWrapper";
 import TVContainer from "../../components/Container/TVContainer";
 import TVNav from "../../components/Nav/TVNav";
 import {
@@ -11,10 +10,9 @@ import {
   varietyThumbnail,
 } from "../Category/SeriesDummy";
 import BillboardContainer from "../../components/Container/BillboardContainer";
-import VignetteWrapper from "../../components/Container/VignetteWrapper";
-import HorizonVignette from "../../components/Container/HorizonVignette";
-import InfoContainer from "../../components/Container/InfoContainer";
 import styles from "./VideoDetail.module.css";
+import PlayButton from "../../components/Button/PlayButton";
+import AddButton from "../../components/Button/AddButton";
 
 interface VideoDetailProps {
   id: number;
@@ -52,6 +50,18 @@ export default function VideoDetail() {
     return <div>Video not found.</div>;
   }
 
+  const backgroundStyle = {
+    backgroundImage: `linear-gradient(
+      to top, rgba(0, 0, 0, 0.8) 2%, rgba(0, 0, 0, 0) 50%),
+      linear-gradient(
+      to right, rgba(0, 0, 0, 0.8) 20%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 100%),
+      url(${video.thumbnailUrl})`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    // height: "30vh",
+    width: "70%",
+  };
+
   return (
     <div>
       <TVContainer>
@@ -59,30 +69,50 @@ export default function VideoDetail() {
         <div style={{ paddingTop: "5rem" }}>
           <Content>
             <BillboardContainer>
-              <ImageWrapper>
-                <img
-                  src="https://img2.sbs.co.kr/img/sbs_cms/WE/2022/02/07/NxE1644218336386.jpg"
-                  alt="그 해 우리는"
-                  className={`${styles.coverImage}`}
-                />
-                <VignetteWrapper className={styles.customVignetteWrapper} />
-                <HorizonVignette className={styles.customHorizonVignette} />
-                <InfoContainer>
-                  <div className={`${styles.info}`}>
-                    <div className={`${styles.vidTitle}`}>{video.title}</div>
-                    {video.playtime && (
-                      <div className={`${styles.videoDetail}`}>
-                        재생 시간: {video.playtime}
-                      </div>
-                    )}
-                    {video.audienceAge && (
-                      <div className={`${styles.videoDetail}`}>
-                        관람 등급: {video.audienceAge}+
-                      </div>
-                    )}
+              <div>
+                <div className={`${styles.imgWrapper}`}>
+                  <div
+                    style={backgroundStyle}
+                    className={`${styles.coverImage}`}
+                  >
+                    <img
+                      src={video.thumbnailUrl}
+                      alt={video.title}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
                   </div>
-                </InfoContainer>
-              </ImageWrapper>
+                </div>
+                <div className={`${styles.detailContainer}`}>
+                  <div className={`${styles.detailWrapper}`}>
+                    <div className={`${styles.vidTitle}`}>{video.title}</div>
+                    <div className={`${styles.timeAge}`}>
+                      <span>{video.playtime}</span>
+                      <span>•</span>
+                      <span>{video.audienceAge}+</span>
+                    </div>
+                    <div className={`${styles.bar}`}></div>
+                    <div className={`${styles.buttonWrapper}`}>
+                      <PlayButton />
+                      <AddButton />
+                    </div>
+                    <div className={`${styles.description}`}>
+                      {video.description}
+                    </div>
+                    <div className={`${styles.staff}`}>
+                      <span>크리에이터</span>
+                      <span>{video.creator}</span>
+                    </div>
+                    <div className={`${styles.staff}`}>
+                      <span>출연</span>
+                      <span>{video.cast}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </BillboardContainer>
           </Content>
         </div>

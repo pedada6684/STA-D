@@ -5,8 +5,14 @@ import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.advert.service.AdvertService;
 import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
+import com.klpc.stadspring.domain.contents.category.service.ContentCategoryService;
+import com.klpc.stadspring.domain.contents.category.service.command.request.AddCategoryRequestCommand;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
+import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
+import com.klpc.stadspring.domain.contents.concept.service.command.request.AddConceptRequestCommand;
+import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
+import com.klpc.stadspring.domain.contents.detail.service.command.request.AddDetailRequestCommand;
 import com.klpc.stadspring.domain.orders.service.OrdersService;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequestCommand;
 import com.klpc.stadspring.domain.product.entity.Product;
@@ -45,10 +51,14 @@ public class DummyGenerator {
     private final ProductRepository productRepository;
     private final ProductTypeService productTypeService;
     private final ContentConceptRepository contentConceptRepository;
+    private final ContentConceptService contentConceptService;
+    private final ContentCategoryService contentCategoryService;
+    private final ContentDetailService contentDetailService;
     private final OrdersService ordersService;
 
-//    @PostConstruct
+    @PostConstruct
     public void createDummy(){
+        createContent();
         User normalUser = createDummyUsers();
         createDummyCompanyUsers();
         User companyUser1 = userRepository.findByEmail("ssafyCompany@ssafy.com").get();
@@ -64,11 +74,48 @@ public class DummyGenerator {
         createDummyAdvert(companyUser1,companyUser2,contentList);
         List<Advert> allAdvertByUser = advertRepository.findAllByUser(companyUser2);
         ProductType dummyProductType = null;
+
         if(!allAdvertByUser.isEmpty())
             dummyProductType = createDummyProduct(allAdvertByUser.get(0));
 
         assert dummyProductType != null;
         addOrders(normalUser,dummyProductType,contentList.get(0),allAdvertByUser.get(0).getId());
+    }
+
+    /**
+     * 컨텐츠 생성
+     */
+    public void createContent(){
+        AddCategoryRequestCommand categoryCommand = AddCategoryRequestCommand.builder().isMovie(true).name("액션").build();
+        contentCategoryService.addCategory(categoryCommand);
+
+        List<String> genre = new ArrayList<>();
+        genre.add("액션");
+
+        AddConceptRequestCommand conceptCommand1 = AddConceptRequestCommand.builder()
+                .audienceAge("19")
+                .playtime("123")
+                .description("내가 코를 만지면")
+                .cast("이서윤")
+                .creator("이태경")
+                .isMovie(true)
+                .releaseYear("2024")
+                .thumbnail("https://dimg.donga.com/wps/NEWS/IMAGE/2013/03/05/53477680.2.jpg")
+                .title("타짜")
+                .genre(genre)
+                .build();
+        contentConceptService.addConcept(conceptCommand1);
+
+        List<ContentConcept> conceptList = contentConceptService.getContentConceptByKeyword("타짜");
+
+        AddDetailRequestCommand detailCommand1 = AddDetailRequestCommand.builder()
+                .episode(1)
+                .videoUrl("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/71cc0506891f4de4aa5bc28389e971c9videoList")
+                .summary("손은 눈보다 빠르다")
+                .contentConceptId(conceptList.get(0).getId())
+                .build();
+
+        contentDetailService.addDetail(detailCommand1);
     }
 
     /**

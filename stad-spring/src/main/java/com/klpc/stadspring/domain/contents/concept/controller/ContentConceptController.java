@@ -3,10 +3,10 @@ package com.klpc.stadspring.domain.contents.concept.controller;
 import com.klpc.stadspring.domain.contents.category.entity.ContentCategory;
 import com.klpc.stadspring.domain.contents.category.service.ContentCategoryService;
 import com.klpc.stadspring.domain.contents.categoryRelationship.service.ContentCategoryRelationshipService;
-import com.klpc.stadspring.domain.contents.concept.controller.request.AddConceptRequest;
-import com.klpc.stadspring.domain.contents.concept.controller.response.AddConceptResponse;
+import com.klpc.stadspring.domain.contents.concept.controller.response.GetCategoryAndConceptsListResponse;
+import com.klpc.stadspring.domain.contents.concept.controller.response.GetConceptListResponse;
 import com.klpc.stadspring.domain.contents.concept.controller.response.GetConceptResponse;
-import com.klpc.stadspring.domain.contents.concept.controller.response.GetContentCategoryAndConceptListResponse;
+import com.klpc.stadspring.domain.contents.concept.controller.response.GetCategoryAndConceptsResponse;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
@@ -17,7 +17,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,97 +36,119 @@ public class ContentConceptController {
 
     @GetMapping("/series")
     @Operation(summary = "시리즈 메인 영상 목록", description = "시리즈 메인 영상 목록")
-    ResponseEntity<List<GetContentCategoryAndConceptListResponse>> getSeriesContent() {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "시리즈 메인 영상 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<GetCategoryAndConceptsListResponse> getSeriesContent() {
+        log.info("시리즈 메인 영상 목록 조회" + "\n" + "getSeriesContent");
+
         List<Long> seriesCategoryIdList = categoryService.getSeriesCategoriesId();
-        List<GetContentCategoryAndConceptListResponse> responseList = new ArrayList<>();
-        for (int i = 0; i < seriesCategoryIdList.size(); i++) {
-            ContentCategory tmp = categoryService.getContentCategoryById(seriesCategoryIdList.get(i));
-            List<Long> contentIdList = categoryRelationshipService.getContentIdByCategory(seriesCategoryIdList.get(i));
+        List<GetCategoryAndConceptsResponse> responseList = new ArrayList<>();
+        for (Long aLong : seriesCategoryIdList) {
+            ContentCategory category = categoryService.getContentCategoryById(aLong);
+            List<Long> contentIdList = categoryRelationshipService.getConceptIdByCategory(aLong);
             List<GetConceptResponse> contentResponseList = new ArrayList<>();
-            for (int j = 0; j < contentIdList.size(); j++) {
-                ContentDetail detail = detailService.getContentDetailById(contentIdList.get(j));
+            for (Long value : contentIdList) {
+                ContentDetail detail = detailService.getContentDetailById(value);
                 ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
 
                 contentResponseList.add(GetConceptResponse.from(concept));
             }
-            responseList.add(GetContentCategoryAndConceptListResponse.from(tmp, contentResponseList));
+            responseList.add(GetCategoryAndConceptsResponse.from(category, contentResponseList));
         }
-        return ResponseEntity.ok(responseList);
+        GetCategoryAndConceptsListResponse response = GetCategoryAndConceptsListResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/series/{category}")
     @Operation(summary = "시리즈 카테고리별 영상 목록", description = "시리즈 카테고리별 영상 목록")
-    ResponseEntity<List<GetConceptResponse>> getSeriesContentByCategory(@PathVariable String category) {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "시리즈 카테고리별 영상 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<GetConceptListResponse> getSeriesContentByCategory(@PathVariable String category) {
+        log.info("시리즈 카테고리별 영상 목록 조회" + "\n" + "getSeriesContentByCategory : " + category);
+
         Long categoryId = categoryService.getIdByIsMovieAndName(false, category);
-        List<Long> conceptIdList = categoryRelationshipService.getContentIdByCategory(categoryId);
+        List<Long> conceptIdList = categoryRelationshipService.getConceptIdByCategory(categoryId);
         List<GetConceptResponse> responseList = new ArrayList<>();
-        for (int i = 0; i < conceptIdList.size(); i++) {
-            ContentConcept concept = conceptService.getContentConceptById(conceptIdList.get(i));
+        for (Long aLong : conceptIdList) {
+            ContentConcept concept = conceptService.getContentConceptById(aLong);
 
             responseList.add(GetConceptResponse.from(concept));
         }
-        return ResponseEntity.ok(responseList);
+        GetConceptListResponse response = GetConceptListResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/movie")
     @Operation(summary = "영화 메인 영상 목록", description = "영화 메인 영상 목록")
-    ResponseEntity<List<GetContentCategoryAndConceptListResponse>> getMovieContent() {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "영화 메인 영상 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<GetCategoryAndConceptsListResponse> getMovieContent() {
+        log.info("영화 메인 영상 목록 조회" + "\n" + "getMovieContent");
+
         List<Long> movieCategoryIdList = categoryService.getMovieCategoriesId();
-        List<GetContentCategoryAndConceptListResponse> responseList = new ArrayList<>();
-        for (int i = 0; i < movieCategoryIdList.size(); i++) {
-            ContentCategory tmp = categoryService.getContentCategoryById(movieCategoryIdList.get(i));
-            List<Long> contentIdList = categoryRelationshipService.getContentIdByCategory(movieCategoryIdList.get(i));
+        List<GetCategoryAndConceptsResponse> responseList = new ArrayList<>();
+        for (Long aLong : movieCategoryIdList) {
+            ContentCategory tmp = categoryService.getContentCategoryById(aLong);
+            List<Long> contentIdList = categoryRelationshipService.getConceptIdByCategory(aLong);
             List<GetConceptResponse> contentResponseList = new ArrayList<>();
-            for (int j = 0; j < contentIdList.size(); j++) {
-                ContentDetail detail = detailService.getContentDetailById(contentIdList.get(j));
+            for (Long value : contentIdList) {
+                ContentDetail detail = detailService.getContentDetailById(value);
                 ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
 
                 contentResponseList.add(GetConceptResponse.from(concept));
             }
-            responseList.add(GetContentCategoryAndConceptListResponse.from(tmp, contentResponseList));
+            responseList.add(GetCategoryAndConceptsResponse.from(tmp, contentResponseList));
         }
-        return ResponseEntity.ok(responseList);
+        GetCategoryAndConceptsListResponse response = GetCategoryAndConceptsListResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/movie/{category}")
     @Operation(summary = "영화 카테고리별 영상 목록", description = "영화 카테고리별 영상 목록")
-    ResponseEntity<List<GetConceptResponse>> getMovieContentByCategory(@PathVariable String category) {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "영화 카테고리별 영상 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<GetConceptListResponse> getMovieContentByCategory(@PathVariable String category) {
+        log.info("영화 카테고리별 영상 목록 조회" + "\n" + "getMovieContentByCategory : " + category);
+
         Long categoryId = categoryService.getIdByIsMovieAndName(true, category);
-        List<Long> conceptIdList = categoryRelationshipService.getContentIdByCategory(categoryId);
+        List<Long> conceptIdList = categoryRelationshipService.getConceptIdByCategory(categoryId);
         List<GetConceptResponse> responseList = new ArrayList<>();
-        for (int i = 0; i < conceptIdList.size(); i++) {
-            ContentConcept concept = conceptService.getContentConceptById(conceptIdList.get(i));
+        for (Long aLong : conceptIdList) {
+            ContentConcept concept = conceptService.getContentConceptById(aLong);
 
             responseList.add(GetConceptResponse.from(concept));
         }
-        return ResponseEntity.ok(responseList);
+        GetConceptListResponse response = GetConceptListResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/search/{keyword}")
     @Operation(summary = "키워드로 검색", description = "키워드로 검색")
-    ResponseEntity<List<GetConceptResponse>> getContentConceptByKeyword(@PathVariable String keyword) {
-        List<ContentConcept> conceptList = conceptService.getContentConceptByKeyword(keyword);
-        List<GetConceptResponse> responseList = new ArrayList<>();
-        for (int i = 0; i < conceptList.size(); i++) {
-            responseList.add(GetConceptResponse.from(conceptList.get(i)));
-        }
-        return ResponseEntity.ok(responseList);
-    }
-
-    @PostMapping("/regist")
-    @Operation(summary = "콘텐츠 콘셉트 등록", description = "콘텐츠 콘셉트 등록")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "콘텐츠 콘셉트 등록 성공"),
+            @ApiResponse(responseCode = "200", description = "키워드로 콘텐츠 검색 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    public ResponseEntity<AddConceptResponse> addConcept(@RequestBody AddConceptRequest request) {
-        try {
-            AddConceptResponse response = conceptService.addConcept(request.toCommand());
+    ResponseEntity<List<GetConceptResponse>> getContentConceptByKeyword(@PathVariable String keyword) {
+        log.info("키워드로 콘텐츠 검색" + "\n" + "getSeriesCategories : "+keyword);
 
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        List<ContentConcept> conceptList = conceptService.getContentConceptByKeyword(keyword);
+        List<GetConceptResponse> responseList = new ArrayList<>();
+        for (ContentConcept contentConcept : conceptList) {
+            responseList.add(GetConceptResponse.from(contentConcept));
         }
+        return ResponseEntity.ok(responseList);
     }
 }
