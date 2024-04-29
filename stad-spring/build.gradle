@@ -24,7 +24,6 @@ repositories {
 dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-batch'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 //	implementation 'org.springframework.kafka:spring-kafka'
 	compileOnly 'org.projectlombok:lombok'
@@ -34,12 +33,41 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //	testImplementation 'org.springframework.batch:spring-batch-test'
 //	testImplementation 'org.springframework.kafka:spring-kafka-test'
-
+	//json
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 	//aws
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
-	// Swagger
+	//Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
+	//json parsing
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+	// Querydsl
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+	//JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	//쿼리문 상세
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
+	//영상 길이 추출
+	implementation 'org.bytedeco:javacv-platform:1.5.7'
+	implementation group: 'org.bytedeco', name: 'ffmpeg-platform', version: '6.0-1.5.9'
+
+	// https://mvnrepository.com/artifact/org.springframework.batch/spring-batch-core
+	// spring batch
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
 }
 
 tasks.named('test') {

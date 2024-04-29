@@ -1,0 +1,75 @@
+.container {
+  height: 5rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  top: 0;
+  position: fixed;
+  z-index: 10;
+  background-color: #141414;
+}
+.left,
+.right {
+  display: flex;
+}
+.left {
+  margin-left: 3rem;
+}
+.right {
+  margin-right: 3rem;
+}
+.logo {
+  display: flex;
+  margin-left: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+.logoIcon {
+  width: 10rem;
+}
+
+.menus {
+  display: flex;
+  margin-left: 3rem;
+}
+.category {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 2rem;
+}
+
+.category a {
+  font-size: 1.1rem;
+  color: white;
+  text-decoration: none;
+  font-weight: lighter;
+}
+.category a:hover {
+  color: #b3b3b3;
+  transition: color 0.4s;
+}
+
+.search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+}
+.search button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+.search button img {
+  width: 2rem;
+}
+.profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 2rem;
+}
+.profile img {
+  width: 3rem;
+}

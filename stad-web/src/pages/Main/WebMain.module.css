@@ -1,0 +1,60 @@
+.contentC {
+  padding-top: 5rem;
+  display: flex;
+  overflow-y: hidden;
+  animation: fadein 2.3s;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.video video {
+  width: 100%;
+}
+
+.introduce {
+  position: absolute;
+  top: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 5rem;
+  color: white;
+}
+
+.introduceT {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.introduceS {
+  font-size: 2rem;
+  font-weight: lighter;
+  /* color: #f4f4f4; */
+  background-color: rgba(0, 0, 0, 0.35);
+}
+
+.btn {
+  margin-top: 2rem;
+  width: 25rem;
+  padding: 0.8rem 2rem;
+  background-color: white;
+  border-radius: 50px;
+  border: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: black;
+  cursor: pointer;
+}
+
+.btn:hover {
+  color: #00127a;
+}

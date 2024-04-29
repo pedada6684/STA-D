@@ -1,0 +1,24 @@
+[
+  {
+    "title": "Summer Sale",
+    "description": "Get ready for the summer with up to 50% off!",
+    "startDate": "2024-06-01",
+    "endDate": "2024-06-30",
+    "category": "Sale",
+    "fullVideoUrl": "https://example.com/videos/summer-sale.mp4",
+    "directVideoUrl": "https://example.com/videos/download/summer-sale.mp4",
+    "directImgUrl": "https://d2gfz7wkiigkmv.cloudfront.net/pickin/2/1/2/lCG7F0-DQ6GEDXR4olZn8w",
+    "selectedContentList": [101, 102]
+  },
+  {
+    "title": "New Product Launch",
+    "description": "Introducing our new line of eco-friendly products.",
+    "startDate": "2024-07-15",
+    "endDate": "2024-08-15",
+    "category": "Launch",
+    "fullVideoUrl": "https://example.com/videos/new-product-launch.mp4",
+    "directVideoUrl": "https://example.com/videos/download/new-product-launch.mp4",
+    "directImgUrl": "https://d2gfz7wkiigkmv.cloudfront.net/pickin/2/1/2/lCG7F0-DQ6GEDXR4olZn8w",
+    "selectedContentList": [201, 202]
+  }
+]

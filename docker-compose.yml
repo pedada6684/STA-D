@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  stad-spring:
+    image: stad-spring-image
+    container_name: stad-spring
+    ports:
+      - "18080:8080"
+    networks:
+      - ubuntu_my-network
+    restart: unless-stopped 
+
+  stad-react:
+    image: stad-react-image
+    container_name: stad-react
+    ports:
+      - "3000:3000"
+    restart: unless-stopped 
+
+networks:
+  ubuntu_my-network:
+    external: true
+    name: ubuntu_my-network

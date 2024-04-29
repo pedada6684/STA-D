@@ -1,0 +1,42 @@
+.content {
+  padding-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  margin: 0 5.5rem;
+}
+.title {
+  margin-top: 1rem;
+  font-size: 2.5rem;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4rem;
+}
+.btn {
+  border: 1px solid #afb0b4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 3rem;
+  border-radius: 10px;
+  width: 20%;
+  margin: auto;
+}
+.activeBorder {
+  border: 3px solid #00127a;
+}
+.btn img {
+  width: 2rem;
+  margin-right: 0.8rem;
+}
+.subTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.description {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+}

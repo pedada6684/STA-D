@@ -13,6 +13,9 @@ public enum ErrorCode {
     /* S3 업로드 실패 */
     FAIL_TO_UPLOAD_S3(HttpStatus.BAD_GATEWAY, "S3 서버의 업로드를 실패했습니다."),
 
+    /* 패스워드 불일치 */
+    PASSWORD_NOT_MATCH(HttpStatus.NOT_ACCEPTABLE, "패스워드가 일치하지 않습니다."),
+
     /* JWT Token Error */
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 토큰"),
     INVALID_TOKEN(HttpStatus.FORBIDDEN, "잘못된 토큰"),
@@ -30,7 +33,19 @@ public enum ErrorCode {
     ENTITIY_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 존재하는 정보입니다."),
 
     /* URI */
-    URI_SYNTAX_ERROR(HttpStatus.BAD_GATEWAY, "외부 API 호출 중 오류가 발생했습니다.");
+    URI_SYNTAX_ERROR(HttpStatus.BAD_GATEWAY, "외부 API 호출 중 오류가 발생했습니다."),
+
+    /* encoding UTF-8 에러 */
+    ENCODING_UTF_8(HttpStatus.BAD_REQUEST, "UTF-8 변환 중 오류가 발생했습니다."),
+
+    /* S3 파일 오류 */
+    AWSS3_ERROR(HttpStatus.BAD_GATEWAY, "AWS S3 호출 중 오류가 발생했습니다."),
+
+    /* 내림차순 정렬 출력 오류 */
+    ORDERBYDESC_ERROR(HttpStatus.NOT_FOUND, "DB 내림차순 정렬 출력이 실패하였습니다."),
+
+    /* 재고 수량 오류 */
+    QUANTITY_ERROR(HttpStatus.BAD_REQUEST, "재고 수량 보다 주문 수량이 많습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
