@@ -1,9 +1,6 @@
 package com.klpc.stadspring.domain.user.controller;
 
-import com.klpc.stadspring.domain.user.controller.request.CreateUserLocationRequest;
-import com.klpc.stadspring.domain.user.controller.request.UpdateProfileImgRequest;
-import com.klpc.stadspring.domain.user.controller.request.UpdateUserInfoRequest;
-import com.klpc.stadspring.domain.user.controller.request.UpdateUserLocationRequest;
+import com.klpc.stadspring.domain.user.controller.request.*;
 import com.klpc.stadspring.domain.user.controller.response.CreateUserLocationResponse;
 import com.klpc.stadspring.domain.user.controller.response.GetUserInfoResponse;
 import com.klpc.stadspring.domain.user.controller.response.UpdateProfileResponse;
@@ -11,6 +8,7 @@ import com.klpc.stadspring.domain.user.controller.response.UpdateUserLocationRes
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.entity.UserLocation;
 import com.klpc.stadspring.domain.user.service.UserService;
+import com.klpc.stadspring.domain.user.service.command.DeleteUserLocationCommand;
 import com.klpc.stadspring.domain.user.service.command.WithdrawUserCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -90,9 +88,21 @@ public class UserController {
     @Operation(summary = "유저 배송지 수정", description = "유저 배송지 수정")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UpdateProfileResponse.class)))
     public ResponseEntity<UpdateUserLocationResponse> updateUserLocation(@RequestBody UpdateUserLocationRequest request) {
-        log.info("CreateUserLocationRequest: " + request);
+        log.info("UpdateUserLocationRequest: " + request);
         UserLocation userLocation = userService.updateUserLocation(request.toCommand());
         UpdateUserLocationResponse response = UpdateUserLocationResponse.from(userLocation);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/location")
+    @Operation(summary = "유저 배송지 삭제", description = "유저 배송지 삭제")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UpdateProfileResponse.class)))
+    public ResponseEntity<?> deleteUserLocation(@RequestParam("userId") Long userId, @RequestParam("locationId") Long locationId) {
+        DeleteUserLocationCommand command = DeleteUserLocationCommand.builder()
+                .userId(userId)
+                .locationId(locationId)
+                .build();
+        userService.deleteUserLocation(command);
+        return ResponseEntity.ok().build();
     }
 }
