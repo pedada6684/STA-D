@@ -1,8 +1,6 @@
 package com.klpc.stadspring.domain.user.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.klpc.stadspring.domain.cart.entity.CartProduct;
-import com.klpc.stadspring.domain.productType.entity.ProductType;
 import com.klpc.stadspring.domain.user.service.command.UpdateUserInfoCommand;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -43,8 +42,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE,  orphanRemoval = true)
     private List<CartProduct> cartProduct;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE,  orphanRemoval = true)
-    private List<UserLocation> userLocations = null;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,  orphanRemoval = true)
+    private List<UserLocation> userLocations = new ArrayList<>();
 
     public static User createNewUser(
             String email,
@@ -96,5 +95,8 @@ public class User {
 
     public void updateYoutubeInfo(String youtubeInfo){
         this.youtubeInfo = UserYoutubeInfo.createNewUserYoutubeInfo(youtubeInfo);
+    }
+    public void addUserLocation(UserLocation userLocation){
+        this.userLocations.add(userLocation);
     }
 }
