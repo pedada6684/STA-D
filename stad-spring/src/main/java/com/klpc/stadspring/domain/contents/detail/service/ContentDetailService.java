@@ -79,7 +79,7 @@ public class ContentDetailService {
 
     // conceptId로 id 조회
     public List<ContentDetail> getContentDetailsByConceptId(Long conceptId) {
-        List<ContentDetail> detailList = repository.findContentDetailByConceptId(conceptId)
+        List<ContentDetail> detailList = repository.findContentDetailsByConceptId(conceptId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return detailList;
     }
