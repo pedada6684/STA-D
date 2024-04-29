@@ -56,6 +56,7 @@ public class OrderLog {
         Long orderId,
         Long contentId,
         Long productId,
+        Long price,
         Boolean status,
         LocalDateTime regDate,
         LocalDateTime updateDate
@@ -67,6 +68,7 @@ public class OrderLog {
         orderLog.orderId = orderId;
         orderLog.contentId = contentId;
         orderLog.productId = productId;
+        orderLog.price = price;
         orderLog.status = status;
         orderLog.regDate = regDate;
         orderLog.updateDate = updateDate;

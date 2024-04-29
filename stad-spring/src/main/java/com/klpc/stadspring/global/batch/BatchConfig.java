@@ -77,26 +77,26 @@ public class BatchConfig {
 
             for (Long advertId : advertIdList) {
                 Long clickCount = advertClickLogRepository.countAddClickLogByAdvertId(advertId,oneHourAgo)
-                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+                        .orElse(0L);
 
                 Long videoCount = advertVideoLogRepository.countAdvertVideoLog(advertId,oneHourAgo)
-                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+                        .orElse(0L);
 
                 Long orderCount = orderLogRepository.countOrderLog(advertId,oneHourAgo)
-                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+                        .orElse(0L);
 
                 Long orderCancelCount = orderLogRepository.countOrderCancelLog(advertId,oneHourAgo)
-                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+                        .orElse(0L);
 
                 Long revenue = orderLogRepository.sumClicksByAdvertIdAndDateRange(advertId,oneHourAgo)
-                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+                        .orElse(0L);
 
 
 
                 logList.add(AdvertStatistics.createNewAdvertStatistics(
                         advertId,
-                        clickCount,
                         videoCount,
+                        clickCount,
                         orderCount,
                         revenue
                 ));
@@ -117,7 +117,7 @@ public class BatchConfig {
         AdvertStatistics existing = entityManager.createQuery(
                         "SELECT a FROM AdvertStatistics a WHERE a.advertId = :advertId AND a.date = :date", AdvertStatistics.class)
                 .setParameter("advertId", advertStatistics.getAdvertId())
-                .setParameter("date", LocalDate.now())  // 예시로 오늘 날짜를 사용
+                .setParameter("date", LocalDate.now())
                 .getResultStream().findFirst().orElse(null);
 
         log.info("existing: " + existing);
