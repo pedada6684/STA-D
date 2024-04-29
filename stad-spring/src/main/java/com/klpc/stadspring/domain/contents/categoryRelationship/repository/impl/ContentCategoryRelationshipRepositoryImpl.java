@@ -18,7 +18,7 @@ public class ContentCategoryRelationshipRepositoryImpl implements ContentCategor
         return Optional.ofNullable(query.select(contentCategoryRelationship.contentConcept.id)
                 .from(contentCategoryRelationship)
                 .where(contentCategoryRelationship.contentCategory.id.eq(categoryId))
-                .limit(40)
+                .limit(12)
                 .fetch());
     }
 }
