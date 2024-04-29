@@ -5,7 +5,6 @@ import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/services/address_service.dart';
-import 'package:stad/services/order_service.dart';
 import 'package:stad/widget/button.dart';
 
 class AddressScreen extends StatefulWidget {

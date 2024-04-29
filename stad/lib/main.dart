@@ -8,10 +8,7 @@ import 'package:stad/models/cart_model.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/cart/cart_screen.dart';
 import 'package:stad/screen/home/home_screen.dart';
-import 'package:stad/screen/home/onboarding_screen.dart';
-import 'package:stad/screen/home/splash_video_screen.dart';
 import 'package:stad/screen/myStad/myStad_screen.dart';
-import 'package:stad/services/user_service.dart';
 import 'package:stad/widget/bottom_bar.dart';
 
 import 'providers/cart_provider.dart';
@@ -35,7 +32,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
-  late bool _isLoggined;
+  // late bool _isLoggined;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   static const List<Widget> _widgetOptions = <Widget>[
