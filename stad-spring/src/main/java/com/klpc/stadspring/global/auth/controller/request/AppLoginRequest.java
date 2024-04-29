@@ -14,6 +14,9 @@ public class AppLoginRequest {
     String googleAT;
 
     public AppLoginCommand toCommand(){
+        if (profile == null){
+            profile = "https://ssl.pstatic.net/static/pwe/address/img_profile.png";
+        }
         return AppLoginCommand.builder()
                 .email(email)
                 .phone(phone)
