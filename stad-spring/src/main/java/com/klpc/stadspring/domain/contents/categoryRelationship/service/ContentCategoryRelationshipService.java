@@ -24,7 +24,7 @@ public class ContentCategoryRelationshipService {
     /**
      * 카테고리별 contentId 12개 조회
      */
-    public List<Long> getContentIdByCategory(Long CategoryId) {
+    public List<Long> getConceptIdByCategory(Long CategoryId) {
         List<Long> list = repository.findConceptIdByCategory(CategoryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return list;

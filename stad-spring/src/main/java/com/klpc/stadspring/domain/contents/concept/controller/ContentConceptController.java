@@ -3,8 +3,10 @@ package com.klpc.stadspring.domain.contents.concept.controller;
 import com.klpc.stadspring.domain.contents.category.entity.ContentCategory;
 import com.klpc.stadspring.domain.contents.category.service.ContentCategoryService;
 import com.klpc.stadspring.domain.contents.categoryRelationship.service.ContentCategoryRelationshipService;
+import com.klpc.stadspring.domain.contents.concept.controller.response.GetCategoryAndConceptsListResponse;
+import com.klpc.stadspring.domain.contents.concept.controller.response.GetConceptListResponse;
 import com.klpc.stadspring.domain.contents.concept.controller.response.GetConceptResponse;
-import com.klpc.stadspring.domain.contents.concept.controller.response.GetContentCategoryAndConceptListResponse;
+import com.klpc.stadspring.domain.contents.concept.controller.response.GetCategoryAndConceptsResponse;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
@@ -32,12 +34,12 @@ public class ContentConceptController {
 
     @GetMapping("/series")
     @Operation(summary = "시리즈 메인 영상 목록", description = "시리즈 메인 영상 목록")
-    ResponseEntity<List<GetContentCategoryAndConceptListResponse>> getSeriesContent() {
+    ResponseEntity<GetCategoryAndConceptsListResponse> getSeriesContent() {
         List<Long> seriesCategoryIdList = categoryService.getSeriesCategoriesId();
-        List<GetContentCategoryAndConceptListResponse> responseList = new ArrayList<>();
+        List<GetCategoryAndConceptsResponse> responseList = new ArrayList<>();
         for (int i = 0; i < seriesCategoryIdList.size(); i++) {
-            ContentCategory tmp = categoryService.getContentCategoryById(seriesCategoryIdList.get(i));
-            List<Long> contentIdList = categoryRelationshipService.getContentIdByCategory(seriesCategoryIdList.get(i));
+            ContentCategory category = categoryService.getContentCategoryById(seriesCategoryIdList.get(i));
+            List<Long> contentIdList = categoryRelationshipService.getConceptIdByCategory(seriesCategoryIdList.get(i));
             List<GetConceptResponse> contentResponseList = new ArrayList<>();
             for (int j = 0; j < contentIdList.size(); j++) {
                 ContentDetail detail = detailService.getContentDetailById(contentIdList.get(j));
@@ -45,33 +47,35 @@ public class ContentConceptController {
 
                 contentResponseList.add(GetConceptResponse.from(concept));
             }
-            responseList.add(GetContentCategoryAndConceptListResponse.from(tmp, contentResponseList));
+            responseList.add(GetCategoryAndConceptsResponse.from(category, contentResponseList));
         }
-        return ResponseEntity.ok(responseList);
+        GetCategoryAndConceptsListResponse response = GetCategoryAndConceptsListResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/series/{category}")
     @Operation(summary = "시리즈 카테고리별 영상 목록", description = "시리즈 카테고리별 영상 목록")
-    ResponseEntity<List<GetConceptResponse>> getSeriesContentByCategory(@PathVariable String category) {
+    ResponseEntity<GetConceptListResponse> getSeriesContentByCategory(@PathVariable String category) {
         Long categoryId = categoryService.getIdByIsMovieAndName(false, category);
-        List<Long> conceptIdList = categoryRelationshipService.getContentIdByCategory(categoryId);
+        List<Long> conceptIdList = categoryRelationshipService.getConceptIdByCategory(categoryId);
         List<GetConceptResponse> responseList = new ArrayList<>();
         for (int i = 0; i < conceptIdList.size(); i++) {
             ContentConcept concept = conceptService.getContentConceptById(conceptIdList.get(i));
 
             responseList.add(GetConceptResponse.from(concept));
         }
-        return ResponseEntity.ok(responseList);
+        GetConceptListResponse response = GetConceptListResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/movie")
     @Operation(summary = "영화 메인 영상 목록", description = "영화 메인 영상 목록")
-    ResponseEntity<List<GetContentCategoryAndConceptListResponse>> getMovieContent() {
+    ResponseEntity<GetCategoryAndConceptsListResponse> getMovieContent() {
         List<Long> movieCategoryIdList = categoryService.getMovieCategoriesId();
-        List<GetContentCategoryAndConceptListResponse> responseList = new ArrayList<>();
+        List<GetCategoryAndConceptsResponse> responseList = new ArrayList<>();
         for (int i = 0; i < movieCategoryIdList.size(); i++) {
             ContentCategory tmp = categoryService.getContentCategoryById(movieCategoryIdList.get(i));
-            List<Long> contentIdList = categoryRelationshipService.getContentIdByCategory(movieCategoryIdList.get(i));
+            List<Long> contentIdList = categoryRelationshipService.getConceptIdByCategory(movieCategoryIdList.get(i));
             List<GetConceptResponse> contentResponseList = new ArrayList<>();
             for (int j = 0; j < contentIdList.size(); j++) {
                 ContentDetail detail = detailService.getContentDetailById(contentIdList.get(j));
@@ -79,23 +83,25 @@ public class ContentConceptController {
 
                 contentResponseList.add(GetConceptResponse.from(concept));
             }
-            responseList.add(GetContentCategoryAndConceptListResponse.from(tmp, contentResponseList));
+            responseList.add(GetCategoryAndConceptsResponse.from(tmp, contentResponseList));
         }
-        return ResponseEntity.ok(responseList);
+        GetCategoryAndConceptsListResponse response = GetCategoryAndConceptsListResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/movie/{category}")
     @Operation(summary = "영화 카테고리별 영상 목록", description = "영화 카테고리별 영상 목록")
-    ResponseEntity<List<GetConceptResponse>> getMovieContentByCategory(@PathVariable String category) {
+    ResponseEntity<GetConceptListResponse> getMovieContentByCategory(@PathVariable String category) {
         Long categoryId = categoryService.getIdByIsMovieAndName(true, category);
-        List<Long> conceptIdList = categoryRelationshipService.getContentIdByCategory(categoryId);
+        List<Long> conceptIdList = categoryRelationshipService.getConceptIdByCategory(categoryId);
         List<GetConceptResponse> responseList = new ArrayList<>();
         for (int i = 0; i < conceptIdList.size(); i++) {
             ContentConcept concept = conceptService.getContentConceptById(conceptIdList.get(i));
 
             responseList.add(GetConceptResponse.from(concept));
         }
-        return ResponseEntity.ok(responseList);
+        GetConceptListResponse response = GetConceptListResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/search/{keyword}")

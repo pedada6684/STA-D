@@ -8,8 +8,6 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter
-@Setter
-@AllArgsConstructor
 @Builder
 public class GetCategoryListResponse {
     List<String> categoryList;

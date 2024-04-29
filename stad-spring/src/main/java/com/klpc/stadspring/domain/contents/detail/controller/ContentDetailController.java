@@ -4,6 +4,7 @@ import com.klpc.stadspring.domain.contents.bookmark.service.BookmarkedContentSer
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetContentConceptResponse;
+import com.klpc.stadspring.domain.contents.detail.controller.response.GetDetailIdAndThumbnailListResponse;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetDetailIdAndThumbnailResponse;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
@@ -47,7 +48,7 @@ public class ContentDetailController {
 
     @GetMapping("/collections/watching")
     @Operation(summary = "시청 중인 영상 목록", description = "시청 중인 영상 목록")
-    ResponseEntity<List<GetDetailIdAndThumbnailResponse>> getWatchingContent(@RequestParam("userId")  Long userId) {
+    ResponseEntity<GetDetailIdAndThumbnailListResponse> getWatchingContent(@RequestParam("userId")  Long userId) {
         List<Long> detailIdList = watchedContentService.getWatchingContentDetailIdByUserId(userId);
         List<GetDetailIdAndThumbnailResponse> responseList = new ArrayList<>();
         for (Long aLong : detailIdList) {
@@ -56,12 +57,13 @@ public class ContentDetailController {
 
             responseList.add(GetDetailIdAndThumbnailResponse.from(detail, concept));
         }
-        return ResponseEntity.ok(responseList);
+        GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/collections/watchingAndWatched")
     @Operation(summary = "시청한 모든 영상 목록", description = "시청한 영상 목록")
-    ResponseEntity<List<GetDetailIdAndThumbnailResponse>> getWatchingAndWatchedContent(@RequestParam("userId")  Long userId) {
+    ResponseEntity<GetDetailIdAndThumbnailListResponse> getWatchingAndWatchedContent(@RequestParam("userId")  Long userId) {
         List<Long> detailIdList = watchedContentService.getWatchingAndWatchedContentDetailIdByUserId(userId);
         List<GetDetailIdAndThumbnailResponse> responseList = new ArrayList<>();
         for (Long aLong : detailIdList) {
@@ -70,12 +72,13 @@ public class ContentDetailController {
 
             responseList.add(GetDetailIdAndThumbnailResponse.from(detail, concept));
         }
-        return ResponseEntity.ok(responseList);
+        GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/collections/bookmarked")
     @Operation(summary = "북마크 영상 목록", description = "북마크 영상 목록")
-    ResponseEntity<List<GetDetailIdAndThumbnailResponse>> getBookmarkedContent(@RequestParam("userId")  Long userId) {
+    ResponseEntity<GetDetailIdAndThumbnailListResponse> getBookmarkedContent(@RequestParam("userId")  Long userId) {
         List<Long> detailIdList = bookmarkedContentService.getDetailIdByUserId(userId);
         List<GetDetailIdAndThumbnailResponse> responseList = new ArrayList<>();
         for (Long aLong : detailIdList) {
@@ -84,12 +87,13 @@ public class ContentDetailController {
 
             responseList.add(GetDetailIdAndThumbnailResponse.from(detail, concept));
         }
-        return ResponseEntity.ok(responseList);
+        GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/collections/popular")
     @Operation(summary = "인기 영상 목록", description = "인기 영상 목록")
-    ResponseEntity<List<GetDetailIdAndThumbnailResponse>> getPopularContent() {
+    ResponseEntity<GetDetailIdAndThumbnailListResponse> getPopularContent() {
         List<ContentDetail> popularList = detailService.getPopularContent();
         List<GetDetailIdAndThumbnailResponse> responseList = new ArrayList<>();
         for (int i = 0; i < popularList.size(); i++) {
@@ -97,12 +101,13 @@ public class ContentDetailController {
 
             responseList.add(GetDetailIdAndThumbnailResponse.from(popularList.get(i),concept));
         }
-        return ResponseEntity.ok(responseList);
+        GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/collections/updated")
     @Operation(summary = "최신 영상 목록", description = "최신 영상 목록")
-    ResponseEntity<List<GetDetailIdAndThumbnailResponse>> getUpdatedContent() {
+    ResponseEntity<GetDetailIdAndThumbnailListResponse> getUpdatedContent() {
         List<ContentDetail> popularList = detailService.getUpdatedContent();
         List<GetDetailIdAndThumbnailResponse> responseList = new ArrayList<>();
         for (int i = 0; i < popularList.size(); i++) {
@@ -110,6 +115,7 @@ public class ContentDetailController {
 
             responseList.add(GetDetailIdAndThumbnailResponse.from(popularList.get(i),concept));
         }
-        return ResponseEntity.ok(responseList);
+        GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 }
