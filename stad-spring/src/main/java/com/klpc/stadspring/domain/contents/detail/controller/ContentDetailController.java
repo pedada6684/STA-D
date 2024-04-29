@@ -96,10 +96,10 @@ public class ContentDetailController {
     ResponseEntity<GetDetailIdAndThumbnailListResponse> getPopularContent() {
         List<ContentDetail> popularList = detailService.getPopularContent();
         List<GetDetailIdAndThumbnailResponse> responseList = new ArrayList<>();
-        for (int i = 0; i < popularList.size(); i++) {
-            ContentConcept concept = conceptService.getContentConceptById(popularList.get(i).getContentConceptId());
+        for (ContentDetail contentDetail : popularList) {
+            ContentConcept concept = conceptService.getContentConceptById(contentDetail.getContentConceptId());
 
-            responseList.add(GetDetailIdAndThumbnailResponse.from(popularList.get(i),concept));
+            responseList.add(GetDetailIdAndThumbnailResponse.from(contentDetail, concept));
         }
         GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
         return ResponseEntity.ok(response);
@@ -110,10 +110,10 @@ public class ContentDetailController {
     ResponseEntity<GetDetailIdAndThumbnailListResponse> getUpdatedContent() {
         List<ContentDetail> popularList = detailService.getUpdatedContent();
         List<GetDetailIdAndThumbnailResponse> responseList = new ArrayList<>();
-        for (int i = 0; i < popularList.size(); i++) {
-            ContentConcept concept = conceptService.getContentConceptById(popularList.get(i).getContentConceptId());
+        for (ContentDetail contentDetail : popularList) {
+            ContentConcept concept = conceptService.getContentConceptById(contentDetail.getContentConceptId());
 
-            responseList.add(GetDetailIdAndThumbnailResponse.from(popularList.get(i),concept));
+            responseList.add(GetDetailIdAndThumbnailResponse.from(contentDetail, concept));
         }
         GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
         return ResponseEntity.ok(response);
