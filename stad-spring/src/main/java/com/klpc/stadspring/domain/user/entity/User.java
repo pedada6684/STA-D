@@ -2,6 +2,9 @@ package com.klpc.stadspring.domain.user.entity;
 
 import com.klpc.stadspring.domain.cart.entity.CartProduct;
 import com.klpc.stadspring.domain.user.service.command.UpdateUserInfoCommand;
+import com.klpc.stadspring.domain.user.service.command.UpdateUserLocationCommand;
+import com.klpc.stadspring.global.response.ErrorCode;
+import com.klpc.stadspring.global.response.exception.CustomException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -98,5 +101,14 @@ public class User {
     }
     public void addUserLocation(UserLocation userLocation){
         this.userLocations.add(userLocation);
+    }
+    public UserLocation updateUserLocation(UpdateUserLocationCommand command){
+        for (UserLocation location : userLocations) {
+            if (location.getId().equals(command.getLocationId())){
+                location.update(command);
+                return location;
+            }
+        }
+        throw new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
     }
 }

@@ -170,4 +170,10 @@ public class UserService {
         user.addUserLocation(newUserLocation);
         return newUserLocation;
     }
+
+    @Transactional(readOnly = false)
+    public UserLocation updateUserLocation(UpdateUserLocationCommand command) {
+        User user = findUserById(command.getUserId());
+        return user.updateUserLocation(command);
+    }
 }
