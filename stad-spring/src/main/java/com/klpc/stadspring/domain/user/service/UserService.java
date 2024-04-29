@@ -2,6 +2,7 @@ package com.klpc.stadspring.domain.user.service;
 
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.entity.UserLocation;
+import com.klpc.stadspring.domain.user.repository.UserLocationRepository;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.domain.user.service.command.*;
 import com.klpc.stadspring.global.auth.controller.response.LoginResult;
@@ -25,6 +26,7 @@ import java.util.Objects;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserLocationRepository userLocationRepository;
     private final AuthTokenGenerator authTokenGenerator;
     private final RefreshTokenService refreshTokenService;
     private final S3Util s3Util;
@@ -173,7 +175,17 @@ public class UserService {
 
     @Transactional(readOnly = false)
     public UserLocation updateUserLocation(UpdateUserLocationCommand command) {
+        log.info("UpdateUserLocationCommand: "+command);
         User user = findUserById(command.getUserId());
         return user.updateUserLocation(command);
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteUserLocation(DeleteUserLocationCommand command) {
+        log.info("DeleteUserLocationCommand: "+command);
+        long cnt = userLocationRepository.deleteByIdAndUser_Id(command.getLocationId(), command.getUserId());
+        if (cnt == 0){
+            throw new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
+        }
     }
 }
