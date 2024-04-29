@@ -5,6 +5,8 @@ import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.advert.service.AdvertService;
 import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
+import com.klpc.stadspring.domain.contents.category.service.ContentCategoryService;
+import com.klpc.stadspring.domain.contents.category.service.command.request.AddCategoryRequestCommand;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
@@ -50,6 +52,7 @@ public class DummyGenerator {
     private final ProductTypeService productTypeService;
     private final ContentConceptRepository contentConceptRepository;
     private final ContentConceptService contentConceptService;
+    private final ContentCategoryService contentCategoryService;
     private final ContentDetailService contentDetailService;
     private final OrdersService ordersService;
 
@@ -83,6 +86,12 @@ public class DummyGenerator {
      * 컨텐츠 생성
      */
     public void createContent(){
+        AddCategoryRequestCommand categoryCommand = AddCategoryRequestCommand.builder().isMovie(true).name("액션").build();
+        contentCategoryService.addCategory(categoryCommand);
+
+        List<String> genre = new ArrayList<>();
+        genre.add("액션");
+
         AddConceptRequestCommand conceptCommand1 = AddConceptRequestCommand.builder()
                 .audienceAge("19")
                 .playtime("123")
@@ -93,6 +102,7 @@ public class DummyGenerator {
                 .releaseYear("2024")
                 .thumbnail("https://dimg.donga.com/wps/NEWS/IMAGE/2013/03/05/53477680.2.jpg")
                 .title("타짜")
+                .genre(genre)
                 .build();
         contentConceptService.addConcept(conceptCommand1);
 
