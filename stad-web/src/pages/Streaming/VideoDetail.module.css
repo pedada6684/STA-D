@@ -1,34 +1,99 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  margin: 0 5.5rem;
+  background-color: #141414;
+}
+.imgWrapper {
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  right: 50%;
+  /* float: right; */
+  /* padding-top: 10rem; */
+}
 .coverImage {
-  background-position: 50%;
+  /* background-color: rgba(0, 0, 0, 0.5); */
   background-size: cover;
-  bottom: 0;
-  filter: alpha(opacity = 100);
-  left: 0;
-  opacity: 1;
+  background-position: center 10%;
+  min-height: 40vh;
+  /* height: 34vw; */
+  /* width: 100%; */
+  color: #fff;
   position: absolute;
   right: 0;
-  top: 0;
-  transition: opacity 0.4s cubic-bezier(0.665, 0.235, 0.265, 0.8) 0s;
-  width: 100%;
 }
 .vidTitle {
+  padding-top: 2rem;
   color: white;
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: 700;
+  margin-bottom: 1.5rem;
 }
-.info {
-  display: flex;
-  margin: 0 auto;
-  align-items: center;
-  flex-direction: column;
-  justify-content: space-around;
+.detailContainer {
+  position: relative;
+  min-height: 40vw;
+  z-index: 6;
+  background-image: linear-gradient(
+    to right,
+    rgba(20, 20, 20, 1) 0%,
+    rgba(20, 20, 20, 0.71) 29%,
+    rgba(20, 20, 20, 0.62) 38%,
+    rgba(20, 20, 20, 0.5) 50%,
+    rgba(20, 20, 20, 0.38) 62%,
+    rgba(20, 20, 20, 0.38) 86%,
+    rgba(20, 20, 20, 0.11) 100%
+  );
 }
-.customHorizonVignette {
-  bottom: -53rem;
-}
-.customVignetteWrapper {
-  bottom: -53rem;
+.detailWrapper {
+  width: 50%;
 }
 .timeAge {
   display: flex;
+  color: #fff;
+  margin-bottom: 2rem;
+}
+.timeAge span {
+  font-size: 1.3rem;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+.buttonWrapper {
+  display: flex;
+  margin-bottom: 1rem;
+}
+.buttonWrapper div {
+  display: flex;
+  align-items: center;
+}
+.bar {
+  width: 80%;
+  height: 0.5rem;
+  text-align: center;
+  border-radius: 50px;
+  background-color: #807f7f;
+  flex: 2;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.description {
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 2rem;
+}
+.staff {
+  color: #c8c8c8;
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+.staff span:first-child {
+  flex: 1 1 10%;
+  min-width: 10rem;
+}
+
+.staff span {
+  flex: 1 1 90%;
+  line-height: 1.5rem;
+  font-weight: 400;
 }
