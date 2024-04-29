@@ -8,12 +8,13 @@ import 'package:provider/provider.dart';
 import 'package:stad/main.dart';
 import 'package:stad/models/user_model.dart';
 import 'package:stad/providers/user_provider.dart';
+import 'package:stad/services/user_secure_storage.dart';
 
 class UserService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final Dio dio = Dio();
-  final EmUrl = Uri.parse('http://192.168.0.9:8080/api/v1/auth/applogin');
+  final EmUrl = Uri.parse('http://192.168.31.202:8080/api/v1/auth/applogin');
   final locUrl = Uri.parse('http://10.0.2.2:8080/api/v1/auth/applogin');
 
   Future<void> signInWithGoogle(BuildContext context) async {
@@ -42,9 +43,8 @@ class UserService {
       bool profileSent =
           await sendUserProfile(context, user, googleAuth.accessToken);
       if (profileSent) {
-        await Provider.of<UserProvider>(context, listen: false)
-            .setUser(userModel);
-        Navigator.pushReplacement(
+        Provider.of<UserProvider>(context, listen: false).setUser(userModel);
+        await Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MyApp()),
         );
@@ -61,7 +61,8 @@ class UserService {
         UserModel.fromFirebaseUser(user, googleAccessToken).toJson();
     try {
       final response = await dio.post(
-          EmUrl as String,
+        // 'https://www.mystad.com/api/v1/auth/applogin',
+        'http://10.0.2.2:8080/api/v1/auth/applogin',
         data: json.encode(userProfile),
         options: Options(
             followRedirects: false, validateStatus: (status) => status! < 500),
@@ -74,6 +75,8 @@ class UserService {
 
         Map<String, dynamic> payload = Jwt.parseJwt(token);
         int userId = int.tryParse(payload['sub'] as String) ?? 0;
+        await AuthService().saveUserId(userId.toString());
+
         Provider.of<UserProvider>(context, listen: false).setUserId(userId);
         Provider.of<UserProvider>(context, listen: false)
             .setCookie(response.headers['Set-Cookie']![0]);
@@ -82,6 +85,48 @@ class UserService {
       }
     } catch (e) {
       print('Error sending user profile: $e');
+    }
+    return false;
+  }
+
+  Future<bool> updateUserProfile(
+      BuildContext context, String phone, String profileImagePath) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    FormData formData = FormData.fromMap({
+      // "userId": userProvider.userId,
+      "userId": 2,
+      "name": userProvider.user?.name,
+      "nickname": userProvider.user?.nickname,
+      "phone": phone,
+      // "company": null,
+      // "comNo": null,
+      // "department": null,
+      // "password": null,
+      "profile": await MultipartFile.fromFile(profileImagePath,
+          filename: "profile_pic.png"),
+    });
+
+    try {
+      final response = await dio.post(
+        'https://www.mystad.com/api/user/update',
+        data: formData,
+        options: Options(
+          headers: {
+            'Cookie': userProvider.cookie,
+            'Authorization': 'Bearer ${userProvider.token}',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        // 서버로부터 받은 응답으로 UserModel 업데이트
+        UserModel updatedUser = UserModel.fromJson(response.data);
+        userProvider.setUser(updatedUser); // UserProvider 업데이트
+        return true;
+      }
+    } catch (e) {
+      print('Error updating user profile: $e');
+      return false;
     }
     return false;
   }
