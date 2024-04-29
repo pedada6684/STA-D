@@ -20,6 +20,7 @@ public class SchedulingConfig {
 
     // 매 시간마다 작업 실행
     @Scheduled(cron = "0 0 * * * ?")
+//    @Scheduled(fixedDelay = 30000)
     public void runBatchJob() {
         try {
             JobParameters params = new JobParametersBuilder()

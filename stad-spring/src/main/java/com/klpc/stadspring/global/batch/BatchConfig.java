@@ -11,6 +11,7 @@ import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -24,6 +25,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,18 +73,24 @@ public class BatchConfig {
 
             List<AdvertStatistics> logList = new ArrayList<>();
 
+            LocalDateTime oneHourAgo = LocalDateTime.now().minusHours(1);
+
             for (Long advertId : advertIdList) {
-                Long clickCount = advertClickLogRepository.countAddClickLogByAdvertId(advertId)
+                Long clickCount = advertClickLogRepository.countAddClickLogByAdvertId(advertId,oneHourAgo)
                         .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-                Long videoCount = advertVideoLogRepository.countAdvertVideoLog(advertId)
+                Long videoCount = advertVideoLogRepository.countAdvertVideoLog(advertId,oneHourAgo)
                         .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-                Long orderCount = orderLogRepository.countOrderLog(advertId)
+                Long orderCount = orderLogRepository.countOrderLog(advertId,oneHourAgo)
                         .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-                Long orderCancelCount = orderLogRepository.countOrderCancelLog(advertId)
+                Long orderCancelCount = orderLogRepository.countOrderCancelLog(advertId,oneHourAgo)
                         .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+                Long revenue = orderLogRepository.sumClicksByAdvertIdAndDateRange(advertId,oneHourAgo)
+                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
 
 
                 logList.add(AdvertStatistics.createNewAdvertStatistics(
@@ -89,12 +98,13 @@ public class BatchConfig {
                         clickCount,
                         videoCount,
                         orderCount,
-                        orderCancelCount
+                        revenue
                 ));
             }
 
             for (AdvertStatistics statistics : logList) {
-                entityManager.persist(statistics);
+                log.info("statistics: " +statistics);
+                updateAdvertStatistic(statistics);
             }
             entityManager.flush();
             entityManager.clear();
@@ -102,4 +112,26 @@ public class BatchConfig {
             return RepeatStatus.FINISHED;
         });
     }
+    @Transactional
+    public void updateAdvertStatistic(AdvertStatistics advertStatistics) {
+        AdvertStatistics existing = entityManager.createQuery(
+                        "SELECT a FROM AdvertStatistics a WHERE a.advertId = :advertId AND a.date = :date", AdvertStatistics.class)
+                .setParameter("advertId", advertStatistics.getAdvertId())
+                .setParameter("date", LocalDate.now())  // 예시로 오늘 날짜를 사용
+                .getResultStream().findFirst().orElse(null);
+
+        log.info("existing: " + existing);
+
+        if (existing != null) {
+            // 기존 데이터 업데이트
+            existing.updateCounts(advertStatistics.getAdvertClickCount(), advertStatistics.getAdvertVideoCount(),
+                    advertStatistics.getOrderCount(), advertStatistics.getRevenue());
+            entityManager.merge(existing);
+        } else {
+            // 새 데이터 삽입
+            entityManager.persist(advertStatistics);
+        }
+    }
+
+
 }

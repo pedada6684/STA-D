@@ -54,4 +54,22 @@ public class AdvertStatistics {
         advertStatistics.date = LocalDate.now();
         return advertStatistics;
     }
+
+    public void updateCounts(Long newClicks,
+                             Long newVideos,
+                             Long newOrders,
+                             Long newOrderCancels) {
+        if (newClicks != null) {
+            this.advertClickCount += newClicks;
+        }
+        if (newVideos != null) {
+            this.advertVideoCount += newVideos;
+        }
+        if (newOrders != null) {
+            this.orderCount += newOrders;
+        }
+        if (newOrderCancels != null) {
+            this.revenue += newOrderCancels;
+        }
+    }
 }
