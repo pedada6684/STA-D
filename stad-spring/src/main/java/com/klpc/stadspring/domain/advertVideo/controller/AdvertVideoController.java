@@ -32,6 +32,7 @@ public class AdvertVideoController {
     @Operation(summary = "광고 영상 업로드", description = "광고 영상 업로드")
     @ApiResponse(responseCode = "200", description = "광고 영상이 업로드 되었습니다.")
     public ResponseEntity<AddVideoListResponse> addVideoList(@RequestPart("videoList") List<MultipartFile> videoList){
+        log.info("광고 영상 업로드"+"\n"+"videoList Size : "+videoList.size());
         AddVideoListResponse response = advertVideoService.addVideoList(AddVideoListRequestCommand.builder().list(videoList).build());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -70,6 +71,7 @@ public class AdvertVideoController {
     @Operation(summary = "광고 배너 이미지 업로드", description = "광고 배너 이미지 업로드")
     @ApiResponse(responseCode = "200", description = "광고 배너 이미지가 업로드 되었습니다.")
     public ResponseEntity<AddBannerImgResponse> addBannerImg(@RequestPart("bannerImg") MultipartFile bannerImg){
+        log.info("광고 배너 이미지 업로드"+"\n"+"bannerImgName : "+bannerImg.getName());
         AddBannerImgRequestCommand command = AddBannerImgRequestCommand.builder().img(bannerImg).build();
 
         AddBannerImgResponse response = advertVideoService.addBannerImg(command);
