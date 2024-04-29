@@ -14,6 +14,7 @@ public class AddOrderLogCommand {
     private Long orderId;
     private Long contentId;
     private Long productId;
+    private Long price;
     private Boolean status;
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
