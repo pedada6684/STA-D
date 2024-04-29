@@ -1,6 +1,6 @@
 package com.klpc.stadspring.domain.user.entity;
 
-import com.klpc.stadspring.domain.user.service.command.UpdateUserInfoCommand;
+import com.klpc.stadspring.domain.user.service.command.UpdateUserLocationCommand;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -41,24 +41,18 @@ public class UserLocation {
         return userLocation;
     }
 
-//    public void update(UpdateUserLoctionCommand command) {
-//        if (command.getName() != null) {
-//            this.name = command.getName();
-//        }
-//        if (command.getNickname() != null) {
-//            this.nickname = command.getNickname();
-//        }
-//        if (command.getPhone() != null) {
-//           this.phone = command.getPhone();
-//        }
-//        if (command.getCompany() != null) {
-//           this.company = command.getCompany();
-//        }
-//        if (command.getComNo() != null) {
-//           this.comNo = command.getComNo();
-//        }
-//        if (command.getDepartment() != null) {
-//            this.department = command.getDepartment();
-//        }
-//    }
+    public void update(UpdateUserLocationCommand command) {
+        if (command.getLocation() != null) {
+            this.location = command.getLocation();
+        }
+        if (command.getName() != null) {
+            this.name = command.getName();
+        }
+        if (command.getPhone() != null) {
+            this.phone = command.getPhone();
+        }
+        if (command.getLocationNick() != null) {
+            this.locationNick = command.getLocationNick();
+        }
+    }
 }
