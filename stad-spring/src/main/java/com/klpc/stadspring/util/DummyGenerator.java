@@ -7,6 +7,8 @@ import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertReques
 import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
+import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
+import com.klpc.stadspring.domain.contents.concept.service.command.request.AddConceptRequestCommand;
 import com.klpc.stadspring.domain.orders.service.OrdersService;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequestCommand;
 import com.klpc.stadspring.domain.product.entity.Product;
@@ -45,6 +47,7 @@ public class DummyGenerator {
     private final ProductRepository productRepository;
     private final ProductTypeService productTypeService;
     private final ContentConceptRepository contentConceptRepository;
+    private final ContentConceptService contentConceptService;
     private final OrdersService ordersService;
 
 //    @PostConstruct
@@ -69,6 +72,23 @@ public class DummyGenerator {
 
         assert dummyProductType != null;
         addOrders(normalUser,dummyProductType,contentList.get(0),allAdvertByUser.get(0).getId());
+    }
+
+    public void createContent(){
+        AddConceptRequestCommand command1 = AddConceptRequestCommand.builder()
+                .audienceAge("19")
+                .playtime("123")
+                .description("내가 코를 만지면")
+                .cast("이서윤")
+                .creator("이태경")
+                .isMovie(true)
+                .releaseYear("2024")
+                .thumbnail("https://dimg.donga.com/wps/NEWS/IMAGE/2013/03/05/53477680.2.jpg")
+                .title("타짜")
+                .build();
+        contentConceptService.addConcept(command1);
+
+        AddDetailRequestCommand
     }
 
     /**
