@@ -4,27 +4,22 @@ import 'package:stad/models/review_model.dart'; // Review 모델 클래스를 �
 class ReviewService {
   final Dio _dio = Dio(); // Dio 인스턴스 생성
 
-  // 서버로부터 사용자 리뷰 목록을 불러오는 메서드
+  // 사용자 리뷰 목록을 불러오는 메서드
   Future<List<Review>> fetchMyReviews(int userId) async {
     try {
-      print('$userId');
-      print('$userId');
-      print('$userId');
-      print('$userId');
-      final response = await _dio
-          .get('https://www.mystad.com/api/review/mypage/list?userId=$userId');
+      final response = await _dio.get('http://10.0.2.2:8080/api/review/list/user/$userId');
+      print('fetchMyReviews response: ${response.data}');  // 응답 데이터 {reviewList : []}
+
       if (response.statusCode == 200 && response.data != null) {
-        // 서버 응답으로부터 Review 목록을 생성합니다.
-        List<Review> reviews = List<Review>.from(
-            response.data.map((data) => Review.fromJson(data)));
-        return reviews; // Review 목록을 반환합니다.
+        List<dynamic> reviewsList = response.data['reviewList'];  // 'reviewList' 키로 리스트 접근
+        List<Review> reviews = reviewsList.map((data) => Review.fromJson(data)).toList();
+        return reviews; // Review 목록을 반환
       } else {
-        throw Exception('Failed to load reviews');
+        throw Exception('리뷰 받아오기 실패');
       }
     } on DioError catch (e) {
-      // DioError를 캐치하여 처리합니다.
       print('Error fetching reviews: ${e.message}');
-      throw Exception('Error occurred while fetching reviews');
+      throw Exception('리뷰 받아오다가 에러 났음');
     }
   }
 }
