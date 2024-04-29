@@ -30,7 +30,6 @@ public class LogService {
     private final AdvertClickLogRepository advertClickLogRepository;
     private final AdvertVideoLogRepository advertVideoLogRepository;
     private final OrderLogRepository orderLogRepository;
-    private final OrderReturnLogRepository orderReturnLogRepository;
     private final AdvertStatisticsRepository advertStatisticsRepository;
 
     @Transactional
