@@ -11,6 +11,7 @@ import 'package:stad/screen/myStad/shop/myaddress_screen.dart';
 import 'package:stad/screen/myStad/shop/myorder_scren.dart';
 import 'package:stad/screen/myStad/shop/myreview_screen.dart';
 import 'package:stad/screen/myStad/stad/mycommercial_screen.dart';
+import 'package:stad/screen/myStad/user/edit_user_screen.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
 
@@ -160,7 +161,7 @@ class _MyStadScreenState extends State<MyStadScreen> {
                   _handleSignout().then((_) {
                     Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => MyApp()),
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
                         (Route<dynamic> route) => false);
                   });
                 }),
@@ -279,7 +280,10 @@ class UserInfoContainer extends StatelessWidget {
                             ],
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => EditUserScreen()));
+                            },
                             icon: Icon(
                               Icons.chevron_right,
                               color: darkGray,
