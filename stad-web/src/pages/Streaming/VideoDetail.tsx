@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Content from "../../components/Container/Content";
 import TVContainer from "../../components/Container/TVContainer";
 import TVNav from "../../components/Nav/TVNav";
@@ -27,6 +27,8 @@ interface VideoDetailProps {
 }
 
 export default function VideoDetail() {
+  const navigate = useNavigate();
+
   const allVideos: VideoDetailProps[] = [
     ...smallThumbnail,
     ...dramaThumbnail,
@@ -49,6 +51,9 @@ export default function VideoDetail() {
   if (!video) {
     return <div>Video not found.</div>;
   }
+  const handlePlayClick = () => {
+    navigate(`/tv/stream/${videoId}`); // 스트리밍 페이지로 이동
+  };
 
   const backgroundStyle = {
     backgroundImage: `linear-gradient(
@@ -96,7 +101,7 @@ export default function VideoDetail() {
                     </div>
                     <div className={`${styles.bar}`}></div>
                     <div className={`${styles.buttonWrapper}`}>
-                      <PlayButton />
+                      <PlayButton onClick={handlePlayClick} />
                       <AddButton />
                     </div>
                     <div className={`${styles.description}`}>
