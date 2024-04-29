@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/models/order_model.dart';
+import 'package:stad/providers/user_provider.dart';
+import 'package:stad/services/order_service.dart';
 import 'package:stad/widget/app_bar.dart';
 
 class MyOrderScreen extends StatefulWidget {
@@ -11,21 +15,73 @@ class MyOrderScreen extends StatefulWidget {
 }
 
 class _MyOrderScreenState extends State<MyOrderScreen> {
-  final List<Map<String, dynamic>> _orders = List.generate(15, (index) {
-    // Assuming every 3rd item starts a new group with a random date
-    final isNewDate = index % 3 == 0;
-    final randomDay = isNewDate ? (1 + index ~/ 3) : 0;
-    return {
-      'title': 'Product Title $index',
-      'description': 'Product Description $index',
-      'isNewDate': isNewDate,
-      'date':
-          isNewDate ? '2024.04.${randomDay.toString().padLeft(2, '1')}' : '',
-    };
-  });
+  // final List<Map<String, dynamic>> _orders = List.generate(15, (index) {
+  //   // Assuming every 3rd item starts a new group with a random date
+  //   final isNewDate = index % 3 == 0;
+  //   final randomDay = isNewDate ? (1 + index ~/ 3) : 0;
+  //   return {
+  //     'title': 'Product Title $index',
+  //     'description': 'Product Description $index',
+  //     'isNewDate': isNewDate,
+  //     'date':
+  //         isNewDate ? '2024.04.${randomDay.toString().padLeft(2, '1')}' : '',
+  //   };
+  // });
+
+  List<Order>? _orders;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+      () {
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        if (userProvider.userId == null) {
+          userProvider.fetchUser().then((_) {
+            if (userProvider.userId != null) {
+              _fetchOrderData();
+            }
+          });
+        } else {
+          _fetchOrderData();
+        }
+      },
+    );
+  }
+
+  // Future<void> _initializeUserAndFetchOrders() async {
+  //   final userProvider = Provider.of<UserProvider>(context, listen: false);
+  //
+  //   // fetchUser가 비동기적으로 처리됩니다.
+  //   await userProvider.fetchUser();
+  //
+  //   if (userProvider.userId != null) {
+  //     _fetchOrderData();
+  //   } else {
+  //     setState(() {
+  //       _isLoading = false; // 로딩 상태 업데이트
+  //       print("User ID is not available. Ensure user is logged in.");
+  //     });
+  //   }
+  // }
+
+  Future<void> _fetchOrderData() async {
+    setState(() => _isLoading = true);
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final orders = await OrderService().fetchOrders(userProvider.userId!);
+      setState(() {
+        _orders = orders;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading orders: $e');
+      setState(() => _isLoading = false);
+    }
+  }
 
   double _progress = 0.0;
-  bool _isLoading = false;
 
   void simulateLoading() async {
     setState(() {
@@ -49,12 +105,6 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    simulateLoading(); // 로딩 시뮬레이션 시작
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainWhite,
@@ -64,80 +114,98 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
         showHomeButton: true,
         isLoading: _isLoading,
         progressValue: _progress,
-
       ),
-      body: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            bottom: 0,
-            left: 72,
-            child: Container(
-              width: 1,
-              color: mainNavy,
-            ),
-          ),
-          CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                  child: SizedBox(
-                height: 40.0,
-              )),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final order = _orders[index];
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (order['isNewDate'])
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 24.0),
-                            child: Center(
-                              child: Text(order['date'],
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: mainNavy,
-                                      fontWeight: FontWeight.w600)),
-                            ),
-                          ),
-                        _buildOrderItem(
-                          title: order['title'],
-                          description: order['description'],
-                        ),
-                      ],
+      // body: Stack(
+      //   children: [
+      //     Positioned(
+      //       top: 0,
+      //       bottom: 0,
+      //       left: 72,
+      //       child: Container(
+      //         width: 1,
+      //         color: mainNavy,
+      //       ),
+      //     ),
+      //     CustomScrollView(
+      //       slivers: [
+      //         SliverToBoxAdapter(
+      //             child: SizedBox(
+      //           height: 40.0,
+      //         )),
+      //         SliverList(
+      //           delegate: SliverChildBuilderDelegate(
+      //             (context, index) {
+      //               final order = _orders[index];
+      //               return Column(
+      //                 crossAxisAlignment: CrossAxisAlignment.start,
+      //                 children: [
+      //                   if (order['isNewDate'])
+      //                     Padding(
+      //                       padding: const EdgeInsets.symmetric(
+      //                           horizontal: 16.0, vertical: 24.0),
+      //                       child: Center(
+      //                         child: Text(order['date'],
+      //                             style: TextStyle(
+      //                                 fontSize: 18,
+      //                                 color: mainNavy,
+      //                                 fontWeight: FontWeight.w600)),
+      //                       ),
+      //                     ),
+      //                   _buildOrderItem(
+      //                     title: order['title'],
+      //                     description: order['description'],
+      //                   ),
+      //                 ],
+      //               );
+      //             },
+      //             childCount: _orders.length,
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //     Positioned(
+      //       top: 0,
+      //       child: Container(
+      //         width: MediaQuery.of(context).size.width,
+      //         decoration: BoxDecoration(color: mainWhite),
+      //         child: Padding(
+      //           padding: const EdgeInsets.all(8.0),
+      //           child: Row(
+      //             mainAxisAlignment: MainAxisAlignment.end,
+      //             children: [
+      //               Text(
+      //                 '최근 3개월',
+      //                 style: TextStyle(
+      //                   color: mainNavy,
+      //                   fontSize: 16.0,
+      //                 ),
+      //               ),
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator()) // 로딩 중 표시
+          : _orders == null || _orders!.isEmpty
+              ? Center(
+                  child: Text(
+                  '주문 내역이 없습니다.',
+                  style: TextStyle(color: midGray, fontSize: 16.0),
+                )) // 주문 내역이 없을 때 표시
+              : ListView.builder(
+                  itemCount: _orders!.length,
+                  itemBuilder: (context, index) {
+                    // 주문 목록 항목을 만드는 코드...
+                    final order = _orders![index];
+                    return _buildOrderItem(
+                      title: order.productName, // 실제 주문 데이터의 속성을 사용해야 합니다.
+                      description: order.orderDate, // 실제 주문 데이터의 속성을 사용해야 합니다.
                     );
                   },
-                  childCount: _orders.length,
                 ),
-              ),
-            ],
-          ),
-          Positioned(
-            top: 0,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(color: mainWhite),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      '최근 3개월',
-                      style: TextStyle(
-                        color: mainNavy,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
