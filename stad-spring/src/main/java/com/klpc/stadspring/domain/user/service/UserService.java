@@ -1,7 +1,7 @@
 package com.klpc.stadspring.domain.user.service;
 
 import com.klpc.stadspring.domain.user.entity.User;
-import com.klpc.stadspring.domain.user.entity.UserYoutubeInfo;
+import com.klpc.stadspring.domain.user.entity.UserLocation;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.domain.user.service.command.*;
 import com.klpc.stadspring.global.auth.controller.response.LoginResult;
@@ -153,5 +153,20 @@ public class UserService {
         log.info("LogoutCommand: "+command);
         refreshTokenService.removeRefreshToken(command.getUserId());
         return;
+    }
+
+    @Transactional(readOnly = false)
+    public UserLocation createUserLocation(CreateUserLocationCommand command) {
+        log.info("CreateUserLocationCommand: "+command);
+        User user = findUserById(command.getUserId());
+        UserLocation newUserLocation = UserLocation.createNewUserLocation(
+                user,
+                command.getLocation(),
+                command.getName(),
+                command.getPhone(),
+                command.getLocationNick()
+        );
+        user.addUserLocation(newUserLocation);
+        return newUserLocation;
     }
 }
