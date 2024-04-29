@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
-import 'package:stad/main.dart';
 import 'package:stad/models/cart_model.dart';
 import 'package:stad/services/cart_service.dart';
 import 'package:stad/widget/app_bar.dart';
