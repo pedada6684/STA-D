@@ -3,9 +3,11 @@ package com.klpc.stadspring.domain.user.controller;
 import com.klpc.stadspring.domain.user.controller.request.CreateUserLocationRequest;
 import com.klpc.stadspring.domain.user.controller.request.UpdateProfileImgRequest;
 import com.klpc.stadspring.domain.user.controller.request.UpdateUserInfoRequest;
+import com.klpc.stadspring.domain.user.controller.request.UpdateUserLocationRequest;
 import com.klpc.stadspring.domain.user.controller.response.CreateUserLocationResponse;
 import com.klpc.stadspring.domain.user.controller.response.GetUserInfoResponse;
 import com.klpc.stadspring.domain.user.controller.response.UpdateProfileResponse;
+import com.klpc.stadspring.domain.user.controller.response.UpdateUserLocationResponse;
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.entity.UserLocation;
 import com.klpc.stadspring.domain.user.service.UserService;
@@ -81,6 +83,16 @@ public class UserController {
         log.info("CreateUserLocationRequest: " + request);
         UserLocation userLocation = userService.createUserLocation(request.toCommand());
         CreateUserLocationResponse response = CreateUserLocationResponse.from(userLocation);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/location")
+    @Operation(summary = "유저 배송지 수정", description = "유저 배송지 수정")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UpdateProfileResponse.class)))
+    public ResponseEntity<UpdateUserLocationResponse> updateUserLocation(@RequestBody UpdateUserLocationRequest request) {
+        log.info("CreateUserLocationRequest: " + request);
+        UserLocation userLocation = userService.updateUserLocation(request.toCommand());
+        UpdateUserLocationResponse response = UpdateUserLocationResponse.from(userLocation);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
