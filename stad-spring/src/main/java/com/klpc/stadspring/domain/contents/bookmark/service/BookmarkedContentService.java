@@ -35,7 +35,7 @@ public class BookmarkedContentService {
     }
 
     public boolean checkBookmark(Long userId, Long contentId) {
-        if(repository.findByUserIdAndContentDetail(userId, contentId).isPresent()) {
+        if(repository.findByUserIdAndContentDetailId(userId, contentId).isPresent()) {
             return true;
         }
         return false;
@@ -61,11 +61,7 @@ public class BookmarkedContentService {
     public DeleteBookmarkResponse deleteBookmark(DeleteBookmarkRequsetCommand command) {
         log.info("DeleteBookmarkRequsetCommand: "+command);
 
-        User user = userRepository.findById(command.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        ContentDetail detail = detailRepository.findById(command.getDetailId())
-                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        BookmarkedContent bookmark = repository.findByUserIdAndContentDetail(user.getId(), detail.getId())
+        BookmarkedContent bookmark = repository.findByUserIdAndContentDetailId(command.getUserId(), command.getDetailId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         repository.delete(bookmark);
