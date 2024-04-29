@@ -27,12 +27,15 @@ public class SwaggerConfig {
         );
 
         List<Server> servers = new ArrayList<>();
-        Server sslServer = new Server();
-        Server server = new Server();
-        server.setUrl("http://localhost:8080/api");
-    //    sslServer.setUrl("https://stad.live/api");
-        servers.add(server);
-    //    servers.add(sslServer);
+        Server local_server = new Server();
+        local_server.setUrl("http://localhost:8080/api");
+        local_server.description("local server");
+        servers.add(local_server);
+
+        Server prod_server = new Server();
+        prod_server.setUrl("https://www.mystad.com/api");
+        prod_server.description("prod server");
+        servers.add(prod_server);
 
         return new OpenAPI()
             .components(new Components())
