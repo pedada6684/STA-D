@@ -35,10 +35,10 @@
 }
 .buttonWrapper {
   display: flex;
-  margin: 0 1rem;
 }
 .playButton {
   background-color: white;
+  margin-right: 1rem;
 }
 .infoButton {
   background-color: #afb0b4;
@@ -54,10 +54,21 @@
   cursor: pointer;
   border-radius: 0.5vw;
 }
-.mainButton:hover {
+.mainButton:hover,
+.addButton:hover {
   transition: all 0.5s;
   background-color: rgba(255, 255, 255, 0.75);
 }
 .mainButton img {
+  width: 2rem;
+}
+.addButton {
+  border-radius: 50%;
+  border: 1px solid #dddddd;
+  background-color: rgba(20, 20, 20, 0.5);
+  padding: 0.8rem 0.8rem;
+  cursor: pointer;
+}
+.addButton img {
   width: 2rem;
 }
