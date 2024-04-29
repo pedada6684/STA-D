@@ -4,10 +4,9 @@ class Order {
   final String orderStatus;
   final int contentId;
   final int advertId;
-  final String deliveryStatus;
-  final int productId;
-  final String productName;
-  final String productImgUrl;
+  final List<int> productTypeId;
+  final List<String> productTypeName;
+  final List<String> productTypeThumbnailUrl;
 
   Order({
     required this.orderId,
@@ -15,23 +14,21 @@ class Order {
     required this.orderStatus,
     required this.contentId,
     required this.advertId,
-    required this.deliveryStatus,
-    required this.productId,
-    required this.productName,
-    required this.productImgUrl,
+    required this.productTypeId,
+    required this.productTypeName,
+    required this.productTypeThumbnailUrl,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
-      orderId: json['orderId'] as int,
+      orderId: json['ordersId'] as int,
       orderDate: json['orderDate'] as String,
       orderStatus: json['orderStatus'] as String,
       contentId: json['contentId'] as int,
       advertId: json['advertId'] as int,
-      deliveryStatus: json['deliveryStatus'] as String,
-      productId: json['productId'] as int,
-      productName: json['productName'] as String,
-      productImgUrl: json['productImgUrl'] as String,
+      productTypeId: List<int>.from(json['productTypeId']),
+      productTypeName: List<String>.from(json['productTypeName']),
+      productTypeThumbnailUrl: List<String>.from(json['productTypeThumbnailUrl']),
     );
   }
 }
