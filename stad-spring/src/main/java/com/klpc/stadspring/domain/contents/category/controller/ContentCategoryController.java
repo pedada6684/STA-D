@@ -2,15 +2,10 @@ package com.klpc.stadspring.domain.contents.category.controller;
 
 import com.klpc.stadspring.domain.contents.category.controller.response.GetCategoryListResponse;
 import com.klpc.stadspring.domain.contents.category.service.ContentCategoryService;
-import com.klpc.stadspring.domain.contents.detail.controller.request.AddDetailRequest;
-import com.klpc.stadspring.domain.contents.detail.controller.response.AddDetailResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

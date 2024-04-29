@@ -12,16 +12,16 @@ import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BookmarkedContentService {
     private final BookmarkedContentRepository repository;
@@ -40,7 +40,8 @@ public class BookmarkedContentService {
         }
         return false;
     }
-    
+
+    @Transactional(readOnly = false)
     public AddBookmarkResponse addBookmark(AddBookmarkRequestCommand command) {
         log.info("AddBookmarkRequestCommand : " + command);
 

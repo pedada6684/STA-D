@@ -23,14 +23,11 @@ public class ContentCategoryRelationship {
     @JoinColumn(name = "content_concept_id")
     private ContentConcept contentConcept;
 
-    public static ContentCategoryRelationship createContentCategoryRelationship (
-            ContentCategory contentCategory,
-            ContentConcept contentConcept
-    ) {
-        ContentCategoryRelationship contentCategoryRelationship = new ContentCategoryRelationship();
-        contentCategoryRelationship.contentCategory = contentCategory;
-        contentCategoryRelationship.contentConcept = contentConcept;
+    public static ContentCategoryRelationship createRelationship(ContentCategory category, ContentConcept concept) {
+        ContentCategoryRelationship newRelationship = new ContentCategoryRelationship();
+        newRelationship.contentCategory = category;
+        newRelationship.contentConcept = concept;
 
-        return contentCategoryRelationship;
+        return newRelationship;
     }
 }

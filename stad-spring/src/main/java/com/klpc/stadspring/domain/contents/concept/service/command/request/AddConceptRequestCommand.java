@@ -2,8 +2,11 @@ package com.klpc.stadspring.domain.contents.concept.service.command.request;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+import java.util.List;
+
+@Getter
 @Builder
 public class AddConceptRequestCommand {
     private String audienceAge;
@@ -15,4 +18,5 @@ public class AddConceptRequestCommand {
     private String releaseYear;
     private String thumbnail;
     private String title;
+    private List<String> genre;
 }
