@@ -32,11 +32,13 @@ class OrderService {
 
   //내 주문목록 불러오기 => 백엔드 수정 필요
   Future<List<Order>> fetchOrders(int userId) async {
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
+    print('fetchOrders : $userId');
+    print('fetchOrders : $userId');
+    print('fetchOrders : $userId');
+    print('fetchOrders : $userId');
+    print('fetchOrders : $userId');
+    print('fetchOrders : $userId');
+
     try {
       final response = await dio
           // .get('https://www.mystad.com/api/orders/list?userId=${userId}');
