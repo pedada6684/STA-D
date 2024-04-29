@@ -12,6 +12,8 @@ import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +36,14 @@ public class ContentConceptController {
 
     @GetMapping("/series")
     @Operation(summary = "시리즈 메인 영상 목록", description = "시리즈 메인 영상 목록")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "시리즈 메인 영상 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
     ResponseEntity<GetCategoryAndConceptsListResponse> getSeriesContent() {
+        log.info("시리즈 메인 영상 목록 조회" + "\n" + "getSeriesContent");
+
         List<Long> seriesCategoryIdList = categoryService.getSeriesCategoriesId();
         List<GetCategoryAndConceptsResponse> responseList = new ArrayList<>();
         for (Long aLong : seriesCategoryIdList) {
@@ -55,7 +64,14 @@ public class ContentConceptController {
 
     @GetMapping("/series/{category}")
     @Operation(summary = "시리즈 카테고리별 영상 목록", description = "시리즈 카테고리별 영상 목록")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "시리즈 카테고리별 영상 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
     ResponseEntity<GetConceptListResponse> getSeriesContentByCategory(@PathVariable String category) {
+        log.info("시리즈 카테고리별 영상 목록 조회" + "\n" + "getSeriesContentByCategory : " + category);
+
         Long categoryId = categoryService.getIdByIsMovieAndName(false, category);
         List<Long> conceptIdList = categoryRelationshipService.getConceptIdByCategory(categoryId);
         List<GetConceptResponse> responseList = new ArrayList<>();
@@ -70,7 +86,14 @@ public class ContentConceptController {
 
     @GetMapping("/movie")
     @Operation(summary = "영화 메인 영상 목록", description = "영화 메인 영상 목록")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "영화 메인 영상 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
     ResponseEntity<GetCategoryAndConceptsListResponse> getMovieContent() {
+        log.info("영화 메인 영상 목록 조회" + "\n" + "getMovieContent");
+
         List<Long> movieCategoryIdList = categoryService.getMovieCategoriesId();
         List<GetCategoryAndConceptsResponse> responseList = new ArrayList<>();
         for (Long aLong : movieCategoryIdList) {
@@ -91,7 +114,14 @@ public class ContentConceptController {
 
     @GetMapping("/movie/{category}")
     @Operation(summary = "영화 카테고리별 영상 목록", description = "영화 카테고리별 영상 목록")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "영화 카테고리별 영상 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
     ResponseEntity<GetConceptListResponse> getMovieContentByCategory(@PathVariable String category) {
+        log.info("영화 카테고리별 영상 목록 조회" + "\n" + "getMovieContentByCategory : " + category);
+
         Long categoryId = categoryService.getIdByIsMovieAndName(true, category);
         List<Long> conceptIdList = categoryRelationshipService.getConceptIdByCategory(categoryId);
         List<GetConceptResponse> responseList = new ArrayList<>();
@@ -106,7 +136,14 @@ public class ContentConceptController {
 
     @GetMapping("/search/{keyword}")
     @Operation(summary = "키워드로 검색", description = "키워드로 검색")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "키워드로 콘텐츠 검색 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
     ResponseEntity<List<GetConceptResponse>> getContentConceptByKeyword(@PathVariable String keyword) {
+        log.info("키워드로 콘텐츠 검색" + "\n" + "getSeriesCategories : "+keyword);
+
         List<ContentConcept> conceptList = conceptService.getContentConceptByKeyword(keyword);
         List<GetConceptResponse> responseList = new ArrayList<>();
         for (ContentConcept contentConcept : conceptList) {
