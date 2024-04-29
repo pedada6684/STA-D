@@ -10,6 +10,7 @@ import com.klpc.stadspring.domain.contents.category.service.command.request.AddC
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
+import com.klpc.stadspring.domain.contents.concept.service.ContentParsingService;
 import com.klpc.stadspring.domain.contents.concept.service.command.request.AddConceptRequestCommand;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
 import com.klpc.stadspring.domain.contents.detail.service.command.request.AddDetailRequestCommand;
@@ -28,12 +29,17 @@ import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.domain.user.service.UserService;
 import com.klpc.stadspring.domain.user.service.command.JoinCompanyUserCommand;
 import com.klpc.stadspring.domain.user.service.command.JoinUserCommand;
+import com.klpc.stadspring.global.response.exception.CustomException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +60,9 @@ public class DummyGenerator {
     private final ContentConceptService contentConceptService;
     private final ContentCategoryService contentCategoryService;
     private final ContentDetailService contentDetailService;
+    private final ContentParsingService contentParsingService;
     private final OrdersService ordersService;
+    private final ResourceLoader resourceLoader;
 
     @PostConstruct
     public void createDummy(){
@@ -85,38 +93,57 @@ public class DummyGenerator {
     /**
      * 컨텐츠 생성
      */
-    public void createContent(){
-        AddCategoryRequestCommand categoryCommand = AddCategoryRequestCommand.builder().isMovie(true).name("액션").build();
-        contentCategoryService.addCategory(categoryCommand);
+//    public void createContent(){
+//        AddCategoryRequestCommand categoryCommand = AddCategoryRequestCommand.builder().isMovie(true).name("액션").build();
+//        contentCategoryService.addCategory(categoryCommand);
+//
+//        List<String> genre = new ArrayList<>();
+//        genre.add("액션");
+//
+//        AddConceptRequestCommand conceptCommand1 = AddConceptRequestCommand.builder()
+//                .audienceAge("19")
+//                .playtime("123")
+//                .description("내가 코를 만지면")
+//                .cast("이서윤")
+//                .creator("이태경")
+//                .isMovie(true)
+//                .releaseYear("2024")
+//                .thumbnail("https://dimg.donga.com/wps/NEWS/IMAGE/2013/03/05/53477680.2.jpg")
+//                .title("타짜")
+//                .genre(genre)
+//                .build();
+//        contentConceptService.addConcept(conceptCommand1);
+//
+//        List<ContentConcept> conceptList = contentConceptService.getContentConceptByKeyword("타짜");
+//
+//        AddDetailRequestCommand detailCommand1 = AddDetailRequestCommand.builder()
+//                .episode(1)
+//                .videoUrl("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/71cc0506891f4de4aa5bc28389e971c9videoList")
+//                .summary("손은 눈보다 빠르다")
+//                .contentConceptId(conceptList.get(0).getId())
+//                .build();
+//
+//        contentDetailService.addDetail(detailCommand1);
+//    }
 
-        List<String> genre = new ArrayList<>();
-        genre.add("액션");
+    public void createContent() {
+        String filePath = "C:\\Users\\SSAFY\\Desktop\\자율PJT\\____________git____________\\S10P31B206\\stad-spring\\src\\main\\resources\\crawl.json";
 
-        AddConceptRequestCommand conceptCommand1 = AddConceptRequestCommand.builder()
-                .audienceAge("19")
-                .playtime("123")
-                .description("내가 코를 만지면")
-                .cast("이서윤")
-                .creator("이태경")
-                .isMovie(true)
-                .releaseYear("2024")
-                .thumbnail("https://dimg.donga.com/wps/NEWS/IMAGE/2013/03/05/53477680.2.jpg")
-                .title("타짜")
-                .genre(genre)
-                .build();
-        contentConceptService.addConcept(conceptCommand1);
+        try {
+            // ResourceLoader를 사용하여 리소스 파일 로드
+            Resource resource = resourceLoader.getResource(filePath);
 
-        List<ContentConcept> conceptList = contentConceptService.getContentConceptByKeyword("타짜");
-
-        AddDetailRequestCommand detailCommand1 = AddDetailRequestCommand.builder()
-                .episode(1)
-                .videoUrl("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/71cc0506891f4de4aa5bc28389e971c9videoList")
-                .summary("손은 눈보다 빠르다")
-                .contentConceptId(conceptList.get(0).getId())
-                .build();
-
-        contentDetailService.addDetail(detailCommand1);
+            // JSON 파일을 파싱하고 저장하는 메서드 호출
+            contentParsingService.parseAndSaveJson(filePath);
+            // 성공 시, 필요한 경우 성공 메시지 로깅
+            System.out.println("Content successfully parsed and saved from file: " + filePath);
+        } catch (Exception e) {
+            // 일반적인 예외 처리
+            System.err.println("An unexpected error occurred while parsing the JSON file: " + filePath);
+            e.printStackTrace();
+        }
     }
+
 
     /**
      * 유저 생성
