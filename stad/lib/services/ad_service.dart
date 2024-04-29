@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:stad/constant/api.dart';
 
 class AdService {
   final Dio dio = Dio();
-  final url = Uri.parse('http://10.0.2.2:8080/api/advert/advert-info');
+  final url = Uri.parse('$locApi/advert/advert-info');
 
   //광고 정보 받아오기
   Future<void> getAdInfo(int advertId) async {

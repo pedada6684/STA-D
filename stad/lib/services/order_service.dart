@@ -10,30 +10,24 @@ class OrderService {
 
   //내 주문목록 불러오기 => 백엔드 수정 필요
   Future<List<Order>> fetchOrders(int userId) async {
-    print('fetchOrders : $userId');
-    print('fetchOrders : $userId');
-    print('fetchOrders : $userId');
-    print('fetchOrders : $userId');
-    print('fetchOrders : $userId');
-    print('fetchOrders : $userId');
-
     try {
-      final response = await dio
-          // .get('https://www.mystad.com/api/orders/list?userId=${userId}');
-          .get('${orderUrl}$userId');
+      final response = await dio.get('${orderUrl}$userId');
       if (response.statusCode == 200) {
-        List<dynamic> ordersJson = response.data['content'];
-        List<Order> orders =
-            ordersJson.map((json) => Order.fromJson(json)).toList();
-        print('주문 목록 불러와지나? : $orders');
-        return orders;
+        // 'content' 필드가 null인지 확인
+        if (response.data['content'] != null) {
+          List<dynamic> ordersJson = response.data['content'];
+          List<Order> orders = ordersJson.map((json) => Order.fromJson(json)).toList();
+          return orders;
+        } else {
+          // 'content'가 null이면 빈 리스트 반환
+          return [];
+        }
       } else {
-        print('주문 목록 불러오기 대실패:${response.data}');
-        throw Exception('Failed to load orders');
+        throw Exception('Failed to load orders: ${response.statusCode}');
       }
     } on DioError catch (e) {
-      print('DioError caught: ${e.response?.statusCode} - ${e.response?.data}');
       throw Exception('Error occurred while fetching orders: ${e.message}');
     }
   }
+
 }
