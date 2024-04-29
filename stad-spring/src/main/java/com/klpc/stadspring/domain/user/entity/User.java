@@ -99,9 +99,20 @@ public class User {
     public void updateYoutubeInfo(String youtubeInfo){
         this.youtubeInfo = UserYoutubeInfo.createNewUserYoutubeInfo(youtubeInfo);
     }
+
+    /**
+     * userLocation 저장
+     * @param userLocation: 저장할 장소
+     */
     public void addUserLocation(UserLocation userLocation){
         this.userLocations.add(userLocation);
     }
+
+    /**
+     * userLocation 수정
+     * @param command
+     * @return
+     */
     public UserLocation updateUserLocation(UpdateUserLocationCommand command){
         for (UserLocation location : userLocations) {
             if (location.getId().equals(command.getLocationId())){
