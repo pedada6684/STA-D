@@ -1,32 +1,62 @@
-import { ChangeEvent, MouseEvent, useState } from "react";
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import styles from "./EnterpriseInfo.module.css";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 
-interface EnterpriseData {
+export interface EnterpriseData {
+  userId?: number;
   email: string;
   name: string;
   phone: string;
   company: string;
   comNo: string;
   password: string;
+  profile: string;
 }
 
 interface EditProps {
+  data?: EnterpriseData;
   onSaveClick: (e: MouseEvent<HTMLDivElement>) => void;
+  updateData: (updatedData: EnterpriseData) => void;
 }
 
-export default function EnterpriseEdit({ onSaveClick }: EditProps) {
-  const [data, setData] = useState<EnterpriseData>({
-    email: "ssafy@gmail.com",
-    name: "홍길동",
-    phone: "034-234-2342",
-    company: "홍길동전자",
-    comNo: "000-00-0000",
-    password: "",
-  });
+export default function EnterpriseEdit({
+  data,
+  onSaveClick,
+  updateData,
+}: EditProps) {
+  const userId = useSelector((state: RootState) => state.user.userId);
+  const userCompany = useSelector((state: RootState) => state.user.userCompany);
+  console.log(userCompany);
+  const [formData, setFormData] = useState<EnterpriseData>(
+    data || {
+      userId: userId,
+      email: "",
+      name: "",
+      phone: "",
+      company: userCompany,
+      comNo: "",
+      password: "",
+      profile: "",
+    }
+  );
+  useEffect(() => {
+    if (data) {
+      setFormData({
+        ...data,
+        userId: userId, // userId 업데이트 보장
+        company: userCompany,
+        password: "", // 비밀번호 필드 초기화
+      });
+    }
+  }, [data]);
 
   const handleChange =
     (field: keyof EnterpriseData) => (e: ChangeEvent<HTMLInputElement>) => {
-      setData({ ...data, [field]: e.target.value });
+      const updatedData = { ...formData, [field]: e.target.value };
+      setFormData(updatedData);
+      updateData(updatedData); // 상위 컴포넌트에 변경된 데이터 전달
     };
   return (
     <div>
@@ -36,7 +66,7 @@ export default function EnterpriseEdit({ onSaveClick }: EditProps) {
           <div className={`${styles.space}`}>
             <input
               type="text"
-              value={data.email}
+              value={formData.email}
               className={styles.txtInput}
               onChange={handleChange("email")}
             />
@@ -48,7 +78,7 @@ export default function EnterpriseEdit({ onSaveClick }: EditProps) {
           <div className={`${styles.space}`}>
             <input
               type="text"
-              value={data.phone}
+              value={formData.phone}
               className={styles.txtInput}
               onChange={handleChange("phone")}
             />
@@ -59,7 +89,7 @@ export default function EnterpriseEdit({ onSaveClick }: EditProps) {
           <div className={`${styles.space}`}>
             <input
               type="text"
-              value={data.comNo}
+              value={formData.comNo}
               className={styles.txtInput}
               onChange={handleChange("comNo")}
             />
@@ -70,7 +100,7 @@ export default function EnterpriseEdit({ onSaveClick }: EditProps) {
           <div className={`${styles.space}`}>
             <input
               type="text"
-              value={data.name}
+              value={formData.name}
               className={styles.txtInput}
               onChange={handleChange("name")}
             />
@@ -81,7 +111,7 @@ export default function EnterpriseEdit({ onSaveClick }: EditProps) {
           <div className={`${styles.space}`}>
             <input
               type="text"
-              value={data.password}
+              value={formData.password}
               className={styles.txtInput}
               onChange={handleChange("password")}
             />
