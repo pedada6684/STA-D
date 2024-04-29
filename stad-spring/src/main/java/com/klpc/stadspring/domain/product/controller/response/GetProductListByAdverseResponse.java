@@ -1,10 +1,6 @@
 package com.klpc.stadspring.domain.product.controller.response;
 
-import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.service.command.GetProductInfoCommand;
-import com.klpc.stadspring.domain.product.service.command.GetProductListByAdverseCommand;
-import com.klpc.stadspring.domain.user.controller.response.GetMemberInfoResponse;
-import com.klpc.stadspring.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
