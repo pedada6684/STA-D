@@ -28,7 +28,7 @@ export default function AnimatedRouter() {
 
   return (
     <TransitionGroup>
-      <CSSTransition key={location.key} timeout={300} classNames="fade">
+      <CSSTransition key="fixed" timeout={300} classNames="fade">
         <Routes>
           <Route path="/web-login" element={<WebLogin />} />
           <Route path="/web-signUp" element={<SignUp />} />
