@@ -63,7 +63,8 @@ public class UserService {
     public User updateUserInfo(UpdateUserInfoCommand command) {
         log.info("UpdateUserInfoCommand: "+command);
         User user = findUserById(command.getUserId());
-        if (command.getPassword() != null //기업 정보 변경인 경우
+        if (command.getComNo() != null //회사 회원
+                && !command.getComNo().isEmpty()
                 && !user.getPassword().equals(command.getPassword())
         ){
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
