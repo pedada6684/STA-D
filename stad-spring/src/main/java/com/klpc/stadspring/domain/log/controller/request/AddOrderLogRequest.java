@@ -15,18 +15,22 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class AddOrderLogRequest {
+    private Long advertId;
     private Long advertVideoId;
     private Long userId;
     private Long contentId;
     private Long productId;
-    private LocalDateTime updateDate;
+    private Long price;
+
 
     public AddOrderLogCommand toCommand() {
         return AddOrderLogCommand.builder().
+                advertId(advertId).
                 advertVideoId(advertVideoId).
                 userId(userId).
                 contentId(contentId).
                 productId(productId).
+                price(price).
                 status(true).
                 regDate(LocalDateTime.now()).
                 updateDate(LocalDateTime.now()).

@@ -8,16 +8,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
-@AllArgsConstructor
 @Builder
-public class GetDetailResponse {
+public class GetDetailIdAndThumbnailResponse {
     String title;
     String thumbnailUrl;
     Long detailId;
 
-    public static GetDetailResponse from(ContentDetail detail, ContentConcept concept) {
-        return GetDetailResponse.builder()
+    public static GetDetailIdAndThumbnailResponse from(ContentDetail detail, ContentConcept concept) {
+        return GetDetailIdAndThumbnailResponse.builder()
                 .title(concept.getTitle())
                 .thumbnailUrl(concept.getThumbnailUrl())
                 .detailId(detail.getId())

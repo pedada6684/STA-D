@@ -4,6 +4,13 @@ export const smallThumbnail = [
     thumbnailUrl:
       "https://occ-0-1723-1722.1.nflxso.net/dnm/api/v6/Qs00mKCpRvrkl3HZAN5KwEL1kpE/AAAABeLFXozkWyQPLW-4ZFEorRvN6kHiL4d8eZbvUhwG3PPiSaZCx3f7bcw8svntUpmIxpzh83e2IegTmLCVNstPOeg-NroTxifX_FWu.jpg?r=4fc",
     title: "그 해 우리는",
+    playtime: "58분",
+    releaseYear: "2021",
+    audienceAge: "15",
+    creator: "김윤진, 이단",
+    cast: "최우식, 김다미",
+    description:
+      "함께해서 더러웠고 다신 보지 말자!로 끝났어야 할 인연이 10년이 흘러 카메라 앞에 강제 소환 되어 펼쳐지는 청춘 다큐를 가장한 아찔한 로맨스 드라마",
   },
   {
     id: 112,

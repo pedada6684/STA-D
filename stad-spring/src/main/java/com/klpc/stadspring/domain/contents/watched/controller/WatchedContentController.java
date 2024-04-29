@@ -30,7 +30,7 @@ public class WatchedContentController {
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
     public ResponseEntity<AddWatchingContentResponse> addWatchingContent(@RequestBody AddWatchingContentRequest request) {
-        log.info("AddWatchingContentRequest : "+request);
+        log.info("시청 중인 영상 등록" + "\n" + "AddWatchingContentRequest : "+request);
 
         try {
             AddWatchingContentResponse response = service.addWatchingContent(request.toCommand());
@@ -42,8 +42,13 @@ public class WatchedContentController {
 
     @PutMapping("/update")
     @Operation(summary = "시청 중인 영상 수정", description = "Watched Content Modify API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "시청 중인 영상 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
     public ResponseEntity<ModifyWatchingContentResponse> modifyWatchingContent(@RequestBody ModifyWatchingContentRequest request) {
-        log.info("ModifyWatchingContentRequest : "+request);
+        log.info("시청 중인 영상 수정" + "\n" + "ModifyWatchingContentRequest : "+request);
 
         try {
             ModifyWatchingContentResponse response = service.modifyWatchingContent(request.toCommand());

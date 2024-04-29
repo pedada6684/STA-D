@@ -1,7 +1,8 @@
 package com.klpc.stadspring.domain.user.service;
 
 import com.klpc.stadspring.domain.user.entity.User;
-import com.klpc.stadspring.domain.user.entity.UserYoutubeInfo;
+import com.klpc.stadspring.domain.user.entity.UserLocation;
+import com.klpc.stadspring.domain.user.repository.UserLocationRepository;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.domain.user.service.command.*;
 import com.klpc.stadspring.global.auth.controller.response.LoginResult;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -25,6 +27,7 @@ import java.util.Objects;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserLocationRepository userLocationRepository;
     private final AuthTokenGenerator authTokenGenerator;
     private final RefreshTokenService refreshTokenService;
     private final S3Util s3Util;
@@ -63,7 +66,8 @@ public class UserService {
     public User updateUserInfo(UpdateUserInfoCommand command) {
         log.info("UpdateUserInfoCommand: "+command);
         User user = findUserById(command.getUserId());
-        if (command.getPassword() != null //기업 정보 변경인 경우
+        if (command.getComNo() != null //회사 회원
+                && !command.getComNo().isEmpty()
                 && !user.getPassword().equals(command.getPassword())
         ){
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
@@ -153,5 +157,40 @@ public class UserService {
         log.info("LogoutCommand: "+command);
         refreshTokenService.removeRefreshToken(command.getUserId());
         return;
+    }
+
+    @Transactional(readOnly = false)
+    public UserLocation createUserLocation(CreateUserLocationCommand command) {
+        log.info("CreateUserLocationCommand: "+command);
+        User user = findUserById(command.getUserId());
+        UserLocation newUserLocation = UserLocation.createNewUserLocation(
+                user,
+                command.getLocation(),
+                command.getName(),
+                command.getPhone(),
+                command.getLocationNick()
+        );
+        user.addUserLocation(newUserLocation);
+        return newUserLocation;
+    }
+
+    @Transactional(readOnly = false)
+    public UserLocation updateUserLocation(UpdateUserLocationCommand command) {
+        log.info("UpdateUserLocationCommand: "+command);
+        User user = findUserById(command.getUserId());
+        return user.updateUserLocation(command);
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteUserLocation(DeleteUserLocationCommand command) {
+        log.info("DeleteUserLocationCommand: "+command);
+        long cnt = userLocationRepository.deleteByIdAndUser_Id(command.getLocationId(), command.getUserId());
+        if (cnt == 0){ //삭제할 수 있는 내주소지 없음
+            throw new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
+        }
+    }
+
+    public List<UserLocation> getUserLocation(GetUserLocationCommand command) {
+        return userLocationRepository.findAllByUser_Id(command.getUserId());
     }
 }
