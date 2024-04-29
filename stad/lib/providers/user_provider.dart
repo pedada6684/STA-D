@@ -2,7 +2,9 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:stad/models/user_model.dart';
+import 'package:stad/services/user_secure_storage.dart';
 
 class UserProvider with ChangeNotifier {
   UserModel? _user;
@@ -21,30 +23,38 @@ class UserProvider with ChangeNotifier {
 
   bool get isLoggedIn => _isLoggedIn;
 
-  Future<void> setUser(UserModel user) async {
+  void setUser(UserModel user) async {
     _user = user;
     _isLoggedIn = true;
-    print('User updated: ${user.toJson()}');
-    print('User updated: ${user.toJson()}');
-    print('User updated: ${user.toJson()}');
     notifyListeners();
   }
 
   void setToken(String token) {
     _token = token;
-    print('토큰토큰토큰토큰토큰 : $token');
+    _setUserIdFromToken(token); // 이 부분에서 토큰으로부터 userId를 추출하여 설정합니다.
+    notifyListeners();
+  }
+
+  void _setUserIdFromToken(String token) async {
+    try {
+      Map<String, dynamic> payload = Jwt.parseJwt(token);
+      _userId = int.tryParse(payload['sub']);
+      print('토큰에서 설정된 사용자 ID: $_userId');
+      await AuthService()
+          .saveToken(token, _userId.toString()); // 토큰과 함께 userId 저장
+      notifyListeners();
+    } catch (e) {
+      print('사용자 ID를 파싱하는 중 오류 발생: $e');
+    }
+  }
+
+  void setUserId(int userId) {
+    _userId = userId;
     notifyListeners();
   }
 
   void setCookie(String cookie) {
     _cookie = cookie;
-    print('내가 만든 쿠키쿠키ㅜ키퀴퀴퀴퀴퀴 cookie : $cookie');
-    notifyListeners();
-  }
-
-  void setUserId(int userId) {
-    _userId = userId;
-    print('사용자 userId : $userId');
     notifyListeners();
   }
 
@@ -53,6 +63,8 @@ class UserProvider with ChangeNotifier {
     _token = null;
     _cookie = null;
     _isLoggedIn = false;
+    _userId = null;
+
     notifyListeners();
   }
 
@@ -63,6 +75,11 @@ class UserProvider with ChangeNotifier {
       UserModel userModel =
           UserModel.fromFirebaseUser(firebaseUser, accessToken);
       setUser(userModel);
+
+      String? userId = await AuthService().getUserId();
+      if (userId != null) {
+        setUserId(int.parse(userId));
+      }
     }
   }
 }
