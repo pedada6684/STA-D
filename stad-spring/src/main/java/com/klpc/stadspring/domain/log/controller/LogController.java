@@ -51,7 +51,7 @@ public class LogController {
         }
     }
 
-    @PostMapping(value = "/Order-log")
+    @PostMapping(value = "/order-log")
     @Operation(summary = "주문 현황 로그 추가", description = "주문 현황 로그 추가")
     public ResponseEntity<?> AddOrderLog(@RequestBody AddOrderLogRequest request) {
         log.info("AddOrderLogRequest: " + request);
