@@ -24,7 +24,7 @@ public class BookmarkedContentRepositoryImpl implements BookmarkedContentReposit
     }
 
     @Override
-    public Optional<BookmarkedContent> findByUserIdAndContentDetail(Long userId, Long contentId) {
+    public Optional<BookmarkedContent> findByUserIdAndContentDetailId(Long userId, Long contentId) {
         return Optional.ofNullable(query.select(bookmarkedContent)
                 .from(bookmarkedContent)
                 .where(bookmarkedContent.user.id.eq(userId)

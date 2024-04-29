@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
-@AllArgsConstructor
 @Builder
 public class GetContentConceptResponse {
     String title;

@@ -52,27 +52,17 @@ public class ContentCategoryService {
 
     // 시리즈 카테고리 id 리스트 조회
     public List<Long> getSeriesCategoriesId() {
-        List<String> categoryList = repository.findNameByIsMovie(false)
+        List<Long> list = repository.findIdByIsMovie(false)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        List<Long> list = new ArrayList<>();
-        for (int i = 0; i < categoryList.size(); i++) {
-            Long id = repository.findIdByIsMovieAndName(false, categoryList.get(i))
-                    .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-            list.add(id);
-        }
+
         return list;
     }
 
     // 영화 카테고리 id 리스트 조회
     public List<Long> getMovieCategoriesId() {
-        List<String> categoryList = repository.findNameByIsMovie(true)
+        List<Long> list = repository.findIdByIsMovie(true)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        List<Long> list = new ArrayList<>();
-        for (int i = 0; i < categoryList.size(); i++) {
-            Long id = getIdByIsMovieAndName(true, categoryList.get(i));
-            System.out.println(id);
-            list.add(id);
-        }
+
         return list;
     }
 
