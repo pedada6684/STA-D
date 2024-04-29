@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/providers/user_provider.dart';
+import 'package:stad/services/address_service.dart';
 import 'package:stad/services/order_service.dart';
 import 'package:stad/widget/button.dart';
 
@@ -109,9 +110,9 @@ class _AddressScreenState extends State<AddressScreen> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     if (userProvider.userId != null) {
-      final orderService = OrderService();
+      final addressService = AddressService();
 
-      orderService.sendAddressData(
+      addressService.sendAddressData(
         userProvider.userId!,
         _addressController.text,
         _nameController.text,
