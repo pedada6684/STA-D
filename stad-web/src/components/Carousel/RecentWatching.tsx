@@ -2,6 +2,7 @@ import { SmallNextArrow, SmallPrevArrow } from "../Arrow/Arrow";
 import { smallThumbnail } from "../../pages/Category/SeriesDummy";
 import "./RecentWatching.css";
 import Slider from "react-slick";
+import { useNavigate } from "react-router-dom";
 export default function RecentWatching() {
   let setting = {
     dots: true,
@@ -24,6 +25,7 @@ export default function RecentWatching() {
     prevArrow: <SmallPrevArrow />,
     nextArrow: <SmallNextArrow />,
   };
+  const navigate = useNavigate();
   return (
     <div className="v-container">
       <div className="v-title">최근 시청중인 컨텐츠</div>
@@ -34,6 +36,7 @@ export default function RecentWatching() {
               className="s-vid-container"
               key={index}
               style={{ position: "relative", transition: "all 0.3s" }}
+              onClick={() => navigate(`/tv/${data.id}`)}
             >
               <img src={data.thumbnailUrl} alt="비디오 썸네일" />
               <div className="vidTitle">{data.title}</div>
