@@ -1,12 +1,7 @@
 package com.klpc.stadspring.domain.product_review.controller.response;
 
 import com.klpc.stadspring.domain.product_review.entity.ProductReview;
-import com.klpc.stadspring.domain.user.controller.response.GetMemberInfoResponse;
-import com.klpc.stadspring.domain.user.entity.User;
 import lombok.*;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
