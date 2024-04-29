@@ -167,6 +167,7 @@ class ReviewCard extends StatelessWidget {
             SizedBox(
               height: 16.0,
             ),
+            Text(review.title),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -178,8 +179,8 @@ class ReviewCard extends StatelessWidget {
                     //         height: 60,
                     //         fit: BoxFit.cover,
                     //       )
-                    Image.asset(
-                        'assets/image/박지운.png',
+                    Image.network(
+                        review.imageUrl as String,
                         width: 60,
                       )
                     : Image.asset('assets/image/박지운.png', width: 60),

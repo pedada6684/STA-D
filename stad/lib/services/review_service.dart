@@ -1,13 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:stad/constant/api.dart';
 import 'package:stad/models/review_model.dart'; // Review 모델 클래스를 임포트합니다.
 
 class ReviewService {
   final Dio _dio = Dio(); // Dio 인스턴스 생성
+  final reviewUrl = '$locApi/api/review';
 
   // 사용자 리뷰 목록을 불러오는 메서드
   Future<List<Review>> fetchMyReviews(int userId) async {
     try {
-      final response = await _dio.get('http://10.0.2.2:8080/api/review/list/user/$userId');
+      final response = await _dio.get('$reviewUrl/list/user/$userId');
       print('fetchMyReviews response: ${response.data}');  // 응답 데이터 {reviewList : []}
 
       if (response.statusCode == 200 && response.data != null) {
