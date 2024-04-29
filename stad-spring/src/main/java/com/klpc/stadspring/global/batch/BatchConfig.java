@@ -1,14 +1,10 @@
 package com.klpc.stadspring.global.batch;
 
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
-import com.klpc.stadspring.domain.advertVideo.repository.AdvertVideoRepository;
 import com.klpc.stadspring.domain.log.entity.AdvertStatistics;
 import com.klpc.stadspring.domain.log.repository.AdvertClickLogRepository;
 import com.klpc.stadspring.domain.log.repository.AdvertVideoLogRepository;
 import com.klpc.stadspring.domain.log.repository.OrderLogRepository;
-import com.klpc.stadspring.domain.log.repository.OrderReturnLogRepository;
-import com.klpc.stadspring.global.response.ErrorCode;
-import com.klpc.stadspring.global.response.exception.CustomException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
