@@ -31,6 +31,8 @@ public class BookmarkContentController {
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
     public ResponseEntity<CheckContentResponse> checkBookmark(@RequestParam Long userId, @PathVariable Long detailId) {
+        log.info("북마크 유무 확인" + "\n" + "userId : " + userId + ", detailId : " + detailId);
+
         boolean tmp = service.checkBookmark(userId, detailId);
         return ResponseEntity.ok(CheckContentResponse.from(tmp));
     }
@@ -43,7 +45,7 @@ public class BookmarkContentController {
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
     public ResponseEntity<AddBookmarkResponse> addBookmark(@RequestBody AddBookmarkRequest request) {
-        log.info("AddBookmarkRequest : "+request);
+        log.info("북마크 추가" + "\n" + "AddBookmarkRequest : "+request);
 
         try {
             AddBookmarkResponse response = service.addBookmark(request.toCommand());
@@ -61,7 +63,7 @@ public class BookmarkContentController {
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
     public ResponseEntity<DeleteBookmarkResponse> deleteBookmark(@RequestBody DeleteBookmarkRequest request) {
-        log.info("DeleteBookmarkRequest: "+request);
+        log.info("북마크 삭제" + "\n" + "DeleteBookmarkRequest : " + request);
 
         try {
             DeleteBookmarkResponse response = service.deleteBookmark(request.toCommand());

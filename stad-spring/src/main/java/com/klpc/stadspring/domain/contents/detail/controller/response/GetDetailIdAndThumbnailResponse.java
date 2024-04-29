@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@AllArgsConstructor
 @Builder
 public class GetDetailIdAndThumbnailResponse {
     String title;
