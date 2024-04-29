@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
-@AllArgsConstructor
 @Builder
 public class CheckContentResponse {
     boolean isBookmarked;

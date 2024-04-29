@@ -6,8 +6,13 @@ import lombok.Getter;
 
 import java.util.List;
 @Getter
-@AllArgsConstructor
 @Builder
 public class GetDetailIdAndThumbnailListResponse {
     private List<GetDetailIdAndThumbnailResponse> detailList;
+
+    public static GetDetailIdAndThumbnailListResponse from(List<GetDetailIdAndThumbnailResponse> list) {
+        return GetDetailIdAndThumbnailListResponse.builder()
+                .detailList(list)
+                .build();
+    }
 }
