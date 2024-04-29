@@ -17,57 +17,87 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     return IntroductionScreen(
       key: introKey,
-      autoScrollDuration: 3000,
       pages: [
         PageViewModel(
-          title: 'advertising',
-          image: Image.asset('assets/image/ad_mockup.png'),
-          body: '사용자 맞춤형 광고와 콘텐츠 맞춤형 광고',
-          decoration: getPageDecoration(),
+          titleWidget: Column(
+            children: [
+              SizedBox(
+                height: 60.0,
+              ),
+              Text(
+                'advertising',
+                style: TextStyle(
+                  fontSize: 44,
+                  fontWeight: FontWeight.bold,
+                  color: mainNavy,
+                  fontFamily: 'LogoFont',
+                ),
+              ),
+            ],
+          ),
+          bodyWidget: Column(
+            children: [
+              SizedBox(height: 60),
+              Image.asset('assets/image/ad_mockup.png', width: 350),
+              SizedBox(height: 40),
+              Text(
+                '사용자 맞춤형 광고와 콘텐츠 맞춤형 광고',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 18, color: mainNavy, fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          decoration: PageDecoration(
+            pageColor: mainWhite,
+          ),
         ),
         PageViewModel(
-          title: 'get',
-          body: '광고에 나오는 제품 바로 구매하기',
-          decoration: getPageDecoration(),
+          titleWidget: Column(
+            children: [
+              SizedBox(height: 60),
+              Text(
+                'get',
+                style: TextStyle(
+                  fontSize: 44,
+                  fontWeight: FontWeight.bold,
+                  color: mainNavy,
+                  fontFamily: 'LogoFont',
+                ),
+              ),
+            ],
+          ),
+          bodyWidget: Column(
+            children: [
+              SizedBox(height: 60),
+              Image.asset('assets/image/ad_mockup.png', width: 350),
+              SizedBox(height: 40),
+              Text(
+                '광고 중인 상품 바로 구매하기',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 18, color: mainNavy, fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          decoration: PageDecoration(
+            pageColor: mainWhite,
+          ),
         ),
       ],
-      showBackButton: true,
       showNextButton: true,
-      // showDoneButton: true,
-      next: Icon(
-        Icons.arrow_forward_ios_rounded,
-        size: 20.0,
-      ),
-      back: Icon(
-        Icons.arrow_back_ios_rounded,
-        size: 20.0,
-      ),
-      onDone: () {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => HomeScreen()));
-      },
+      showBackButton: true,
+      next: Icon(Icons.arrow_forward_ios_rounded, size: 20.0),
+      back: Icon(Icons.arrow_back_ios_rounded, size: 20.0),
+      onDone: () => Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => HomeScreen())),
       done: Text(
-        'STA:D',
+        'Done',
         style: TextStyle(
             color: mainNavy, fontSize: 18.0, fontWeight: FontWeight.bold),
       ),
+      globalBackgroundColor: mainWhite,
       curve: Curves.ease,
-    );
-  }
-
-  PageDecoration getPageDecoration() {
-    return const PageDecoration(
-      titleTextStyle: TextStyle(
-          fontSize: 44,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'LogoFont',
-          color: mainNavy),
-      bodyTextStyle: TextStyle(
-        fontSize: 16,
-        color: mainNavy,
-      ),
-      imagePadding: EdgeInsets.only(top: 40),
-      pageColor: mainWhite,
     );
   }
 }
