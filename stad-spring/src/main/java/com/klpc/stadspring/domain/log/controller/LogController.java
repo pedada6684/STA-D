@@ -4,6 +4,7 @@ import com.klpc.stadspring.domain.log.controller.request.AddAdvertClickLogReques
 import com.klpc.stadspring.domain.log.controller.request.AddAdvertVideoLogRequest;
 import com.klpc.stadspring.domain.log.controller.request.AddOrderLogRequest;
 import com.klpc.stadspring.domain.log.controller.request.AddOrderReturnLogRequest;
+import com.klpc.stadspring.domain.log.controller.response.GetTotalLogResponse;
 import com.klpc.stadspring.domain.log.entity.AdvertClickLog;
 import com.klpc.stadspring.domain.log.entity.AdvertVideoLog;
 import com.klpc.stadspring.domain.log.entity.OrderLog;
@@ -51,7 +52,7 @@ public class LogController {
         }
     }
 
-    @PostMapping(value = "/Order-log")
+    @PostMapping(value = "/order-log")
     @Operation(summary = "주문 현황 로그 추가", description = "주문 현황 로그 추가")
     public ResponseEntity<?> AddOrderLog(@RequestBody AddOrderLogRequest request) {
         log.info("AddOrderLogRequest: " + request);
@@ -74,4 +75,16 @@ public class LogController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @GetMapping("/total/{advertId}")
+    @Operation(summary = "30일짜리 데이터", description = "30일짜리 데이터")
+    public ResponseEntity<?> GetTotalLog(@PathVariable Long advertId)  {
+        try {
+            GetTotalLogResponse response = logService.getTotalLog(advertId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }

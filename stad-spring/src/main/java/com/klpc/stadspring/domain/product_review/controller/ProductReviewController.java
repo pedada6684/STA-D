@@ -76,10 +76,10 @@ public class ProductReviewController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/mypage/list")
+    @GetMapping("/list/user/{userId}")
     @Operation(summary = "유저가 작성한 리뷰 목록", description = "유저가 작성한 리뷰 목록")
-    public ResponseEntity<?> getProductReviewListByUserId(@RequestBody GetProductReviewListByUserIdRequest request) {
-        GetProductReviewListResponse response = productReviewService.getProductReviewListByUserId(request.getUserId());
+    public ResponseEntity<?> getProductReviewListByUserId(@PathVariable Long userId) {
+        GetProductReviewListResponse response = productReviewService.getProductReviewListByUserId(userId);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
         return ResponseEntity.ok(response);
