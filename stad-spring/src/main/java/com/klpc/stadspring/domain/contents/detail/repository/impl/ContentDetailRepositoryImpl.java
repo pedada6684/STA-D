@@ -25,12 +25,11 @@ public class ContentDetailRepositoryImpl implements ContentDetailRepositoryCusto
     }
 
     @Override
-    public Optional<ContentDetail> findContentDetailByConceptId(Long conceptId) {
+    public Optional<List<ContentDetail>> findContentDetailsByConceptId(Long conceptId) {
         return Optional.ofNullable(query.select(contentDetail)
                 .from(contentDetail)
                 .where(contentDetail.contentConceptId.eq(conceptId))
-                .limit(1)
-                .fetchOne());
+                .fetch());
     }
 
     // 인기 영상 추출
