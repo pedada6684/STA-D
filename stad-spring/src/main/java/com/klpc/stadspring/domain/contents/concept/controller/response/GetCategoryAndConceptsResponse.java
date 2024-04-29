@@ -9,15 +9,13 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter
-@Setter
-@AllArgsConstructor
 @Builder
-public class GetContentCategoryAndConceptListResponse {
+public class GetCategoryAndConceptsResponse {
     String category;
     List<GetConceptResponse> getConceptResponseList;
 
-    public static GetContentCategoryAndConceptListResponse from(ContentCategory category, List<GetConceptResponse> list) {
-        return GetContentCategoryAndConceptListResponse.builder()
+    public static GetCategoryAndConceptsResponse from(ContentCategory category, List<GetConceptResponse> list) {
+        return GetCategoryAndConceptsResponse.builder()
                 .category(category.getName())
                 .getConceptResponseList(list)
                 .build();
