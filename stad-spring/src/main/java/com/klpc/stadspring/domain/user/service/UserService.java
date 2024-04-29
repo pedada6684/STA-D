@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -187,5 +188,9 @@ public class UserService {
         if (cnt == 0){
             throw new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
         }
+    }
+
+    public List<UserLocation> getUserLocation(GetUserLocationCommand command) {
+        return userLocationRepository.findAllByUser_Id(command.getUserId());
     }
 }
