@@ -196,7 +196,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
               ? Center(
                   child: Text(
                   '주문 내역이 없습니다.',
-                  style: TextStyle(color: midGray, fontSize: 16.0),
+                  style: TextStyle(color: darkGray, fontSize: 18.0),
                 ))
               : ListView.builder(
                   itemCount: _orders!.length,
