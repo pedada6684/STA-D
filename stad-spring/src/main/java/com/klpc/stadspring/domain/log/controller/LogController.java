@@ -4,6 +4,7 @@ import com.klpc.stadspring.domain.log.controller.request.AddAdvertClickLogReques
 import com.klpc.stadspring.domain.log.controller.request.AddAdvertVideoLogRequest;
 import com.klpc.stadspring.domain.log.controller.request.AddCancelOrderLogRequest;
 import com.klpc.stadspring.domain.log.controller.request.AddOrderLogRequest;
+import com.klpc.stadspring.domain.log.controller.response.GetDailyCountResponse;
 import com.klpc.stadspring.domain.log.controller.response.GetTotalLogResponse;
 import com.klpc.stadspring.domain.log.entity.AdvertClickLog;
 import com.klpc.stadspring.domain.log.entity.AdvertVideoLog;
@@ -76,10 +77,54 @@ public class LogController {
     }
 
     @GetMapping("/total/{advertId}")
-    @Operation(summary = "30일짜리 데이터", description = "30일짜리 데이터")
+    @Operation(summary = "30일 데이터 총합", description = "30일짜리 데이터")
     public ResponseEntity<?> GetTotalLog(@PathVariable Long advertId)  {
         try {
             GetTotalLogResponse response = logService.getTotalLog(advertId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/daily/click")
+    @Operation(summary = "30일 동안 각 날짜 광고 클릭 수", description = "30일 동안 각 날짜 광고 클릭 수")
+    public ResponseEntity<?> GetDailyAdvertClick()  {
+        try {
+            GetDailyCountResponse response = logService.getDailyAdvertCilckCount();
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/daily/advert-video")
+    @Operation(summary = "30일 동안 각 날짜 광고 시청 수", description = "30일 동안 각 날짜 광고 시청 수")
+    public ResponseEntity<?> GetDailyAdvertVideo()  {
+        try {
+            GetDailyCountResponse response = logService.getDailyAdvertVideoCount();
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/daily/order")
+    @Operation(summary = "30일 동안 각 날짜 주문 수", description = "30일 동안 각 날짜 광고 주문 수")
+    public ResponseEntity<?> GetDailyOrder()  {
+        try {
+            GetDailyCountResponse response = logService.getDailyOrderCount();
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/daily/revenue")
+    @Operation(summary = "30일 동안 각 날짜 수익", description = "30일 동안 각 날짜 수익")
+    public ResponseEntity<?> GetDailyRevenue()  {
+        try {
+            GetDailyCountResponse response = logService.getDailyRevenueCount();
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
