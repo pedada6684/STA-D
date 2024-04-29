@@ -12,6 +12,7 @@ import com.klpc.stadspring.domain.log.service.command.AddAdvertClickLogCommand;
 import com.klpc.stadspring.domain.log.service.command.AddAdvertVideoLogCommand;
 import com.klpc.stadspring.domain.log.service.command.AddOrderLogCommand;
 import com.klpc.stadspring.domain.log.service.command.AddOrderReturnLogCommand;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class LogService {
     private final OrderLogRepository orderLogRepository;
     private final OrderReturnLogRepository orderReturnLogRepository;
 
+    @Transactional
     public AdvertClickLog addAdvertClickLog(AddAdvertClickLogCommand command) {
         log.info("AddAdvertClickLogCommand: " + command);
 
@@ -43,6 +45,8 @@ public class LogService {
 
         return newAddAdvertClickLog;
     }
+
+    @Transactional
 
     public AdvertVideoLog addAdvertVideoLog(AddAdvertVideoLogCommand command) {
         log.info("AddAdvertVideoLogCommand: " + command);
@@ -60,6 +64,8 @@ public class LogService {
         return newAddAdvertVideoLog;
     }
 
+    @Transactional
+
     public OrderLog addOrderLog(AddOrderLogCommand command) {
         log.info("AddOrderLogCommand: " + command);
 
@@ -70,6 +76,7 @@ public class LogService {
                 command.getOrderId(),
                 command.getContentId(),
                 command.getProductId(),
+                command.getPrice(),
                 command.getStatus(),
                 command.getRegDate(),
                 command.getUpdateDate()
@@ -79,6 +86,8 @@ public class LogService {
 
         return newOrderLog;
     }
+
+    @Transactional
 
     public OrderReturnLog addOrderReturnLog(AddOrderReturnLogCommand command) {
         log.info("AddOrderReturnLogCommand: " + command);
