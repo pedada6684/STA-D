@@ -15,16 +15,6 @@ public class WatchedContentRepositoryImpl implements WatchedContentRepositoryCus
     private final JPAQueryFactory query;
 
     @Override
-    public Optional<List<WatchedContent>> findAllByUserId(Long userId) {
-        return Optional.ofNullable(query.select(watchedContent)
-                .from(watchedContent)
-                .where(watchedContent.user.id.eq(userId)
-                        .and(watchedContent.status.isFalse()))
-                .orderBy(watchedContent.date.desc())
-                .fetch());
-    }
-
-    @Override
     public Optional<List<Long>> findWatchingContentDetailIdByUserId(Long userId) {
         return Optional.ofNullable(query.select(watchedContent.contentDetail.id)
                 .from(watchedContent)

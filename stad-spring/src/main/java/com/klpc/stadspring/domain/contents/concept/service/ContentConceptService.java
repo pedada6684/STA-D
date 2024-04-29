@@ -25,21 +25,32 @@ public class ContentConceptService {
     public final ContentCategoryRelationshipRepository relationshipRepository;
     public final ContentCategoryRepository categoryRepository;
 
-    // id로 콘텐츠 개념 조회
+    /**
+     * id로 콘텐츠 개념 조회
+     * @param id
+     * @return
+     */
     public ContentConcept getContentConceptById(Long id) {
         ContentConcept contentConcept = repository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return contentConcept;
     }
 
-    // keyword로 title 검색
+    /**
+     * keyword로 title 검색
+     * @param keyword
+     * @return
+     */
     public List<ContentConcept> getContentConceptByKeyword(String keyword) {
         List<ContentConcept> contentConceptList = repository.findByKeyword(keyword)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return contentConceptList;
     }
 
-    // contentConcept 등록
+    /**
+     * contentConcept 등록
+     * @param command
+     */
     @Transactional(readOnly = false)
     public void addConcept(AddConceptRequestCommand command) {
         log.info("AddConceptRequestCommand : " + command);

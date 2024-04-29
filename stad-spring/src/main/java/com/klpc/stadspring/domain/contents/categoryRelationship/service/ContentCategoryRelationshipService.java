@@ -22,10 +22,12 @@ public class ContentCategoryRelationshipService {
     private final ContentCategoryRelationshipRepository repository;
 
     /**
-     * 카테고리별 contentId 12개 조회
+     * categoryId로 카테고리별 conceptId 12개 조회
+     * @param categoryId
+     * @return
      */
-    public List<Long> getConceptIdByCategory(Long CategoryId) {
-        List<Long> list = repository.findConceptIdByCategory(CategoryId)
+    public List<Long> getConceptIdByCategory(Long categoryId) {
+        List<Long> list = repository.findConceptIdByCategory(categoryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return list;
     }
