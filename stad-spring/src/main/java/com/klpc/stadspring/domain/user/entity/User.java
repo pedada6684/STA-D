@@ -43,6 +43,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE,  orphanRemoval = true)
     private List<CartProduct> cartProduct;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    private List<UserLocation> userLocations = null;
+
     public static User createNewUser(
             String email,
             String password,
