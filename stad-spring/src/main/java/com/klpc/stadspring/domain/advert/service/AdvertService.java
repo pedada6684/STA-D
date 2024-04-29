@@ -73,12 +73,12 @@ public class AdvertService {
         }
         for(String i : command.getAdvertVideoUrlList()){
             Long len = 0L;
-            try (FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(i)) {
-                grabber.start();
-                len = (Long) (grabber.getLengthInTime() / 1000000); // Convert to seconds
-            } catch (Exception e) {
-                throw new CustomException(ErrorCode.AWSS3_ERROR);
-            }
+//            try (FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(i)) {
+//                grabber.start();
+//                len = (Long) (grabber.getLengthInTime() / 1000000); // Convert to seconds
+//            } catch (Exception e) {
+//                throw new CustomException(ErrorCode.AWSS3_ERROR);
+//            }
             AdvertVideo advertVideo = AdvertVideo.createToAdvertVideo(len,i);
             advertVideo.linkAdvert(advert);
             advertVideoRepository.save(advertVideo);
