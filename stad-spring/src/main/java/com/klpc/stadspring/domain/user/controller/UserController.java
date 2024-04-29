@@ -2,7 +2,8 @@ package com.klpc.stadspring.domain.user.controller;
 
 import com.klpc.stadspring.domain.user.controller.request.UpdateProfileImgRequest;
 import com.klpc.stadspring.domain.user.controller.request.UpdateUserInfoRequest;
-import com.klpc.stadspring.domain.user.controller.response.GetMemberInfoResponse;
+import com.klpc.stadspring.domain.user.controller.response.CreateUserLocationResponse;
+import com.klpc.stadspring.domain.user.controller.response.GetUserInfoResponse;
 import com.klpc.stadspring.domain.user.controller.response.UpdateProfileResponse;
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.service.UserService;
@@ -40,20 +41,20 @@ public class UserController {
 
     @GetMapping()
     @Operation(summary = "유저 정보 요청", description = "유저 정보 요청")
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMemberInfoResponse.class)))
-    public ResponseEntity<GetMemberInfoResponse> getUserInfo(@RequestParam("userId") Long userId) {
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetUserInfoResponse.class)))
+    public ResponseEntity<GetUserInfoResponse> getUserInfo(@RequestParam("userId") Long userId) {
         User user = userService.findUserById(userId);
-        GetMemberInfoResponse response = GetMemberInfoResponse.from(user);
+        GetUserInfoResponse response = GetUserInfoResponse.from(user);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/update")
     @Operation(summary = "유저 정보 변경", description = "유저 정보 변경")
     @ApiResponse(responseCode = "200", description = "유저 정보 수정이 성공적으로 진행되었습니다.")
-    public ResponseEntity<GetMemberInfoResponse> updateUserInfo(@ModelAttribute UpdateUserInfoRequest request) {
+    public ResponseEntity<GetUserInfoResponse> updateUserInfo(@ModelAttribute UpdateUserInfoRequest request) {
         log.info("UpdateUserInfoRequest: " + request);
         User user = userService.updateUserInfo(request.toCommand());
-        GetMemberInfoResponse response = GetMemberInfoResponse.from(user);
+        GetUserInfoResponse response = GetUserInfoResponse.from(user);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

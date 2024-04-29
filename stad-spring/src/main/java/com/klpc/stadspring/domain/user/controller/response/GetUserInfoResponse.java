@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class GetMemberInfoResponse {
+public class GetUserInfoResponse {
     private Long userId;
     private String nickname;
     private String email;
@@ -16,8 +16,8 @@ public class GetMemberInfoResponse {
     private String comNo;
     private String profile;
 
-    public static GetMemberInfoResponse from(User user){
-        return GetMemberInfoResponse.builder()
+    public static GetUserInfoResponse from(User user){
+        return GetUserInfoResponse.builder()
                 .userId(user.getId())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
