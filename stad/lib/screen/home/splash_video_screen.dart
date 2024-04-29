@@ -7,9 +7,7 @@ import 'package:stad/screen/home/onboarding_screen.dart';
 import 'package:video_player/video_player.dart';
 
 class SplashVideoScreen extends StatefulWidget {
-  final Function onComplete;
-
-  const SplashVideoScreen({super.key, required this.onComplete});
+  const SplashVideoScreen({super.key});
 
   @override
   State<SplashVideoScreen> createState() => _SplashVideoScreenState();
@@ -17,6 +15,7 @@ class SplashVideoScreen extends StatefulWidget {
 
 class _SplashVideoScreenState extends State<SplashVideoScreen> {
   late VideoPlayerController _controller;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -26,18 +25,15 @@ class _SplashVideoScreenState extends State<SplashVideoScreen> {
         setState(() {});
         _controller.play();
         _controller.setLooping(false);
-        _controller.addListener(checkVideoCompletion);
+        
+        _timer = Timer(Duration(seconds: 3), () {
+          _controller.pause(); // 3초 후 비디오를 일시정지
+          Navigator.pushReplacement(
+              context,
+              TVSwitchOnRoute(page: OnboardingScreen()) // 여기에 새 애니메이션 라우트를 적용
+          );
+        });
       });
-  }
-
-  void checkVideoCompletion() {
-    if (!_controller.value.isPlaying &&
-        _controller.value.position == _controller.value.duration) {
-      _controller.removeListener(checkVideoCompletion);
-      widget.onComplete(); // Call the onComplete function passed to the widget
-      // 비디오 재생이 완료되면서 3초가 지나는 대신에 바로 OnboardingScreen으로 이동
-      Navigator.pushReplacement(context, TVSwitchOnRoute(page: OnboardingScreen()));
-    }
   }
 
   @override
@@ -60,6 +56,7 @@ class _SplashVideoScreenState extends State<SplashVideoScreen> {
 
   @override
   void dispose() {
+    _timer?.cancel();
     _controller.dispose();
     super.dispose();
   }
