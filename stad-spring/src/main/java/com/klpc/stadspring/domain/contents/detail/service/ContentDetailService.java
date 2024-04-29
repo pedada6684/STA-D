@@ -1,20 +1,17 @@
 package com.klpc.stadspring.domain.contents.detail.service;
 
-import com.klpc.stadspring.domain.contents.category.entity.ContentCategory;
-import com.klpc.stadspring.domain.contents.category.repository.ContentCategoryRepository;
-import com.klpc.stadspring.domain.contents.detail.controller.response.AddDetailResponse;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailRepository;
 import com.klpc.stadspring.domain.contents.detail.service.command.request.AddDetailRequestCommand;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 @Log4j2
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ContentDetailService {
 
@@ -81,10 +78,10 @@ public class ContentDetailService {
     }
 
     // conceptId로 id 조회
-    public ContentDetail getContentDetailByConceptId(Long conceptId) {
-        ContentDetail detail = repository.findContentDetailByConceptId(conceptId)
+    public List<ContentDetail> getContentDetailsByConceptId(Long conceptId) {
+        List<ContentDetail> detailList = repository.findContentDetailsByConceptId(conceptId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        return detail;
+        return detailList;
     }
 
     // 인기 영상 목록
@@ -103,7 +100,8 @@ public class ContentDetailService {
         return list;
     }
 
-    public AddDetailResponse addDetail(AddDetailRequestCommand command) {
+    @Transactional(readOnly = false)
+    public void addDetail(AddDetailRequestCommand command) {
         log.info("AddDetailRequestCommand : " + command);
 
         ContentDetail newContentDetail = ContentDetail.createContentDetail(
@@ -112,7 +110,5 @@ public class ContentDetailService {
                 command.getVideoUrl(),
                 command.getSummary());
         repository.save(newContentDetail);
-
-        return AddDetailResponse.builder().result("콘텐츠 디테일이 성공적으로 등록되었습니다.").build();
     }
 }

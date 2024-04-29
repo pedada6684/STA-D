@@ -2,12 +2,13 @@ package com.klpc.stadspring.domain.contents.category.service;
 
 import com.klpc.stadspring.domain.contents.category.entity.ContentCategory;
 import com.klpc.stadspring.domain.contents.category.repository.ContentCategoryRepository;
+import com.klpc.stadspring.domain.contents.category.service.command.request.AddCategoryRequestCommand;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import static com.klpc.stadspring.domain.contents.category.entity.QContentCatego
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ContentCategoryService {
     private final ContentCategoryRepository repository;
@@ -64,11 +65,8 @@ public class ContentCategoryService {
 
     // 영화 카테고리 id 리스트 조회
     public List<Long> getMovieCategoriesId() {
-        System.out.println("=================durl==================");
         List<String> categoryList = repository.findNameByIsMovie(true)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        System.out.println("================category size : " + categoryList.size());
-        System.out.println(repository.findAll().toString());
         List<Long> list = new ArrayList<>();
         for (int i = 0; i < categoryList.size(); i++) {
             Long id = getIdByIsMovieAndName(true, categoryList.get(i));
@@ -76,5 +74,18 @@ public class ContentCategoryService {
             list.add(id);
         }
         return list;
+    }
+
+    /**
+     * 콘텐츠 카테고리 등록
+     */
+    @Transactional(readOnly = false)
+    public void addCategory(AddCategoryRequestCommand command) {
+        log.info("AddCategoryRequestCommand : " + command);
+
+        ContentCategory newCategory = ContentCategory.createContentCategory(
+                command.isMovie(),
+                command.getName());
+        repository.save(newCategory);
     }
 }
