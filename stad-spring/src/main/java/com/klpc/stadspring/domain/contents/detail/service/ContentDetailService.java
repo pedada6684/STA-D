@@ -26,7 +26,12 @@ public class ContentDetailService {
 
     private final ContentDetailRepository repository;
 
-    // 영상 스트리밍
+    /**
+     * 영상 스트리밍
+     * @param httpHeaders
+     * @param id
+     * @return
+     */
     public ResponseEntity<ResourceRegion> streamingPublicVideo(HttpHeaders httpHeaders, Long id) {
         String pathStr = null;
 
@@ -70,21 +75,32 @@ public class ContentDetailService {
         }
     }
 
-    // id로 영상 상세 조회
+    /**
+     * id로 영상 상세 조회
+     * @param id
+     * @return
+     */
     public ContentDetail getContentDetailById(Long id) {
         ContentDetail detail = repository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return detail;
     }
 
-    // conceptId로 id 조회
+    /**
+     * conceptId로 detailId 조회
+     * @param conceptId
+     * @return
+     */
     public List<ContentDetail> getContentDetailsByConceptId(Long conceptId) {
         List<ContentDetail> detailList = repository.findContentDetailsByConceptId(conceptId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return detailList;
     }
 
-    // 인기 영상 목록
+    /**
+     * 인기 영상 목록 조회
+     * @return
+     */
     // ========================== 태경 수정 ===================================
     public List<ContentDetail> getPopularContent() {
         List<ContentDetail> list = repository.findPopularContentDetail()
@@ -92,7 +108,10 @@ public class ContentDetailService {
         return list;
     }
 
-    // 최신 영상 목록
+    /**
+     * 최신 영상 목록 조회
+     * @return
+     */
     // ========================== 태경 수정 ===================================
     public List<ContentDetail> getUpdatedContent() {
         List<ContentDetail> list = repository.findPopularContentDetail()
@@ -100,6 +119,10 @@ public class ContentDetailService {
         return list;
     }
 
+    /**
+     * contentDetail 등록
+     * @param command
+     */
     @Transactional(readOnly = false)
     public void addDetail(AddDetailRequestCommand command) {
         log.info("AddDetailRequestCommand : " + command);

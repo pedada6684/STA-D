@@ -29,24 +29,33 @@ public class WatchedContentService {
     private final UserRepository userRepository;
     private final ContentDetailRepository detailRepository;
 
-    public List<WatchedContent> getWatchedContentByUserId(Long userId) {
-        List<WatchedContent> watchedContentList = watchedContentRepository.findAllByUserId(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        return watchedContentList;
-    }
-
+    /**
+     * 시청 중인 영상 조회
+     * @param userId
+     * @return
+     */
     public List<Long> getWatchingContentDetailIdByUserId(Long userId) {
         List<Long> detailIdList = watchedContentRepository.findWatchingContentDetailIdByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return detailIdList;
     }
 
+    /**
+     * 시청 중인, 완료한 영상 조회
+     * @param userId
+     * @return
+     */
     public List<Long> getWatchingAndWatchedContentDetailIdByUserId(Long userId) {
         List<Long> detailIdList = watchedContentRepository.findWatchingAndWatchedContentDetailIdByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return detailIdList;
     }
 
+    /**
+     * 시청 중인 영상 등록
+     * @param command
+     * @return
+     */
     @Transactional(readOnly = false)
     public AddWatchingContentResponse addWatchingContent(AddWatchingContentCommand command) {
         log.info("AddWatchingContentCommand : " + command);
@@ -67,6 +76,13 @@ public class WatchedContentService {
         return AddWatchingContentResponse.builder().result("시청 중인 컨텐츠가 성공적으로 생성되었습니다.").build();
     }
 
+    /**
+     * 시청 중인 영상 수정
+     * - 시청 시점 변경
+     * - 시청 완료로 변경
+     * @param command
+     * @return
+     */
     @Transactional(readOnly = false)
     public ModifyWatchingContentResponse modifyWatchingContent(ModifyWatchingContentCommand command) {
         log.info("ModifyWatchingContentCommand : " + command);
