@@ -1,0 +1,44 @@
+.title {
+  font-size: 3.5rem;
+  color: white;
+}
+.top {
+  display: flex;
+  z-index: 2;
+}
+.category {
+  margin-left: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mainImage {
+  background-position: 50%;
+  background-size: cover;
+  bottom: 0;
+  filter: alpha(opacity = 100);
+  left: 0;
+  opacity: 1;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: opacity 0.4s cubic-bezier(0.665, 0.235, 0.265, 0.8) 0s;
+  width: 100%;
+}
+.info {
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.vidTitle {
+  font-size: 2.3rem;
+  font-weight: lighter;
+  color: white;
+  margin-right: 1rem;
+}
+.btnWrapper {
+  display: flex;
+  margin-top: 1rem;
+}

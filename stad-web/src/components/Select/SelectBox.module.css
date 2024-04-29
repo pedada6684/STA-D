@@ -1,0 +1,13 @@
+.option {
+  margin-left: 2rem;
+}
+
+.container {
+  display: flex;
+}
+.category {
+  margin-right: 2rem;
+}
+.ValueContainer {
+  padding: 2px 2rem;
+}

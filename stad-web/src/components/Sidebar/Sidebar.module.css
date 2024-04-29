@@ -1,0 +1,94 @@
+.container {
+  border: 1.5px solid #807f7f;
+  border-radius: 1rem;
+  width: 16rem;
+  height: 40rem;
+}
+
+.content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.item {
+  list-style-type: none;
+  display: flex;
+  justify-self: center;
+  cursor: pointer;
+  margin: 2rem 0 4rem 0;
+  width: 12rem;
+}
+
+.item:hover {
+  /* padding: 0 1rem; */
+  border-radius: 50px;
+}
+
+.dropDown {
+  list-style-type: none;
+  position: relative;
+  width: 12rem;
+  display: flex;
+  /* flex-direction: column; */
+}
+
+.dropDownMenu {
+  list-style-type: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: visibility 0s, opacity 0.5s linear;
+  position: absolute;
+  background-color: white;
+  z-index: 1;
+  width: 12rem;
+  font-size: 1.3rem;
+  /* margin-left: 1rem; */
+  top: 100%; /* 현재 .dropDown 요소의 끝에서 시작하도록 조정 */
+  left: 0;
+}
+
+.dropDownMenu li {
+  margin: 1rem 0;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  padding-right: 1rem;
+}
+
+.dropDownMenu li:hover {
+  color: #00127a;
+  font-weight: 600;
+}
+
+.dropDown:hover .dropDownMenu {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+  text-align: left;
+  background: transparent;
+  padding: 1rem 1rem;
+}
+
+.icon {
+  width: 2.8rem;
+}
+
+.text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.4rem;
+  margin-left: 1rem;
+  color: #807f7f;
+  font-weight: 500;
+}
+
+.text:hover {
+  font-size: 800;
+  color: #00127a;
+}

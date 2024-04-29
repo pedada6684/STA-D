@@ -1,0 +1,63 @@
+.toggleBtn {
+  display: flex;
+  justify-content: center;
+  border: 1px solid #afb0b4;
+  margin-right: 1rem;
+  background-color: transparent;
+}
+.toggleBtn img {
+  width: 3rem;
+}
+.goButton {
+  width: 15rem;
+  padding: 1rem 3rem;
+  border: 1px solid #00127a;
+  color: #00127a;
+  border-radius: 10px;
+  background-color: transparent;
+  cursor: pointer;
+}
+.goButton:hover {
+  color: white;
+  background-color: #00127a;
+}
+.enroll {
+  width: 10rem;
+  padding: 1rem;
+  background-color: #00127a;
+  border-radius: 50px;
+  color: white;
+}
+.enCon {
+  margin: 3rem;
+  display: flex;
+  justify-content: center;
+}
+.buttonWrapper {
+  display: flex;
+  margin: 0 1rem;
+}
+.playButton {
+  background-color: white;
+}
+.infoButton {
+  background-color: #afb0b4;
+}
+.infoButton div {
+  color: white;
+}
+.mainButton {
+  border: 0;
+  font-size: 1.2rem;
+  display: flex;
+  padding: 0.5rem 2rem;
+  cursor: pointer;
+  border-radius: 0.5vw;
+}
+.mainButton:hover {
+  transition: all 0.5s;
+  background-color: rgba(255, 255, 255, 0.75);
+}
+.mainButton img {
+  width: 2rem;
+}

@@ -1,0 +1,52 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+
+.content {
+  background: white;
+  padding: 2rem;
+  border-radius: 5px;
+  width: 50%;
+  height: 30%;
+  position: relative;
+}
+
+.close {
+  width: 2rem;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.apply {
+  position: absolute;
+  left: 40%;
+  bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.applyBtn {
+  border: none;
+  width: 10rem;
+  padding: 0.5rem 2rem;
+  background-color: #d9d9d9;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-top: 2rem;
+}
