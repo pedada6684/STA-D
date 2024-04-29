@@ -136,7 +136,7 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
                   child: Text(
                     '리뷰가 없습니다.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: darkGray),
+                    style: TextStyle(color: darkGray, fontSize: 18.0),
                   ),
                 ),
     );

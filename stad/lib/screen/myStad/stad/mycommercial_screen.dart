@@ -86,7 +86,7 @@ class _MyCommercialScreenState extends State<MyCommercialScreen> {
           : adverts.isEmpty
               ? Center(
                   child: Text('내가 본 광고가 없습니다.',
-                      style: TextStyle(fontSize: 18, color: midGray)))
+                      style: TextStyle(fontSize: 18, color: darkGray)))
               : ListView.builder(
                   itemCount: adverts.length,
                   itemBuilder: (context, index) {

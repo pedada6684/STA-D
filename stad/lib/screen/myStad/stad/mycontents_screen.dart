@@ -62,7 +62,7 @@ class _MyContentsScreenState extends State<MyContentsScreen> {
               ? Center(
                   child: Text(
                     '내가 본 콘텐츠가 없습니다.',
-                    style: TextStyle(color: midGray, fontSize: 18.0),
+                    style: TextStyle(color: darkGray, fontSize: 18.0),
                   ),
                 )
               : GridView.builder(
