@@ -9,10 +9,12 @@ export interface EnterpriseData {
   email: string;
   name: string;
   phone: string;
+  department?: string;
   company: string;
   comNo: string;
   password: string;
-  profile: string;
+  profile: File | null;
+  [key: string]: string | number | File | null | undefined;
 }
 
 interface EditProps {
@@ -35,10 +37,11 @@ export default function EnterpriseEdit({
       email: "",
       name: "",
       phone: "",
+      department: "",
       company: userCompany,
       comNo: "",
       password: "",
-      profile: "",
+      profile: null,
     }
   );
   useEffect(() => {
@@ -47,16 +50,16 @@ export default function EnterpriseEdit({
         ...data,
         userId: userId, // userId 업데이트 보장
         company: userCompany,
-        password: "", // 비밀번호 필드 초기화
       });
     }
   }, [data]);
 
   const handleChange =
     (field: keyof EnterpriseData) => (e: ChangeEvent<HTMLInputElement>) => {
-      const updatedData = { ...formData, [field]: e.target.value };
+      const value = e.target.value === "" ? null : e.target.value;
+      const updatedData = { ...formData, [field]: value };
       setFormData(updatedData);
-      updateData(updatedData); // 상위 컴포넌트에 변경된 데이터 전달
+      updateData(updatedData);
     };
   return (
     <div>
@@ -107,13 +110,25 @@ export default function EnterpriseEdit({
           </div>
         </div>
         <div className={`${styles.item} ${styles.name}`}>
-          <div className={`${styles.title}`}>비밀번호</div>
+          <div className={`${styles.title}`}>부서명</div>
           <div className={`${styles.space}`}>
             <input
               type="text"
+              value={formData.department}
+              className={styles.txtInput}
+              onChange={handleChange("department")}
+            />
+          </div>
+        </div>
+        <div className={`${styles.item} ${styles.name}`}>
+          <div className={`${styles.title}`}>비밀번호</div>
+          <div className={`${styles.space}`}>
+            <input
+              type="password"
               value={formData.password}
               className={styles.txtInput}
               onChange={handleChange("password")}
+              required
             />
           </div>
         </div>

@@ -1,34 +1,49 @@
 import styles from "./Profile.module.css";
 import company from "../../../assets/profile_company.png";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { EnterpriseData } from "./EnterprisesEdit";
 import { profileImgUpload } from "./EnterpriseApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
+import { useMutation } from "react-query";
 
 interface ProfileProps {
   data?: EnterpriseData;
   onEditClick: (e: MouseEvent<HTMLDivElement>) => void;
   onSaveClick: (e: MouseEvent<HTMLDivElement>) => void;
+  onFileSelect: (file: File) => void;
 }
 
 export default function Profile({
   data,
   onEditClick,
   onSaveClick,
+  onFileSelect,
 }: ProfileProps) {
   const [editing, setEditing] = useState(false); // 수정 or 저장 상태관리
-  const [image, setImage] = useState(company); // 이미지 업로드 관리
-  const userId = useSelector((state: RootState) => state.user.userId);
+  const [image, setImage] = useState(company); // 이미지 업로드 관리(URL 상태관리)
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [fileKey, setFileKey] = useState(Date.now());
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (data?.profile instanceof File) {
+      const url = URL.createObjectURL(data.profile);
+      setImage(url);
+    } else if (typeof data?.profile === "string") {
+      setImage(data.profile);
+    } else {
+      setImage(company);
+    }
+  }, [data]);
+
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files) {
       let profileImg = e.target.files[0]; // FileList에서 첫 번째 File 선택
-      const res = await profileImgUpload(profileImg, userId);
-      console.log(res);
-      if (res) {
-        console.log("이미지 url", res.profileImgUrl);
-        setImage(res.profileImgUrl);
-      }
+      setSelectedFile(profileImg);
+      const imgUrl = URL.createObjectURL(profileImg);
+      setPreviewUrl(imgUrl);
+      onFileSelect(profileImg);
     }
   };
 
@@ -49,6 +64,7 @@ export default function Profile({
             {editing ? (
               <>
                 <input
+                  key={fileKey}
                   type="file"
                   accept="image/*"
                   name="file"
@@ -57,7 +73,9 @@ export default function Profile({
                   className={styles.imageInput}
                 />
                 <div className={`${styles.preview}`}>
-                  {image && <img src={image} alt="preview-img" />}
+                  {image && (
+                    <img src={previewUrl} alt="preview-img" key={previewUrl} />
+                  )}
                 </div>
               </>
             ) : (
