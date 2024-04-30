@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.advertVideo.service;
 
+import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.advertVideo.controller.response.*;
 import com.klpc.stadspring.domain.advertVideo.entity.AdvertVideo;
 import com.klpc.stadspring.domain.advertVideo.repository.AdvertVideoRepository;
@@ -11,6 +12,7 @@ import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import com.klpc.stadspring.util.S3Util;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +28,7 @@ import java.util.UUID;
 public class AdvertVideoService {
 
     private final AdvertVideoRepository advertVideoRepository;
+    private final AdvertRepository advertRepository;
     private final S3Util s3Util;
 
     /**
@@ -106,5 +109,28 @@ public class AdvertVideoService {
         URL imgUrl = s3Util.uploadImageToS3(file,"bannerImg",fileName);
 
         return AddBannerImgResponse.builder().bannerUrl(imgUrl.toString()).build();
+    }
+
+    public List<Long> getAdvertVideoByUser(Long userId){
+        // ==지운이가 관심사 추려주는 알고리즘 만들면 바꾸기==
+        List<String> userCategory = new ArrayList<>();
+        userCategory.add("개발");
+        userCategory.add("푸드");
+        userCategory.add("개발");
+        // ===========================================
+
+        List<Long> listByUser = advertRepository.findAdvertIdByCategory(userCategory.get(0), PageRequest.of(0, 6));
+        List<Long> tmp = advertRepository.findAdvertIdByCategory(userCategory.get(1), PageRequest.of(0, 4));
+        listByUser.addAll(tmp);
+        tmp = advertRepository.findAdvertIdByCategory(userCategory.get(2), PageRequest.of(0, 2));
+        listByUser.addAll(tmp);
+
+        List<Long> responseList = new ArrayList<>();
+        for (Long id: listByUser) {
+            Long videoId = advertVideoRepository.findIdByAdvertId(id);
+
+            responseList.add(videoId);
+        }
+        return responseList;
     }
 }
