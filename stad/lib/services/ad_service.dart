@@ -4,7 +4,7 @@ import 'package:stad/models/advert_model.dart';
 
 class AdService {
   final Dio dio = Dio();
-  final url = Uri.parse('$locApi/advert');
+  final url = Uri.parse('$svApi/advert');
 
   //광고 정보 받아오기
   Future<void> getAdInfo(int advertId) async {

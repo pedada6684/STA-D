@@ -14,25 +14,8 @@ class AuthService {
 
   Future<void> saveUserId(String userId) async {
     await storage.write(key: 'userId', value: userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
-    print(userId);
+    print('userStorage : $userId');
+
   }
 
   Future<String?> getUserId() async {

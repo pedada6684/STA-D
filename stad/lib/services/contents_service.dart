@@ -9,7 +9,7 @@ class ContentsService {
   Future<List<Map<String, dynamic>>> fetchWatchedcontents(int userId) async {
     try {
       final response = await dio.get(
-          '$locApi/contents-detail/collections/watching',
+          '$svApi/contents-detail/collections/watching',
           queryParameters: {'userId': userId});
 
       print('내가 본 콘텐츠 목록 불러오기:${response.data}');
