@@ -14,6 +14,9 @@
 }
 
 .circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
@@ -27,8 +30,9 @@
   padding: 0.2rem;
   justify-content: center;
   align-items: center;
-  width: 2.5rem;
+  width: 2.8rem;
 }
+
 .preview img {
   z-index: 2;
 }
