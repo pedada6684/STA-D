@@ -41,6 +41,9 @@ export default function Merchandise() {
   const toggleExpDate = () => setExpDateExpanded(!isExpDateExpanded);
   const toggleDeliveryDate = () =>
     setDeliveryDateExpanded(!isDeliveryDateExpanded);
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(new Date("2024/12/31"));
+
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.item}`}>
@@ -178,7 +181,10 @@ export default function Merchandise() {
               </div>
               <div className={`${styles.sellContainer}`}>
                 <div className={`${styles.calendar}`}>
-                  <DateRange />
+                  <DateRange startDate={startDate}
+                             endDate={endDate}
+                             setStartDate={setStartDate}
+                             setEndDate={setEndDate}/>
                 </div>
               </div>
             </div>
@@ -271,7 +277,10 @@ export default function Merchandise() {
         {isExpDateExpanded && (
           <InputContainer>
             <div className={`${styles.calendar}`}>
-              <DateRange />
+              <DateRange startDate={startDate}
+                         endDate={endDate}
+                         setStartDate={setStartDate}
+                         setEndDate={setEndDate}/>
             </div>
           </InputContainer>
         )}
