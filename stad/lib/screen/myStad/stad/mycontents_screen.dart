@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/providers/user_provider.dart';
-import 'package:stad/screen/myStad/stad/content_bottom_sheet.dart';
+import 'package:stad/widget/content_bottom_sheet.dart';
 import 'package:stad/services/contents_service.dart';
 import 'package:stad/widget/app_bar.dart';
 
