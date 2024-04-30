@@ -92,7 +92,7 @@ class _MyCommercialScreenState extends State<MyCommercialScreen> {
                   itemBuilder: (context, index) {
                     final advert = adverts[index];
                     return AdvertisingCard(
-                      imagePath:
+                      bannerImgUrl:
                           advert.bannerImgUrl ?? 'assets/image/default.png',
                       // Handle possible null URL
                       buttonText: advert.title,

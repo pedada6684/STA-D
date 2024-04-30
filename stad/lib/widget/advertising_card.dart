@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
 
 class AdvertisingCard extends StatelessWidget {
-  final String imagePath;
+  final String bannerImgUrl;
   final String buttonText;
   final VoidCallback onPressed;
 
   const AdvertisingCard({
     Key? key,
-    required this.imagePath,
+    required this.bannerImgUrl,
     required this.buttonText,
     required this.onPressed,
   }) : super(key: key);
@@ -31,7 +31,7 @@ class AdvertisingCard extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.asset(imagePath, fit: BoxFit.cover),
+                    Image.network(bannerImgUrl, fit: BoxFit.cover),
                     BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
                       child: Container(
