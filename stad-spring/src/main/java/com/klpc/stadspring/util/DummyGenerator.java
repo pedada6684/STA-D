@@ -214,17 +214,17 @@ public class DummyGenerator {
         advertVideoUrlList1.add("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/71cc0506891f4de4aa5bc28389e971c9videoList");
 
         AddAdvertRequestCommand command1 = AddAdvertRequestCommand.builder()
-                .userId(user1.getId())
+                .userId(user2.getId())
                 .title("유산균 김치")
                 .description("발효된 Super Food 김치")
                 .startDate(LocalDateTime.parse("2024-04-25T00:00:00"))
                 .endDate(LocalDateTime.parse("2025-04-25T00:00:00"))
-                .type("NOTPRODUCT")
+                .type("PRODUCT")
                 .directVideoUrl("")
-                .bannerImgUrl("https://contents.codetree.ai/homepage/images/company/SSAFY_logo.png")
+                .bannerImgUrl("https://img.khan.co.kr/lady/r/1100xX/2023/03/08/news-p.v1.20230308.9abb9311c8ee43c6b181dd72e08fa534.png")
                 .selectedContentList(contentList)
                 .advertVideoUrlList(advertVideoUrlList1)
-                .category("개발")
+                .category("푸드")
                 .build();
 
 
@@ -234,17 +234,17 @@ public class DummyGenerator {
         advertVideoUrlList2.add("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/71cc0506891f4de4aa5bc28389e971c9videoList");
 
         AddAdvertRequestCommand command2 = AddAdvertRequestCommand.builder()
-                .userId(user2.getId())
+                .userId(user1.getId())
                 .title("싸피 12기")
                 .description("개발자로 취업할 수 있는 절호의 기회")
                 .startDate(LocalDateTime.parse("2024-04-25T00:00:00"))
                 .endDate(LocalDateTime.parse("2025-04-25T00:00:00"))
-                .type("product")
-                .directVideoUrl("")
-                .bannerImgUrl("https://img.khan.co.kr/lady/r/1100xX/2023/03/08/news-p.v1.20230308.9abb9311c8ee43c6b181dd72e08fa534.png")
+                .type("NOTPRODUCT")
+                .directVideoUrl("https://www.ssafy.com/ksp/servlet/swp.content.controller.SwpContentServlet?p_process=select-content-view&p_menu_cd=M0307&p_content_cd=C0307&gad_source=1&gclid=CjwKCAjwrcKxBhBMEiwAIVF8rNcbofIU9So7-M2nvl4LIlRg_YOU5R3mox3ws6r398qEcnMdWDBMVhoCmH4QAvD_BwE")
+                .bannerImgUrl("https://contents.codetree.ai/homepage/images/company/SSAFY_logo.png")
                 .selectedContentList(contentList2)
                 .advertVideoUrlList(advertVideoUrlList2)
-                .category("푸드")
+                .category("개발")
                 .build();
 
         advertService.addAdvert(command1);
@@ -259,7 +259,7 @@ public class DummyGenerator {
 
         Product kimchi = Product.createNewProduct(
                 advert,
-                "금비김치",
+                "https://cdn.imweb.me/thumbnail/20200415/6b6e035658bac.png",
                 2500L,
                 5000L,
                 LocalDateTime.parse("2024-04-25T00:00:00"),
