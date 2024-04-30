@@ -19,55 +19,55 @@ public interface AdvertStatisticsRepository extends JpaRepository<AdvertStatisti
             SUM(a.orderCount) as totalOrders,
             SUM(a.revenue) as totalRevenue
             FROM AdvertStatistics a
-            WHERE a.advertId = :advertId AND a.date>= :startDate
+            WHERE a.advertId = :advertId AND a.date >= :startDate
             """)
-    Optional<Object[]> getTotalLog(@Param("advertId") Long advertId, @Param("startDate") LocalDateTime startDate);
+    Optional<Object[]> getTotalLog(@Param("advertId") Long advertId, @Param("startDate") LocalDate startDate);
 
     /**
      * 30일간 클릭 숫자 통계 구하기
-     * @param startDate
-     * @return
      */
     @Query("""
-            SELECT a.date, SUM(a.advertClickCount) as clickTotal
-            FROM AdvertStatistics a WHERE a.date >= :startDate
-            GROUP BY a.date ORDER BY a.date ASC
-            """)
-    Optional<List<GetDailyCountCommand>> getDailyAdvertClickCount(LocalDate startDate);
+        SELECT a.date, SUM(a.advertClickCount) as value
+        FROM AdvertStatistics a
+        WHERE a.date >= :startDate AND a.advertId = :advertId
+        GROUP BY a.date
+        ORDER BY a.date ASC
+        """)
+    Optional<List<Object[]>> getDailyAdvertClickCount(@Param("advertId") Long advertId, @Param("startDate") LocalDate startDate);
 
     /**
      * 30일간 비디오 숫자 통계 구하기
-     * @param startDate
-     * @return
      */
     @Query("""
-            SELECT a.date, SUM(a.advertVideoCount) as videoTotal
-            FROM AdvertStatistics a WHERE a.date >= :startDate
-            GROUP BY a.date ORDER BY a.date ASC
+            SELECT a.date as date, SUM(a.advertVideoCount) as value
+            FROM AdvertStatistics a
+            WHERE a.date >= :startDate AND a.advertId = :advertId
+            GROUP BY a.date
+            ORDER BY a.date ASC
             """)
-    Optional<List<GetDailyCountCommand>> getDailyAdvertVideoCount(LocalDate startDate);
+    Optional<List<Object[]>> getDailyAdvertVideoCount(@Param("advertId") Long advertId, @Param("startDate") LocalDate startDate);
 
     /**
      * 30일간 주문 숫자 통계 구하기
-     * @param startDate
-     * @return
      */
     @Query("""
-            SELECT a.date, SUM(a.orderCount) as orderCount
-            FROM AdvertStatistics a WHERE a.date >= :startDate
-            GROUP BY a.date ORDER BY a.date ASC
+            SELECT a.date as date, SUM(a.orderCount) as value
+            FROM AdvertStatistics a
+            WHERE a.date >= :startDate AND a.advertId = :advertId
+            GROUP BY a.date
+            ORDER BY a.date ASC
             """)
-    Optional<List<GetDailyCountCommand>> getDailyOrderCount(LocalDate startDate);
+    Optional<List<Object[]>> getDailyOrderCount(@Param("advertId") Long advertId, @Param("startDate") LocalDate startDate);
 
     /**
      * 30일간 수익 통계 구하기
-     * @param startDate
-     * @return
      */
     @Query("""
-            SELECT a.date, SUM(a.revenue) as revenue
-            FROM AdvertStatistics a WHERE a.date >= :startDate
-            GROUP BY a.date ORDER BY a.date ASC
+            SELECT a.date as date, SUM(a.revenue) as value
+            FROM AdvertStatistics a
+            WHERE a.date >= :startDate AND a.advertId = :advertId
+            GROUP BY a.date
+            ORDER BY a.date ASC
             """)
-    Optional<List<GetDailyCountCommand>> getDailyRevenue(LocalDate startDate);
+    Optional<List<Object[]>> getDailyRevenue(@Param("advertId") Long advertId, @Param("startDate") LocalDate startDate);
 }

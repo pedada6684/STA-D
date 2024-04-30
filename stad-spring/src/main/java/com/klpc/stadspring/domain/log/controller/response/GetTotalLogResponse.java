@@ -9,6 +9,6 @@ public class GetTotalLogResponse {
     Long totalAdvertVideo;
     Long totalAdvertClick;
     Long totalOrder;
-    Long totalOrderCancel;
+//    Long totalOrderCancel;
     Long totalRevenue;
 }
