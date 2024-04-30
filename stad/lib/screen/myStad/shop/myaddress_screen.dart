@@ -19,27 +19,6 @@ class _MyAddressScreenState extends State<MyAddressScreen>
     with TickerProviderStateMixin {
   late AnimationController _controller;
 
-  //
-  // List<DeliveryAddress> deliveryAddresses = [
-  //   DeliveryAddress(
-  //     name: "박지운",
-  //     phone: "010-1000-1000",
-  //     location: "(34153) 대전광역시 유성구 대학로 124",
-  //     locationNick: "집",
-  //   ),
-  //   DeliveryAddress(
-  //     name: "최은희",
-  //     phone: "010-2000-2000",
-  //     location: "(12345) 서울특별시 강남구 테헤란로 123",
-  //     locationNick: "은희집",
-  //   ),
-  //   DeliveryAddress(
-  //     name: "이태경",
-  //     phone: "010-2000-2000",
-  //     location: "(12345) 서울특별시 강남구 테헤란로 123",
-  //     locationNick: "태경집",
-  //   ),
-  // ];
   late AddressService addressService;
   bool _isLoading = true;
   List<DeliveryAddress> deliveryAddresses = [];
@@ -54,15 +33,15 @@ class _MyAddressScreenState extends State<MyAddressScreen>
     });
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   // Provider를 통해 userId를 가져옵니다.
-  //   final userProvider = Provider.of<UserProvider>(context);
-  //   if (userProvider.userId != null && deliveryAddresses.isEmpty) {
-  //     _fetchAddresses();
-  //   }
-  // }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Provider를 통해 userId를 가져옵니다.
+    final userProvider = Provider.of<UserProvider>(context);
+    if (userProvider.userId != null && deliveryAddresses.isEmpty) {
+      _fetchAddresses();
+    }
+  }
 
   void _fetchAddresses() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -142,7 +121,6 @@ class _MyAddressScreenState extends State<MyAddressScreen>
 
   Widget _buildAddressList() {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    print('buildAddressList : ${userProvider.userId}');
     return ListView.builder(
       itemCount: deliveryAddresses.length,
       itemBuilder: (context, index) {
