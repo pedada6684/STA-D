@@ -40,12 +40,16 @@ public class CartProduct {
     @Column(name = "content_id")
     private Long contentId;
 
+    @Column(name = "option_id")
+    private Long optionId;
+
     public static CartProduct createNewCartProduct(
             ProductType productType,
             User user,
             Long quantity,
             Long advertId,
-            Long contentId
+            Long contentId,
+            Long optionId
     ) {
         CartProduct cartProduct = new CartProduct();
         cartProduct.productType = productType;
@@ -53,6 +57,7 @@ public class CartProduct {
         cartProduct.quantity = quantity;
         cartProduct.advertId = advertId;
         cartProduct.contentId = contentId;
+        cartProduct.optionId = optionId;
         return cartProduct;
     }
 }
