@@ -1,0 +1,10 @@
+server:
+  servlet:
+    context-path: '/alert'
+spring:
+  profiles:
+    group:
+      default: dev
+  config:
+    import:
+      - classpath:/db.yml
