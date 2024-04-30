@@ -12,6 +12,7 @@ import com.klpc.stadspring.domain.contents.concept.service.ContentConceptParsing
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailParsingService;
 import com.klpc.stadspring.domain.orders.service.OrdersService;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequestCommand;
+import com.klpc.stadspring.domain.orders.service.command.request.AddOrdersProductTypeRequestCommand;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
 import com.klpc.stadspring.domain.product.service.ProductServiceImpl;
@@ -26,6 +27,8 @@ import com.klpc.stadspring.domain.user.service.command.JoinUserCommand;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -51,7 +54,7 @@ public class DummyGenerator {
     private final ContentConceptParsingService contentConceptParsingService;
     private final OrdersService ordersService;
 
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     public void createDummy(){
         createContent();
         User normalUser = createDummyUsers();
@@ -282,10 +285,18 @@ public class DummyGenerator {
     }
 
     public void addOrders(User user, ProductType productType, Long contentId, Long advertId){
+
+        List<AddOrdersProductTypeRequestCommand> productTypeList = new ArrayList<>();
+        AddOrdersProductTypeRequestCommand ptRequestCommand = AddOrdersProductTypeRequestCommand.builder()
+                .productTypeId(productType.getId())
+                .productCnt(Math.max(productType.getQuantity()-10,1))
+                .optionId(null)
+                .build();
+        productTypeList.add(ptRequestCommand);
+
         AddOrderRequestCommand command1 = AddOrderRequestCommand.builder()
                 .userId(user.getId())
-                .productTypeId(productType.getId())
-                .productTypeCnt(Math.max(productType.getQuantity()-10,1))
+                .addOrdersProductTypeRequestCommands(productTypeList)
                 .contentId(contentId)
                 .advertId(advertId)
                 .name("이태경")
