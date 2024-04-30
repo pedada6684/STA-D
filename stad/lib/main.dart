@@ -32,6 +32,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
+
   // late bool _isLoggined;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -87,22 +88,15 @@ class _MyAppState extends State<MyApp> {
         ),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          body: AnimatedIndexedStack(
-            index: _selectedIndex,
-            children: _widgetOptions,
-          ),
-          bottomNavigationBar: Consumer<CartModel>(
-            // Consumer 위젯 사용
-            builder: (context, cart, child) {
-              print('장바그니 항목 수 ${cart.itemCount}');
-              return CustomBottomNavigationBar(
-                selectedIndex: _selectedIndex,
-                onItemSelected: _onItemTapped,
-                cartItemCount: cart.itemCount, // CartModel로부터 장바구니 아이템 수를 가져옴
-              );
-            },
-          ),
-        ),
+            body: AnimatedIndexedStack(
+              index: _selectedIndex,
+              children: _widgetOptions,
+            ),
+            bottomNavigationBar:
+                CustomBottomNavigationBar(
+              selectedIndex: _selectedIndex,
+              onItemSelected: _onItemTapped,
+            )),
         // home: SplashVideoScreen(),
       ),
     );
