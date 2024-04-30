@@ -77,7 +77,10 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
       });
     } catch (e) {
       print('Error loading orders: $e');
-      setState(() => _isLoading = false);
+      setState(() {
+        _orders = []; // 빈 리스트 할당
+        _isLoading = false;
+      });
     }
   }
 
@@ -188,21 +191,21 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
       //   ],
       // ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator()) // 로딩 중 표시
+          ? Center(child: CircularProgressIndicator())
           : _orders == null || _orders!.isEmpty
               ? Center(
                   child: Text(
                   '주문 내역이 없습니다.',
-                  style: TextStyle(color: midGray, fontSize: 16.0),
-                )) // 주문 내역이 없을 때 표시
+                  style: TextStyle(color: darkGray, fontSize: 18.0),
+                ))
               : ListView.builder(
                   itemCount: _orders!.length,
                   itemBuilder: (context, index) {
-                    // 주문 목록 항목을 만드는 코드...
                     final order = _orders![index];
                     return _buildOrderItem(
-                      title: order.productName, // 실제 주문 데이터의 속성을 사용해야 합니다.
-                      description: order.orderDate, // 실제 주문 데이터의 속성을 사용해야 합니다.
+                      title:
+                          order.productTypeName[0], // 예시 코드, 실제 필드명에 맞게 조정 필요
+                      description: order.orderDate,
                     );
                   },
                 ),
