@@ -19,7 +19,9 @@ public class ContentDetail {
     private Long id;
     private Long contentConceptId;
     private Integer episode;
+    @Column(length = 3000)
     private String videoUrl;
+    @Column(columnDefinition = "text")
     private String summary;
 
     @OneToMany(mappedBy = "contentDetail")
@@ -28,7 +30,7 @@ public class ContentDetail {
     @OneToMany(mappedBy = "contentDetail")
     private List<WatchedContent> watchedContentList = new ArrayList<>();
 
-    public static ContentDetail createContentDetail (
+    public static ContentDetail createSeriesDetail (
             Long contentConceptId,
             int episode,
             String videoUrl,
@@ -39,6 +41,17 @@ public class ContentDetail {
         contentDetail.episode = episode;
         contentDetail.videoUrl = videoUrl;
         contentDetail.summary = summary;
+
+        return contentDetail;
+    }
+
+    public static ContentDetail createMovieDetail (
+            Long contentConceptId,
+            String videoUrl
+    ) {
+        ContentDetail contentDetail = new ContentDetail();
+        contentDetail.contentConceptId = contentConceptId;
+        contentDetail.videoUrl = videoUrl;
 
         return contentDetail;
     }

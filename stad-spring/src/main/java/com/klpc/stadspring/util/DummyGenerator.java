@@ -4,24 +4,18 @@ import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.advert.service.AdvertService;
 import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertRequestCommand;
-import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
 import com.klpc.stadspring.domain.contents.category.service.ContentCategoryService;
-import com.klpc.stadspring.domain.contents.category.service.command.request.AddCategoryRequestCommand;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
-import com.klpc.stadspring.domain.contents.concept.service.ContentParsingService;
-import com.klpc.stadspring.domain.contents.concept.service.command.request.AddConceptRequestCommand;
-import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
-import com.klpc.stadspring.domain.contents.detail.service.command.request.AddDetailRequestCommand;
+import com.klpc.stadspring.domain.contents.concept.service.ContentConceptParsingService;
+import com.klpc.stadspring.domain.contents.detail.service.ContentDetailParsingService;
 import com.klpc.stadspring.domain.orders.service.OrdersService;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequestCommand;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
 import com.klpc.stadspring.domain.product.service.ProductServiceImpl;
-import com.klpc.stadspring.domain.product.service.command.AddProductCommand;
 import com.klpc.stadspring.domain.productType.entity.ProductType;
-import com.klpc.stadspring.domain.productType.repository.ProductTypeRepository;
 import com.klpc.stadspring.domain.productType.service.ProductTypeService;
 import com.klpc.stadspring.domain.productType.service.command.AddProductTypeCommand;
 import com.klpc.stadspring.domain.user.entity.User;
@@ -29,17 +23,11 @@ import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.domain.user.service.UserService;
 import com.klpc.stadspring.domain.user.service.command.JoinCompanyUserCommand;
 import com.klpc.stadspring.domain.user.service.command.JoinUserCommand;
-import com.klpc.stadspring.global.response.exception.CustomException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,10 +47,9 @@ public class DummyGenerator {
     private final ContentConceptRepository contentConceptRepository;
     private final ContentConceptService contentConceptService;
     private final ContentCategoryService contentCategoryService;
-    private final ContentDetailService contentDetailService;
-    private final ContentParsingService contentParsingService;
+    private final ContentDetailParsingService contentDetailParsingService;
+    private final ContentConceptParsingService contentConceptParsingService;
     private final OrdersService ordersService;
-    private final ResourceLoader resourceLoader;
 
     @PostConstruct
     public void createDummy(){
@@ -127,19 +114,28 @@ public class DummyGenerator {
 //    }
 
     public void createContent() {
-        String filePath = "C:\\Users\\SSAFY\\Desktop\\자율PJT\\____________git____________\\S10P31B206\\stad-spring\\src\\main\\resources\\crawl.json";
+        String conceptFilePath = "src/main/resources/crawl.json";
 
         try {
-            // ResourceLoader를 사용하여 리소스 파일 로드
-            Resource resource = resourceLoader.getResource(filePath);
-
             // JSON 파일을 파싱하고 저장하는 메서드 호출
-            contentParsingService.parseAndSaveJson(filePath);
+            contentConceptParsingService.parseAndSaveJson(conceptFilePath);
             // 성공 시, 필요한 경우 성공 메시지 로깅
-            System.out.println("Content successfully parsed and saved from file: " + filePath);
+            System.out.println("Content successfully parsed and saved from file: " + conceptFilePath);
         } catch (Exception e) {
             // 일반적인 예외 처리
-            System.err.println("An unexpected error occurred while parsing the JSON file: " + filePath);
+            System.err.println("An unexpected error occurred while parsing the JSON file: " + conceptFilePath);
+            e.printStackTrace();
+        }
+
+
+        String detailFilePath = "src/main/resources/crawl_detail.json";
+        try {
+            contentDetailParsingService.parseAndSaveJson(detailFilePath);
+            // 성공 시, 필요한 경우 성공 메시지 로깅
+            System.out.println("Content successfully parsed and saved from file: " + detailFilePath);
+        } catch (Exception e) {
+            // 일반적인 예외 처리
+            System.err.println("An unexpected error occurred while parsing the JSON file: " + detailFilePath);
             e.printStackTrace();
         }
     }

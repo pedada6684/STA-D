@@ -6,6 +6,8 @@ import com.klpc.stadspring.domain.contents.categoryRelationship.entity.ContentCa
 import com.klpc.stadspring.domain.contents.categoryRelationship.repository.ContentCategoryRelationshipRepository;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
+import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
+import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import org.json.simple.JSONArray;
@@ -24,10 +26,13 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class ContentParsingService {
+public class ContentConceptParsingService {
 
     @Autowired
     private ContentConceptRepository contentConceptRepository;
+
+    @Autowired
+    private ContentDetailRepository contentDetailRepository;
 
     @Autowired
     private ContentCategoryRepository contentCategoryRepository;
@@ -46,10 +51,8 @@ public class ContentParsingService {
             JSONArray jsonArray = (JSONArray) parser.parse(reader);
 
             // ContentCategory에 저장된 카테고리 이름을 로드
-            List<String> existingCategoryNames = contentCategoryRepository.findAll()
-                    .stream()
-                    .map(ContentCategory::getName)
-                    .toList();
+            List<String> existingCategoryNames = contentCategoryRepository.findAllNames()
+                    .orElseThrow(()->new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
             // 새로운 카테고리 이름을 추적하기 위한 Set
             Set<String> newCategoryNames = new HashSet<>();
@@ -60,20 +63,30 @@ public class ContentParsingService {
                 JSONObject jsonObject = (JSONObject) obj;
 
                 // ContentConcept 객체 생성
-                ContentConcept newConcept = ContentConcept.createContentConcept(
-                        (String) jsonObject.get("audienceAge"),
-                        (String) jsonObject.get("playtime"),
-                        (String) jsonObject.get("description"),
-                        (String) jsonObject.get("cast"),
-                        (String) jsonObject.get("creator"),
-                        (Boolean) jsonObject.get("is_movie"),
-                        (String) jsonObject.get("release_year"),
-                        (String) jsonObject.get("thumbnail"),
-                        (String) jsonObject.get("title")
-                );
+                ContentConcept newConcept = contentConceptRepository.findByIsMovieAndTitle((Boolean) jsonObject.get("is_movie"),(String) jsonObject.get("title"))
+                        .orElse(
+                                ContentConcept.createContentConcept(
+                                    (String) jsonObject.get("audience_age"),
+                                    (String) jsonObject.get("playtime"),
+                                    (String) jsonObject.get("description"),
+                                    (String) jsonObject.get("cast"),
+                                    (String) jsonObject.get("creator"),
+                                    (Boolean) jsonObject.get("is_movie"),
+                                    (String) jsonObject.get("release_year"),
+                                    (String) jsonObject.get("thumbnail"),
+                                    (String) jsonObject.get("title")));
 
-                // ContentConcept 엔티티를 데이터베이스에 저장
-                contentConceptRepository.save(newConcept);
+                // ContentConcept가 존재하지 않으면 엔티티를 데이터베이스에 저장
+                if (!contentConceptRepository.findByIsMovieAndTitle(newConcept.isMovie(), newConcept.getTitle()).isPresent()) {
+                    contentConceptRepository.save(newConcept);
+
+                    if (newConcept.isMovie()) {
+                        ContentDetail newDetail = ContentDetail.createMovieDetail(
+                                newConcept.getId(),
+                                "https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/streamingDummy.mp4");
+                        contentDetailRepository.save(newDetail);
+                    }
+                }
 
                 // JSON에서 genre 필드를 가져와 ","로 분할
                 String[] genres = ((String) jsonObject.get("genre")).split(",");
@@ -87,10 +100,9 @@ public class ContentParsingService {
 
                     // ContentCategory 가져오기
                     ContentCategory category = contentCategoryRepository.findByIsMovieAndName((Boolean) jsonObject.get("is_movie"), genre)
-                            .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-                    if (category == null) {
-                        // ContentCategory가 존재하지 않으면 새로 생성
-                        category = ContentCategory.createContentCategory((Boolean) jsonObject.get("is_movie"), genre);
+                            .orElse(// ContentCategory가 존재하지 않으면 새로 생성
+                                    ContentCategory.createContentCategory((Boolean) jsonObject.get("is_movie"), genre));
+                    if (!contentCategoryRepository.findByIsMovieAndName((Boolean) jsonObject.get("is_movie"), genre).isPresent()) {
                         contentCategoryRepository.save(category);
                         existingCategoryNames.add(genre); // 기존 카테고리 목록 업데이트
                     }
