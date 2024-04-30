@@ -9,9 +9,7 @@ import com.klpc.stadspring.domain.log.controller.response.GetTotalLogResponse;
 import com.klpc.stadspring.domain.log.entity.AdvertClickLog;
 import com.klpc.stadspring.domain.log.entity.AdvertVideoLog;
 import com.klpc.stadspring.domain.log.entity.OrderLog;
-import com.klpc.stadspring.domain.log.entity.OrderReturnLog;
 import com.klpc.stadspring.domain.log.service.LogService;
-import com.klpc.stadspring.domain.log.service.command.AddCancelOrderLogCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -76,12 +74,12 @@ public class LogController {
         }
     }
 
-    @GetMapping("/total/{advertId}")
+    @GetMapping("/total")
     @Operation(summary = "30일 데이터 총합", description = "30일짜리 데이터")
-    public ResponseEntity<?> GetTotalLog(@PathVariable Long advertId)  {
+    public ResponseEntity<?> GetTotalLog(@RequestParam("advertId") Long advertId)  {
         try {
             GetTotalLogResponse response = logService.getTotalLog(advertId);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -89,21 +87,23 @@ public class LogController {
 
     @GetMapping("/daily/click")
     @Operation(summary = "30일 동안 각 날짜 광고 클릭 수", description = "30일 동안 각 날짜 광고 클릭 수")
-    public ResponseEntity<?> GetDailyAdvertClick()  {
+    public ResponseEntity<?> GetDailyAdvertClick(@RequestParam("advertId") Long advertId)  {
         try {
-            GetDailyCountResponse response = logService.getDailyAdvertCilckCount();
-            return ResponseEntity.ok().build();
+            GetDailyCountResponse response = logService.getDailyAdvertClickCount(advertId);
+            log.info("success");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
+            log.info("problem?");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping("/daily/advert-video")
     @Operation(summary = "30일 동안 각 날짜 광고 시청 수", description = "30일 동안 각 날짜 광고 시청 수")
-    public ResponseEntity<?> GetDailyAdvertVideo()  {
+    public ResponseEntity<?> GetDailyAdvertVideo(@RequestParam("advertId") Long advertId)  {
         try {
-            GetDailyCountResponse response = logService.getDailyAdvertVideoCount();
-            return ResponseEntity.ok().build();
+            GetDailyCountResponse response = logService.getDailyAdvertVideoCount(advertId);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -111,10 +111,10 @@ public class LogController {
 
     @GetMapping("/daily/order")
     @Operation(summary = "30일 동안 각 날짜 주문 수", description = "30일 동안 각 날짜 광고 주문 수")
-    public ResponseEntity<?> GetDailyOrder()  {
+    public ResponseEntity<?> GetDailyOrder(@RequestParam("advertId") Long advertId)  {
         try {
-            GetDailyCountResponse response = logService.getDailyOrderCount();
-            return ResponseEntity.ok().build();
+            GetDailyCountResponse response = logService.getDailyOrderCount(advertId);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -122,10 +122,10 @@ public class LogController {
 
     @GetMapping("/daily/revenue")
     @Operation(summary = "30일 동안 각 날짜 수익", description = "30일 동안 각 날짜 수익")
-    public ResponseEntity<?> GetDailyRevenue()  {
+    public ResponseEntity<?> GetDailyRevenue(@RequestParam("advertId") Long advertId)  {
         try {
-            GetDailyCountResponse response = logService.getDailyRevenueCount();
-            return ResponseEntity.ok().build();
+            GetDailyCountResponse response = logService.getDailyRevenueCount(advertId);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
