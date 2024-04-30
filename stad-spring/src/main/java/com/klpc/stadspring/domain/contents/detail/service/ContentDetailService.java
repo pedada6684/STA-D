@@ -127,7 +127,7 @@ public class ContentDetailService {
     public void addDetail(AddDetailRequestCommand command) {
         log.info("AddDetailRequestCommand : " + command);
 
-        ContentDetail newContentDetail = ContentDetail.createContentDetail(
+        ContentDetail newContentDetail = ContentDetail.createSeriesDetail(
                 command.getContentConceptId(),
                 command.getEpisode(),
                 command.getVideoUrl(),
