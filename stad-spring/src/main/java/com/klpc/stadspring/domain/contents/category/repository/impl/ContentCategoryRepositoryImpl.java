@@ -48,4 +48,11 @@ public class ContentCategoryRepositoryImpl implements ContentCategoryRepositoryC
                         .and(contentCategory.name.eq(name)))
                 .fetchOne());
     }
+
+    @Override
+    public Optional<List<String>> findAllNames() {
+        return Optional.ofNullable(query.select(contentCategory.name)
+                .from(contentCategory)
+                .fetch());
+    }
 }

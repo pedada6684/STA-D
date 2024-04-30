@@ -22,4 +22,13 @@ public class ContentConceptRepositoryImpl implements ContentConceptRepositoryCus
                 .where(contentConcept.title.contains(keyword))
                 .fetch());
     }
+
+    @Override
+    public Optional<ContentConcept> findByIsMovieAndTitle(boolean isMovie, String title) {
+        return Optional.ofNullable(query.select(contentConcept)
+                .from(contentConcept)
+                .where(contentConcept.isMovie.eq(isMovie)
+                        .and(contentConcept.title.eq(title)))
+                .fetchOne());
+    }
 }
