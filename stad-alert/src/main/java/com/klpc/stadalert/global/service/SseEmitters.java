@@ -25,15 +25,14 @@ public class SseEmitters {
 		emitter.onError(e -> {
 			emitter.complete();
 		});
-		String emitId = command.getUserId()+ "/" + command.getType();
+		String emitId = command.getUserId()+command.getType();
 		emitterMap.put(emitId, emitter);
 
-		emit(emitId, "SSE connected", "connect");
-		return emitter;
+		return emit(emitId, "SSE connected", "connect");
 	}
 
 	//emit
-	public void emit(String id, Object eventPayload, String eventType) {
+	public SseEmitter emit(String id, Object eventPayload, String eventType) {
 		SseEmitter emitter = emitterMap.get(id);
 		if (emitter != null) {
 			try {
@@ -44,6 +43,7 @@ public class SseEmitters {
 				log.error("failure send media position data, id={}, {}", id, e.getMessage());
 			}
 		}
+		return emitter;
 	}
 
 	private SseEmitter createEmitter() {
