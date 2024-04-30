@@ -2,12 +2,13 @@ package com.klpc.stadspring.domain.orders.controller.request;
 
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class AddOrdersRequest {
 
     Long userId;
-    Long productId;
-    Long productCnt;
+    List<AddOrdersProductTypeRequest> productTypes;
     Long contentId;
     Long advertId;
     String name;
