@@ -19,6 +19,7 @@ public class CartProductPostRequest {
     private Long quantity;
     private Long advertId;
     private Long contentId;
+    private Long optionId;
 
     public AddCartProductCommand toCommand(){
         return AddCartProductCommand.builder()
@@ -26,6 +27,7 @@ public class CartProductPostRequest {
                 .quantity(quantity)
                 .advertId(advertId)
                 .contentId(contentId)
+                .optionId(optionId)
                 .build();
     }
 }
