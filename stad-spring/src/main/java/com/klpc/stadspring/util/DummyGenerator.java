@@ -30,6 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -55,6 +57,7 @@ public class DummyGenerator {
     private final OrdersService ordersService;
 
     @EventListener(ApplicationReadyEvent.class)
+    @Transactional
     public void createDummy(){
         createContent();
         User normalUser = createDummyUsers();
