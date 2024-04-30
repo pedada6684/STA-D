@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  user-service:
+    url: http://localhost:8080/api
+server:
+  port: 8081
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  user-service:
+    url: http://stad-spring:18080/api
