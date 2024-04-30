@@ -51,19 +51,23 @@ export default function RecentWatching() {
     <div className="v-container">
       <div className="v-title">최근 시청중인 컨텐츠</div>
       <div className="thumbnail-container">
-        <Slider {...setting}>
-          {WatchingData?.map((data, index) => (
-            <div
-              className="s-vid-container"
-              key={index}
-              style={{ position: "relative", transition: "all 0.3s" }}
-              onClick={() => navigate(`/tv/${data.detailId}`)}
-            >
-              <img src={data.thumbnailUrl} alt="비디오 썸네일" />
-              <div className="vidTitle">{data.title}</div>
-            </div>
-          ))}
-        </Slider>
+        {WatchingData ? (
+          <Slider {...setting}>
+            {WatchingData?.map((data, index) => (
+              <div
+                className="s-vid-container"
+                key={index}
+                style={{ position: "relative", transition: "all 0.3s" }}
+                onClick={() => navigate(`/tv/${data.detailId}`)}
+              >
+                <img src={data.thumbnailUrl} alt="비디오 썸네일" />
+                <div className="vidTitle">{data.title}</div>
+              </div>
+            ))}
+          </Slider>
+        ) : (
+          <div>현재 시청 중인 영상이 없습니다.</div>
+        )}
       </div>
     </div>
   );
