@@ -191,6 +191,7 @@ public class UserService {
     }
 
     public List<UserLocation> getUserLocation(GetUserLocationCommand command) {
+        log.info("GetUserLocationCommand: "+command);
         return userLocationRepository.findAllByUser_Id(command.getUserId());
     }
 }
