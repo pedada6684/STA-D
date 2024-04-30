@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ConnectCommand {
     String userId;
-    String type;
+    String type; // tv, app
 }
