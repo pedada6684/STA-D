@@ -31,7 +31,7 @@ export async function GetRecentWatching(accessToken: string | null) {
         }
       );
       console.log("시청 중인 영상 조회 성공", response.data);
-      return response.data;
+      return response.data.detailList;
     }
   } catch (error) {
     console.error("시청 중인 영상 목록 조회 실패", error);
