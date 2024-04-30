@@ -57,6 +57,7 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
       }
     });
   }
+
   // void fetchMyReviews() async {
   //   final userProvider = Provider.of<UserProvider>(context, listen: false);
   //   // print(userProvider.userId);
@@ -86,17 +87,21 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
 
   void fetchMyReviews() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    int hardCodedUserId = 1;  // 하드코딩된 userId 값
-
-    try {
-      reviews = await ReviewService().fetchMyReviews(hardCodedUserId);
-      setState(() => isLoading = false);
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-        reviews = [];
-      });
-      print('Error fetching reviews: $e');
+    if (userProvider.userId != null) {
+      try {
+        reviews = await ReviewService()
+            .fetchMyReviews(userProvider.userId!); // userId를 인자로 전달
+        setState(() => isLoading = false);
+      } catch (e) {
+        setState(() {
+          isLoading = false;
+          reviews = [];
+        });
+        print('Error fetching reviews: $e');
+      }
+    } else {
+      print('User ID is null');
+      setState(() => isLoading = false); // User ID가 없는 경우 로딩 상태를 비활성화합니다.
     }
   }
 
@@ -131,7 +136,7 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
                   child: Text(
                     '리뷰가 없습니다.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: darkGray),
+                    style: TextStyle(color: darkGray, fontSize: 18.0),
                   ),
                 ),
     );
@@ -162,6 +167,7 @@ class ReviewCard extends StatelessWidget {
             SizedBox(
               height: 16.0,
             ),
+            Text(review.title),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -173,8 +179,8 @@ class ReviewCard extends StatelessWidget {
                     //         height: 60,
                     //         fit: BoxFit.cover,
                     //       )
-                    Image.asset(
-                        'assets/image/박지운.png',
+                    Image.network(
+                        review.imageUrl as String,
                         width: 60,
                       )
                     : Image.asset('assets/image/박지운.png', width: 60),
