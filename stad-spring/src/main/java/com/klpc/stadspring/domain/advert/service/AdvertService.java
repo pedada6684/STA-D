@@ -262,7 +262,7 @@ public class AdvertService {
      * @return
      */
     public GetAdvertListByContentResponse getAdvertListByContent(Long contentId){
-        log.info("컨텐츠 관련 광과 목록 조회 Service"+'\n'+"contentId : "+contentId);
+        log.info("컨텐츠 관련 광고 목록 조회 Service"+'\n'+"contentId : "+contentId);
         ContentConcept contentConcept = contentConceptRepository.findById(contentId).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         List<Advert> advertList = advertRepository.findAllByContentId(contentId);
