@@ -48,11 +48,25 @@ export default function Advertisement() {
   const toggleAdPeriod = () => setAdPeriodExpanded(!isAdPeriodExpanded); // 광고 기간
   const toggleAdCategory = () => setAdCategoryExpanded(!isAdCategoryExpanded); // 광고 카테고리
   const toggleAdContent = () => setAdContentExpanded(!isAdContentExpanded); // 노출 컨텐츠
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(new Date("2024/12/31"));
+  const [category, setCategory] = useState<String | null>("");
+  const [contentId, setContentId] = useState<number | null>(null);
 
+  const handleDateRangeChange = (startDate: Date | null, endDate: Date | null) => {
+    // startDate와 endDate를 이용한 작업 수행
+    console.log("Start Date:", startDate);
+    console.log("End Date:", endDate);
+  };
   useEffect(() => {
     console.log(videoUrlList);
     console.log(bannerImgUrl);
-  }, [videoUrlList,bannerImgUrl]);
+    console.log(formData)
+    console.log(startDate)
+    console.log(endDate)
+    console.log(category)
+    console.log(contentId)
+  }, [videoUrlList,bannerImgUrl,formData,startDate,endDate,category,contentId]);
 
   const handleAdvertVideoList = async (e: ChangeEvent<HTMLInputElement>) => {
     const videoList = e.target.files;
@@ -180,7 +194,10 @@ export default function Advertisement() {
         {isAdPeriodExpanded && (
           <InputContainer>
             <div className={`${styles.calendar}`}>
-              <DateRange />
+              <DateRange startDate={startDate}
+                         endDate={endDate}
+                         setStartDate={setStartDate}
+                         setEndDate={setEndDate} />
             </div>
             <div className={`${styles.caution}`}>
               *계약 기간 만료시 광고는 자동으로 삭제됩니다.
@@ -201,7 +218,7 @@ export default function Advertisement() {
         {isAdCategoryExpanded && (
           <InputContainer>
             <div className={`${styles.selectBox}`}>
-              <SelectAdCategory />
+              <SelectAdCategory setCategory={setCategory}/>
             </div>
             <div className={`${styles.caution}`}>
               *각 광고 카테고리에 맞는 영상을 매칭해드립니다.
@@ -226,7 +243,7 @@ export default function Advertisement() {
               <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
                 <div className={`${styles.modalContent}`}>
                   <div className={`${styles.modalTitle}`}>컨텐츠 선택하기</div>
-                  <SelectContentsBox />
+                  <SelectContentsBox setContentId={setContentId}/>
                 </div>
               </Modal>
             </div>
