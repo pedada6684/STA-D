@@ -4,7 +4,7 @@ import 'package:stad/models/review_model.dart'; // Review 모델 클래스를 �
 
 class ReviewService {
   final Dio _dio = Dio(); // Dio 인스턴스 생성
-  final reviewUrl = '$locApi/api/review';
+  final reviewUrl = '$svApi/api/review';
 
   // 사용자 리뷰 목록을 불러오는 메서드
   Future<List<Review>> fetchMyReviews(int userId) async {
