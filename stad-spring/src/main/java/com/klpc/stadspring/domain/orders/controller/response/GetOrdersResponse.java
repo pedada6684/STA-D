@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.orders.controller.response;
 
+import com.klpc.stadspring.domain.orders.service.command.response.GetOrderListProductTypeResponseCommand;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +16,6 @@ public class GetOrdersResponse {
     String orderStatus;
     Long contentId;
     Long advertId;
-    List<Long> productTypeId;
-    List<String> productTypeName;
-    String productThumbnailUrl;
+    List<GetOrderListProductTypeResponseCommand> productTypes;
 
 }
