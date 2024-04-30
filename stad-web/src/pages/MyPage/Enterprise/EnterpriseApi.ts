@@ -3,13 +3,18 @@ import { EnterpriseData } from "./EnterprisesEdit";
 
 export async function profileImgUpload(file: File, userId: number) {
   if (!file) return null;
+  console.log(file);
   const formData = new FormData();
-  formData.append("profile", file);
+  formData.append("memberId", userId.toString());
+  formData.append("profileImg", file);
   try {
-    const res = await axios.post(`/api/user/profile`, {
-      profileImg: formData,
+    const res = await axios.post(`/api/user/profile`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
     console.log("업로드 성공", res);
+    return res.data;
   } catch (error) {
     console.error("업로드 실패", error);
   }

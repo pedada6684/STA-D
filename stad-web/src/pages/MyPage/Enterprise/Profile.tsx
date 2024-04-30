@@ -24,9 +24,10 @@ export default function Profile({
     if (e.target.files && e.target.files[0]) {
       let profileImg = e.target.files[0]; // FileList에서 첫 번째 File 선택
       const res = await profileImgUpload(profileImg, userId);
+      console.log(res);
       if (res) {
-        console.log("이미지 url", res);
-        setImage(res);
+        console.log("이미지 url", res.profileImgUrl);
+        setImage(res.profileImgUrl);
       }
     }
   };
@@ -46,13 +47,19 @@ export default function Profile({
         <div className={styles.profileSection}>
           <div className={styles.circle}>
             {editing ? (
-              <input
-                type="file"
-                name="file"
-                id="file"
-                onChange={handleImageChange}
-                className={styles.imageInput}
-              />
+              <>
+                <input
+                  type="file"
+                  accept="image/*"
+                  name="file"
+                  id="file"
+                  onChange={handleImageChange}
+                  className={styles.imageInput}
+                />
+                <div className={`${styles.preview}`}>
+                  {image && <img src={image} alt="preview-img" />}
+                </div>
+              </>
             ) : (
               <img src={image} alt="회사 로고" className={styles.icon} />
             )}
