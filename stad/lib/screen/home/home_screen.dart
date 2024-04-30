@@ -1,11 +1,11 @@
-//나중에 서버에서 받아올 것
-import 'dart:ui';
-
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/models/contents_model.dart';
 import 'package:stad/screen/product/product_screen.dart';
+import 'package:stad/services/contents_service.dart';
 import 'package:stad/widget/advertising_card.dart';
+import 'package:stad/widget/content_bottom_sheet.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,11 +18,25 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   bool _isActive = true;
   int _current = 0;
   final CarouselController _controller = CarouselController();
+  Content? featuredContent;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    fetchFeaturedContent();
+  }
+
+  void fetchFeaturedContent() async {
+    ContentsService contentsService = ContentsService();
+    try {
+      var fetchedContent = await contentsService.fetchContentDetails(1); // assuming 1 is a valid ID
+      setState(() {
+        featuredContent = fetchedContent;
+      });
+    } catch (e) {
+      print('Failed to fetch content: $e');
+    }
   }
 
   @override
@@ -80,66 +94,80 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(
-              children: [
-                ShaderMask(
-                  shaderCallback: (rect) {
-                    return LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.black, Colors.transparent],
-                      stops: [0.5, 1.0], // 상단 절반을 덮는 그라데이션
-                    ).createShader(
-                        Rect.fromLTRB(0, 0, rect.width, rect.height));
-                  },
-                  blendMode: BlendMode.dstIn,
-                  child: Image.asset(
-                    'assets/image/thumbnail5.jpg', // 서버에서 받아올 이미지 URL
-                    height: 420,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: 100, // 이미지의 높이와 동일하게 설정
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                          mainBlack.withOpacity(0.2),
-                          Colors.transparent,
-                        ],
-                            stops: [
-                          0.0,
-                          0.5
-                        ])),
-                  ),
-                ),
-                Positioned(
-                  bottom: 35,
-                  left: 25,
-                  child: Text(
-                    '지금 보는 컨텐츠',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: mainWhite,
-                      shadows: <Shadow>[
-                        Shadow(
-                          offset: Offset(0.0, 0.8),
-                          blurRadius: 3.0,
-                          color: Color.fromARGB(150, 0, 0, 0),
-                        ),
-                      ],
+            GestureDetector(
+              onTap: () {
+                if (featuredContent != null) {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (BuildContext context) => ContentDetailBottomSheet(
+                      title: featuredContent!.title,
+                      imagePath: featuredContent!.thumbnailUrl,
+                      synopsis: featuredContent!.description,
+                      seasonInfo: '${featuredContent!.releaseYear} | ${featuredContent!.audienceAge}',
+                      additionalText: '${featuredContent!.creator} | ${featuredContent!.cast}',
+                    ),
+                  );
+                }
+              },
+              child: Stack(
+                children: [
+                  ShaderMask(
+                    shaderCallback: (rect) {
+                      return LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [mainBlack, Colors.transparent],
+                        stops: [0.4, 1.0],
+                      ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+                    },
+                    blendMode: BlendMode.dstIn,
+                    child: featuredContent == null
+                        ? Center(child: CircularProgressIndicator()) // Show loading spinner if content is null
+                        : Image.network(
+                      featuredContent!.thumbnailUrl,
+                      height: 420,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                ),
-              ],
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [mainBlack.withOpacity(0.2), Colors.transparent],
+                          stops: [0.0, 0.5],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 35,
+                    left: 25,
+                    child: Text(
+                      '지금 보는 컨텐츠',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: mainWhite,
+                        shadows: <Shadow>[
+                          Shadow(
+                            offset: Offset(0.0, 0.8),
+                            blurRadius: 3.0,
+                            color: Color.fromARGB(150, 0, 0, 0),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             Column(
               children: [

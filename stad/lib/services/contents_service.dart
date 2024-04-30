@@ -5,6 +5,27 @@ import 'package:stad/models/contents_model.dart';
 class ContentsService {
   final Dio dio = Dio();
 
+  Future<Content> fetchContentDetails(int detailId) async {
+    try {
+      final response = await dio.get('$svApi/contents-detail/1');
+      print('${response.data}');
+      print('${response.data}');
+      print('${response.data}');
+      print('${response.data}');
+      print('${response.data}');
+      print('${response.data}');
+
+      if (response.statusCode == 200) {
+        return Content.fromJson(response.data);
+      } else {
+        throw Exception('Failed to load content details');
+      }
+    } catch (e) {
+      print('Error fetching content details: $e');
+      throw Exception('Error occurred while fetching content details');
+    }
+  }
+
   //내가 본 콘텐츠 불러오기
   Future<List<Map<String, dynamic>>> fetchWatchedcontents(int userId) async {
     try {
@@ -29,21 +50,6 @@ class ContentsService {
     } on DioException catch (e) {
       print('Error fetching watched contents for user $userId: ${e.message}');
       throw Exception('콘텐츠 목록 불러오다가 에러: ${e.message}');
-    }
-  }
-
-  //콘텐츠 디테일
-  Future<Content> fetchContentDetails(int detailId) async {
-    try {
-      final response = await dio.get('$locApi/contents-detail/$detailId');
-      if (response.statusCode == 200) {
-        return Content.fromJson(response.data);
-      } else {
-        throw Exception('Failed to load content details');
-      }
-    } catch (e) {
-      print('Error fetching content details: $e');
-      throw Exception('Error occurred while fetching content details');
     }
   }
 }
