@@ -15,7 +15,6 @@ export default function EnterpriseInfo({ onLoaded }: EnterpriseInfoProps) {
   const tokenObj = useSelector((state: RootState) => state.token);
   // Redux 스토어에서 accessToken을 추출
   const accessToken = tokenObj.accessToken;
-  const loading = useSelector((state: RootState) => state.loading["MY-PAGE"]);
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["user"],
     queryFn: () => GetEnterpriseInfo(userId, accessToken || ""),
@@ -48,6 +47,10 @@ export default function EnterpriseInfo({ onLoaded }: EnterpriseInfoProps) {
       <div className={`${styles.item} ${styles.name}`}>
         <div className={`${styles.title}`}>등록 사원 이름</div>
         <div className={`${styles.space}`}>{data.name}</div>
+      </div>
+      <div className={`${styles.item} ${styles.name}`}>
+        <div className={`${styles.title}`}>부서명</div>
+        <div className={`${styles.noSpace}`}>{data.department}</div>
       </div>
     </div>
   );
