@@ -16,6 +16,7 @@ public class ContentConcept {
     private Long id;
     private boolean isMovie;
     private String title;
+    @Column(length = 3000)
     private String thumbnailUrl;
     private String releaseYear;
     private String audienceAge;
