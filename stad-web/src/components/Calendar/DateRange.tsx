@@ -3,10 +3,19 @@ import DatePicker from "react-datepicker";
 import styles from "./Calendar.module.css";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function DateRange() {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date("2024/12/31"));
+interface DateRangeProps {
+    startDate: Date | null;
+    endDate: Date | null;
+    setStartDate: (date: Date | null) => void;
+    setEndDate: (date: Date | null) => void;
+}
 
+export default function DateRange({
+  startDate,
+  endDate,
+  setStartDate,
+  setEndDate,
+}: DateRangeProps) {
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.calendar}`}>
