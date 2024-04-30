@@ -11,6 +11,7 @@ import com.klpc.stadspring.domain.orders.controller.response.GetOrdersResponse;
 import com.klpc.stadspring.domain.orders.entity.Orders;
 import com.klpc.stadspring.domain.orders.repository.OrdersRepository;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequestCommand;
+import com.klpc.stadspring.domain.orders.service.command.request.AddOrdersProductTypeRequestCommand;
 import com.klpc.stadspring.domain.orders.service.command.response.GetOrdersListResponseCommand;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
@@ -48,15 +49,17 @@ public class OrdersService {
     public AddOrdersResponse addOrders(AddOrderRequestCommand command){
         log.info("주문 추가 Service"+"\n"+"Command userId : "+command.getUserId());
         User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        ProductType productType = productTypeRepository.findById(command.getProductTypeId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         Orders orders = Orders.createToOrders(user, command.getContentId(), command.getAdvertId());
         ordersRepository.save(orders);
 
-        OrderProduct orderProduct = OrderProduct.createToOrderProduct(command.getProductTypeCnt());
-        orderProduct.linkedOrders(orders);
-        orderProduct.linkedProductType(productType);
-        orderProductRepository.save(orderProduct);
+        for(AddOrdersProductTypeRequestCommand ptCommand : command.getAddOrdersProductTypeRequestCommands()){
+            ProductType productType = productTypeRepository.findById(ptCommand.getProductTypeId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+            OrderProduct orderProduct = OrderProduct.createToOrderProduct(ptCommand.getProductCnt(), ptCommand.getOptionId());
+            orderProduct.linkedOrders(orders);
+            orderProduct.linkedProductType(productType);
+            orderProductRepository.save(orderProduct);
+        }
 
         return AddOrdersResponse.builder().result("success").build();
     }
