@@ -28,7 +28,7 @@ public class ConnectController {
 		return ResponseEntity.ok(emitter);
 	}
 
-	@GetMapping("qrlogin")
+	@PostMapping("qrlogin")
 	public ResponseEntity<?> qrLogin(@RequestBody QrLoginRequest request) {
 		log.info("CreateConnectRequest: "+ request);
 		connectService.qrLogin(request.toCommand());

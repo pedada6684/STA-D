@@ -18,7 +18,7 @@ public class UserService {
 
 	public User findUser(Long userId) {
 		FindUserDto findUser = new RestTemplate().getForObject(
-			userServiceUrl + "/user/userId="+userId,
+			userServiceUrl + "/user?userId="+userId,
 			FindUserDto.class
 		);
 		log.debug("findUser: " + findUser);

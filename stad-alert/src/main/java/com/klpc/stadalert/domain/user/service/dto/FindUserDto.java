@@ -4,8 +4,6 @@ import lombok.Data;
 
 @Data
 public class FindUserDto {
-    //data로 get을 받기 때문
-    private FindUserDto data;
     private Long userId;
     private String nickname;
     private String email;

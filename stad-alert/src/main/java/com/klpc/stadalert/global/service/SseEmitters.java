@@ -19,6 +19,7 @@ public class SseEmitters {
 	private final Map<String, SseEmitter> emitterMap = new ConcurrentHashMap<>();
 
 	public SseEmitter subscribe(ConnectCommand command) {
+		log.info("ConnectCommand: "+ command);
 		SseEmitter emitter = createEmitter();
 		emitter.onTimeout(emitter::complete);
 
