@@ -3,10 +3,7 @@ package com.klpc.stadspring.domain.contents.concept.controller;
 import com.klpc.stadspring.domain.contents.category.entity.ContentCategory;
 import com.klpc.stadspring.domain.contents.category.service.ContentCategoryService;
 import com.klpc.stadspring.domain.contents.categoryRelationship.service.ContentCategoryRelationshipService;
-import com.klpc.stadspring.domain.contents.concept.controller.response.GetCategoryAndConceptsListResponse;
-import com.klpc.stadspring.domain.contents.concept.controller.response.GetConceptListResponse;
-import com.klpc.stadspring.domain.contents.concept.controller.response.GetConceptResponse;
-import com.klpc.stadspring.domain.contents.concept.controller.response.GetCategoryAndConceptsResponse;
+import com.klpc.stadspring.domain.contents.concept.controller.response.*;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
@@ -150,5 +147,20 @@ public class ContentConceptController {
             responseList.add(GetConceptResponse.from(contentConcept));
         }
         return ResponseEntity.ok(responseList);
+    }
+
+    @GetMapping("/all")
+    @Operation(summary = "콘텐츠 전체 조회", description = "콘텐츠 전체 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "콘텐츠 전체 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<GetAllConceptListResponse> getAllContentList() {
+        log.info("콘텐츠 전체 조회" + "\n" + "getAllContentList");
+
+        GetAllConceptListResponse response = conceptService.getAllContentList();
+
+        return ResponseEntity.ok(response);
     }
 }
