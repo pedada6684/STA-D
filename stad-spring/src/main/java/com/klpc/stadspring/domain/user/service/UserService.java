@@ -55,6 +55,7 @@ public class UserService {
         return S3Url.toString();
     }
 
+    @Transactional(readOnly = false)
     public void withdrawUser(WithdrawUserCommand command) {
         log.info("WithdrawUserCommand: "+command);
         User user = userRepository.findById(command.getUserId())
@@ -63,6 +64,7 @@ public class UserService {
         return;
     }
 
+    @Transactional(readOnly = false)
     public User updateUserInfo(UpdateUserInfoCommand command) {
         log.info("UpdateUserInfoCommand: "+command);
         User user = findUserById(command.getUserId());
@@ -191,6 +193,7 @@ public class UserService {
     }
 
     public List<UserLocation> getUserLocation(GetUserLocationCommand command) {
+        log.info("GetUserLocationCommand: "+command);
         return userLocationRepository.findAllByUser_Id(command.getUserId());
     }
 }
