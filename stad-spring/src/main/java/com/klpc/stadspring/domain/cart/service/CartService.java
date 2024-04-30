@@ -53,8 +53,9 @@ public class CartService {
                     user,
                     cartProductPostRequest.getQuantity(),
                     cartProductPostRequest.getAdvertId(),
-                    cartProductPostRequest.getContentId()
-            );
+                    cartProductPostRequest.getContentId(),
+                    cartProductPostRequest.getOptionId()
+                    );
             cartProductRepository.save(newCartProduct);
             addedProducts.add(newCartProduct);
         }
