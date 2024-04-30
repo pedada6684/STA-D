@@ -1,7 +1,9 @@
-import Select from "react-select";
+import Select, {MultiValue} from "react-select";
 import styles from "./SelectBox.module.css";
 import { useState } from "react";
 import { SelectAdMainCategory, SelectAdSubCategory } from "./AdCategory";
+
+
 export function SelectReviewGoodsBox() {
   const options = [
     { value: "상품 전체", label: "상품 전체" },
@@ -24,12 +26,24 @@ export function SelectReviewSortBox() {
   return <Select options={options} />;
 }
 
-export function SelectContentsBox() {
+interface SelectContentBox{
+  setContentId: (number : number | null) => void;
+}
+export function SelectContentsBox({setContentId}: SelectContentBox) {
+
+  const handleContentBox = (selectedOptions: MultiValue<{ value: number; label: string; }> | null) => {
+    if (selectedOptions) {
+      const selectedOption = selectedOptions[selectedOptions.length - 1]; // 선택된 옵션 중 마지막 것을 사용
+      setContentId(selectedOption.value);
+    } else {
+      setContentId(null);
+    }
+  };
   const options = [
-    { value: "무한도전", label: "무한도전" },
-    { value: "런닝맨", label: "런닝맨" },
-    { value: "신서유기6", label: "신서유기6" },
-    { value: "위플래시", label: "위플래시" },
+    { value: 1, label: "무한도전" },
+    { value: 2, label: "런닝맨" },
+    { value: 3, label: "신서유기6" },
+    { value: 4, label: "위플래시" },
   ];
 
   return (
@@ -37,13 +51,20 @@ export function SelectContentsBox() {
       isMulti
       name="colors"
       options={options}
+      onChange={handleContentBox}
       className="basic-multi-select"
       classNamePrefix="select"
     />
   );
 }
 
-export function SelectAdCategory() {
+interface CategoryProps {
+  setCategory: (string: string | null) => void;
+}
+
+export function SelectAdCategory({
+  setCategory
+} : CategoryProps) {
   type OptionType = { value: string; label: string };
   type SubCategoryOptions = {
     [key: string]: OptionType[];
@@ -64,6 +85,11 @@ export function SelectAdCategory() {
   // 중분류 변경 핸들러
   const handleSubcategoryChange = (selectedOption: OptionType | null) => {
     setSelectSubCategory(selectedOption);
+    if(selectedOption){
+      setCategory(selectedOption.value)
+    }else{
+      setCategory(null);
+    }
   };
 
   const customStyles = {
