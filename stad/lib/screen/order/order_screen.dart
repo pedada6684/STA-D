@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/models/delivery_address_model.dart';
+import 'package:stad/providers/user_provider.dart';
+import 'package:stad/services/address_service.dart';
 import 'package:stad/widget/address_screen.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
@@ -16,36 +19,56 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   String? selectedProduct;
   bool isExpanded = false;
-  String? deliveryAddress; //배송지 주소 저장
+  List<DeliveryAddress> deliveryAddresses = [];
+  DeliveryAddress? selectedDeliveryAddress;
 
-  List<DeliveryAddress> deliveryAddresses = [
-    DeliveryAddress(
-      name: "박지운",
-      phone: "010-1000-1000",
-      location: "(34153) 대전광역시 유성구 대학로 124",
-      locationNick: "집",
-    ),
-    DeliveryAddress(
-      name: "최은희",
-      phone: "010-2000-2000",
-      location: "(12345) 서울특별시 강남구 테헤란로 123",
-      locationNick: "은희집",
-    ),
-    DeliveryAddress(
-      name: "이태경",
-      phone: "010-2000-2000",
-      location: "(12345) 서울특별시 강남구 테헤란로 123",
-      locationNick: "태경집",
-    ),
-  ];
+  // List<DeliveryAddress> deliveryAddresses = [
+  //   DeliveryAddress(
+  //     name: "박지운",
+  //     phone: "010-1000-1000",
+  //     location: "(34153) 대전광역시 유성구 대학로 124",
+  //     locationNick: "집",
+  //   ),
+  //   DeliveryAddress(
+  //     name: "최은희",
+  //     phone: "010-2000-2000",
+  //     location: "(12345) 서울특별시 강남구 테헤란로 123",
+  //     locationNick: "은희집",
+  //   ),
+  //   DeliveryAddress(
+  //     name: "이태경",
+  //     phone: "010-2000-2000",
+  //     location: "(12345) 서울특별시 강남구 테헤란로 123",
+  //     locationNick: "태경집",
+  //   ),
+  // ];
 
   @override
   void initState() {
     super.initState();
-    selectedDeliveryAddress = deliveryAddresses.first;
+   fetchDeliveryAddresses();
+  }
+  void refreshAddresses() {
+    fetchDeliveryAddresses();
   }
 
-  DeliveryAddress? selectedDeliveryAddress;
+  void fetchDeliveryAddresses() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    if (userProvider.userId != null) {
+      AddressService addressService = AddressService();
+      try {
+        deliveryAddresses = await addressService.fetchAddresses(userProvider.userId!);
+        if (deliveryAddresses.isNotEmpty) {
+          selectedDeliveryAddress = deliveryAddresses.first;
+        }
+      } catch (e) {
+        print("Failed to fetch addresses: $e");
+      }
+    }
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +211,7 @@ class _OrderScreenState extends State<OrderScreen> {
                         context: context,
                         isScrollControlled: true,
                         useSafeArea: true,
-                        builder: (_) => const AddressScreen());
+                        builder: (_) => AddressScreen(onAddressAdded: refreshAddresses));
                   },
                   child: const Text(
                     '배송지추가',

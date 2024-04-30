@@ -1,4 +1,3 @@
-//api 받아오기
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
@@ -8,7 +7,8 @@ import 'package:stad/services/address_service.dart';
 import 'package:stad/widget/button.dart';
 
 class AddressScreen extends StatefulWidget {
-  const AddressScreen({super.key});
+  final Function onAddressAdded;
+  const AddressScreen({super.key, required this.onAddressAdded});
 
   @override
   State<AddressScreen> createState() => _AddressScreenState();
@@ -21,7 +21,7 @@ class _AddressScreenState extends State<AddressScreen> {
   final TextEditingController _postcodeController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _addressDetailController =
-      TextEditingController();
+  TextEditingController();
   bool isDefaultAddress = false;
   bool isFormFilled = false;
   bool isPhoneError = false;
@@ -77,11 +77,8 @@ class _AddressScreenState extends State<AddressScreen> {
   }
 
   void validateNumber(String input) {
-    final phonePattern = r'^01([0|1|6|7|8|9])-(\d{3,4})-(\d{4})$';
-
     setState(() {
-      isPhoneError = !RegExp(r'^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$')
-          .hasMatch(input);
+      isPhoneError = !RegExp(r'^01[016789]\d{3,4}\d{4}$').hasMatch(input);
     });
   }
 
@@ -105,22 +102,99 @@ class _AddressScreenState extends State<AddressScreen> {
     }
   }
 
-  void someFunctionToCallService() {
+  void addUserAddress() {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-
     if (userProvider.userId != null) {
       final addressService = AddressService();
 
-      addressService.sendAddressData(
-        userProvider.userId!,
-        _addressController.text,
-        _nameController.text,
-        _phoneController.text,
-        _adnickController.text,
-      );
+      // 새로운 주소 데이터 생성
+      Map<String, dynamic> newAddress = {
+        'userId': userProvider.userId!,
+        'name': _nameController.text,
+        'phone': _phoneController.text,
+        'location': _postcodeController.text + ' ' + _addressController.text,
+        'locationNick': _adnickController.text,
+      };
+
+      try {
+        // 주소 추가
+        addressService.addAddress(newAddress).then((_) {
+          widget.onAddressAdded();
+          Navigator.pop(context);
+        });
+      } catch (e) {
+        print('Error adding address: $e');
+      }
     } else {
       print('로그인이 필요합니다.');
     }
+  }
+
+  Widget _buildPostalCodeField() {
+    return TextFormField(
+      controller: _postcodeController,
+      readOnly: true,
+      style: TextStyle(color: mainBlack),
+      decoration: InputDecoration(
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        labelText: '우편번호',
+        labelStyle: TextStyle(color: midGray),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: midGray),
+        ),
+        focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: mainNavy, width: 2)),
+        suffixIcon: TextButton(
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            minimumSize: Size(40, 40),
+          ),
+          onPressed: () => _searchAddress(context), // 메서드 호출 방식 변경
+          child: Text(
+            '우편번호검색',
+            style: TextStyle(color: midGray, fontSize: 14),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+      TextEditingController controller,
+      String placeholder, {
+        bool readOnly = false,
+        bool isFixedLabel = false,
+      }) {
+    bool isError = placeholder == '핸드폰 번호' && isPhoneError;
+
+    return TextFormField(
+      controller: controller,
+      readOnly: readOnly,
+      cursorColor: mainNavy,
+      style: TextStyle(color: mainBlack),
+      decoration: InputDecoration(
+        labelText: placeholder,
+        labelStyle: TextStyle(color: midGray),
+        floatingLabelBehavior:
+        isFixedLabel ? FloatingLabelBehavior.always : null,
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: midGray),
+        ),
+        focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: mainNavy, width: 2)),
+        errorBorder: isError
+            ? UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.red, width: 2),
+        )
+            : null,
+        focusedErrorBorder: isError
+            ? UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.red, width: 2),
+        )
+            : null,
+        errorText: isError ? '번호를 입력해주세요.' : null,
+      ),
+    );
   }
 
   @override
@@ -168,78 +242,11 @@ class _AddressScreenState extends State<AddressScreen> {
             CustomElevatedButton(
               text: '완료',
               textColor: mainWhite,
-              onPressed: isFormFilled ? someFunctionToCallService : null,
+              onPressed: isFormFilled ? addUserAddress : null,
               backgroundColor: mainNavy,
             )
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildPostalCodeField() {
-    return TextFormField(
-      controller: _postcodeController,
-      readOnly: true,
-      style: TextStyle(color: mainBlack),
-      decoration: InputDecoration(
-        floatingLabelBehavior: FloatingLabelBehavior.never,
-        labelText: '우편번호',
-        labelStyle: TextStyle(color: midGray),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: midGray),
-        ),
-        focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: mainNavy, width: 2)),
-        suffixIcon: TextButton(
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            minimumSize: Size(40, 40),
-          ),
-          onPressed: () => _searchAddress(context), // 메서드 호출 방식 변경
-          child: Text(
-            '우편번호검색',
-            style: TextStyle(color: midGray, fontSize: 14),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField(
-    TextEditingController controller,
-    String placeholder, {
-    bool readOnly = false,
-    bool isFixedLabel = false,
-  }) {
-    bool isError = placeholder == '핸드폰 번호' && isPhoneError;
-
-    return TextFormField(
-      controller: controller,
-      readOnly: readOnly,
-      cursorColor: mainNavy,
-      style: TextStyle(color: mainBlack),
-      decoration: InputDecoration(
-        labelText: placeholder,
-        labelStyle: TextStyle(color: midGray),
-        floatingLabelBehavior:
-            isFixedLabel ? FloatingLabelBehavior.always : null,
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: midGray),
-        ),
-        focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: mainNavy, width: 2)),
-        errorBorder: isError
-            ? UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.red, width: 2),
-              )
-            : null,
-        focusedErrorBorder: isError
-            ? UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.red, width: 2),
-              )
-            : null,
-        errorText: isError ? '번호를 입력해주세요.' : null,
       ),
     );
   }
