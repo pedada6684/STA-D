@@ -4,6 +4,8 @@ spring:
       on-profile: dev
   user-service:
     url: http://localhost:8080
+server:
+  port: 8081
 ---
 spring:
   config:
