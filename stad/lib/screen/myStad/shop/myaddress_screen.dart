@@ -94,7 +94,6 @@ class _MyAddressScreenState extends State<MyAddressScreen>
       appBar: CustomAppBar(
         title: '배송지 관리',
         showBackButton: true,
-        showHomeButton: true,
       ),
       body: _isLoading
           ? Center(

@@ -112,7 +112,6 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
       appBar: CustomAppBar(
         title: '상품 리뷰',
         showBackButton: true,
-        showHomeButton: true,
         progressValue: 0,
         isLoading: false,
       ),
