@@ -34,7 +34,7 @@ public class ProductController {
      * @param id
      * @return
      */
-    @GetMapping("/info/{id}")
+    @GetMapping("/info")
     @Operation(summary = "상품 정보 요청", description = "상품 정보 요청")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetProductInfoResponse.class)))
     public ResponseEntity<GetProductInfoResponse> getProductInfo(@RequestParam("id") Long id) {
@@ -73,7 +73,6 @@ public class ProductController {
 
     /**
      *
-     * @param command
      * @return
      */
     @DeleteMapping("/delete")
