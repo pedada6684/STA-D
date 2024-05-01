@@ -8,6 +8,15 @@ services:
     networks:
       - ubuntu_my-network
     restart: unless-stopped 
+    
+  stad-alert:
+    image: stad-alert-image
+    container_name: stad-alert
+    ports:
+      - "18081:8080"
+    networks:
+      - ubuntu_my-network
+    restart: unless-stopped 
 
   stad-react:
     image: stad-react-image
