@@ -6,6 +6,7 @@ import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetContentConceptResponse;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetDetailIdAndThumbnailListResponse;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetDetailIdAndThumbnailResponse;
+import com.klpc.stadspring.domain.contents.detail.controller.response.GetDetailListByConceptIdResponse;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
 import com.klpc.stadspring.domain.contents.watched.service.WatchedContentService;
@@ -167,6 +168,21 @@ public class ContentDetailController {
             responseList.add(GetDetailIdAndThumbnailResponse.from(contentDetail, concept));
         }
         GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/collections")
+    @Operation(summary = "conceptId로 detail 조회", description = "conceptId로 detail 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "conceptId로 detail 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    public ResponseEntity<GetDetailListByConceptIdResponse> getDetailListByConceptId(@RequestParam("conceptId") Long conceptId) {
+        log.info("conceptId로 detail 조회" + "\n" + "getDetailListByConceptId : " + conceptId);
+
+        GetDetailListByConceptIdResponse response = detailService.getDetailListByConceptId(conceptId);
+
         return ResponseEntity.ok(response);
     }
 }
