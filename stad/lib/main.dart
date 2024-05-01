@@ -205,19 +205,40 @@ class _MyAppState extends State<MyApp> {
     routes: <GoRoute>[
       GoRoute(
         path: '/splash',
-        builder: (BuildContext context, GoRouterState state) => const SplashVideoScreen(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const SplashVideoScreen(),
       ),
       GoRoute(
         path: '/onboarding',
-        builder: (BuildContext context, GoRouterState state) => const OnboardingScreen(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const OnboardingScreen(),
       ),
       GoRoute(
         path: '/login',
-        builder: (BuildContext context, GoRouterState state) => const LoginScreen(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const LoginScreen(),
       ),
       GoRoute(
         path: '/',
-        builder: (BuildContext context, GoRouterState state) => const MainNavigation(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const MainNavigation(),
+        routes: [
+          GoRoute(
+            path: 'home',
+            builder: (BuildContext context, GoRouterState state) =>
+                const HomeScreen(),
+          ),
+          GoRoute(
+            path: 'cart',
+            builder: (BuildContext context, GoRouterState state) =>
+                const CartScreen(),
+          ),
+          GoRoute(
+            path: 'mystad',
+            builder: (BuildContext context, GoRouterState state) =>
+                const MyStadScreen(),
+          ),
+        ],
       ),
     ],
   );

@@ -5,7 +5,7 @@ import 'package:stad/models/advert_model.dart';
 class AdService {
   final Dio dio = Dio();
   // final url = Uri.parse('$svApi/advert');
-  final String url = ('http://192.168.0.4:8080/api');
+  final String url = ('http://192.168.0.129:8080/api');
   //광고 정보 받아오기
   //TODO: advertId 수정
   Future<Map<String, dynamic>> getAdInfo(int advertId) async {
