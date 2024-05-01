@@ -52,7 +52,6 @@ class _MyContentsScreenState extends State<MyContentsScreen> {
       appBar: CustomAppBar(
         title: '내가 본 콘텐츠',
         showBackButton: true,
-        showHomeButton: true,
       ),
       body: isLoading
           ? Center(
