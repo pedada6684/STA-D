@@ -51,7 +51,7 @@ export default function Advertisement() {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date("2024/12/31"));
   const [category, setCategory] = useState<String | null>("");
-  const [contentId, setContentId] = useState<number | null>(null);
+  const [contentId, setContentId] = useState<{value : number, label : string}[] | null>(null);
 
   const handleDateRangeChange = (startDate: Date | null, endDate: Date | null) => {
     // startDate와 endDate를 이용한 작업 수행
@@ -243,7 +243,8 @@ export default function Advertisement() {
               <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
                 <div className={`${styles.modalContent}`}>
                   <div className={`${styles.modalTitle}`}>컨텐츠 선택하기</div>
-                  <SelectContentsBox setContentId={setContentId}/>
+                  <SelectContentsBox contentId={contentId}
+                                     setContentId={setContentId}/>
                 </div>
               </Modal>
             </div>

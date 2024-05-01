@@ -47,3 +47,25 @@ export const bannerImgUpload = async (files: FileList | null) => {
         return null;
     }
 };
+
+export const getContentConcept = async () => {
+
+    try {
+        const response = await fetch(`/api/contents-concept/all`, {
+            method: 'GET',
+        });
+        if (!response.ok) {
+            throw new Error('컨텐츠 전체 목록 조회 실패');
+        }
+        const data = await response.json(); // JSON 형태로 응답 받음
+        const result = data.data.map((item:any) => ({
+            value : item.id,
+            label : item.title
+        }));
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error('컨텐츠 전체 목록 조회 실패 : ', error);
+        return null;
+    }
+};
