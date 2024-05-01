@@ -1,12 +1,8 @@
 import InfoButton from "../../components/Button/InfoButton";
 import PlayButton from "../../components/Button/PlayButton";
-import {
-  documentaryThumbnail,
-  dramaThumbnail,
-  foreignThumbnail,
-  varietyThumbnail,
-} from "./SeriesDummy";
-import CategoryCarousel from "../../components/Carousel/CategoryCarousel";
+import CategoryCarousel, {
+  getConceptResponseList,
+} from "../../components/Carousel/CategoryCarousel";
 import BillboardContainer from "../../components/Container/BillboardContainer";
 import Content from "../../components/Container/Content";
 import HorizonVignette from "../../components/Container/HorizonVignette";
@@ -21,13 +17,38 @@ import TVCategorySelect, {
 import styles from "./TVCategory.module.css";
 import { useNavigate } from "react-router-dom";
 import { SingleValue } from "react-select";
+import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { GetSeriesVideoList } from "./TVCategoryAPI";
+import Loading from "../../components/Loading";
+
+export type CategoryProps = {
+  category: string;
+  getConceptResponseList: getConceptResponseList[];
+};
 export default function TVSeries() {
   const navigate = useNavigate();
+  const token = useSelector((state: RootState) => state.token.accessToken);
+  const {
+    data: videoList,
+    isLoading,
+    error,
+  } = useQuery(["series", token], () => GetSeriesVideoList(token));
+
+  // 로딩 상태 처리
+  if (isLoading) {
+    return <Loading />;
+  }
   const handleCategoryChange = (selectedOption: SingleValue<OptionType>) => {
     if (selectedOption) {
       navigate(`/tv-series/${selectedOption.value}`);
     }
   };
+
+  const firstCategory = videoList?.categoryAndConceptsList[0]; // 빌보드 컨테이너 안에 들어갈 첫번째 카테고리 캐러셀
+  const othersCategories = videoList?.categoryAndConceptsList.slice(1); // 인덱스 1번부터 ~ 모두 복사
+  console.log(firstCategory);
   return (
     <div>
       <TVContainer>
@@ -58,28 +79,25 @@ export default function TVSeries() {
                 </div>
               </InfoContainer>
             </ImageWrapper>
-            <CategoryCarousel
-              title="드라마"
-              items={dramaThumbnail}
-              marginTop="30rem"
-            />
+            {firstCategory && (
+              <CategoryCarousel
+                key={firstCategory.category}
+                title={firstCategory.category}
+                items={firstCategory.getConceptResponseList}
+                marginTop="30rem"
+              />
+            )}
           </BillboardContainer>
-          <CategoryCarousel
-            title="예능"
-            marginTop="3rem"
-            items={varietyThumbnail}
-          />
-          <CategoryCarousel
-            title="교양/다큐멘터리"
-            marginTop="3rem"
-            items={documentaryThumbnail}
-          />
-          <CategoryCarousel
-            title="해외"
-            marginTop="3rem"
-            marginBottom="3rem"
-            items={foreignThumbnail}
-          />
+          {othersCategories &&
+            othersCategories.map((category: CategoryProps) => (
+              <CategoryCarousel
+                title={category.category}
+                items={category.getConceptResponseList}
+                key={category.category}
+                marginTop="2rem"
+                marginBottom="2rem"
+              />
+            ))}
         </Content>
       </TVContainer>
     </div>
