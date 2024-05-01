@@ -1,8 +1,11 @@
 package com.klpc.stadspring.domain.contents.detail.service;
 
+import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
+import com.klpc.stadspring.domain.contents.detail.controller.response.GetDetailListByConceptIdResponse;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailRepository;
 import com.klpc.stadspring.domain.contents.detail.service.command.request.AddDetailRequestCommand;
+import com.klpc.stadspring.domain.contents.detail.service.command.response.GetDetailListByConceptIdResponseCommand;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -133,5 +137,31 @@ public class ContentDetailService {
                 command.getVideoUrl(),
                 command.getSummary());
         repository.save(newContentDetail);
+    }
+
+
+    /**
+     * conceptId로 detail 조회
+     * @param conceptId
+     * @return
+     */
+    public GetDetailListByConceptIdResponse getDetailListByConceptId(Long conceptId) {
+        log.info("getDetailListByConceptId 서비스 : " + conceptId);
+
+        List<ContentDetail> allDetails = repository.findByConceptId(conceptId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        List<GetDetailListByConceptIdResponseCommand> responseList = new ArrayList<>();
+        for(ContentDetail detail:allDetails) {
+            GetDetailListByConceptIdResponseCommand command = GetDetailListByConceptIdResponseCommand.builder()
+                    .episode(detail.getEpisode())
+                    .videoUrl(detail.getVideoUrl())
+                    .summary(detail.getSummary())
+                    .build();
+
+            responseList.add(command);
+        }
+
+        return GetDetailListByConceptIdResponse.builder().data(responseList).build();
     }
 }
