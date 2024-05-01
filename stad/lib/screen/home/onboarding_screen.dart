@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/screen/home/home_screen.dart';
+import 'package:stad/screen/login/login_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -73,7 +75,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Image.asset('assets/image/ad_mockup.png', width: 350),
               SizedBox(height: 40),
               Text(
-                '광고 중인 상품 바로 구매하기',
+                '광고 중인 상품이 궁금하다면?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 18, color: mainNavy, fontWeight: FontWeight.w600),
@@ -89,12 +91,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       showBackButton: true,
       next: Icon(Icons.arrow_forward_ios_rounded, size: 20.0),
       back: Icon(Icons.arrow_back_ios_rounded, size: 20.0),
-      onDone: () => Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomeScreen())),
+      // onDone: () => Builder(
+      //   builder: (context) {
+      //     context.go('/login');
+      //     return SizedBox.shrink();
+      //   },
+      // ),
+      // onDone: () {
+      //   Navigator.of(context).pushReplacement(
+      //       MaterialPageRoute(builder: (context) => LoginScreen()));
+      // },
+      onDone: () => context.go('/login'),
       done: Text(
-        'Done',
+        'STA:D',
         style: TextStyle(
-            color: mainNavy, fontSize: 18.0, fontWeight: FontWeight.bold),
+            color: mainNavy,
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'LogoFont'),
       ),
       globalBackgroundColor: mainWhite,
       curve: Curves.ease,
