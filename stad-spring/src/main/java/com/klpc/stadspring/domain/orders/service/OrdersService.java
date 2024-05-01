@@ -94,7 +94,7 @@ public class OrdersService {
                         .productImg(productType.getProduct().getThumbnail())
                         .optionId(productOption.getId())
                         .optionName(productOption.getName())
-                        .optionValue(Long.parseLong(productOption.getValue()))
+                        .optionValue(productOption.getValue())
                         .build();
                 productTypeList.add(ptCommand);
             }
@@ -131,7 +131,7 @@ public class OrdersService {
                     .productImg(productType.getProduct().getThumbnail())
                     .optionId(productOption.getId())
                     .optionName(productOption.getName())
-                    .optionValue(Long.parseLong(productOption.getValue()))
+                    .optionValue(productOption.getValue())
                     .build();
             productTypeList.add(ptCommand);
         }
