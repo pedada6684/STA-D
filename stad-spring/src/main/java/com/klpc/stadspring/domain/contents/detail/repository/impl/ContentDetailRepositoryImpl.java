@@ -43,4 +43,12 @@ public class ContentDetailRepositoryImpl implements ContentDetailRepositoryCusto
                 .limit(3)
                 .collect(Collectors.toList()));
     }
+
+    @Override
+    public Optional<List<ContentDetail>> findByConceptId(Long conceptId) {
+        return Optional.ofNullable(query.select(contentDetail)
+                .from(contentDetail)
+                .where(contentDetail.contentConceptId.eq(conceptId))
+                .fetch());
+    }
 }
