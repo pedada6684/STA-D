@@ -45,7 +45,7 @@ class UserService {
           await sendUserProfile(context, user, googleAuth.accessToken);
       if (profileSent) {
         Provider.of<UserProvider>(context, listen: false).setUser(userModel);
-        context.go('/');
+        context.go('/home');
       } else {
         // 에러 처리 로직
         print('Failed to send user profile');
