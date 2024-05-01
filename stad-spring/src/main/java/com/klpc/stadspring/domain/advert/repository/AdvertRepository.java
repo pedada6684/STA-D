@@ -21,6 +21,9 @@ public interface AdvertRepository extends JpaRepository<Advert,Long> {
            """)
     public List<Advert> findAllByContentId(Long contentId);
 
+    @Query("SELECT a.id FROM Advert a WHERE a.category = :category")
+    public List<Long> findAdvertIdByCategory(String category);
+
     @Query("SELECT a.id FROM Advert a WHERE a.category = :category ORDER BY FUNCTION('RAND')")
-    public List<Long> findAdvertIdByCategory(String category, Pageable pageable);
+    public List<Long> findRandomAdvertIdByCategory(String category);
 }
