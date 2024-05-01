@@ -19,7 +19,7 @@ import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequest
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrdersProductTypeRequestCommand;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
-import com.klpc.stadspring.domain.product.service.ProductServiceImpl;
+import com.klpc.stadspring.domain.product.service.ProductService;
 import com.klpc.stadspring.domain.productType.entity.ProductType;
 import com.klpc.stadspring.domain.productType.service.ProductTypeService;
 import com.klpc.stadspring.domain.productType.service.command.AddProductTypeCommand;
@@ -28,7 +28,6 @@ import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.domain.user.service.UserService;
 import com.klpc.stadspring.domain.user.service.command.JoinCompanyUserCommand;
 import com.klpc.stadspring.domain.user.service.command.JoinUserCommand;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -50,7 +49,7 @@ public class DummyGenerator {
     private final AdvertService advertService;
     private final AdvertRepository advertRepository;
     private final UserRepository userRepository;
-    private final ProductServiceImpl productService;
+    private final ProductService productService;
     private final ProductRepository productRepository;
     private final ProductTypeService productTypeService;
     private final ContentConceptRepository contentConceptRepository;
