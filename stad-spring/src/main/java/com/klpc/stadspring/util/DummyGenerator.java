@@ -19,7 +19,6 @@ import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequest
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrdersProductTypeRequestCommand;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
-import com.klpc.stadspring.domain.product.service.ProductService;
 import com.klpc.stadspring.domain.productType.entity.ProductType;
 import com.klpc.stadspring.domain.productType.service.ProductTypeService;
 import com.klpc.stadspring.domain.productType.service.command.AddProductTypeCommand;
@@ -34,7 +33,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -49,16 +47,15 @@ public class DummyGenerator {
     private final AdvertService advertService;
     private final AdvertRepository advertRepository;
     private final UserRepository userRepository;
-    private final ProductService productService;
     private final ProductRepository productRepository;
     private final ProductTypeService productTypeService;
     private final ContentConceptRepository contentConceptRepository;
     private final ContentConceptService contentConceptService;
     private final ContentCategoryService contentCategoryService;
-    private final ContentDetailService contentDetailService;
     private final ContentDetailParsingService contentDetailParsingService;
     private final ContentConceptParsingService contentConceptParsingService;
     private final OrdersService ordersService;
+    private final ContentDetailService contentDetailService;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
@@ -122,7 +119,6 @@ public class DummyGenerator {
 
         contentDetailService.addDetail(detailCommand1);
     }
-
 
     /**
      * 유저 생성
@@ -196,12 +192,12 @@ public class DummyGenerator {
                 .description("발효된 Super Food 김치")
                 .startDate(LocalDateTime.parse("2024-04-25T00:00:00"))
                 .endDate(LocalDateTime.parse("2025-04-25T00:00:00"))
-                .type("PRODUCT")
+                .advertType("PRODUCT")
                 .directVideoUrl("")
                 .bannerImgUrl("https://img.khan.co.kr/lady/r/1100xX/2023/03/08/news-p.v1.20230308.9abb9311c8ee43c6b181dd72e08fa534.png")
                 .selectedContentList(contentList)
                 .advertVideoUrlList(advertVideoUrlList1)
-                .category("푸드")
+                .advertCategory("푸드")
                 .build();
 
 
@@ -216,36 +212,16 @@ public class DummyGenerator {
                 .description("개발자로 취업할 수 있는 절호의 기회")
                 .startDate(LocalDateTime.parse("2024-04-25T00:00:00"))
                 .endDate(LocalDateTime.parse("2025-04-25T00:00:00"))
-                .type("NOTPRODUCT")
-                .directVideoUrl("")
+                .advertType("NOTPRODUCT")
+                .directVideoUrl("https://www.ssafy.com/ksp/servlet/swp.content.controller.SwpContentServlet?p_process=select-content-view&p_menu_cd=M0307&p_content_cd=C0307&gad_source=1&gclid=CjwKCAjwrcKxBhBMEiwAIVF8rNcbofIU9So7-M2nvl4LIlRg_YOU5R3mox3ws6r398qEcnMdWDBMVhoCmH4QAvD_BwE")
                 .bannerImgUrl("https://contents.codetree.ai/homepage/images/company/SSAFY_logo.png")
                 .selectedContentList(contentList2)
                 .advertVideoUrlList(advertVideoUrlList2)
-                .category("개발")
-                .build();
-
-        List<Long> contentList3 = new ArrayList<>();
-
-        List<String> advertVideoUrlList3 = new ArrayList<>();
-        advertVideoUrlList3.add("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/%EC%9A%A9%EA%B0%80%EB%A6%AC.mp4");
-
-        AddAdvertRequestCommand command3 = AddAdvertRequestCommand.builder()
-                .userId(user1.getId())
-                .title("용가리")
-                .description("하림 용가리 용가리 치킨 너겟")
-                .startDate(LocalDateTime.parse("2024-04-30T00:00:00"))
-                .endDate(LocalDateTime.parse("2025-04-30T00:00:00"))
-                .type("PRODUCT")
-                .directVideoUrl("")
-                .bannerImgUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfHlm-3ClhvsN5t9bIaYROpbF-P_SywH2OgUUMeBBslw&s")
-                .selectedContentList(contentList3)
-                .advertVideoUrlList(advertVideoUrlList3)
-                .category("튀김")
+                .advertCategory("개발")
                 .build();
 
         advertService.addAdvert(command1);
         advertService.addAdvert(command2);
-        advertService.addAdvert(command3);
     }
 
     /**

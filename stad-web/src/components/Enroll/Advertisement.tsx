@@ -1,5 +1,4 @@
 import styles from "./Advertisement.module.css";
-import top from "../../assets/flowbite_angle-top-solid.png";
 import plus from "../../assets/plus.png";
 import {ChangeEvent, useEffect, useState} from "react";
 import DateRange from "../Calendar/DateRange";
@@ -42,7 +41,7 @@ export default function Advertisement() {
   const [isAdCategoryExpanded, setAdCategoryExpanded] = useState(false);
   const [isAdContentExpanded, setAdContentExpanded] = useState(false);
   const [videoUrlList, setVideoUrlList] = useState<string[]>([])
-  const [bannerImgUrl,setBannerImgUrl] = useState<String>("");
+  const [bannerImgUrl,setBannerImgUrl] = useState<string>("");
   const toggleAdName = () => setAdNameExpanded(!isAdNameExpanded); // 광고명
   const toggleAdVideo = () => setAdVideoExpanded(!isAdVideoExpanded); // 광고 영상
   const toggleAdPeriod = () => setAdPeriodExpanded(!isAdPeriodExpanded); // 광고 기간
@@ -50,31 +49,57 @@ export default function Advertisement() {
   const toggleAdContent = () => setAdContentExpanded(!isAdContentExpanded); // 노출 컨텐츠
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date("2024/12/31"));
-  const [category, setCategory] = useState<String | null>("");
-  const [contentId, setContentId] = useState<number | null>(null);
+  const [category, setCategory] = useState<string | null>("");
+  const [contentId, setContentId] = useState<{value : number, label : string}[] | null>([]);
 
-  const handleDateRangeChange = (startDate: Date | null, endDate: Date | null) => {
-    // startDate와 endDate를 이용한 작업 수행
-    console.log("Start Date:", startDate);
-    console.log("End Date:", endDate);
-  };
   useEffect(() => {
-    console.log(videoUrlList);
-    console.log(bannerImgUrl);
+    if(startDate) {
+      setFormData(prevState => ({
+        ...prevState,
+        startDate: startDate.toISOString().split('T')[0]
+      }))
+    }
+  }, [startDate]);
+  useEffect(() => {
+    if(endDate) {
+      setFormData(prevState => ({
+        ...prevState,
+        endDate: endDate.toISOString().split('T')[0]
+      }))
+    }
+  }, [endDate]);
+  useEffect(() => {
+    if(contentId) {
+      setFormData(prevState => ({
+        ...prevState,
+        selectedContentList: [...(prevState?.selectedContentList ?? []), ...contentId.map(option => option.value)]
+      }))
+    }
+  }, [contentId]);
+  useEffect(() => {
+    if(category) {
+      setFormData(prevState => ({
+        ...prevState,
+        category: category
+      }))
+    }
+  }, [category]);
+  useEffect(() => {
     console.log(formData)
-    console.log(startDate)
-    console.log(endDate)
-    console.log(category)
-    console.log(contentId)
-  }, [videoUrlList,bannerImgUrl,formData,startDate,endDate,category,contentId]);
+  }, [formData]);
 
   const handleAdvertVideoList = async (e: ChangeEvent<HTMLInputElement>) => {
     const videoList = e.target.files;
     const responseData = await advertVideoUpload(videoList);
-    responseData.forEach((video: any, index: number) => {
-      console.log(`영상 ${index + 1}:`, video.videoUrl);
-      setVideoUrlList(prevVideoUrlList => [...prevVideoUrlList, video.videoUrl]);
-    });
+    const videoUrls = responseData.map((video: any) => video.videoUrl);
+    setFormData(prevState => ({
+      ...prevState,
+      advertVideoUrlList: [...(prevState?.advertVideoUrlList ?? []), ...videoUrls]
+    }));
+    // responseData.forEach((video: any, index: number) => {
+    //   console.log(`영상 ${index + 1}:`, video.videoUrl);
+    //   setVideoUrlList(prevVideoUrlList => [...prevVideoUrlList, video.videoUrl]);
+    // });
   };
 
   const handleBannerImg = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +107,10 @@ export default function Advertisement() {
     const responseData = await bannerImgUpload(bannerImgUrl);
     console.log(`배너이미지 : `,responseData);
     setBannerImgUrl(responseData);
+    setFormData(prevState => ({
+      ...prevState,
+      bannerImgUrl:responseData.bannerUrl
+    }))
   };
 
   return (
@@ -98,7 +127,7 @@ export default function Advertisement() {
             <div>
               <input
                 type="text"
-                name="advertise-name"
+                name="title"
                 onChange={handleChange}
                 className={`${styles.input}`}
                 required
@@ -243,7 +272,8 @@ export default function Advertisement() {
               <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
                 <div className={`${styles.modalContent}`}>
                   <div className={`${styles.modalTitle}`}>컨텐츠 선택하기</div>
-                  <SelectContentsBox setContentId={setContentId}/>
+                  <SelectContentsBox contentId={contentId}
+                                     setContentId={setContentId}/>
                 </div>
               </Modal>
             </div>
@@ -255,10 +285,10 @@ export default function Advertisement() {
         )}
       </div>
       <div className={`${styles.buttonContainer}`}>
-        <GoEnrollButton to="/ad-enroll/merchandise">
+        <GoEnrollButton to="/ad-enroll/merchandise" formData={formData}>
           상품 등록하러가기
         </GoEnrollButton>
-        <GoEnrollButton to="/ad-enroll/digital">
+        <GoEnrollButton to="/ad-enroll/digital" formData={formData}>
           직접 광고 등록하러가기
         </GoEnrollButton>
       </div>
