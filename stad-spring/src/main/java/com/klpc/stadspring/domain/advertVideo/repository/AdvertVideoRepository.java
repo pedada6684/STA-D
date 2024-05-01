@@ -19,4 +19,6 @@ public interface AdvertVideoRepository extends JpaRepository<AdvertVideo, Long> 
     @Query("SELECT a.id FROM AdvertVideo a")
     public List<Long> findAllAdvertVideoIds();
 
+    public AdvertVideo findTopByAdvert_Id(Long avertId);
+
 }
