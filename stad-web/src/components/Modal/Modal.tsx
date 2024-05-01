@@ -20,7 +20,7 @@ export default function Modal({
         </button>
         {children}
         <div className={`${styles.apply}`}>
-          <button className={styles.applyBtn}>적용</button>
+          <button className={styles.applyBtn} onClick={onRequestClose}>적용</button>
         </div>
       </div>
     </div>

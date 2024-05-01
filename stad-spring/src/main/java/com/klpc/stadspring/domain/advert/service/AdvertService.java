@@ -59,11 +59,11 @@ public class AdvertService {
                 command.getDescription(),
                 command.getStartDate(),
                 command.getEndDate(),
-                command.getType(),
+                command.getAdvertType(),
                 command.getDescription(),
                 command.getBannerImgUrl(),
                 user,
-                command.getCategory());
+                command.getAdvertCategory());
         Advert advert = advertRepository.save(adv);
 
         for(Long i : command.getSelectedContentList()){
@@ -108,10 +108,10 @@ public class AdvertService {
                 command.getDescription(),
                 command.getStartDate(),
                 command.getEndDate(),
-                command.getType(),
+                command.getCategory(),
                 command.getDirectVideoUrl(),
                 command.getBannerImgUrl(),
-                command.getCategory()
+                command.getType()
         );
         if(!command.getSelectedContentList().isEmpty()) {
             selectedContentRepository.deleteAll(advert.getSelectedContents());
@@ -286,12 +286,12 @@ public class AdvertService {
                     .description(advert.getDescription())
                     .startDate(advert.getStartDate().toLocalDate().toString())
                     .endDate(advert.getEndDate().toLocalDate().toString())
-                    .type(advert.getAdvertType().name())
+                    .advertType(advert.getAdvertType().name())
                     .directVideoUrl(advert.getDirectVideoUrl())
                     .bannerImgUrl(advert.getBannerImgUrl())
                     .selectedContentList(selectedContentList)
                     .advertVideoUrlList(advertVideoUrlList)
-                    .category(advert.getCategory())
+                    .advertCategory(advert.getAdvertCategory())
                     .build();
 
             list.add(command);
