@@ -114,7 +114,6 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
       appBar: CustomAppBar(
         title: '주문 내역',
         showBackButton: true,
-        showHomeButton: true,
         isLoading: _isLoading,
         progressValue: _progress,
       ),
