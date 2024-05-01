@@ -1,7 +1,8 @@
 import Select, {MultiValue} from "react-select";
 import styles from "./SelectBox.module.css";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { SelectAdMainCategory, SelectAdSubCategory } from "./AdCategory";
+import {getContentConcept} from "../../pages/AdEnroll/AdEnrollApi";
 
 
 export function SelectReviewGoodsBox() {
@@ -27,34 +28,50 @@ export function SelectReviewSortBox() {
 }
 
 interface SelectContentBox{
-  setContentId: (number : number | null) => void;
+  contentId : {value : number, label : string}[] | null;
+  setContentId: (value: { value: number; label: string; }[] | null) => void;
 }
-export function SelectContentsBox({setContentId}: SelectContentBox) {
+export function SelectContentsBox({ contentId, setContentId }: SelectContentBox) {
+  const [options, setOptions] = useState<{ value: number; label: string; }[]>([]);
+
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        const data = await getContentConcept();
+        setOptions(data);
+      } catch (error) {
+        console.error('컨텐츠 가져오기 실패 : ', error);
+      }
+    };
+
+    fetchOptions();
+  }, []);
 
   const handleContentBox = (selectedOptions: MultiValue<{ value: number; label: string; }> | null) => {
     if (selectedOptions) {
-      const selectedOption = selectedOptions[selectedOptions.length - 1]; // 선택된 옵션 중 마지막 것을 사용
-      setContentId(selectedOption.value);
+      setContentId(selectedOptions.map(option => option));
     } else {
       setContentId(null);
     }
   };
-  const options = [
-    { value: 1, label: "무한도전" },
-    { value: 2, label: "런닝맨" },
-    { value: 3, label: "신서유기6" },
-    { value: 4, label: "위플래시" },
-  ];
 
+  // 데이터가 준비되지 않은 경우, 렌더링할 수 있는 방법을 사용합니다.
+  // 예를 들어 로딩 중이라는 메시지를 표시할 수 있습니다.
+  if (options.length === 0) {
+    return <div>Loading...</div>;
+  }
+
+  // 데이터가 준비된 후에는 옵션을 렌더링합니다.
   return (
-    <Select
-      isMulti
-      name="colors"
-      options={options}
-      onChange={handleContentBox}
-      className="basic-multi-select"
-      classNamePrefix="select"
-    />
+      <Select
+          isMulti
+          value={contentId}
+          name="colors"
+          options={options}
+          onChange={handleContentBox}
+          className="basic-multi-select"
+          classNamePrefix="select"
+      />
   );
 }
 
