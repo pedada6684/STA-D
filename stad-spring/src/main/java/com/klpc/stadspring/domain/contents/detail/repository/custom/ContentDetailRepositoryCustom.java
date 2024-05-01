@@ -9,4 +9,5 @@ public interface ContentDetailRepositoryCustom {
     Optional<String> findVideoUrlById(Long id);
     Optional<List<ContentDetail>> findContentDetailsByConceptId(Long conceptId);
     Optional<List<ContentDetail>> findPopularContentDetail();
+    Optional<List<ContentDetail>> findByConceptId(Long conceptId);
 }
