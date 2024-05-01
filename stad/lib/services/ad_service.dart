@@ -5,12 +5,20 @@ import 'package:stad/models/advert_model.dart';
 class AdService {
   final Dio dio = Dio();
   // final url = Uri.parse('$svApi/advert');
-  final String url = ('http://192.168.0.129:8080/api');
+  final String url = ('http://192.168.0.129:8080/api/advert');
   //광고 정보 받아오기
   //TODO: advertId 수정
   Future<Map<String, dynamic>> getAdInfo(int advertId) async {
     try {
-      final response = await dio.get('$url/advert-info?advertId=2');
+      final response = await dio.get('$url/get?advertId=1');
+
+      print(response.data);
+      print(response.data);
+      print(response.data);
+      print(response.data);
+      print(response.data);
+      print(response.data);
+      print(response.data);
       // final response = await dio.get('$url/advert-info?advertId=$advertId');
       if (response.statusCode == 200) {
         // 응답이 성공적이라면 JSON 데이터를 반환
@@ -46,11 +54,17 @@ class AdService {
   //TODO: contentId 수정
   Future<List<Advert>> getAdvertsByContentId(int contentId) async {
     try {
-      final response = await dio.get('$url/get-list-by-content?contentId=2');
+      final response = await dio.get('$url/get-list-by-content?contentId=1');
 
       if (response.statusCode == 200 && response.data != null) {
 
-        print(response.data);
+        print(response.data); // {data:[]}
+        // print(response.data);
+        // print(response.data);
+        // print(response.data);
+        // print(response.data);
+        // print(response.data);
+
         List<dynamic> advertsData = response.data['data'] as List<dynamic>;
         List<Advert> adverts = advertsData.map((data) => Advert.fromJson(data)).toList();
         return adverts;
