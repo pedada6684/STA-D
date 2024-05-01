@@ -48,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
-
   void fetchAdverts() async {
     AdService adService = AdService();
     try {
@@ -99,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: mainWhite,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50.0), // 앱바 높이 설정
         child: AppBar(
@@ -152,14 +152,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ),
             Column(
               children: [
-            if (adverts.isNotEmpty) AdvertisingCard(
-                  bannerImgUrl: adverts[0].bannerImgUrl,
-                  buttonText: '지금 보는 광고가 궁금하다면?',
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProductScreen()));
-                  },
-                ),
+                if (adverts.isNotEmpty)
+                  AdvertisingCard(
+                    bannerImgUrl: adverts[0].bannerImgUrl,
+                    buttonText: '지금 보는 광고가 궁금하다면?',
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ProductScreen()));
+                    },
+                  ),
                 buildCarouselSlider(context),
               ],
             ),
