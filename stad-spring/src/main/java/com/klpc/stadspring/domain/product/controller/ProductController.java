@@ -124,15 +124,15 @@ public class ProductController {
 
     /**
      *
-     * @param adverseId
+     * @param advertId
      * @return
      *
      *
      */
-    @GetMapping("/list/{adverseId}")
+    @GetMapping("/list/{advertId}")
     @Operation(summary = "특정 광고에 속한 상품 리스트 조회", description = "특정 광고에 속한 상품들의 리스트를 조회합니다.")
-    public ResponseEntity<?> getProductListByAdverseId(@PathVariable Long adverseId) {
-        GetProductListByAdverseResponse response = productService.getProductListByAdverseId(adverseId);
+    public ResponseEntity<?> getProductListByAdverseId(@PathVariable Long advertId) {
+        GetProductListByAdverseResponse response = productService.getProductListByAdverseId(advertId);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
         return ResponseEntity.ok(response);
