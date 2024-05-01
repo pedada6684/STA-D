@@ -81,6 +81,10 @@ public class ContentConceptService {
         }
     }
 
+    /**
+     * 모든 콘텐츠 콘셉트 조회
+     * @return
+     */
     public GetAllConceptListResponse getAllContentList() {
         log.info("getAllContentList 서비스");
 
