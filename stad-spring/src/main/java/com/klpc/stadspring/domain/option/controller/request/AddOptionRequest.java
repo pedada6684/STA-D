@@ -11,7 +11,7 @@ import lombok.*;
 public class AddOptionRequest {
     private Long productTypeId;
     private String name;
-    private String value;
+    private Long value;
 
     public AddOptionCommand toCommand() {
         return AddOptionCommand.builder()

@@ -13,4 +13,5 @@ public class AddCartProductCommand {
     private Long quantity;
     private Long advertId;
     private Long contentId;
+    private Long optionId;
 }
