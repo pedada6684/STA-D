@@ -10,7 +10,7 @@ class AdService {
   //TODO: advertId 수정
   Future<Map<String, dynamic>> getAdInfo(int advertId) async {
     try {
-      final response = await dio.get('$url/advert-info?advertId=1');
+      final response = await dio.get('$url/advert-info?advertId=2');
       // final response = await dio.get('$url/advert-info?advertId=$advertId');
       if (response.statusCode == 200) {
         // 응답이 성공적이라면 JSON 데이터를 반환
@@ -46,7 +46,7 @@ class AdService {
   //TODO: contentId 수정
   Future<List<Advert>> getAdvertsByContentId(int contentId) async {
     try {
-      final response = await dio.get('$url/get-list-by-content?contentId=1');
+      final response = await dio.get('$url/get-list-by-content?contentId=2');
 
       if (response.statusCode == 200 && response.data != null) {
 

@@ -169,9 +169,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:stad/constant/animation/animated_indexed_stack.dart';
 import 'package:stad/firebase_options.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/cart/cart_screen.dart';
+import 'package:stad/screen/error/error_screen.dart';
 import 'package:stad/screen/home/home_screen.dart';
 import 'package:stad/screen/home/onboarding_screen.dart';
 import 'package:stad/screen/login/login_screen.dart';
@@ -199,49 +201,36 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final GoRouter _router = GoRouter(
-    debugLogDiagnostics: true,
-    initialLocation: '/splash',
-    routes: <GoRoute>[
-      GoRoute(
-        path: '/splash',
-        builder: (BuildContext context, GoRouterState state) =>
-            const SplashVideoScreen(),
-      ),
-      GoRoute(
-        path: '/onboarding',
-        builder: (BuildContext context, GoRouterState state) =>
-            const OnboardingScreen(),
-      ),
-      GoRoute(
-        path: '/login',
-        builder: (BuildContext context, GoRouterState state) =>
-            const LoginScreen(),
-      ),
-      GoRoute(
-        path: '/',
-        builder: (BuildContext context, GoRouterState state) =>
-            const MainNavigation(),
-        routes: [
-          GoRoute(
-            path: 'home',
-            builder: (BuildContext context, GoRouterState state) =>
-                const HomeScreen(),
-          ),
-          GoRoute(
-            path: 'cart',
-            builder: (BuildContext context, GoRouterState state) =>
-                const CartScreen(),
-          ),
-          GoRoute(
-            path: 'mystad',
-            builder: (BuildContext context, GoRouterState state) =>
-                const MyStadScreen(),
-          ),
-        ],
-      ),
-    ],
-  );
+  late final GoRouter _router;
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _router = GoRouter(
+      debugLogDiagnostics: true,
+      initialLocation: '/splash',
+      navigatorKey: navigatorKey,
+      routes: [
+        GoRoute(
+          path: '/splash',
+          builder: (context, state) => const SplashVideoScreen(),
+        ),
+        GoRoute(
+          path: '/onboarding',
+          builder: (context, state) => const OnboardingScreen(),
+        ),
+        GoRoute(
+          path: '/login',
+          builder: (context, state) => LoginScreen(),
+        ),
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => MainNavigation(),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -257,9 +246,11 @@ class _MyAppState extends State<MyApp> {
         title: 'STA:D',
         theme: ThemeData(
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          pageTransitionsTheme: PageTransitionsTheme(builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-          }),
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            },
+          ),
           fontFamily: 'MainFont',
         ),
         debugShowCheckedModeBanner: false,
@@ -293,13 +284,17 @@ class _MainNavigationState extends State<MainNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
+      body: AnimatedIndexedStack(
         index: _selectedIndex,
         children: _widgetOptions,
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
-        onItemSelected: _onItemTapped,
+        onItemSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }
