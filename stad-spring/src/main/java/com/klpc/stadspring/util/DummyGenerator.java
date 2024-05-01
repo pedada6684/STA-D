@@ -31,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,10 +57,22 @@ public class DummyGenerator {
     private final ContentConceptParsingService contentConceptParsingService;
     private final OrdersService ordersService;
     private final ContentDetailService contentDetailService;
+    private final Environment environment;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void createDummy(){
+        log.info("DummyGenerator start");
+
+        //서버에서 작동하지 않음
+        String[] activeProfiles = environment.getActiveProfiles();
+        for (String activeProfile : activeProfiles) {
+            if (activeProfile.equals("prod")){
+                log.info("DummyGenerator doesn't work in prod");
+                return;
+            }
+        }
+
         createContent();
         User normalUser = createDummyUsers();
         createDummyCompanyUsers();
