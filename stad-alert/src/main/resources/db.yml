@@ -14,6 +14,6 @@ spring:
       on-profile: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql-stad-alert-main:3306/stad
+    url: jdbc:mysql://mysql-stad-alert:3306/stad
     username: root
     password: 1234
