@@ -5,11 +5,15 @@ import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.advert.service.AdvertService;
 import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertRequestCommand;
 import com.klpc.stadspring.domain.contents.category.service.ContentCategoryService;
+import com.klpc.stadspring.domain.contents.category.service.command.request.AddCategoryRequestCommand;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptParsingService;
+import com.klpc.stadspring.domain.contents.concept.service.command.request.AddConceptRequestCommand;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailParsingService;
+import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
+import com.klpc.stadspring.domain.contents.detail.service.command.request.AddDetailRequestCommand;
 import com.klpc.stadspring.domain.orders.service.OrdersService;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequestCommand;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrdersProductTypeRequestCommand;
@@ -52,6 +56,7 @@ public class DummyGenerator {
     private final ContentConceptRepository contentConceptRepository;
     private final ContentConceptService contentConceptService;
     private final ContentCategoryService contentCategoryService;
+    private final ContentDetailService contentDetailService;
     private final ContentDetailParsingService contentDetailParsingService;
     private final ContentConceptParsingService contentConceptParsingService;
     private final OrdersService ordersService;
@@ -86,65 +91,65 @@ public class DummyGenerator {
     /**
      * 컨텐츠 생성
      */
-//    public void createContent(){
-//        AddCategoryRequestCommand categoryCommand = AddCategoryRequestCommand.builder().isMovie(true).name("액션").build();
-//        contentCategoryService.addCategory(categoryCommand);
-//
-//        List<String> genre = new ArrayList<>();
-//        genre.add("액션");
-//
-//        AddConceptRequestCommand conceptCommand1 = AddConceptRequestCommand.builder()
-//                .audienceAge("19")
-//                .playtime("123")
-//                .description("내가 코를 만지면")
-//                .cast("이서윤")
-//                .creator("이태경")
-//                .isMovie(true)
-//                .releaseYear("2024")
-//                .thumbnail("https://dimg.donga.com/wps/NEWS/IMAGE/2013/03/05/53477680.2.jpg")
-//                .title("타짜")
-//                .genre(genre)
-//                .build();
-//        contentConceptService.addConcept(conceptCommand1);
-//
-//        List<ContentConcept> conceptList = contentConceptService.getContentConceptByKeyword("타짜");
-//
-//        AddDetailRequestCommand detailCommand1 = AddDetailRequestCommand.builder()
-//                .episode(1)
-//                .videoUrl("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/71cc0506891f4de4aa5bc28389e971c9videoList")
-//                .summary("손은 눈보다 빠르다")
-//                .contentConceptId(conceptList.get(0).getId())
-//                .build();
-//
-//        contentDetailService.addDetail(detailCommand1);
-//    }
+    public void createContent(){
+        AddCategoryRequestCommand categoryCommand = AddCategoryRequestCommand.builder().isMovie(true).name("액션").build();
+        contentCategoryService.addCategory(categoryCommand);
 
-    public void createContent() {
-        String conceptFilePath = "src/main/resources/crawl.json";
+        List<String> genre = new ArrayList<>();
+        genre.add("액션");
 
-        try {
-            // JSON 파일을 파싱하고 저장하는 메서드 호출
-            contentConceptParsingService.parseAndSaveJson(conceptFilePath);
-            // 성공 시, 필요한 경우 성공 메시지 로깅
-            System.out.println("Content successfully parsed and saved from file: " + conceptFilePath);
-        } catch (Exception e) {
-            // 일반적인 예외 처리
-            System.err.println("An unexpected error occurred while parsing the JSON file: " + conceptFilePath);
-            e.printStackTrace();
-        }
+        AddConceptRequestCommand conceptCommand1 = AddConceptRequestCommand.builder()
+                .audienceAge("19")
+                .playtime("123")
+                .description("내가 코를 만지면")
+                .cast("이서윤")
+                .creator("이태경")
+                .isMovie(true)
+                .releaseYear("2024")
+                .thumbnail("https://dimg.donga.com/wps/NEWS/IMAGE/2013/03/05/53477680.2.jpg")
+                .title("타짜")
+                .genre(genre)
+                .build();
+        contentConceptService.addConcept(conceptCommand1);
 
+        List<ContentConcept> conceptList = contentConceptService.getContentConceptByKeyword("타짜");
 
-        String detailFilePath = "src/main/resources/crawl_detail.json";
-        try {
-            contentDetailParsingService.parseAndSaveJson(detailFilePath);
-            // 성공 시, 필요한 경우 성공 메시지 로깅
-            System.out.println("Content successfully parsed and saved from file: " + detailFilePath);
-        } catch (Exception e) {
-            // 일반적인 예외 처리
-            System.err.println("An unexpected error occurred while parsing the JSON file: " + detailFilePath);
-            e.printStackTrace();
-        }
+        AddDetailRequestCommand detailCommand1 = AddDetailRequestCommand.builder()
+                .episode(1)
+                .videoUrl("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/71cc0506891f4de4aa5bc28389e971c9videoList")
+                .summary("손은 눈보다 빠르다")
+                .contentConceptId(conceptList.get(0).getId())
+                .build();
+
+        contentDetailService.addDetail(detailCommand1);
     }
+
+//    public void createContent() {
+//        String conceptFilePath = "src/main/resources/crawl.json";
+//
+//        try {
+//            // JSON 파일을 파싱하고 저장하는 메서드 호출
+//            contentConceptParsingService.parseAndSaveJson(conceptFilePath);
+//            // 성공 시, 필요한 경우 성공 메시지 로깅
+//            System.out.println("Content successfully parsed and saved from file: " + conceptFilePath);
+//        } catch (Exception e) {
+//            // 일반적인 예외 처리
+//            System.err.println("An unexpected error occurred while parsing the JSON file: " + conceptFilePath);
+//            e.printStackTrace();
+//        }
+//
+//
+//        String detailFilePath = "src/main/resources/crawl_detail.json";
+//        try {
+//            contentDetailParsingService.parseAndSaveJson(detailFilePath);
+//            // 성공 시, 필요한 경우 성공 메시지 로깅
+//            System.out.println("Content successfully parsed and saved from file: " + detailFilePath);
+//        } catch (Exception e) {
+//            // 일반적인 예외 처리
+//            System.err.println("An unexpected error occurred while parsing the JSON file: " + detailFilePath);
+//            e.printStackTrace();
+//        }
+//    }
 
 
     /**
@@ -221,7 +226,7 @@ public class DummyGenerator {
                 .endDate(LocalDateTime.parse("2025-04-25T00:00:00"))
                 .type("PRODUCT")
                 .directVideoUrl("")
-                .bannerImgUrl("https://img.khan.co.kr/lady/r/1100xX/2023/03/08/news-p.v1.20230308.9abb9311c8ee43c6b181dd72e08fa534.png")
+                .bannerImgUrl("https://contents.codetree.ai/homepage/images/company/SSAFY_logo.png")
                 .selectedContentList(contentList)
                 .advertVideoUrlList(advertVideoUrlList1)
                 .category("푸드")
@@ -240,15 +245,35 @@ public class DummyGenerator {
                 .startDate(LocalDateTime.parse("2024-04-25T00:00:00"))
                 .endDate(LocalDateTime.parse("2025-04-25T00:00:00"))
                 .type("NOTPRODUCT")
-                .directVideoUrl("https://www.ssafy.com/ksp/servlet/swp.content.controller.SwpContentServlet?p_process=select-content-view&p_menu_cd=M0307&p_content_cd=C0307&gad_source=1&gclid=CjwKCAjwrcKxBhBMEiwAIVF8rNcbofIU9So7-M2nvl4LIlRg_YOU5R3mox3ws6r398qEcnMdWDBMVhoCmH4QAvD_BwE")
-                .bannerImgUrl("https://contents.codetree.ai/homepage/images/company/SSAFY_logo.png")
+                .directVideoUrl("")
+                .bannerImgUrl("https://img.khan.co.kr/lady/r/1100xX/2023/03/08/news-p.v1.20230308.9abb9311c8ee43c6b181dd72e08fa534.png")
                 .selectedContentList(contentList2)
                 .advertVideoUrlList(advertVideoUrlList2)
                 .category("개발")
                 .build();
 
+        List<Long> contentList3 = new ArrayList<>();
+
+        List<String> advertVideoUrlList3 = new ArrayList<>();
+        advertVideoUrlList3.add("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/%EC%9A%A9%EA%B0%80%EB%A6%AC.mp4");
+
+        AddAdvertRequestCommand command3 = AddAdvertRequestCommand.builder()
+                .userId(user1.getId())
+                .title("용가리")
+                .description("하림 용가리 용가리 치킨 너겟")
+                .startDate(LocalDateTime.parse("2024-04-30T00:00:00"))
+                .endDate(LocalDateTime.parse("2025-04-30T00:00:00"))
+                .type("product")
+                .directVideoUrl("")
+                .bannerImgUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfHlm-3ClhvsN5t9bIaYROpbF-P_SywH2OgUUMeBBslw&s")
+                .selectedContentList(contentList3)
+                .advertVideoUrlList(advertVideoUrlList3)
+                .category("튀김")
+                .build();
+
         advertService.addAdvert(command1);
         advertService.addAdvert(command2);
+        advertService.addAdvert(command3);
     }
 
     /**
