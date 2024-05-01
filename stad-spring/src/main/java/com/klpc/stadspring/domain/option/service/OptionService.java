@@ -73,9 +73,8 @@ public class OptionService {
         return newOption;
     }
 
-    public void deleteOption(DeleteOptionCommand command) {
-        log.info("DeleteOptionCommand: "+command);
-        ProductOption productOption = optionRepository.findById(command.getId())
+    public void deleteOption(Long id) {
+        ProductOption productOption = optionRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         optionRepository.delete(productOption);
     }
