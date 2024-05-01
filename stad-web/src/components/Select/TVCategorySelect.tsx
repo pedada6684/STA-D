@@ -1,4 +1,9 @@
+import { useSelector } from "react-redux";
 import Select, { SingleValue } from "react-select";
+import { RootState } from "../../store";
+import { useQuery } from "react-query";
+import { getSeriesCategory } from "./TVSelectAPI";
+import Loading from "../Loading";
 export interface OptionType {
   value: string;
   label: string;
@@ -7,12 +12,19 @@ export interface TVCategorySelectProps {
   onChange: (option: SingleValue<OptionType>) => void;
 }
 export default function TVCategorySelect({ onChange }: TVCategorySelectProps) {
-  const options: OptionType[] = [
-    { value: "드라마", label: "드라마" },
-    { value: "예능", label: "예능" },
-    { value: "교양/다큐멘터리", label: "교양/다큐멘터리" },
-    { value: "해외", label: "해외" },
-  ];
+  const token = useSelector((state: RootState) => state.token.accessToken);
+  const { data: CategoryList, isLoading } = useQuery(
+    ["series-categoryList", token],
+    () => getSeriesCategory(token)
+  );
+  if (isLoading) {
+    return <Loading />;
+  }
+  console.log(CategoryList);
+  const options = CategoryList.map((category: string, index: number) => ({
+    value: category,
+    label: category,
+  }));
 
   const customStyles = {
     valueContainer: (provided: any) => ({
