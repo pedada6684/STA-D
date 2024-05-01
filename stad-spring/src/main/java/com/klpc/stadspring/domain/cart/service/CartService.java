@@ -9,6 +9,8 @@ import com.klpc.stadspring.domain.cart.service.command.AddProductToCartCommand;
 import com.klpc.stadspring.domain.cart.service.command.DeleteProductInCartCommand;
 import com.klpc.stadspring.domain.cart.service.command.GetCartProductCommand;
 import com.klpc.stadspring.domain.cart.service.command.UpdateCartProductCountCommand;
+import com.klpc.stadspring.domain.option.entity.ProductOption;
+import com.klpc.stadspring.domain.option.repository.OptionRepository;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.productType.entity.ProductType;
 import com.klpc.stadspring.domain.productType.repository.ProductTypeRepository;
@@ -34,6 +36,7 @@ public class CartService {
     private final CartProductRepository cartProductRepository;
     private final UserRepository userRepository;
     private final ProductTypeRepository productTypeRepository;
+    private final OptionRepository optionRepository;
 
     @Transactional
     public List<CartProduct> addProductToCart(AddProductToCartCommand command) {
@@ -78,11 +81,16 @@ public class CartService {
         List<GetCartProductCommand> responseList = new ArrayList<>();
 
         for(CartProduct cartProduct : cartProductList){
+
+            ProductOption productOption = optionRepository.findById(cartProduct.getOptionId())
+                    .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
             GetCartProductCommand response = GetCartProductCommand.builder()
                     .productType(cartProduct.getProductType())
                     .quantity(cartProduct.getQuantity())
                     .advertId(cartProduct.getAdvertId())
                     .contentId(cartProduct.getContentId())
+                    .option(productOption)
                     .build();
 
             responseList.add(response);
