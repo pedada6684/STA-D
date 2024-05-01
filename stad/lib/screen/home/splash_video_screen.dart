@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stad/constant/animation/vertical_split_route.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/screen/home/onboarding_screen.dart';
@@ -28,10 +29,11 @@ class _SplashVideoScreenState extends State<SplashVideoScreen> {
         
         _timer = Timer(Duration(seconds: 3), () {
           _controller.pause(); // 3초 후 비디오를 일시정지
-          Navigator.pushReplacement(
-              context,
-              TVSwitchOnRoute(page: OnboardingScreen()) // 여기에 새 애니메이션 라우트를 적용
-          );
+          // Navigator.pushReplacement(
+          //     context,
+          //     TVSwitchOnRoute(page: OnboardingScreen()) // 여기에 새 애니메이션 라우트를 적용
+          // );
+          context.go('/onboarding');
         });
       });
   }
