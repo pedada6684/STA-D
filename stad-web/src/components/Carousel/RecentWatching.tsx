@@ -11,13 +11,14 @@ import { GetRecentWatching } from "./CarouselApI";
 import Content from "../Container/Content";
 export default function RecentWatching() {
   const token = useSelector((state: RootState) => state.token.accessToken);
+  const userId = useSelector((state: RootState) => state.user.userId);
   const navigate = useNavigate();
   const {
     data: WatchingData,
     isLoading,
     error,
   } = useQuery<CarouselVideoProps[]>(["watching", token], () =>
-    GetRecentWatching(token)
+    GetRecentWatching(userId, token)
   );
   if (isLoading)
     return (
@@ -51,7 +52,7 @@ export default function RecentWatching() {
     <div className="v-container">
       <div className="v-title">최근 시청중인 컨텐츠</div>
       <div className="thumbnail-container">
-        {WatchingData ? (
+        {WatchingData && WatchingData.length > 0 ? (
           <Slider {...setting}>
             {WatchingData?.map((data, index) => (
               <div
@@ -66,7 +67,7 @@ export default function RecentWatching() {
             ))}
           </Slider>
         ) : (
-          <div>현재 시청 중인 영상이 없습니다.</div>
+          <div className="no-content">현재 시청 중인 영상이 없습니다.</div>
         )}
       </div>
     </div>
