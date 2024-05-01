@@ -25,6 +25,7 @@ export default function MainCarousel() {
   } = useQuery<CarouselVideoProps[]>(["mainCarousel", token], () =>
     GetMainCarousel(token)
   );
+  console.log(CarouselData);
   if (isLoading)
     return (
       <div>
