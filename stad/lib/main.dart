@@ -8,10 +8,21 @@ import 'package:stad/models/cart_model.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/cart/cart_screen.dart';
 import 'package:stad/screen/home/home_screen.dart';
+import 'package:stad/screen/home/onboarding_screen.dart';
+import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/myStad_screen.dart';
+import 'package:stad/screen/myStad/shop/myaddress_screen.dart';
+import 'package:stad/screen/myStad/shop/myorder_scren.dart';
+import 'package:stad/screen/myStad/shop/myreview_screen.dart';
+import 'package:stad/screen/myStad/stad/mycommercial_screen.dart';
+import 'package:stad/screen/myStad/stad/mycontents_screen.dart';
+import 'package:stad/screen/product/product_screen.dart';
 import 'package:stad/widget/bottom_bar.dart';
+import 'package:go_router/go_router.dart';
 
 import 'providers/cart_provider.dart';
+import 'screen/error/error_screen.dart';
+import 'screen/home/splash_video_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Flutter 엔진, 위젯 트리 바인딩
@@ -36,17 +47,76 @@ class _MyAppState extends State<MyApp> {
   // late bool _isLoggined;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    CartScreen(),
-    MyStadScreen(),
-  ];
+  // static const List<Widget> _widgetOptions = <Widget>[
+  //   HomeScreen(),
+  //   CartScreen(),
+  //   MyStadScreen(),
+  // ];
+  //
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  // }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  final GoRouter _router = GoRouter(
+      // errorBuilder: (context, state) => ErrorScreen(error: state.error),
+      debugLogDiagnostics: true,
+      initialLocation: '/splash',
+      routes: <GoRoute>[
+        GoRoute(
+            path: '/splash',
+            builder: (BuildContext context, GoRouterState state) =>
+                SplashVideoScreen()),
+        GoRoute(
+            path: '/onboarding',
+            builder: (BuildContext context, GoRouterState state) =>
+                OnboardingScreen()),
+        GoRoute(
+            path: '/login',
+            builder: (BuildContext context, GoRouterState state) =>
+                LoginScreen()),
+        GoRoute(
+            path: '/',
+            builder: (BuildContext context, GoRouterState state) =>
+                HomeScreen(),
+            routes: [
+              GoRoute(
+                  path: 'cart',
+                  builder: (BuildContext context, GoRouterState state) =>
+                      CartScreen()),
+              GoRoute(
+                  path: 'mystad',
+                  builder: (BuildContext context, GoRouterState state) =>
+                      MyStadScreen(),
+                  routes: [
+                    GoRoute(
+                        path: 'myaddress',
+                        builder: (BuildContext context, GoRouterState state) =>
+                            MyAddressScreen()),
+                    GoRoute(
+                        path: 'myorder',
+                        builder: (BuildContext context, GoRouterState state) =>
+                            MyOrderScreen()),
+                    GoRoute(
+                        path: 'myreview',
+                        builder: (BuildContext context, GoRouterState state) =>
+                            MyReviewScreen()),
+                    GoRoute(
+                        path: 'mycommercial',
+                        builder: (BuildContext context, GoRouterState state) =>
+                            MyCommercialScreen()),
+                    GoRoute(
+                        path: 'mycontents',
+                        builder: (BuildContext context, GoRouterState state) =>
+                            MyContentsScreen()),
+                  ]),
+              GoRoute(
+                  path: 'product',
+                  builder: (BuildContext context, GoRouterState state) =>
+                      ProductScreen()),
+            ])
+      ]);
 
   @override
   Widget build(BuildContext context) {
@@ -74,31 +144,23 @@ class _MyAppState extends State<MyApp> {
             )),
         ),
       ],
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        title: 'STA:D',
-        theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          pageTransitionsTheme: PageTransitionsTheme(
-            builders: {
-              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            },
-          ),
-          fontFamily: 'MainFont',
+      child: MaterialApp.router(
+      routerDelegate: _router.routerDelegate,
+      routeInformationParser: _router.routeInformationParser,
+      routeInformationProvider: _router.routeInformationProvider,
+      title: 'STA:D',
+      theme: ThemeData(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          },
         ),
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-            body: AnimatedIndexedStack(
-              index: _selectedIndex,
-              children: _widgetOptions,
-            ),
-            bottomNavigationBar:
-                CustomBottomNavigationBar(
-              selectedIndex: _selectedIndex,
-              onItemSelected: _onItemTapped,
-            )),
-        // home: SplashVideoScreen(),
+        fontFamily: 'MainFont',
       ),
+      debugShowCheckedModeBanner: false,
+    ),
+
     );
   }
 }
