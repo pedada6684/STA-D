@@ -37,12 +37,12 @@ public class AdvertController {
                 .description(request.getDescription())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
-                .type(request.getType())
+                .advertType(request.getAdvertType())
                 .directVideoUrl(request.getDirectVideoUrl())
                 .bannerImgUrl(request.getBannerImgUrl())
                 .selectedContentList(request.getSelectedContentList())
                 .advertVideoUrlList(request.getAdvertVideoUrlList())
-                .advertBannerImgUrl(request.getBannerImgUrl())
+                .advertCategory(request.getAdvertCategory())
                 .build();
         AddAdvertResponse response = advertService.addAdvert(command);
         return new ResponseEntity<>(response, HttpStatus.OK);

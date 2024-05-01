@@ -69,3 +69,4 @@ export const getContentConcept = async () => {
         return null;
     }
 };
+
