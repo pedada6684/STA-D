@@ -31,6 +31,7 @@ public class ProductType {
     private Product product;
 
     @OneToMany(mappedBy = "productType", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    @JsonIgnore
     private List<ProductOption> productOptions;
 
     @OneToMany(mappedBy = "productType", cascade = CascadeType.REMOVE,  orphanRemoval = true)
@@ -38,6 +39,7 @@ public class ProductType {
     private List<CartProduct> cartProduct;
 
     @OneToMany(mappedBy = "productType")
+    @JsonIgnore
     private List<OrderProduct> orderProduct;
 
     @Column(name = "name")

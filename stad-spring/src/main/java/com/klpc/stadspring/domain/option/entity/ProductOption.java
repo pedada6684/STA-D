@@ -29,12 +29,12 @@ public class ProductOption {
     String name;
 
     @Column(name = "value")
-    String value;
+    Long value;
 
     public static ProductOption createNewOption(
             ProductType productType,
             String name,
-            String value
+            Long value
     ) {
         ProductOption productOption = new ProductOption();
         productOption.productType = productType;

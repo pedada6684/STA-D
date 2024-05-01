@@ -35,7 +35,7 @@ public class ProductImageService {
         imageRepository.save(productImage);
     }
 
-    public void deleteImage(Long productId, Long imageId) {
+    public void deleteImage(Long imageId) {
         ProductImage image = imageRepository.findById(imageId)
                 .orElseThrow(() -> new RuntimeException("Image not found"));
 

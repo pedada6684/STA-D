@@ -51,9 +51,8 @@ public class ProductTypeService {
         return newType;
     }
 
-    public void deleteProductType(DeleteProductTypeCommand command) {
-        log.info("DeleteOptionCommand: "+command);
-        ProductType productType = productTypeRepository.findById(command.getId())
+    public void deleteProductType(Long productTypeId) {
+        ProductType productType = productTypeRepository.findById(productTypeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         productTypeRepository.delete(productType);
     }
