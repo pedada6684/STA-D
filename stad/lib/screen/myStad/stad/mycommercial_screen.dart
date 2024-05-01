@@ -94,14 +94,14 @@ class _MyCommercialScreenState extends State<MyCommercialScreen> {
                       bannerImgUrl:
                           advert.bannerImgUrl ?? 'assets/image/default.png',
                       // Handle possible null URL
-                      buttonText: advert.title,
+                      buttonText: '내가 본 광고',
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProductScreen()),
                         );
-                      },
+                      }, subText: advert.title,
                     );
                   },
                 ),

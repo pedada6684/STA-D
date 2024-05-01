@@ -41,8 +41,15 @@ class _EditUserScreenState extends State<EditUserScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('성공'),
-          content: Text('사용자 정보가 업데이트 되었습니다.'),
+          backgroundColor: mainWhite,
+          title: Text(
+            '성공',
+            style: TextStyle(color: mainNavy),
+          ),
+          content: Text(
+            '사용자 정보가 업데이트 되었습니다.',
+            style: TextStyle(color: mainNavy),
+          ),
           actions: <Widget>[
             TextButton(
               child: Text('확인'),

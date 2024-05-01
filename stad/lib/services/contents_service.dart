@@ -9,13 +9,9 @@ class ContentsService {
   Future<Content> fetchContentDetails(int detailId) async {
     try {
       // final response = await dio.get('$svApi/contents-detail/1');
-      final response = await dio.get('http://192.168.0.129:8080/api/contents-detail/2');
+      final response = await dio.get('http://192.168.0.129:8080/api/contents-detail/1');
       print('${response.data}');
-      print('${response.data}');
-      print('${response.data}');
-      print('${response.data}');
-      print('${response.data}');
-      print('${response.data}');
+
 
       if (response.statusCode == 200) {
         return Content.fromJson(response.data);

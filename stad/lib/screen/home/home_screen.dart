@@ -22,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final CarouselController _controller = CarouselController();
   Content? featuredContent;
   List<Advert> adverts = [];
+  List<Map<String, dynamic>> singleAdverts = [];
 
   @override
   void initState() {
@@ -37,11 +38,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     try {
       Map<String, dynamic> advertData = await adService.getAdInfo(advertId);
       setState(() {
-        adverts.add({
+        singleAdverts.add({
           'bannerImgUrl': advertData['bannerImgUrl'],
           'title': advertData['title'],
           //추가로 필요한 데이터 여기서 처리
-        } as Advert);
+        });
       });
     } catch (e) {
       print('Failed to fetch single advert: $e');
@@ -152,10 +153,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ),
             Column(
               children: [
-                if (adverts.isNotEmpty)
+                if (singleAdverts.isNotEmpty)
                   AdvertisingCard(
-                    bannerImgUrl: adverts[0].bannerImgUrl,
+                    bannerImgUrl: singleAdverts[0]['bannerImgUrl'],
                     buttonText: '지금 보는 광고가 궁금하다면?',
+                    subText: singleAdverts[0]['title'],
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ProductScreen()));
@@ -175,7 +177,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       items: adverts
           .map((advert) => AdvertisingCard(
                 bannerImgUrl: advert.bannerImgUrl,
-                buttonText: advert.title,
+                buttonText: '콘텐츠 관련 광고 보러가기',
+                subText: advert.title,
                 onPressed: () {
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => ProductScreen()));

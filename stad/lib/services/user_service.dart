@@ -93,8 +93,8 @@ class UserService {
       BuildContext context, String phone, String profileImagePath) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     FormData formData = FormData.fromMap({
-      // "userId": userProvider.userId,
-      "userId": 2,
+      "userId": userProvider.userId,
+      // "userId": 2,
       "name": userProvider.user?.name,
       "nickname": userProvider.user?.nickname,
       "phone": phone,
@@ -106,9 +106,12 @@ class UserService {
           filename: "profile_pic.png"),
     });
 
+    print(formData);
+
     try {
       final response = await dio.post(
-        'https://www.mystad.com/api/user/update',
+        // 'https://www.mystad.com/api/user/update',
+        'http://http://192.168.0.129:8080/api/user/update',
         data: formData,
         options: Options(
           headers: {
