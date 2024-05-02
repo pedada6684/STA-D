@@ -114,7 +114,10 @@ public class ProductService {
     public void deleteProduct(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        productRepository.delete(product);
+
+        product.deleteProduct(product);
+
+        productRepository.save(product);
     }
 
 
