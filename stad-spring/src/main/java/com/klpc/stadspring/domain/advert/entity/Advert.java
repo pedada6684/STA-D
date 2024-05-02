@@ -41,6 +41,8 @@ public class Advert {
 
     private String advertCategory;
 
+    private Boolean status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -64,9 +66,6 @@ public class Advert {
             String bannerImgUrl,
             User user,
             String advertCategory
-//            List<AdvertVideo> advertVideos,
-//            List<SelectedContent> selectedContents,
-//            List<Product> products
             ){
         Advert advert = new Advert();
         advert.title=title;
@@ -82,10 +81,7 @@ public class Advert {
         advert.bannerImgUrl=bannerImgUrl;
         advert.user=user;
         advert.advertCategory=advertCategory;
-//        advert.advertVideos=advertVideos;
-//        advert.selectedContents=selectedContents;
-//        advert.products=products;
-
+        advert.status=true;
         return advert;
     }
 
@@ -110,5 +106,9 @@ public class Advert {
         this.directVideoUrl = directVideoUrl;
         this.bannerImgUrl=bannerImgUrl;
         this.advertCategory=advertCategory;
+    }
+
+    public void deleteAdvert(){
+        this.status=false;
     }
 }
