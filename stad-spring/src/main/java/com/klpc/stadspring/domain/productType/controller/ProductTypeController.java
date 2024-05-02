@@ -4,6 +4,7 @@ import com.klpc.stadspring.domain.productType.controller.request.AddProductTypeR
 import com.klpc.stadspring.domain.productType.controller.response.GetProductTypeListResponse;
 import com.klpc.stadspring.domain.productType.entity.ProductType;
 import com.klpc.stadspring.domain.productType.service.ProductTypeService;
+import com.klpc.stadspring.domain.productType.service.command.ProductTypeInfoCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -28,9 +29,7 @@ public class ProductTypeController {
     @GetMapping("/list")
     @Operation(summary = "특정 상품의 타입 리스트 조회", description = "특정 상품에 속한 타입들의 리스트를 조회합니다.")
     public ResponseEntity<?> getProductTypeList(@RequestParam("productId") Long productId) {
-        List<ProductType> list = productTypeService.getProductTypeList(productId);
-
-        GetProductTypeListResponse response = GetProductTypeListResponse.from(list);
+        GetProductTypeListResponse response = productTypeService.getProductTypeList(productId);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
         return ResponseEntity.ok(response);
