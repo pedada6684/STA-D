@@ -3,12 +3,13 @@ package com.klpc.stadspring.domain.contents.detail.controller;
 import com.klpc.stadspring.domain.contents.bookmark.service.BookmarkedContentService;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
-import com.klpc.stadspring.domain.contents.detail.controller.response.GetContentConceptResponse;
+import com.klpc.stadspring.domain.contents.detail.controller.response.GetConceptAndDetailResponse;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetDetailIdAndThumbnailListResponse;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetDetailIdAndThumbnailResponse;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetDetailListByConceptIdResponse;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
+import com.klpc.stadspring.domain.contents.detail.service.command.response.GetDetailListByConceptIdResponseCommand;
 import com.klpc.stadspring.domain.contents.watched.service.WatchedContentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -47,19 +48,21 @@ public class ContentDetailController {
         return detailService.streamingPublicVideo(httpHeaders, detailId);
     }
 
-    @GetMapping("/{detailId}")
+    @GetMapping("/{conceptId}")
     @Operation(summary = "콘텐츠 상세 조회", description = "콘텐츠 상세 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "콘텐츠 상세 조회 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<GetContentConceptResponse> getContentDetailAndConcept(@PathVariable Long detailId) {
-        log.info("콘텐츠 상세 조회" + "\n" + "getContentDetailAndConcept : " + detailId);
+    ResponseEntity<GetConceptAndDetailResponse> getConceptAndDetail(@PathVariable Long conceptId) {
+        log.info("콘텐츠 상세 조회" + "\n" + "getConceptAndDetail : " + conceptId);
 
-        ContentDetail detail = detailService.getContentDetailById(detailId);
-        ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
-        GetContentConceptResponse reponse = GetContentConceptResponse.from(concept);
+        ContentConcept concept = conceptService.getContentConceptById(conceptId);
+        List<GetDetailListByConceptIdResponseCommand> commandList = detailService.getDetailListByConceptId(conceptId);
+
+        GetConceptAndDetailResponse reponse = GetConceptAndDetailResponse.from(concept, commandList);
+
         return ResponseEntity.ok(reponse);
     }
 
@@ -171,18 +174,18 @@ public class ContentDetailController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/collections")
-    @Operation(summary = "conceptId로 detail 조회", description = "conceptId로 detail 조회")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "conceptId로 detail 조회 성공"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
-            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
-    })
-    public ResponseEntity<GetDetailListByConceptIdResponse> getDetailListByConceptId(@RequestParam("conceptId") Long conceptId) {
-        log.info("conceptId로 detail 조회" + "\n" + "getDetailListByConceptId : " + conceptId);
-
-        GetDetailListByConceptIdResponse response = detailService.getDetailListByConceptId(conceptId);
-
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping("/collections")
+//    @Operation(summary = "conceptId로 detail 조회", description = "conceptId로 detail 조회")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "conceptId로 detail 조회 성공"),
+//            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+//            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+//    })
+//    public ResponseEntity<GetDetailListByConceptIdResponse> getDetailListByConceptId(@RequestParam("conceptId") Long conceptId) {
+//        log.info("conceptId로 detail 조회" + "\n" + "getDetailListByConceptId : " + conceptId);
+//
+//        GetDetailListByConceptIdResponse response = detailService.getDetailListByConceptId(conceptId);
+//
+//        return ResponseEntity.ok(response);
+//    }
 }
