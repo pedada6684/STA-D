@@ -79,11 +79,11 @@ public class AdvertVideoController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @GetMapping("/get-list-by-user")
-    @Operation(summary = "사용자 맞춤 광고 조회", description = "사용자 맞춤 광고 조회")
-    @ApiResponse(responseCode = "200", description = "사용자 맞춤 광고 영상이 조회 되었습니다.")
-    public ResponseEntity<GetAdvertVideoListByUserResponse> getAdvertVideoByUser(@RequestParam("userId") Long userId){
-        GetAdvertVideoListByUserResponse response = advertVideoService.getAdvertVideoByUser(userId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    @GetMapping("/get-list-by-user")
+//    @Operation(summary = "사용자 맞춤 광고 조회", description = "사용자 맞춤 광고 조회")
+//    @ApiResponse(responseCode = "200", description = "사용자 맞춤 광고 영상이 조회 되었습니다.")
+//    public ResponseEntity<GetAdvertVideoListByUserResponse> getAdvertVideoByUser(@RequestParam("userId") Long userId){
+//        GetAdvertVideoListByUserResponse response = advertVideoService.getAdvertVideoByUser(userId);
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 }
