@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GetProductListByAdverseResponse {
+public class GetProductListByAdvertResponse {
     /**
      * 광고 내 상품 리스트 조회
      */

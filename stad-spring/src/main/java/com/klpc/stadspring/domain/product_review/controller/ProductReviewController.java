@@ -1,14 +1,10 @@
 package com.klpc.stadspring.domain.product_review.controller;
 
-import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdverseResponse;
-import com.klpc.stadspring.domain.product.entity.Product;
-import com.klpc.stadspring.domain.product_review.controller.request.GetProductReviewListByUserIdRequest;
 import com.klpc.stadspring.domain.product_review.controller.request.ProductReviewPostRequest;
 import com.klpc.stadspring.domain.product_review.controller.response.GetProductReviewListResponse;
 import com.klpc.stadspring.domain.product_review.controller.response.GetProductReviewResponse;
 import com.klpc.stadspring.domain.product_review.entity.ProductReview;
 import com.klpc.stadspring.domain.product_review.service.ProductReviewService;
-import com.klpc.stadspring.domain.product_review.service.command.DeleteReviewCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,8 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @Tag(name = "상품 리뷰 컨트롤러", description = "Product Review Controller API")
