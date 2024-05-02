@@ -46,19 +46,32 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   bool isOptionExpanded = false;
   int? selectedProductIndex;
   int? selectedOptionIndex;
+  List<ProductType> selectedProducts = [];
 
   void selectProductOption(String? value) {
     if (value != null) {
       int index = widget.productTypes.indexWhere((p) => p.name == value);
-      setState(() {
-        selectedProductIndex = index;
-        selectedOptionIndex = null;
-        isProductExpanded = false;
-        if (widget.productTypes[index].productOptions.isEmpty) {
-          isOptionExpanded = false;
-        }
-      });
+      addProduct(widget.productTypes.firstWhere((p) => p.name == value));
+      setState(
+        () {
+          selectedProductIndex = index;
+          selectedOptionIndex = null;
+          isProductExpanded = false;
+          if (widget.productTypes[index].productOptions.isEmpty) {
+            isOptionExpanded = false;
+          }
+          if (!selectedProducts.contains(widget.productTypes[index])) {
+            selectedProducts.add(widget.productTypes[index]);
+          }
+        },
+      );
     }
+  }
+
+  void addProduct(ProductType product) {
+    setState(() {
+      selectedProducts.add(product);
+    });
   }
 
   // void toggleProductExpanded() {
@@ -127,15 +140,6 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
                   : null,
               onToggle: () =>
                   setState(() => isProductExpanded = !isProductExpanded),
-              // onSelect: (String? value) {
-              //   if (value != null) {
-              //     int index = productOptions.indexOf(value);
-              //     setState(() {
-              //       selectedProductIndex = index;
-              //       selectedOptionIndex = null; // Reset the selected option
-              //     });
-              //   }
-              // },
               onSelect: selectProductOption,
             ),
             SizedBox(height: 15),
@@ -156,21 +160,26 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
                 },
               ),
             if (selectedProductIndex != null) ...[
-              ProductDetails(
-                productType: widget.productTypes[selectedProductIndex!],
-                onCancel: () {
-                  setState(() {
-                    selectedProductIndex = null;
-                    selectedOptionIndex = null;
-                  });
-                },
-              ),
-              QuantityChanger(
-                initialQuantity: 1,
-                onQuantityChanged: (newQuantity) {
-                  // Handle quantity change
-                },
-              ),
+              ...selectedProducts.map((product) {
+                return Column(
+                  children: [
+                    ProductDetails(
+                      productType: product,
+                      onCancel: () {
+                        setState(() {
+                          selectedProducts.remove(product);
+                        });
+                      },
+                    ),
+                    QuantityChanger(
+                      initialQuantity: 1,
+                      onQuantityChanged: (newQuantity) {
+                        // Handle quantity change
+                      },
+                    ),
+                  ],
+                );
+              }).toList(),
             ],
             // Padding(
             //   padding: const EdgeInsets.all(5.0),
