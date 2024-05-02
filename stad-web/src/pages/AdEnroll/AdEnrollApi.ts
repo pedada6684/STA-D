@@ -1,3 +1,6 @@
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
+
 export const advertVideoUpload = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
 
@@ -66,6 +69,24 @@ export const getContentConcept = async () => {
         return result;
     } catch (error) {
         console.error('컨텐츠 전체 목록 조회 실패 : ', error);
+        return null;
+    }
+};
+
+export const getAdvertList = async (userId : number) => {
+    try {
+        const response = await fetch(`/api/advert/get-list?userId=${userId}`, {
+            method: 'GET',
+        });
+        if (!response.ok) {
+            throw new Error('광고 목록 조회 실패');
+        }
+        const data = await response.json(); // JSON 형태로 응답 받음
+        const result = data.data;
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error('광고 목록 조회 실패 : ', error);
         return null;
     }
 };
