@@ -31,6 +31,7 @@ public class AdvertController {
     @ApiResponse(responseCode = "200", description = "광고가 등록 되었습니다.")
     public ResponseEntity<AddAdvertResponse> addAdvert(@RequestBody AddAdvertRequest request){
         log.info("광고 등록 Controller"+"\n"+"title : "+request.getTitle());
+        log.info("directVideoUrl : "+request.getDirectVideoUrl());
         AddAdvertRequestCommand command = AddAdvertRequestCommand.builder()
                 .userId(request.getUserId())
                 .title(request.getTitle())

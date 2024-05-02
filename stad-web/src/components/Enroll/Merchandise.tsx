@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import styles from "./Advertisement.module.css";
 import ToggleButton from "../Button/ToggleButton";
 import InputContainer from "../Container/InputContainer";
@@ -7,12 +7,12 @@ import EnrollButton from "../Button/EnrollButton";
 import DateRange from "../Calendar/DateRange";
 import CalendarIcon from "../Calendar/CalendarIcon";
 interface merchanForm {
-  name: string;
-  price: number;
-  quantity: number;
-  introduction: string;
-  thumbnail: string;
-  category: string; // 이거 말해서 빼야함
+  name?: string;
+  price?: number;
+  quantity?: number;
+  introduction?: string;
+  thumbnail?: string;
+  category?: string; // 이거 말해서 빼야함
   option?: string[];
   // 상품 이미지들/추가로 필요한 데이터 넣을것
 }
@@ -20,6 +20,10 @@ export default function Merchandise() {
   const [formData, setFormData] = useState<merchanForm>();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
   const [isMerNameExpanded, setMerNameExpanded] = useState(false);
   const [isMerOptionExpanded, setMerOptionExpanded] = useState(false);
@@ -44,6 +48,9 @@ export default function Merchandise() {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date("2024/12/31"));
 
+  useEffect(() => {
+    console.log(formData)
+  }, [formData]);
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.item}`}>
@@ -61,7 +68,7 @@ export default function Merchandise() {
             <div>
               <input
                 type="text"
-                name="merchandise-name"
+                name="name"
                 onChange={handleChange}
                 className={`${styles.input}`}
                 required
@@ -304,7 +311,7 @@ export default function Merchandise() {
         )}
       </div>
 
-      <EnrollButton />
+      <EnrollButton formData={formData} from="merchandise"/>
     </div>
   );
 }
