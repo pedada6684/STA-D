@@ -102,10 +102,10 @@ public class AdvertService {
                 command.getDescription(),
                 command.getStartDate(),
                 command.getEndDate(),
-                command.getCategory(),
+                command.getAdvertCategory(),
                 command.getDirectVideoUrl(),
                 command.getBannerImgUrl(),
-                command.getType()
+                command.getAdvertType()
         );
         if(!command.getSelectedContentList().isEmpty()) {
             selectedContentRepository.deleteAll(advert.getSelectedContents());
