@@ -145,7 +145,8 @@ public class ContentDetailService {
      * @param conceptId
      * @return
      */
-    public GetDetailListByConceptIdResponse getDetailListByConceptId(Long conceptId) {
+//    public GetDetailListByConceptIdResponse getDetailListByConceptId(Long conceptId) {
+    public List<GetDetailListByConceptIdResponseCommand> getDetailListByConceptId(Long conceptId) {
         log.info("getDetailListByConceptId 서비스 : " + conceptId);
 
         List<ContentDetail> allDetails = repository.findByConceptId(conceptId)
@@ -162,6 +163,7 @@ public class ContentDetailService {
             responseList.add(command);
         }
 
-        return GetDetailListByConceptIdResponse.builder().data(responseList).build();
+//        return GetDetailListByConceptIdResponse.builder().data(responseList).build();
+        return responseList;
     }
 }

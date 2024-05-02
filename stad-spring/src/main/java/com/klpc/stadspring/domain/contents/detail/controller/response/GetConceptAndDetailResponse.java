@@ -1,14 +1,15 @@
 package com.klpc.stadspring.domain.contents.detail.controller.response;
 
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
-import lombok.AllArgsConstructor;
+import com.klpc.stadspring.domain.contents.detail.service.command.response.GetDetailListByConceptIdResponseCommand;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Builder
-public class GetContentConceptResponse {
+public class GetConceptAndDetailResponse {
     String title;
     String thumbnailUrl;
     String playtime;
@@ -17,9 +18,10 @@ public class GetContentConceptResponse {
     String creator;
     String cast;
     String description;
+    List<GetDetailListByConceptIdResponseCommand> data;
 
-    public static GetContentConceptResponse from(ContentConcept contentConcept) {
-        return GetContentConceptResponse.builder()
+    public static GetConceptAndDetailResponse from(ContentConcept contentConcept, List<GetDetailListByConceptIdResponseCommand> commandList) {
+        return GetConceptAndDetailResponse.builder()
                 .title(contentConcept.getTitle())
                 .thumbnailUrl(contentConcept.getThumbnailUrl())
                 .playtime(contentConcept.getPlaytime())
@@ -28,6 +30,7 @@ public class GetContentConceptResponse {
                 .creator(contentConcept.getCreator())
                 .cast(contentConcept.getCast())
                 .description(contentConcept.getDescription())
+                .data(commandList)
                 .build();
     }
 }
