@@ -2,23 +2,24 @@ import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TVNav from "../../components/Nav/TVNav";
 import Content from "../../components/Container/Content";
-import { useMutation } from "react-query";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { Video } from "../Category/TVDetail";
 import TVSearchInput from "./TVSearchInput";
 import styles from "./TVSearch.module.css";
 import TVContainer from "../../components/Container/TVContainer";
 
+export interface searchProps {
+  conceptId: number;
+  thumbnailUrl: string;
+  title: string;
+}
+
 export default function TVSearch() {
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
-  const [searchResults, setSearchResults] = useState<Video[] | null>(null);
+  const [searchResults, setSearchResults] = useState<searchProps[] | null>(
+    null
+  );
   // 검색 시도 상태 추가
   const [searchAttempted, setSearchAttempted] = useState(false);
-  const accessToken = useSelector(
-    (state: RootState) => state.token.accessToken
-  );
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const nextValue = e.target.value;
@@ -46,7 +47,7 @@ export default function TVSearch() {
                       <div
                         className={`${styles.thumbnail}`}
                         key={index}
-                        onClick={() => navigate(`/tv/${data.id}`)}
+                        onClick={() => navigate(`/tv/${data.conceptId}`)}
                       >
                         <img src={data.thumbnailUrl} alt="영상 썸네일" />
                         <div className={`${styles.title}`}>{data.title}</div>

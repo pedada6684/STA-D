@@ -1,20 +1,27 @@
 import Select from "react-select";
 import { TVCategorySelectProps } from "./TVCategorySelect";
+import { useQuery } from "react-query";
+import { getMovieCategory, getSeriesCategory } from "./TVSelectAPI";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import Loading from "../Loading";
 
 export default function TVMovieCategorySelect({
   onChange,
 }: TVCategorySelectProps) {
-  const options = [
-    { value: "액션", label: "액션" },
-    { value: "코미디", label: "코미디" },
-    { value: "드라마", label: "드라마" },
-    { value: "멜로", label: "멜로" },
-    { value: "공포 / 스릴러", label: "공포 / 스릴러" },
-    { value: "SF / 판타지", label: "SF / 판타지" },
-    { value: "애니메이션", label: "애니메이션" },
-    { value: "다큐멘터리", label: "다큐멘터리" },
-    { value: "독립영화", label: "독립영화" },
-  ];
+  const token = useSelector((state: RootState) => state.token.accessToken);
+  const {
+    data: CategoryList,
+    isLoading,
+    error,
+  } = useQuery(["movie-categoryList", token], () => getMovieCategory(token));
+  if (isLoading) {
+    return <Loading />;
+  }
+  const options = CategoryList.map((category: string, index: number) => ({
+    value: category, // 'category'는 API에서 받은 실제 카테고리 이름
+    label: category, // 동일하게 label도 카테고리 이름으로 설정
+  }));
 
   const customStyles = {
     valueContainer: (provided: any) => ({
