@@ -7,10 +7,21 @@
   border-top: 2px solid black;
   border-bottom: 2px solid black;
 }
+.pwConfirm {
+  display: flex;
+  flex-direction: column;
+}
 .item {
   display: flex;
   padding: 3rem;
   border-bottom: 1px solid black;
+}
+.items {
+  display: flex;
+}
+.error {
+  margin-top: 1rem;
+  margin-left: 20%;
 }
 .title {
   display: flex;
