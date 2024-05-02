@@ -20,6 +20,7 @@ public class ProductPostRequest {
      */
     private Long userId;
     private Long advertId;
+    private String name;
     private List<MultipartFile> images;
     private MultipartFile thumbnail;
     private Long cityDeliveryFee;
@@ -31,6 +32,7 @@ public class ProductPostRequest {
         return AddProductCommand.builder()
                 .userId(userId)
                 .advertId(advertId)
+                .name(name)
                 .images(images)
                 .thumbnail(thumbnail)
                 .cityDeliveryFee(cityDeliveryFee)

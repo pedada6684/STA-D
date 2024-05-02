@@ -17,6 +17,7 @@ public class AddProductCommand {
      */
     private Long userId;
     private Long advertId;
+    private String name;
     private List<MultipartFile> images;
     private MultipartFile thumbnail;
     private Long cityDeliveryFee;
