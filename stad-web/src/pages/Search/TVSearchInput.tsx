@@ -6,11 +6,12 @@ import { GetSearch } from "./TVSearchAPI";
 import { useMutation } from "react-query";
 import search from "../../assets/ic_sharp-search.png";
 import styles from "./TVSearch.module.css";
+import { searchProps } from "./TVSearch";
 interface SearchInputProps {
   value?: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onSearch: (results: Video[]) => void;
-  onSearchAttempted: () => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void; // 검색키워드 입력
+  onSearch: (results: searchProps[]) => void;
+  onSearchAttempted: () => void; // 검색 시도 여부 체크
 }
 
 export default function TVSearchInput({
@@ -28,7 +29,7 @@ export default function TVSearchInput({
     const response = await GetSearch(value, accessToken);
     console.log(response);
     // 검색 결과가 있으면 그 결과를 사용하고, 없으면 null로 설정
-    onSearch(response?.data != "" ? response?.data : null);
+    onSearch(response ? response : null);
   };
 
   return (

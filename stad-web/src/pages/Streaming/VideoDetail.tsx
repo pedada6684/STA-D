@@ -2,17 +2,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import Content from "../../components/Container/Content";
 import TVContainer from "../../components/Container/TVContainer";
 import TVNav from "../../components/Nav/TVNav";
-import {
-  documentaryThumbnail,
-  dramaThumbnail,
-  foreignThumbnail,
-  smallThumbnail,
-  varietyThumbnail,
-} from "../Category/SeriesDummy";
 import BillboardContainer from "../../components/Container/BillboardContainer";
 import styles from "./VideoDetail.module.css";
 import PlayButton from "../../components/Button/PlayButton";
 import AddButton from "../../components/Button/AddButton";
+import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { getVideoConcept, getVideoDetail } from "./StreamingAPI";
+import Loading from "../../components/Loading";
+import VideoEpisode from "./VideoEpisode";
 
 interface VideoDetailProps {
   id: number;
@@ -26,33 +25,32 @@ interface VideoDetailProps {
   description?: string;
 }
 
+export interface SeriesDetailProps {
+  episode: number;
+  summary: string;
+  videoUrl: string;
+}
+
 export default function VideoDetail() {
   const navigate = useNavigate();
 
-  const allVideos: VideoDetailProps[] = [
-    ...smallThumbnail,
-    ...dramaThumbnail,
-    ...varietyThumbnail,
-    ...documentaryThumbnail,
-    ...foreignThumbnail,
-  ];
   // URL 에서 videoId 가져오기
   // URL에서 videoId 가져오기 및 변환
   const { videoId } = useParams<{ videoId: string }>();
-  if (!videoId) {
-    return <div>No video ID provided.</div>;
-  }
-  const videoIdNumber = parseInt(videoId);
-  if (isNaN(videoIdNumber)) {
-    return <div>Invalid video ID.</div>;
+  const detailId = Number(videoId);
+
+  const token = useSelector((state: RootState) => state.token.accessToken);
+  // 영화videoConceptData까지
+  const { data: videoConceptData, isLoading } = useQuery(
+    ["concept", token, detailId],
+    () => getVideoConcept(token, detailId)
+  );
+  if (isLoading) {
+    return <Loading />;
   }
 
-  const video = allVideos.find((video) => video.id === videoIdNumber);
-  if (!video) {
-    return <div>Video not found.</div>;
-  }
   const handlePlayClick = () => {
-    navigate(`/tv/stream/${videoId}`); // 스트리밍 페이지로 이동
+    navigate(`/tv/stream/${detailId}`); // 스트리밍 페이지로 이동
   };
 
   const backgroundStyle = {
@@ -60,7 +58,7 @@ export default function VideoDetail() {
       to top, rgba(0, 0, 0, 0.8) 2%, rgba(0, 0, 0, 0) 50%),
       linear-gradient(
       to right, rgba(0, 0, 0, 0.8) 20%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 100%),
-      url(${video.thumbnailUrl})`,
+      url(${videoConceptData.thumbnailUrl})`,
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     // height: "30vh",
@@ -81,8 +79,8 @@ export default function VideoDetail() {
                     className={`${styles.coverImage}`}
                   >
                     <img
-                      src={video.thumbnailUrl}
-                      alt={video.title}
+                      src={videoConceptData.thumbnailUrl}
+                      alt={videoConceptData.title}
                       style={{
                         width: "100%",
                         height: "100%",
@@ -93,11 +91,13 @@ export default function VideoDetail() {
                 </div>
                 <div className={`${styles.detailContainer}`}>
                   <div className={`${styles.detailWrapper}`}>
-                    <div className={`${styles.vidTitle}`}>{video.title}</div>
+                    <div className={`${styles.vidTitle}`}>
+                      {videoConceptData.title}
+                    </div>
                     <div className={`${styles.timeAge}`}>
-                      <span>{video.playtime}</span>
+                      <span>{videoConceptData.playtime}</span>
                       <span>•</span>
-                      <span>{video.audienceAge}+</span>
+                      <span>{videoConceptData.audienceAge}</span>
                     </div>
                     <div className={`${styles.bar}`}></div>
                     <div className={`${styles.buttonWrapper}`}>
@@ -105,20 +105,36 @@ export default function VideoDetail() {
                       <AddButton />
                     </div>
                     <div className={`${styles.description}`}>
-                      {video.description}
+                      {videoConceptData.description}
                     </div>
                     <div className={`${styles.staff}`}>
                       <span>크리에이터</span>
-                      <span>{video.creator}</span>
+                      <span>{videoConceptData.creator}</span>
                     </div>
                     <div className={`${styles.staff}`}>
                       <span>출연</span>
-                      <span>{video.cast}</span>
+                      <span>{videoConceptData.cast}</span>
                     </div>
                   </div>
                 </div>
               </div>
             </BillboardContainer>
+            {videoConceptData.data && videoConceptData.data.length > 0 && (
+              <>
+                {videoConceptData.data.map(
+                  (data: SeriesDetailProps, index: number) => (
+                    <>
+                      {/* 객체 속성 직접 전달 */}
+                      <VideoEpisode
+                        key={data.episode}
+                        {...data}
+                        thumbnailUrl={videoConceptData.thumbnailUrl}
+                      />
+                    </>
+                  )
+                )}
+              </>
+            )}
           </Content>
         </div>
       </TVContainer>

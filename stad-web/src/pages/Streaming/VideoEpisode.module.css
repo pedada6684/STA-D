@@ -1,0 +1,26 @@
+.episodeContainer {
+  display: flex;
+  cursor: pointer;
+  padding: 7px 0;
+}
+.thumbnail img {
+  border-radius: 5px;
+  height: 6rem;
+  object-fit: cover;
+  z-index: 10;
+}
+.metadata {
+  flex: 1 1 80%;
+  min-width: 10rem;
+  padding: 3px 20px;
+  justify-content: center;
+  align-content: center;
+}
+.episode {
+  margin-bottom: 1rem;
+  color: #fff;
+}
+.summary {
+  color: #ccc;
+  line-height: 1.5rem;
+}
