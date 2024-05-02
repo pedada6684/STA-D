@@ -10,8 +10,10 @@ import 'package:stad/widget/button.dart';
 
 class ProductScreen extends StatefulWidget {
   final int advertId;
+  final String title;
+  final String description;
 
-  const ProductScreen({super.key, required this.advertId});
+  const ProductScreen({super.key, required this.advertId, required this.title, required this.description});
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -65,7 +67,7 @@ class _ProductScreenState extends State<ProductScreen>
         controller: _tabController,
         children: [
           _productInfo != null ?
-          ProductDetailScreen(productInfo: _productInfo, productTypes: _productTypes) :
+          ProductDetailScreen(productInfo: _productInfo, productTypes: _productTypes, title: widget.title, description:widget.description ) :
           Center(child: Text('상품 정보가 없습니다')),
           Center(child: ReviewScreen()),
         ],
@@ -76,7 +78,7 @@ class _ProductScreenState extends State<ProductScreen>
         backgroundColor: mainNavy,
         onPressed: () {
           if (_productTypes.isNotEmpty) {
-            showProductOptionBottomSheet(context, _productInfo, _productTypes);
+            showProductOptionBottomSheet(context, _productInfo, _productTypes, widget.title);
           }
         },
       ),

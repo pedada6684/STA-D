@@ -58,12 +58,14 @@ class ProductType {
   final String name;
   final int price;
   final int quantity;
+  final List<ProductOption> productOptions; // Ensure this is included
 
   ProductType({
     required this.id,
     required this.name,
     required this.price,
     required this.quantity,
+    this.productOptions = const [],
   });
 
   factory ProductType.fromJson(Map<String, dynamic> json) {
@@ -72,6 +74,28 @@ class ProductType {
       name: json['name'] as String,
       price: json['price'] as int,
       quantity: json['quantity'] as int,
+      productOptions: (json['productOptions'] as List<dynamic>? ?? [])
+          .map((item) => ProductOption.fromJson(item))
+          .toList(),
     );
   }
 }
+
+class ProductOption {
+  final String name;
+  final int additionalCost;
+
+  ProductOption({
+    required this.name,
+    required this.additionalCost,
+  });
+
+  factory ProductOption.fromJson(Map<String, dynamic> json) {
+    return ProductOption(
+      name: json['name'] as String,
+      additionalCost: json['additionalCost'] as int,
+    );
+  }
+}
+
+
