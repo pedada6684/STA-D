@@ -233,6 +233,7 @@ public class DummyGenerator {
         Product kimchi = Product.createNewProduct(
                 advert,
                 "https://cdn.imweb.me/thumbnail/20200415/6b6e035658bac.png",
+                "우리 아이가 좋아하는 맛있는 김치",
                 2500L,
                 5000L,
                 LocalDateTime.parse("2024-04-25T00:00:00"),

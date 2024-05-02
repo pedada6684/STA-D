@@ -3,7 +3,7 @@ package com.klpc.stadspring.domain.product.controller;
 import com.klpc.stadspring.domain.image.product_image.service.ProductImageService;
 import com.klpc.stadspring.domain.product.controller.request.ProductPostRequest;
 import com.klpc.stadspring.domain.product.controller.response.GetProductInfoResponse;
-import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdverseResponse;
+import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdvertResponse;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.controller.request.UpdateProductInfoRequest;
 import com.klpc.stadspring.domain.product.service.ProductService;
@@ -124,7 +124,7 @@ public class ProductController {
     @GetMapping("/list")
     @Operation(summary = "특정 광고에 속한 상품 리스트 조회", description = "특정 광고에 속한 상품들의 리스트를 조회합니다.")
     public ResponseEntity<?> getProductListByAdverseId(@RequestParam Long advertId) {
-        GetProductListByAdverseResponse response = productService.getProductListByAdverseId(advertId);
+        GetProductListByAdvertResponse response = productService.getProductListByAdvertId(advertId);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
         return ResponseEntity.ok(response);

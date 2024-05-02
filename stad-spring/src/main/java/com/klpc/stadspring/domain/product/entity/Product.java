@@ -8,6 +8,7 @@ import com.klpc.stadspring.domain.productType.entity.ProductType;
 import com.klpc.stadspring.domain.product_review.entity.ProductReview;
 import jakarta.persistence.*;
 import lombok.*;
+import org.bytedeco.opencv.presets.opencv_core;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,6 +39,9 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE,  orphanRemoval = true)
     private List<ProductReview> productReview;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "thumbnail")
     private String thumbnail;
 
@@ -53,9 +57,13 @@ public class Product {
     @Column(name = "exp_end")
     private LocalDateTime expEnd;
 
+    @Column(name = "status")
+    private Boolean status;
+
     public static Product createNewProduct(
             Advert advert,
             String thumbnail,
+            String name,
             Long cityDeliveryFee,
             Long mtDeliveryFee,
             LocalDateTime expStart,
@@ -68,6 +76,8 @@ public class Product {
         product.mtDeliveryFee = mtDeliveryFee;
         product.expStart = expStart;
         product.expEnd = expEnd;
+        product.name = name;
+        product.status = false;
         return product;
     }
 
@@ -75,6 +85,10 @@ public class Product {
         if (command.getThumbnail() != null) {
             this.thumbnail = command.getThumbnail();
         }
+    }
+
+    public void deleteProduct(Product product) {
+        product.status = true;
     }
 
     public void updateProductThumbnail(String thumbnail) {
