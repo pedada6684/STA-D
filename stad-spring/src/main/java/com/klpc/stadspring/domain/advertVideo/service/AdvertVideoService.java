@@ -9,7 +9,7 @@ import com.klpc.stadspring.domain.advertVideo.service.command.request.AddBannerI
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddVideoListRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVideoRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.response.AddVideoListResponseCommand;
-import com.klpc.stadspring.domain.advertVideo.service.command.response.GetAdvertVideoListByUserResponseCommand;
+//import com.klpc.stadspring.domain.advertVideo.service.command.response.GetAdvertVideoListByUserResponseCommand;
 import com.klpc.stadspring.domain.log.repository.AdvertStatisticsRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
@@ -114,74 +114,74 @@ public class AdvertVideoService {
         return AddBannerImgResponse.builder().bannerUrl(imgUrl.toString()).build();
     }
 
-    public GetAdvertVideoListByUserResponse getAdvertVideoByUser(Long userId){
-        // ==지운 - 관심사 추려주는 알고리즘 만들면 바꾸기==
-        List<String> userCategory = new ArrayList<>();
-        userCategory.add("개발");
-        userCategory.add("푸드");
-        userCategory.add("튀김");
-        // ===========================================
-
-        List<Long> listByUser = new ArrayList<>();
-
-        for (int i = 0; i < userCategory.size(); i++) {
-            // 인기 광고
-            List<Long> listByCategory = advertRepository.findAdvertIdByCategory(userCategory.get(i));
-
-            // 해당 카테고리에 속하는 advert 중 광고 클릭수와 판매량의 합이 높은 순으로 정렬하여 3:2:1 비율로 유저 맞춤 광고에 삽입
-            LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
-            Map<Long, Long> logAndAdvertIdMap = new HashMap<>();
-            for (Long advertId : listByCategory) {
-                Object[] results = advertStatisticsRepository.getTotalLog(advertId, thirtyDaysAgo)
-                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-
-                Object[] result = (Object[]) results[0];
-                Long totalAdvertClick = result[0] != null ? (Long) result[0] : 0L;
-                Long totalOrder = result[2] != null ? (Long) result[2] : 0L;
-
-                Long sumAdvertClickAndOrder = totalAdvertClick + totalOrder;
-                logAndAdvertIdMap.put(sumAdvertClickAndOrder, advertId);
-            }
-            List<Long> keySetList = new ArrayList<>(logAndAdvertIdMap.keySet());
-
-            // 내림차순 정렬
-            keySetList.sort(Comparator.reverseOrder());
-
-            for (int j = 0; j < 3 - i; j++) {
-                if (keySetList.size() > j) {
-                    listByUser.add(logAndAdvertIdMap.get(keySetList.get(j)));
-                }
-            }
-
-            // 랜덤 광고
-            List<Long> randomListByCategory = advertRepository.findRandomAdvertIdByCategory(userCategory.get(i));
-            int cnt = 0;
-            for (Long videoId : randomListByCategory) {
-                for (int k = 0; k < listByUser.size() && cnt < 3 - i; k++) {
-                    if (Objects.equals(videoId, listByCategory.get(k))) {
-                        cnt++;
-                        listByCategory.add(videoId);
-                    }
-                }
-            }
-        }
-
-        List<GetAdvertVideoListByUserResponseCommand> responseList = new ArrayList<>();
-        for (Long id: listByUser) {
-            // ============= 민형 - 영상 길이 나오면 고치기 ===============
-            AdvertVideo video = advertVideoRepository.findTopByAdvert_Id(id);
-            if (video != null) {
-                GetAdvertVideoListByUserResponseCommand command = GetAdvertVideoListByUserResponseCommand.builder()
-                        .videoId(video.getId())
-                        .videoUrl(video.getVideoUrl())
-                        .build();
-
-                responseList.add(command);
-            }
-
-        }
-        return GetAdvertVideoListByUserResponse.builder()
-                .data(responseList)
-                .build();
-    }
+//    public GetAdvertVideoListByUserResponse getAdvertVideoByUser(Long userId){
+//        // ==지운 - 관심사 추려주는 알고리즘 만들면 바꾸기==
+//        List<String> userCategory = new ArrayList<>();
+//        userCategory.add("개발");
+//        userCategory.add("푸드");
+//        userCategory.add("튀김");
+//        // ===========================================
+//
+//        List<Long> listByUser = new ArrayList<>();
+//
+//        for (int i = 0; i < userCategory.size(); i++) {
+//            // 인기 광고
+//            List<Long> listByCategory = advertRepository.findAdvertIdByCategory(userCategory.get(i));
+//
+//            // 해당 카테고리에 속하는 advert 중 광고 클릭수와 판매량의 합이 높은 순으로 정렬하여 3:2:1 비율로 유저 맞춤 광고에 삽입
+//            LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
+//            Map<Long, Long> logAndAdvertIdMap = new HashMap<>();
+//            for (Long advertId : listByCategory) {
+//                Object[] results = advertStatisticsRepository.getTotalLog(advertId, thirtyDaysAgo)
+//                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+//
+//                Object[] result = (Object[]) results[0];
+//                Long totalAdvertClick = result[0] != null ? (Long) result[0] : 0L;
+//                Long totalOrder = result[2] != null ? (Long) result[2] : 0L;
+//
+//                Long sumAdvertClickAndOrder = totalAdvertClick + totalOrder;
+//                logAndAdvertIdMap.put(sumAdvertClickAndOrder, advertId);
+//            }
+//            List<Long> keySetList = new ArrayList<>(logAndAdvertIdMap.keySet());
+//
+//            // 내림차순 정렬
+//            keySetList.sort(Comparator.reverseOrder());
+//
+//            for (int j = 0; j < 3 - i; j++) {
+//                if (keySetList.size() > j) {
+//                    listByUser.add(logAndAdvertIdMap.get(keySetList.get(j)));
+//                }
+//            }
+//
+//            // 랜덤 광고
+//            List<Long> randomListByCategory = advertRepository.findRandomAdvertIdByCategory(userCategory.get(i));
+//            int cnt = 0;
+//            for (Long videoId : randomListByCategory) {
+//                for (int k = 0; k < listByUser.size() && cnt < 3 - i; k++) {
+//                    if (Objects.equals(videoId, listByCategory.get(k))) {
+//                        cnt++;
+//                        listByCategory.add(videoId);
+//                    }
+//                }
+//            }
+//        }
+//
+//        List<GetAdvertVideoListByUserResponseCommand> responseList = new ArrayList<>();
+//        for (Long id: listByUser) {
+//            // ============= 민형 - 영상 길이 나오면 고치기 ===============
+//            AdvertVideo video = advertVideoRepository.findTopByAdvert_Id(id);
+//            if (video != null) {
+//                GetAdvertVideoListByUserResponseCommand command = GetAdvertVideoListByUserResponseCommand.builder()
+//                        .videoId(video.getId())
+//                        .videoUrl(video.getVideoUrl())
+//                        .build();
+//
+//                responseList.add(command);
+//            }
+//
+//        }
+//        return GetAdvertVideoListByUserResponse.builder()
+//                .data(responseList)
+//                .build();
+//    }
 }
