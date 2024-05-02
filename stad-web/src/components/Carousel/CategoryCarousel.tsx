@@ -59,7 +59,7 @@ export default function CategoryCarousel({
           {items.map((data: getConceptResponseList, index: number) => (
             <div
               className="xs-vid-container"
-              key={index}
+              key={`${data.title}-${index}`}
               style={{ position: "relative", transition: "all 0.3s" }}
               onClick={() => navigate(`/tv/${data.conceptId}`)}
             >
