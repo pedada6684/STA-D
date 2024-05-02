@@ -1,12 +1,11 @@
 from pydantic import BaseModel
 
 
-class request_category(BaseModel):
-    video_id: str
-    video_transcript: str
-    video_grade: str
+class classfication_request(BaseModel):
+    videoid: str
+    video_discription: str
 
 
-class response_category(BaseModel):
+class classfication_response(BaseModel):
     video_id: str
     category: str

@@ -3,7 +3,7 @@ import tensorflow as tf
 from gensim.models import Word2Vec
 
 from app.common.preprocess import preprocess
-from app.dto.category_dto import request_category, response_category
+from app.dto.category_dto import classfication_request, classfication_response
 
 
 def token_to_idx(tokenized_document, unk_idx):
@@ -31,12 +31,12 @@ def predict(sentence):
     return label[result.argmax()]
 
 
-def get_category(requests: list[request_category]):
+def get_category(requests: list[classfication_request]):
     responses = []
     for request in requests:
         text = preprocess(request.video_transcript)
         result = predict(sentence_to_sequence(text))
-        response = response_category(video_id=request.video_id, category=result)
+        response = classfication_response(video_id=request.video_id, category=result)
         responses.append(response)
 
     return responses
