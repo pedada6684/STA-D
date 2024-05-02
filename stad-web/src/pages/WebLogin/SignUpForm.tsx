@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import styles from "./SignUpForm.module.css";
 import { useMutation } from "react-query";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 interface signUpFormData {
   email: string;
   phone: string[];
@@ -26,6 +27,7 @@ export async function postSignUp(formData: combinationData) {
   return data;
 }
 export default function SignUpForm() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<signUpFormData>({
     email: "",
     phone: ["", "", ""],
@@ -40,6 +42,8 @@ export default function SignUpForm() {
   const mutation = useMutation(postSignUp, {
     onSuccess: (data) => {
       console.log("회원가입 완료", data);
+      window.alert("회원가입이 완료되었습니다");
+      navigate(`/web-login`);
     },
     onError: (error) => {
       console.log("회원가입 실패", error);
@@ -175,22 +179,24 @@ export default function SignUpForm() {
               />
             </div>
           </div>
-          <div className={styles.item}>
-            <div className={styles.title}>
-              비밀번호확인<span>*</span>
+          <div className={`${styles.item} ${styles.pwConfirm}`}>
+            <div className={`${styles.items}`}>
+              <div className={styles.title}>
+                비밀번호확인<span>*</span>
+              </div>
+              <div className={styles.inputContainer}>
+                <input
+                  type="password"
+                  name="passwordConfirm"
+                  value={passwordConfirm}
+                  onChange={handleChange}
+                  required
+                  placeholder="동일한 비밀번호 입력"
+                />
+              </div>
             </div>
-            <div className={styles.inputContainer}>
-              <input
-                type="password"
-                name="passwordConfirm"
-                value={passwordConfirm}
-                onChange={handleChange}
-                required
-                placeholder="동일한 비밀번호 입력"
-              />
-            </div>
+            {error && <div className={styles.error}>{error}</div>}
           </div>
-          {error && <p className={styles.error}>{error}</p>}
           <div className={styles.item}>
             <div className={styles.title}>
               회사명<span>*</span>
