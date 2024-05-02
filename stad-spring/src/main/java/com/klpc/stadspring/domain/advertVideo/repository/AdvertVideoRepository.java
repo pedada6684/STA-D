@@ -30,4 +30,10 @@ public interface AdvertVideoRepository extends JpaRepository<AdvertVideo, Long> 
            """)
     public AdvertVideo findTopByAdvert_Id(Long advertId);
 
+    @Query("""
+           SELECT adv FROM AdvertVideo adv
+           ORDER BY FUNCTION('RAND')
+           LIMIT 1
+           """)
+    public AdvertVideo findRandomTop();
 }

@@ -32,4 +32,12 @@ public interface AdvertRepository extends JpaRepository<Advert,Long> {
 
     @Query("SELECT a.id FROM Advert a WHERE a.advertCategory = :category AND a.status=true ORDER BY FUNCTION('RAND')")
     public List<Long> findRandomAdvertIdByCategory(String category);
+
+    @Query("""
+           SELECT a.id FROM Advert a
+           WHERE a.advertType = 'NOTPRODUCT'
+           ORDER BY FUNCTION('RAND')
+           LIMIT 1
+           """)
+    public Long findRandomNotProductAdvertId();
 }

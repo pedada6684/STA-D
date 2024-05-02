@@ -2,19 +2,20 @@ package com.klpc.stadspring.domain.advertVideo.controller;
 
 import com.klpc.stadspring.domain.advertVideo.controller.request.ModifyVideoRequest;
 import com.klpc.stadspring.domain.advertVideo.controller.response.*;
-import com.klpc.stadspring.domain.advertVideo.entity.AdvertVideo;
 import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddBannerImgRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddVideoListRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVideoRequestCommand;
+import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.support.ResourceRegion;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +29,7 @@ import java.util.List;
 public class AdvertVideoController {
 
     private final AdvertVideoService advertVideoService;
+    private final ContentDetailService detailService;
 
     @PostMapping("/add-video-list")
     @Operation(summary = "광고 영상 업로드", description = "광고 영상 업로드")
@@ -79,11 +81,33 @@ public class AdvertVideoController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-//    @GetMapping("/get-list-by-user")
-//    @Operation(summary = "사용자 맞춤 광고 조회", description = "사용자 맞춤 광고 조회")
-//    @ApiResponse(responseCode = "200", description = "사용자 맞춤 광고 영상이 조회 되었습니다.")
-//    public ResponseEntity<GetAdvertVideoListByUserResponse> getAdvertVideoByUser(@RequestParam("userId") Long userId){
-//        GetAdvertVideoListByUserResponse response = advertVideoService.getAdvertVideoByUser(userId);
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
+    @GetMapping("/get-video-list/{detailId}")
+    @Operation(summary = "송출할 광고 비디오 리스트 조회", description = "송출할 광고 비디오 리스트 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "송출할 광고 비디오 리스트 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<GetFinalAdvertVideoListResponse> getFinalVideoList(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long detailId, @RequestParam("userId") Long userId){
+        log.info("송출할 광고 비디오 리스트 조회" + "\n" + "getFinalVideoList : "+detailId);
+
+        Long conceptId = detailService.getContentDetailById(detailId).getContentConceptId();
+        GetFinalAdvertVideoListResponse response = advertVideoService.getFinalAdvertVideoList(userId, conceptId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/streaming/{videoId}")
+    @Operation(summary = "광고 스트리밍", description = "광고 스트리밍")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "광고 스트리밍 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<ResourceRegion> streamingPublicVideo(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long videoId){
+        log.info("광고 스트리밍" + "\n" + "streamingPublicVideo : "+videoId);
+
+//        Long conceptId = detailService.getContentDetailById(detailId).getContentConceptId();
+//        List<Long> videoIdList = advertVideoService.getFinalAdvertVideoList(userId, conceptId);
+        return advertVideoService.streamingAdvertVideo(httpHeaders, videoId);
+    }
 }

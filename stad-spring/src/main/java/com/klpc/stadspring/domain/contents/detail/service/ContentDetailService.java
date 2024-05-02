@@ -91,17 +91,6 @@ public class ContentDetailService {
     }
 
     /**
-     * conceptId로 detailId 조회
-     * @param conceptId
-     * @return
-     */
-    public List<ContentDetail> getContentDetailsByConceptId(Long conceptId) {
-        List<ContentDetail> detailList = repository.findContentDetailsByConceptId(conceptId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        return detailList;
-    }
-
-    /**
      * 인기 영상 목록 조회
      * @return
      */
@@ -145,7 +134,6 @@ public class ContentDetailService {
      * @param conceptId
      * @return
      */
-//    public GetDetailListByConceptIdResponse getDetailListByConceptId(Long conceptId) {
     public List<GetDetailListByConceptIdResponseCommand> getDetailListByConceptId(Long conceptId) {
         log.info("getDetailListByConceptId 서비스 : " + conceptId);
 
@@ -162,8 +150,6 @@ public class ContentDetailService {
 
             responseList.add(command);
         }
-
-//        return GetDetailListByConceptIdResponse.builder().data(responseList).build();
         return responseList;
     }
 }
