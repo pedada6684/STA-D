@@ -304,7 +304,7 @@ export default function Merchandise() {
         )}
       </div>
 
-      <EnrollButton />
+      <EnrollButton formData={formData} from="merchandise"/>
     </div>
   );
 }

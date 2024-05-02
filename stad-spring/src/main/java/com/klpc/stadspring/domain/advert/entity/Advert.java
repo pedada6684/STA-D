@@ -77,7 +77,7 @@ public class Advert {
             advert.advertType=AdvertType.PRODUCT;
         else
             advert.advertType=AdvertType.NOTPRODUCT;
-        if(advert.directVideoUrl!=null && !advert.directVideoUrl.isBlank())
+        if(directVideoUrl!=null && !directVideoUrl.isBlank())
             advert.directVideoUrl=directVideoUrl;
         advert.bannerImgUrl=bannerImgUrl;
         advert.user=user;
