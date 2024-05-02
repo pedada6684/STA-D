@@ -4,7 +4,7 @@ import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.image.product_image.entity.ProductImage;
 import com.klpc.stadspring.domain.image.product_image.repository.ProductImageRepository;
-import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdverseResponse;
+import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdvertResponse;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
 import com.klpc.stadspring.domain.product.service.command.*;
@@ -38,9 +38,9 @@ public class ProductService {
 //        return productRepository.getAllProductByAdverseId(command.getList());
 //    }
 
-    public GetProductListByAdverseResponse getProductListByAdverseId(Long advertId) {
+    public GetProductListByAdvertResponse getProductListByAdvertId(Long advertId) {
 
-        List<Product> productList = productRepository.getProductListByAdverseId(advertId)
+        List<Product> productList = productRepository.getProductListByAdvertId(advertId)
             .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         List<GetProductInfoCommand> responseList = new ArrayList<>();
@@ -54,6 +54,7 @@ public class ProductService {
             GetProductInfoCommand response = GetProductInfoCommand.builder()
                     .id(product.getId())
                     .images(productImageList)
+                    .name(product.getName())
                     .thumbnail(product.getThumbnail())
                     .cityDeliveryFee(product.getCityDeliveryFee())
                     .mtDeliveryFee(product.getMtDeliveryFee())
@@ -63,12 +64,12 @@ public class ProductService {
 
             responseList.add(response);
         }
-        return GetProductListByAdverseResponse.builder().productList(responseList).build();
+        return GetProductListByAdvertResponse.builder().productList(responseList).build();
     }
 
     // 상품 상세 정보
     public Product getProductInfo(Long productId){
-        Product product = productRepository.findById(productId)
+        Product product = productRepository.getProductInfo(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         // 이미지를 초기화
         if (product.getImages() != null) {
@@ -90,6 +91,7 @@ public class ProductService {
         Product newProduct = Product.createNewProduct(
                 advert,
                 thumbnailUrl.toString(),
+                command.getName(),
                 command.getCityDeliveryFee(),
                 command.getMtDeliveryFee(),
                 command.getExpStart(),

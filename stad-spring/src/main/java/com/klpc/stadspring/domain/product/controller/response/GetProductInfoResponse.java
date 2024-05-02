@@ -21,7 +21,8 @@ public class GetProductInfoResponse {
      */
 
     private Long id;
-    private List<ProductImage> images ;
+    private String name;
+    private List<ProductImage> images;
     private String thumbnail;
     private Long cityDeliveryFee;
     private Long mtDeliveryFee;
@@ -32,6 +33,7 @@ public class GetProductInfoResponse {
         return GetProductInfoResponse.builder()
                 .id(product.getId())
                 .images(product.getImages())
+                .name(product.getName())
                 .thumbnail(product.getThumbnail())
                 .cityDeliveryFee(product.getCityDeliveryFee())
                 .mtDeliveryFee(product.getMtDeliveryFee())

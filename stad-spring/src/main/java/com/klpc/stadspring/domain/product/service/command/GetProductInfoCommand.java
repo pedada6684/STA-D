@@ -16,6 +16,7 @@ public class GetProductInfoCommand {
      */
 
     private Long id;
+    private String name;
     private List<String> images;
     private String thumbnail;
     private Long cityDeliveryFee;
