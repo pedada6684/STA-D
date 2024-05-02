@@ -155,4 +155,14 @@ public class OrdersService {
         return CancelOrdersResponse.builder().result("success").build();
     }
 
+    /**
+     * productType 주문량
+     * @param productTypeId
+     * @return
+     */
+    public Long cntOrdersByproductTypeId(Long productTypeId){
+        Long cnt = ordersRepository.findCntOrdersByProductType(productTypeId).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        return cnt;
+    }
+
 }

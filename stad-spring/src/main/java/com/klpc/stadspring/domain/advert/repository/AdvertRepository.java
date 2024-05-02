@@ -10,20 +10,26 @@ import java.util.List;
 
 public interface AdvertRepository extends JpaRepository<Advert,Long> {
 
+    @Query("""
+           SELECT ad FROM Advert ad
+           WHERE ad.user = :user
+                 AND ad.status=true
+           """)
     public List<Advert> findAllByUser(User user);
 
-    @Query("SELECT a.id FROM Advert a")
+    @Query("SELECT a.id FROM Advert a WHERE a.status = true")
     public List<Long> findAllAdvertIds();
 
     @Query("""
            SELECT ad FROM Advert ad
            WHERE :contentId in (SELECT ads.fixedContentId FROM ad.selectedContents ads)
+                 AND ad.status = true
            """)
     public List<Advert> findAllByContentId(Long contentId);
 
-    @Query("SELECT a.id FROM Advert a WHERE a.advertCategory = :category")
+    @Query("SELECT a.id FROM Advert a WHERE a.advertCategory = :category AND a.status=true")
     public List<Long> findAdvertIdByCategory(String category);
 
-    @Query("SELECT a.id FROM Advert a WHERE a.advertCategory = :category ORDER BY FUNCTION('RAND')")
+    @Query("SELECT a.id FROM Advert a WHERE a.advertCategory = :category AND a.status=true ORDER BY FUNCTION('RAND')")
     public List<Long> findRandomAdvertIdByCategory(String category);
 }

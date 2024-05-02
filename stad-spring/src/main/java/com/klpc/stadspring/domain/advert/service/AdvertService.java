@@ -73,12 +73,6 @@ public class AdvertService {
         }
         for(String i : command.getAdvertVideoUrlList()){
             Long len = 0L;
-//            try (FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(i)) {
-//                grabber.start();
-//                len = (Long) (grabber.getLengthInTime() / 1000000); // Convert to seconds
-//            } catch (Exception e) {
-//                throw new CustomException(ErrorCode.AWSS3_ERROR);
-//            }
             AdvertVideo advertVideo = AdvertVideo.createToAdvertVideo(len,i);
             advertVideo.linkAdvert(advert);
             advertVideoRepository.save(advertVideo);
@@ -140,7 +134,8 @@ public class AdvertService {
     public DeleteAdvertResponse deleteAdvert(Long id){
         Advert advert = advertRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-        advertRepository.delete(advert);
+        advert.deleteAdvert();
+
         return DeleteAdvertResponse.builder().result("success").build();
     }
 
@@ -151,7 +146,9 @@ public class AdvertService {
      */
     public GetAdvertResponse getAdvert(Long id){
         Advert advert = advertRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-
+        if(!advert.getStatus()){
+            throw new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
+        }
         List<Long> selectedContentList = new ArrayList<>();
         for(SelectedContent i : advert.getSelectedContents())
             selectedContentList.add(i.getId());
