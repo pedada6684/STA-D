@@ -68,6 +68,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.batch/spring-batch-core
 	// spring batch
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
+
+	//webClient 사용을 위한 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
 }
 
 tasks.named('test') {
