@@ -60,7 +60,7 @@ public class AdvertService {
                 command.getStartDate(),
                 command.getEndDate(),
                 command.getAdvertType(),
-                command.getDescription(),
+                command.getDirectVideoUrl(),
                 command.getBannerImgUrl(),
                 user,
                 command.getAdvertCategory());
