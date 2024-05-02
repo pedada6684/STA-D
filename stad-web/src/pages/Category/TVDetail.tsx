@@ -5,13 +5,14 @@ import Content from "../../components/Container/Content";
 import styles from "./TVDetail.module.css";
 import { MouseEvent, useEffect, useState } from "react";
 import VideoList from "../Streaming/VideoList";
+import { useQuery } from "react-query";
 import {
-  documentaryThumbnail,
-  dramaThumbnail,
-  foreignThumbnail,
-  varietyThumbnail,
-} from "./SeriesDummy";
-import { actionDummy, comedyDummy } from "./MovieDummy";
+  getMovieVideoList,
+  getSeriesVideoList,
+} from "../Streaming/StreamingAPI";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import Loading from "../../components/Loading";
 interface TVDetailProps {
   type: "series" | "movie";
 }
@@ -40,30 +41,25 @@ export default function TVSeriesDetail({ type }: TVDetailProps) {
       navigate(`/tv-movie`);
     }
   };
+  const token = useSelector((state: RootState) => state.token.accessToken);
+  const { data: videos, isLoading } = useQuery(
+    ["videoList", token, categoryId],
+    () => {
+      if (categoryId) {
+        if (title === "시리즈") {
+          return getSeriesVideoList(token, categoryId);
+        } else {
+          return getMovieVideoList(token, categoryId);
+        }
+      }
+    }
+  );
+
+  if (isLoading) {
+    <Loading />;
+  }
   useEffect(() => {
     setFade(true); // 컴포넌트 마운트 시 fade 상태를 true로 설정하여 애니메이션 트리거
-    switch (categoryId) {
-      case "드라마":
-        setVideos(dramaThumbnail);
-        break;
-      case "예능":
-        setVideos(varietyThumbnail);
-        break;
-      case "교양/다큐멘터리":
-        setVideos(documentaryThumbnail);
-        break;
-      case "해외":
-        setVideos(foreignThumbnail);
-        break;
-      case "액션":
-        setVideos(actionDummy);
-        break;
-      case "코미디":
-        setVideos(comedyDummy);
-        break;
-      default:
-        setVideos([]);
-    }
     return () => setFade(false);
   }, []);
   return (
@@ -82,7 +78,7 @@ export default function TVSeriesDetail({ type }: TVDetailProps) {
               {categoryId}
             </div>
           </div>
-          <VideoList items={video} />
+          {videos && <VideoList items={videos} />}
         </Content>
       </TVContainer>
     </div>

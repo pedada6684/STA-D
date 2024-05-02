@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 export interface getConceptResponseList {
   title: string;
   thumbnailUrl: string;
-  conceptId: number;
+  conceptId: number; // detailId랑 다름
 }
 
 // CategoryCarouselProps 인터페이스 정의

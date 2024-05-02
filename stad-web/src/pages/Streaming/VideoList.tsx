@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./VideoList.module.css";
 import { Video } from "../Category/TVDetail";
 interface VideoListProps {
-  items: Video[]; // 올바른 타입 지정
+  items: Video[];
 }
 export default function VideoList({ items = [] }: VideoListProps) {
   const navigate = useNavigate();
