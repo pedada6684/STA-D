@@ -64,6 +64,9 @@ public class WatchedContentService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         ContentDetail detail = detailRepository.findById(command.getDetailId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        if (watchedContentRepository.findByUserIdAndDetailId(user.getId(), detail.getId()).isPresent()) {
+            return AddWatchingContentResponse.builder().result("시청 중인 컨텐츠가 성공적으로 생성되었습니다.").build();
+        }
 
         WatchedContent newWatchedContent = WatchedContent.createWatchedContent(
                 detail,
