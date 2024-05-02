@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class TmpCommand {
-    Long userId;
+    Long id;
     String type;
 }

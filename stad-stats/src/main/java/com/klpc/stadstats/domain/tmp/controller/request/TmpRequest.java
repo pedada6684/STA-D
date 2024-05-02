@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TmpRequest {
     String type;
-    Long userId;
+    Long id;
     public TmpCommand toCommand(){
         return TmpCommand.builder()
-                .userId(userId)
+                .id(id)
                 .type(type)
                 .build();
     }
