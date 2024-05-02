@@ -18,6 +18,8 @@ export default function EnrolledAdList() {
   const [adsList, setAdsList] = useState<adType[]>([]); // 광고 목록
   useEffect(() => {}, []);
 
+  useEffect(() =>{},[]);
+
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.title}`}>등록 광고 목록</div>

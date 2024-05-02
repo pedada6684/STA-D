@@ -1,6 +1,7 @@
 import styles from "./Button.module.css";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store";
+import {useNavigate} from "react-router-dom";
 
 interface EnrollButtonProps {
     from : string;
@@ -19,14 +20,19 @@ interface EnrollButtonProps {
 }
 export default function EnrollButton({from, formData} : EnrollButtonProps) {
     const userId = useSelector((state: RootState)=> state.user.userId);
+    const navigate = useNavigate();
     const handleClick = () => {
         if (from === "digital") {
             console.log(formData?.directVideoUrl)
             if (formData && formData.directVideoUrl!=undefined) {
-                    addAdvert(formData); // 광고 추가 요청
+                addAdvert(formData); // 광고 추가 요청
+                navigate("/my-page/enroll-adList")
             } else {
                 alert("필수 입력 값을 모두 입력해 주세요."); // 광고명이 비어있을 경우 경고창 표시
             }
+        }
+        else{
+            navigate("/my-page/enroll-adList")
         }
     };
     const addAdvert = async (data : any) => {
