@@ -1,21 +1,19 @@
 import { SmallNextArrow, SmallPrevArrow } from "../Arrow/Arrow";
-import { smallThumbnail } from "../../pages/Category/SeriesDummy";
 import "./CategoryCarousel.css";
 import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
-interface CategoryCarouselProps {
-  title?: string;
-  items?: {
-    id: number;
-    thumbnailUrl: string;
-    title: string;
-    playtime?: string;
-    releaseYear?: string;
-    audienceAge?: string;
-    creator?: string;
-    cast?: string;
-    description?: string;
-  }[];
+
+// getConceptResponseList 인터페이스 정의
+export interface getConceptResponseList {
+  title: string;
+  thumbnailUrl: string;
+  conceptId: number; // detailId랑 다름
+}
+
+// CategoryCarouselProps 인터페이스 정의
+export interface CategoryCarouselProps {
+  title: string;
+  items: getConceptResponseList[];
   marginTop?: string;
   marginBottom?: string;
 }
@@ -26,6 +24,8 @@ export default function CategoryCarousel({
   marginTop,
   marginBottom,
 }: CategoryCarouselProps) {
+  const navigate = useNavigate();
+
   let setting = {
     dots: true,
     infinite: true,
@@ -47,7 +47,6 @@ export default function CategoryCarousel({
     prevArrow: <SmallPrevArrow />,
     nextArrow: <SmallNextArrow />,
   };
-  const navigate = useNavigate();
 
   return (
     <div
@@ -57,12 +56,12 @@ export default function CategoryCarousel({
       <div className="v-title">{title}</div>
       <div className="thumbnail-container">
         <Slider {...setting}>
-          {items.map((data, index) => (
+          {items.map((data: getConceptResponseList, index: number) => (
             <div
               className="xs-vid-container"
-              key={index}
+              key={`${data.title}-${index}`}
               style={{ position: "relative", transition: "all 0.3s" }}
-              onClick={() => navigate(`/tv/${data.id}`)}
+              onClick={() => navigate(`/tv/${data.conceptId}`)}
             >
               <img src={data.thumbnailUrl} alt="비디오 썸네일" />
               <div className="vidTitle">{data.title}</div>

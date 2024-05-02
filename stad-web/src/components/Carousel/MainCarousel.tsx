@@ -25,6 +25,7 @@ export default function MainCarousel() {
   } = useQuery<CarouselVideoProps[]>(["mainCarousel", token], () =>
     GetMainCarousel(token)
   );
+  console.log(CarouselData);
   if (isLoading)
     return (
       <div>
@@ -53,7 +54,7 @@ export default function MainCarousel() {
             {CarouselData?.map((data: CarouselVideoProps, index: number) => (
               <div
                 className="videoContainer"
-                key={index}
+                key={`${data.title}-${index}`}
                 style={{ position: "relative", transition: "all 0.3s" }}
                 onClick={() => navigate(`/tv/${data.detailId}`)}
               >

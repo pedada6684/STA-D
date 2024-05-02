@@ -15,13 +15,31 @@ import { actionDummy, comedyDummy } from "./MovieDummy";
 import { OptionType } from "../../components/Select/TVCategorySelect";
 import { SingleValue } from "react-select";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { useQuery } from "react-query";
+import { GetMovieVideoList } from "./TVCategoryAPI";
+import Loading from "../../components/Loading";
+import { CategoryProps } from "./TVSeries";
 export default function TVMovie() {
   const navigate = useNavigate();
+  const token = useSelector((state: RootState) => state.token.accessToken);
+  // 영화 리스트 조회
+  const {
+    data: videoList,
+    isLoading,
+    error,
+  } = useQuery(["movie", token], () => GetMovieVideoList(token));
+  if (isLoading) {
+    return <Loading />;
+  }
   const handleCategoryChange = (selectedOption: SingleValue<OptionType>) => {
     if (selectedOption) {
       navigate(`/tv-movie/${selectedOption.value}`);
     }
   };
+  const firstCategory = videoList?.categoryAndConceptsList[0]; // 빌보드 컨테이너 안에 들어갈 첫번째 카테고리 캐러셀
+  const othersCategories = videoList?.categoryAndConceptsList.slice(1); // 인덱스 1번부터 ~ 모두 복사
   return (
     <div>
       <TVContainer>
@@ -52,17 +70,26 @@ export default function TVMovie() {
                 </div>
               </InfoContainer>
             </ImageWrapper>
-            <CategoryCarousel
-              title="액션"
-              items={actionDummy}
-              marginTop="30rem"
-            />
+            {firstCategory && (
+              <CategoryCarousel
+                title={firstCategory.category}
+                items={firstCategory.getConceptResponseList}
+                key={firstCategory.category}
+                marginTop="30rem"
+                marginBottom="4rem"
+              />
+            )}
           </BillboardContainer>
-          <CategoryCarousel
-            title="코메디"
-            items={comedyDummy}
-            marginTop="3rem"
-          />
+          {othersCategories &&
+            othersCategories.map((category: CategoryProps) => (
+              <CategoryCarousel
+                title={category.category}
+                items={category.getConceptResponseList}
+                key={category.category}
+                marginTop="2rem"
+                marginBottom="2rem"
+              />
+            ))}
         </Content>
       </TVContainer>
     </div>
