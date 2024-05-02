@@ -26,8 +26,11 @@ export default function GoEnrollButton({ children, to, formData }: GoEnrollButto
     && formData.endDate!=undefined && formData.bannerImgUrl!=undefined && formData.advertVideoUrlList!=undefined) {
       if (to === "/ad-enroll/merchandise") {
         addAdvert(formData); // 광고 추가 요청
+        navigate(to); // to 프로퍼티로 받은 경로로 이동
       }
-      navigate(to); // to 프로퍼티로 받은 경로로 이동
+      else{
+        navigate(to, { state: formData });
+      }
     } else {
       alert("필수 입력 값을 모두 입력해 주세요."); // 광고명이 비어있을 경우 경고창 표시
     }
@@ -47,9 +50,6 @@ export default function GoEnrollButton({ children, to, formData }: GoEnrollButto
       'selectedContentList' : data.selectedContentList,
       'advertVideoUrlList' : data.advertVideoUrlList
     }
-
-    console.log("###############################")
-    console.log("formData ",request)
 
     try {
       const response = await fetch(`/api/advert`, {
