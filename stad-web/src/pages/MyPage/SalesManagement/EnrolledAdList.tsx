@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./EnrolledList.module.css";
 import dummyData from "./dummyAdData.json";
-import {getAdvertList, getContentConcept} from "../../AdEnroll/AdEnrollApi";
+import {deleteAdvert, getAdvertList, getContentConcept} from "../../AdEnroll/AdEnrollApi";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../store";
 
@@ -35,6 +35,16 @@ export default function EnrolledAdList() {
 
     fetchAdsList();
   }, []);
+
+  const editClick = () => {
+    console.log(`Edit clicked for ad with ID:`);
+  };
+
+  const deleteClick = (advertId : number | undefined) => {
+    console.log(`Delete clicked for ad with ID:`+advertId);
+    deleteAdvert(advertId);
+  };
+
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.title}`}>등록 광고 목록</div>
@@ -44,17 +54,23 @@ export default function EnrolledAdList() {
         <div className={`${styles.gridCategory}`}>광고기간</div>
         <div className={`${styles.gridCategory} `}>수정/삭제</div>
         {adsList.map((ad) => (
-          <>
+            <>
             <div className={`${styles.gridItem} ${styles.gridImg}`}>
-              <img src={ad.bannerImgUrl} alt="Ad" />
+              <img src={ad.bannerImgUrl} alt="Ad"/>
             </div>
             <div className={`${styles.gridItem}`}>{ad.title}</div>
             <div className={`${styles.gridItem}`}>
               {ad.startDate} ~ {ad.endDate}
             </div>
-            <div className={`${styles.gridItem}`}>수정 / 삭제</div>
+            <div className={`${styles.gridItem}`}>
+              <span style={{cursor: 'pointer', marginRight: '10px'}}
+                    onClick={() => editClick()}>수정</span>
+              <span>/</span>
+              <span style={{cursor: 'pointer', marginLeft: '10px'}}
+                    onClick={() => deleteClick(ad.advertId)}>삭제</span>
+            </div>
           </>
-        ))}
+          ))}
       </div>
     </div>
   );
