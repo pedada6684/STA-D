@@ -87,6 +87,10 @@ public class Product {
         }
     }
 
+    public void deleteProduct(Product product) {
+        product.status = true;
+    }
+
     public void updateProductThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
