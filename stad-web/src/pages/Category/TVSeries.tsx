@@ -30,6 +30,7 @@ export type CategoryProps = {
 export default function TVSeries() {
   const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.token.accessToken);
+  // 시리즈 카테고리 별로 메인 영상 12개씩 조회
   const {
     data: videoList,
     isLoading,
