@@ -1,18 +1,25 @@
 import tensorflow as tf
 
 from gensim.models import Word2Vec
+import numpy as np
 
 from app.common.preprocess import preprocess
 from app.dto.category_dto import classfication_request, classfication_response
-
+import logging
 
 def token_to_idx(tokenized_document, unk_idx):
-    idx_list = []
-    for token in tokenized_document.split(' '):
-        try:
-            idx_list.append(w2v_model.wv.index_to_key.index(token))
-        except:
-            idx_list.append(unk_idx)
+    logging.debug(f"Received document: {tokenized_document}")
+    if isinstance(tokenized_document, np.ndarray):
+        tokens = tokenized_document.tolist()
+        logging.debug("Converted numpy array to list.")
+    elif isinstance(tokenized_document, str):
+        tokens = tokenized_document.split(' ')
+        logging.debug("Split string into tokens.")
+    else:
+        tokens = list(tokenized_document)
+        logging.debug("Handled as iterable, converted to list.")
+
+    idx_list = [w2v_model.wv.index_to_key.index(token) if token in w2v_model.wv.index_to_key else unk_idx for token in tokens]
     return idx_list
 
 
@@ -34,7 +41,8 @@ def predict(sentence):
 def get_category(requests: list[classfication_request]):
     responses = []
     for request in requests:
-        text = preprocess(request.video_transcript)
+        text = preprocess(request.video_discription)
+        print(text)
         result = predict(sentence_to_sequence(text))
         response = classfication_response(video_id=request.video_id, category=result)
         responses.append(response)

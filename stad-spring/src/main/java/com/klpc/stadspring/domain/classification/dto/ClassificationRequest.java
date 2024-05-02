@@ -1,9 +1,11 @@
 package com.klpc.stadspring.domain.classification.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ClassificationRequest {
     private String videoId;
