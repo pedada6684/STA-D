@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./EnrolledList.module.css";
 import dummyData from "./dummyAdData.json";
-import {deleteAdvert, getAdvertList, getContentConcept} from "../../AdEnroll/AdEnrollApi";
+import {deleteAdvert, getAdvertList, getContentConcept, modifyAdvert} from "../../AdEnroll/AdEnrollApi";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../store";
 
@@ -36,8 +36,9 @@ export default function EnrolledAdList() {
     fetchAdsList();
   }, []);
 
-  const editClick = () => {
+  const editClick = (advert : adType) => {
     console.log(`Edit clicked for ad with ID:`);
+    modifyAdvert(advert)
   };
 
   const deleteClick = (advertId : number | undefined) => {
@@ -64,7 +65,7 @@ export default function EnrolledAdList() {
             </div>
             <div className={`${styles.gridItem}`}>
               <span style={{cursor: 'pointer', marginRight: '10px'}}
-                    onClick={() => editClick()}>수정</span>
+                    onClick={() => editClick(ad)}>수정</span>
               <span>/</span>
               <span style={{cursor: 'pointer', marginLeft: '10px'}}
                     onClick={() => deleteClick(ad.advertId)}>삭제</span>
