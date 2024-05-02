@@ -10,7 +10,7 @@ export default function ToggleButton({
   isExpanded,
   onToggle,
 }: ToggleButtonProps) {
-  const iconSrc = isExpanded ? bottom : top;
+  const iconSrc = isExpanded ? top : bottom;
   const altText = isExpanded ? "접기" : "펼치기";
   return (
     <div>
