@@ -109,3 +109,36 @@ export const deleteAdvert = async (advertId : number | undefined) => {
     }
 };
 
+interface adType {
+    advertId? : number;
+    title? : string;
+    description? : string;
+    startDate? : string;
+    endDate? : string;
+    advertType? : string;
+    advertCategory? : string;
+    directVideoUrl?: string;
+    bannerImgUrl?: string;
+    selectedContentList? : number[];
+    advertVideoUrlList? : string[];
+}
+export const modifyAdvert = async (body : adType | undefined) => {
+    const formData = new FormData();
+    try {
+        const response = await fetch(`/api/advert`, {
+            method: 'PUT',
+            body : formData
+        });
+        if (!response.ok) {
+            throw new Error('광고 수정 실패');
+        }
+        const data = await response.json(); // JSON 형태로 응답 받음
+        const result = data.result;
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error('광고 수정 실패 : ', error);
+        return null;
+    }
+};
+
