@@ -59,10 +59,10 @@ class UserService {
         UserModel.fromFirebaseUser(user, googleAccessToken).toJson();
     try {
       final response = await dio.post(
-        // 'https://www.mystad.com/api/v1/auth/applogin',
+        'https://www.mystad.com/api/v1/auth/applogin',
         // 'http://10.0.2.2:8080/api/v1/auth/applogin',
         // 'http://192.168.31.202:8080/api/v1/auth/applogin',
-        'http://192.168.0.129:8080/api/v1/auth/applogin',
+        // 'http://192.168.0.129:8080/api/v1/auth/applogin',
         data: json.encode(userProfile),
         options: Options(
             followRedirects: false, validateStatus: (status) => status! < 500),
