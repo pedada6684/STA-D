@@ -1,10 +1,11 @@
 package com.klpc.stadspring.domain.classification.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ClassificationResponse {
     private String videoId;
