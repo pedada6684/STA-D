@@ -181,29 +181,6 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
                 );
               }).toList(),
             ],
-            // Padding(
-            //   padding: const EdgeInsets.all(5.0),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       Text(
-            //         '민형이가 좋아하는 딸기',
-            //         style: TextStyle(
-            //           fontSize: 14,
-            //           fontWeight: FontWeight.bold,
-            //         ),
-            //       ),
-            //       IconButton(
-            //         iconSize: 20.0,
-            //         onPressed: () {},
-            //         icon: Icon(
-            //           Icons.cancel_rounded,
-            //           color: mainGray,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
             _buildTotalPrice(),
             _buildActionButtons(context),
           ],
