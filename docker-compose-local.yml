@@ -1,5 +1,6 @@
 version: "3.8"
 services:
+
   mysql-stad:
     image: mysql:latest
     container_name: mysql-stad
@@ -9,6 +10,7 @@ services:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: stad
       MYSQL_ROOT_HOST: '%'
+
   mysql-stad-alert:
     image: mysql:latest
     container_name: mysql-stad-alert
@@ -18,6 +20,17 @@ services:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: stad
       MYSQL_ROOT_HOST: '%'
+
+  mysql-stad-stats:
+    image: mysql:latest
+    container_name: mysql-stad-stats
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: stad
+      MYSQL_ROOT_HOST: '%'
+      
   redis:
     image: redis:latest
     container_name: redis
