@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/models/product_model.dart';
 import 'package:stad/screen/order/order_screen.dart';
 import 'package:stad/widget/custom_dropdown.dart';
 import 'package:stad/widget/page_animation.dart';
 import 'package:stad/widget/quantity_changer.dart';
 
 // 모달 바텀 시트를 띄우는 함수
-void showProductOptionBottomSheet(BuildContext context) {
+void showProductOptionBottomSheet(BuildContext context, ProductInfo? productInfo, List<ProductType> productTypes) {
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
     builder: (BuildContext context) {
-      return ProductOptionBottomSheet();
+      return ProductOptionBottomSheet(productInfo: productInfo, productTypes: productTypes);
     },
   );
 }
 
 // 바텀 시트의 내용을 관리할 StatefulWidget
 class ProductOptionBottomSheet extends StatefulWidget {
-  const ProductOptionBottomSheet({super.key});
+  final ProductInfo? productInfo;
+  final List<ProductType> productTypes;
+
+  const ProductOptionBottomSheet({super.key, this.productInfo, required this.productTypes});
 
   @override
-  _ProductOptionBottomSheetState createState() =>
-      _ProductOptionBottomSheetState();
+  _ProductOptionBottomSheetState createState() => _ProductOptionBottomSheetState();
 }
 
 class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {

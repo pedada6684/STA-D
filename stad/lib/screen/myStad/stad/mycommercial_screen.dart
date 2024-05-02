@@ -99,7 +99,7 @@ class _MyCommercialScreenState extends State<MyCommercialScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ProductScreen()),
+                              builder: (context) => ProductScreen(advertId :1)),
                         );
                       }, subText: advert.title,
                     );

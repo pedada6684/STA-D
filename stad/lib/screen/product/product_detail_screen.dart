@@ -1,29 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/models/product_model.dart';
 
 class ProductDetailScreen extends StatelessWidget {
-  const ProductDetailScreen({super.key});
+  final ProductInfo? productInfo;
+  final List<ProductType> productTypes;
+
+  const ProductDetailScreen({
+    super.key,
+    this.productInfo,
+    required this.productTypes,
+  });
 
   @override
   Widget build(BuildContext context) {
+    print(productInfo);
+    print(productInfo);
+    print(productInfo);
+    print(productInfo);
     return SingleChildScrollView(
       child: Container(
         color: mainGray,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Image.asset('assets/image/product.png', fit: BoxFit.cover),
+            Image.network(productInfo!.thumbnail, fit: BoxFit.cover),
             // const SizedBox(height: 10.0),
             Container(
               color: mainWhite,
-              child: const Padding(
+              child: Padding(
                 padding: const EdgeInsets.symmetric(
                     vertical: 10.0, horizontal: 20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '상품명임',
+                      productTypes[0].name,
                       style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w700,
@@ -40,25 +52,29 @@ class ProductDetailScreen extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Text(
-                          '24,300원',
-                          style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w900,
-                              color: mainGray,
-                              decoration: TextDecoration.lineThrough,
-                              decorationColor: mainGray),
-                        ),
-                        SizedBox(
-                          width: 16.0,
-                        ),
-                        Text(
-                          '17,800원',
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w900,
-                              color: mainBlack),
-                        ),
+                        // Text(
+                        //   '24,300원',
+                        //   style: TextStyle(
+                        //       fontSize: 16.0,
+                        //       fontWeight: FontWeight.w900,
+                        //       color: mainGray,
+                        //       decoration: TextDecoration.lineThrough,
+                        //       decorationColor: mainGray),
+                        // ),
+                        // SizedBox(
+                        //   width: 16.0,
+                        // ),
+                        // Text(
+                        //   '17,800원',
+                        //   style: TextStyle(
+                        //       fontSize: 18.0,
+                        //       fontWeight: FontWeight.w900,
+                        //       color: mainBlack),
+                        // ),
+                        ...productTypes.map((type) => Text(
+                          "${type.name} - ${type.price}원 (${type.quantity}개 재고)",
+                          style: TextStyle(fontSize: 14.0),
+                        )).toList(),
                       ],
                     ),
                   ],

@@ -6,7 +6,8 @@ class OrderService {
   final Dio dio = Dio();
 
   // final String EmUrl = 'http://192.168.31.202:8080/api/user/location';
-  final String orderUrl = '$svApi/orders/list?userId=';
+  // final String orderUrl = '$svApi/orders/list?userId=';
+  final String orderUrl = 'http://192.168.31.202:8080/orders/list?userId=';
 
   //내 주문목록 불러오기 => 백엔드 수정 필요
   Future<List<Order>> fetchOrders(int userId) async {
