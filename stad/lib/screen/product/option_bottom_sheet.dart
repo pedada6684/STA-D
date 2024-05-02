@@ -7,12 +7,17 @@ import 'package:stad/widget/page_animation.dart';
 import 'package:stad/widget/quantity_changer.dart';
 
 // 모달 바텀 시트를 띄우는 함수
-void showProductOptionBottomSheet(BuildContext context, ProductInfo? productInfo, List<ProductType> productTypes, String title) {
+void showProductOptionBottomSheet(BuildContext context,
+    ProductInfo? productInfo, List<ProductType> productTypes, String title) {
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
     builder: (BuildContext context) {
-      return ProductOptionBottomSheet(productInfo: productInfo, productTypes: productTypes, title: title,);
+      return ProductOptionBottomSheet(
+        productInfo: productInfo,
+        productTypes: productTypes,
+        title: title,
+      );
     },
   );
 }
@@ -23,10 +28,15 @@ class ProductOptionBottomSheet extends StatefulWidget {
   final List<ProductType> productTypes;
   final String title;
 
-  const ProductOptionBottomSheet({super.key, this.productInfo, required this.productTypes, required this.title});
+  const ProductOptionBottomSheet(
+      {super.key,
+      this.productInfo,
+      required this.productTypes,
+      required this.title});
 
   @override
-  _ProductOptionBottomSheetState createState() => _ProductOptionBottomSheetState();
+  _ProductOptionBottomSheetState createState() =>
+      _ProductOptionBottomSheetState();
 }
 
 class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
@@ -37,25 +47,31 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   int? selectedProductIndex;
   int? selectedOptionIndex;
 
-
-  void toggleProductExpanded() {
-    setState(() {
-      isProductExpanded = !isProductExpanded;
-      if (isOptionExpanded) isOptionExpanded = false;
-    });
+  void selectProductOption(String? value) {
+    if (value != null) {
+      int index = widget.productTypes.indexWhere((p) => p.name == value);
+      setState(() {
+        selectedProductIndex = index;
+        selectedOptionIndex = null;
+        isProductExpanded = false;
+        if (widget.productTypes[index].productOptions.isEmpty) {
+          isOptionExpanded = false;
+        }
+      });
+    }
   }
+
+  // void toggleProductExpanded() {
+  //   setState(() {
+  //     isProductExpanded = !isProductExpanded;
+  //     if (isOptionExpanded) isOptionExpanded = false;
+  //   });
+  // }
 
   void toggleOptionExpanded() {
     setState(() {
       isOptionExpanded = !isOptionExpanded;
       if (isProductExpanded) isProductExpanded = false;
-    });
-  }
-
-  void selectProductOption(String? option) {
-    setState(() {
-      selectedProductOption = option;
-      isProductExpanded = false;
     });
   }
 
@@ -68,9 +84,13 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> productOptions = widget.productTypes.map((p)=>p.name).toList();
-    List<String>? currentOptions = selectedProductIndex != null ? widget.productTypes[selectedProductIndex!].productOptions.map((o) => o.name).toList() : null;
-
+    List<String> productOptions =
+        widget.productTypes.map((p) => p.name).toList();
+    List<String>? currentOptions = selectedProductIndex != null
+        ? widget.productTypes[selectedProductIndex!].productOptions
+            .map((o) => o.name)
+            .toList()
+        : null;
 
     return Container(
       decoration: BoxDecoration(
@@ -102,34 +122,40 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
               options: productOptions,
               //서버에서 받아올 것
               isExpanded: isProductExpanded,
-              selectedOption: selectedProductIndex != null ? productOptions[selectedProductIndex!] : null,
-              onToggle: toggleProductExpanded,
-              onSelect: (String? value) {
-                if (value != null) {
-                  int index = productOptions.indexOf(value);
-                  setState(() {
-                    selectedProductIndex = index;
-                    selectedOptionIndex = null;  // Reset the selected option
-                  });
-                }
-              },
+              selectedOption: selectedProductIndex != null
+                  ? productOptions[selectedProductIndex!]
+                  : null,
+              onToggle: () =>
+                  setState(() => isProductExpanded = !isProductExpanded),
+              // onSelect: (String? value) {
+              //   if (value != null) {
+              //     int index = productOptions.indexOf(value);
+              //     setState(() {
+              //       selectedProductIndex = index;
+              //       selectedOptionIndex = null; // Reset the selected option
+              //     });
+              //   }
+              // },
+              onSelect: selectProductOption,
             ),
             SizedBox(height: 15),
-            if(currentOptions != null && currentOptions.isNotEmpty)
-            CustomDropdown(
-              title: '옵션선택',
-              options: currentOptions,
-              //서버에서 받아올 것
-              isExpanded: isOptionExpanded,
-              selectedOption: selectedOptionIndex != null ? currentOptions[selectedOptionIndex!] : null,
-              onToggle: toggleOptionExpanded,
-              onSelect: (String? value) {
-                setState(() {
-                  selectedOptionIndex = currentOptions.indexOf(value!);
-                });
-              },
-            ),
-            if (selectedProductIndex != null)
+            if (currentOptions != null && currentOptions.isNotEmpty)
+              CustomDropdown(
+                title: '옵션선택',
+                options: currentOptions,
+                //서버에서 받아올 것
+                isExpanded: isOptionExpanded,
+                selectedOption: selectedOptionIndex != null
+                    ? currentOptions[selectedOptionIndex!]
+                    : null,
+                onToggle: toggleOptionExpanded,
+                onSelect: (String? value) {
+                  setState(() {
+                    selectedOptionIndex = currentOptions.indexOf(value!);
+                  });
+                },
+              ),
+            if (selectedProductIndex != null) ...[
               ProductDetails(
                 productType: widget.productTypes[selectedProductIndex!],
                 onCancel: () {
@@ -139,6 +165,13 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
                   });
                 },
               ),
+              QuantityChanger(
+                initialQuantity: 1,
+                onQuantityChanged: (newQuantity) {
+                  // Handle quantity change
+                },
+              ),
+            ],
             // Padding(
             //   padding: const EdgeInsets.all(5.0),
             //   child: Row(
@@ -162,10 +195,6 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
             //     ],
             //   ),
             // ),
-            QuantityChanger(
-              initialQuantity: 1,
-              onQuantityChanged: (newQuantity) {},
-            ),
             _buildTotalPrice(),
             _buildActionButtons(context),
           ],
@@ -179,7 +208,9 @@ class ProductDetails extends StatelessWidget {
   final ProductType productType;
   final VoidCallback onCancel;
 
-  const ProductDetails({Key? key, required this.productType, required this.onCancel}) : super(key: key);
+  const ProductDetails(
+      {Key? key, required this.productType, required this.onCancel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -190,9 +221,11 @@ class ProductDetails extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(productType.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Text(productType.name,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               Text("${productType.price}원", style: TextStyle(color: midGray)),
-              Text("수량: ${productType.quantity}", style: TextStyle(color: midGray)),
+              Text("재고: ${productType.quantity}",
+                  style: TextStyle(color: midGray)),
             ],
           ),
         ),
@@ -208,7 +241,6 @@ class ProductDetails extends StatelessWidget {
     );
   }
 }
-
 
 Widget _buildTotalPrice() {
   // Return widget for total price
@@ -279,4 +311,3 @@ Widget _buildActionButtons(BuildContext context) {
     ),
   );
 }
-
