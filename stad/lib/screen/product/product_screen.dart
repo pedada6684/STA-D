@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/models/product_model.dart';
 import 'package:stad/screen/product/option_bottom_sheet.dart';
 import 'package:stad/screen/product/product_detail_screen.dart';
+import 'package:stad/screen/review/review_screen.dart';
+import 'package:stad/services/product_service.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
 
 class ProductScreen extends StatefulWidget {
-  const ProductScreen({super.key});
+  final int advertId;
+
+  const ProductScreen({super.key, required this.advertId});
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -15,11 +20,29 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late ProductService _productService;
+  ProductInfo? _productInfo;
+  List<ProductType> _productTypes = [];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _productService = ProductService();
+    _loadProductData();
+  }
+
+  void _loadProductData() async {
+    try {
+      _productInfo = await _productService.getProductInfo(widget.advertId);
+      _productTypes = await _productService.getProductTypeList(_productInfo!.id);
+      if (_tabController == null || _tabController.length != 2) {
+        _tabController = TabController(length: 2, vsync: this);
+      }
+      setState(() {}); // 데이터가 로드된 후 UI를 업데이트
+    } catch (e) {
+      print('Error loading product data: $e');
+    }
   }
 
   @override
@@ -32,15 +55,19 @@ class _ProductScreenState extends State<ProductScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: '상품명임',
+        title: _productInfo != null && _productTypes.isNotEmpty
+            ? _productTypes[0].name
+            : '상품 상세',
         showBackButton: true,
         tabController: _tabController,
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const [
-          ProductDetailScreen(),
-          Center(child: Text('리뷰 내용')),
+        children: [
+          _productInfo != null ?
+          ProductDetailScreen(productInfo: _productInfo, productTypes: _productTypes) :
+          Center(child: Text('상품 정보가 없습니다')),
+          Center(child: ReviewScreen()),
         ],
       ),
       bottomNavigationBar: CustomElevatedButton(
@@ -48,7 +75,9 @@ class _ProductScreenState extends State<ProductScreen>
         textColor: mainWhite,
         backgroundColor: mainNavy,
         onPressed: () {
-          showProductOptionBottomSheet(context);
+          if (_productTypes.isNotEmpty) {
+            showProductOptionBottomSheet(context, _productInfo, _productTypes);
+          }
         },
       ),
     );

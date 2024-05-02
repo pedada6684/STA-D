@@ -159,8 +159,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     buttonText: '지금 보는 광고가 궁금하다면?',
                     subText: singleAdverts[0]['title'],
                     onPressed: () {
+                      //TODO: advertId 수정
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ProductScreen()));
+                          builder: (context) => ProductScreen(advertId: 1,)));
                     },
                   ),
                 buildCarouselSlider(context),
@@ -181,7 +182,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 subText: advert.title,
                 onPressed: () {
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ProductScreen()));
+                    //TODO:advertId 수정
+                      MaterialPageRoute(builder: (context) => ProductScreen(advertId: 1,)));
                 },
               ))
           .toList(),
