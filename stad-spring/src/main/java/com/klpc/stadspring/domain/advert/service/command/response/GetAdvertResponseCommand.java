@@ -14,11 +14,11 @@ public class GetAdvertResponseCommand {
     String description;
     String startDate;
     String endDate;
-    String type;
+    String advertType;
+    String advertCategory;
     String directVideoUrl;
     String bannerImgUrl;
     List<Long> selectedContentList;
     List<String> advertVideoUrlList;
-    String category;
 
 }
