@@ -50,6 +50,9 @@ public class ProductType {
     @Column(name = "quantity")
     private Long quantity;
 
+    @Column(name = "status")
+    private Boolean status;
+
     public static ProductType createNewProductType(
             Product product,
             String name,
@@ -61,10 +64,15 @@ public class ProductType {
         productType.name = name;
         productType.price = price;
         productType.quantity = quantity;
+        productType.status = true;
         return productType;
     }
 
     public void modifyQuantity(Long cnt){
         this.quantity += cnt;
+    }
+
+    public void deleteProductType(ProductType productType) {
+        productType.status = false;
     }
 }
