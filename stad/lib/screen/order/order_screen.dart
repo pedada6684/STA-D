@@ -46,8 +46,9 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   void initState() {
     super.initState();
-   fetchDeliveryAddresses();
+    fetchDeliveryAddresses();
   }
+
   void refreshAddresses() {
     fetchDeliveryAddresses();
   }
@@ -57,7 +58,8 @@ class _OrderScreenState extends State<OrderScreen> {
     if (userProvider.userId != null) {
       AddressService addressService = AddressService();
       try {
-        deliveryAddresses = await addressService.fetchAddresses(userProvider.userId!);
+        deliveryAddresses =
+            await addressService.fetchAddresses(userProvider.userId!);
         if (deliveryAddresses.isNotEmpty) {
           selectedDeliveryAddress = deliveryAddresses.first;
         }
@@ -66,9 +68,6 @@ class _OrderScreenState extends State<OrderScreen> {
       }
     }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -210,8 +209,13 @@ class _OrderScreenState extends State<OrderScreen> {
                     showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20.0),
+                                topRight: Radius.circular(20.0))),
                         useSafeArea: true,
-                        builder: (_) => AddressScreen(onAddressAdded: refreshAddresses));
+                        builder: (_) =>
+                            AddressScreen(onAddressAdded: refreshAddresses));
                   },
                   child: const Text(
                     '배송지추가',

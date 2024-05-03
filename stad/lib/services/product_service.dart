@@ -6,13 +6,11 @@ class ProductService {
   final Dio _dio = Dio();
 
   final String _baseUrl = svApi;
-  // final String _baseUrl = 'http://192.168.31.202:8080/api';
-
+  // final String _baseUrl = 'http://172.30.1.83:8080/api';
+  //
   ProductService() {
     _dio.options.baseUrl = _baseUrl;
   }
-
-// final String _baseUrl = '$svApi';
 
   //상품 정보 조회
   //TODO: advertId 수정하기
@@ -41,7 +39,7 @@ class ProductService {
   Future<List<ProductType>> getProductTypeList(int productId) async {
     try {
       final response =
-          await _dio.get('/type/list', queryParameters: {'productId': 1});
+          await _dio.get('/type/list', queryParameters: {'productId': productId});
       print('광고 상품 타입 리스트 response :${response.data}');
       if (response.statusCode == 200) {
         List<dynamic> typeList = response.data['list'];

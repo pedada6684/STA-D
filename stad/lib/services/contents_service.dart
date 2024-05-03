@@ -5,10 +5,10 @@ import 'package:stad/models/contents_model.dart';
 class ContentsService {
   final Dio dio = Dio();
 
-  //콘텐츠 상세정보
+  //콘텐츠 상세정보 TODO:서버에서 보내줄거임 sse
   Future<Content> fetchContentDetails(int detailId) async {
     try {
-      final response = await dio.get('$svApi/contents-detail/1');
+      final response = await dio.get('$svApi/contents-detail/2');
       // final response = await dio.get('http://192.168.31.202:8080/api/contents-detail/1');
       print('${response.data}');
 

@@ -29,13 +29,23 @@ class ProductInfo {
       throw Exception('One or more required fields are missing or null');
     }
     return ProductInfo(
-      id: json['id'] ?? 0,  // 기본값을 0으로 설정
-      images: (json['images'] as List<dynamic>? ?? []).map((i) => ProductImage.fromJson(i)).toList(),
-      thumbnail: json['thumbnail'] ?? 'default_thumbnail.png',  // 기본 썸네일 이미지
-      cityDeliveryFee: json['cityDeliveryFee'] ?? 0,  // 기본 배송료
+      id: json['id'] ?? 0,
+      // 기본값을 0으로 설정
+      images: (json['images'] as List<dynamic>? ?? [])
+          .map((i) => ProductImage.fromJson(i))
+          .toList(),
+      thumbnail: json['thumbnail'] ?? 'default_thumbnail.png',
+      // 기본 썸네일 이미지
+      cityDeliveryFee: json['cityDeliveryFee'] ?? 0,
+      // 기본 배송료
       mtDeliveryFee: json['mtDeliveryFee'] ?? 0,
-      expStart: json['expStart'] != null ? DateTime.parse(json['expStart']) : DateTime.now(),  // 시작 기본값 오늘
-      expEnd: json['expEnd'] != null ? DateTime.parse(json['expEnd']) : DateTime.now().add(Duration(days: 365)),  // 종료 기본값 1년 후
+      expStart: json['expStart'] != null
+          ? DateTime.parse(json['expStart'])
+          : DateTime.now(),
+      // 시작 기본값 오늘
+      expEnd: json['expEnd'] != null
+          ? DateTime.parse(json['expEnd'])
+          : DateTime.now().add(Duration(days: 365)), // 종료 기본값 1년 후
     );
   }
 }
@@ -57,14 +67,14 @@ class ProductType {
   final int id;
   final String name;
   final int price;
-  final int quantity;
+  int quantity;
   final List<ProductOption> productOptions; // Ensure this is included
 
   ProductType({
     required this.id,
     required this.name,
     required this.price,
-    required this.quantity,
+    this.quantity = 1,
     this.productOptions = const [],
   });
 
@@ -97,5 +107,3 @@ class ProductOption {
     );
   }
 }
-
-
