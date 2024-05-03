@@ -32,6 +32,9 @@ public class AdvertStatistics {
     @Column(name = "order_count")
     private Long orderCount;
 
+    @Column(name = "order_cancel_count")
+    private Long orderCancelCount;
+
     @Column(name = "revenue")
     private Long revenue;
 
@@ -43,6 +46,7 @@ public class AdvertStatistics {
         Long advertVideoCount,
         Long advertClickCount,
         Long orderCount,
+        Long orderCancelCount,
         Long revenue
     ){
         AdvertStatistics advertStatistics = new AdvertStatistics();
@@ -50,6 +54,7 @@ public class AdvertStatistics {
         advertStatistics.advertVideoCount = advertVideoCount;
         advertStatistics.advertClickCount = advertClickCount;
         advertStatistics.orderCount = orderCount;
+        advertStatistics.orderCancelCount= orderCancelCount;
         advertStatistics.revenue = revenue;
         advertStatistics.date = LocalDate.now();
         return advertStatistics;
@@ -58,7 +63,8 @@ public class AdvertStatistics {
     public void updateCounts(Long newClicks,
                              Long newVideos,
                              Long newOrders,
-                             Long newOrderCancels) {
+                             Long newOrderCancels,
+                             Long newRevenue) {
         if (newClicks != null) {
             this.advertClickCount += newClicks;
         }
@@ -69,7 +75,10 @@ public class AdvertStatistics {
             this.orderCount += newOrders;
         }
         if (newOrderCancels != null) {
-            this.revenue += newOrderCancels;
+            this.orderCancelCount += newOrderCancels;
+        }
+        if (newRevenue != null) {
+            this.revenue += newRevenue;
         }
     }
 }
