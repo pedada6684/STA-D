@@ -77,7 +77,7 @@ public class Product {
         product.expStart = expStart;
         product.expEnd = expEnd;
         product.name = name;
-        product.status = false;
+        product.status = true;
         return product;
     }
 
@@ -88,7 +88,7 @@ public class Product {
     }
 
     public void deleteProduct(Product product) {
-        product.status = true;
+        product.status = false;
     }
 
     public void updateProductThumbnail(String thumbnail) {
