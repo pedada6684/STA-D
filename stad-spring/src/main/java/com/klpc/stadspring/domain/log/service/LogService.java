@@ -122,8 +122,8 @@ public class LogService {
                 totalAdvertClick(result[0] != null ? (Long) result[0] : 0L).
                 totalAdvertVideo(result[1] != null ? (Long) result[1] : 0L).
                 totalOrder(result[2] != null ? (Long) result[2] : 0L).
-//                totalOrderCancel((Long) result[3]).
-                totalRevenue(result[3] != null ? (Long) result[3] : 0L).
+                totalOrderCancel(result[2] != null ? (Long) result[3] : 0L).
+                totalRevenue(result[3] != null ? (Long) result[4] : 0L).
                 build();
 
         return response;
