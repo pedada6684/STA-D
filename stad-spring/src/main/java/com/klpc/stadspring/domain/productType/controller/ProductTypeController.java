@@ -42,6 +42,7 @@ public class ProductTypeController {
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
     public ResponseEntity<?> addNewProductType(@RequestBody AddProductTypeRequest request) {
+        log.info("AddProductTypeRequest: "+ request);
         try {
             productTypeService.addProductType(request.toCommand());
 
