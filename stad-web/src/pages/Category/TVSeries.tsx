@@ -64,18 +64,18 @@ export default function TVSeries() {
           <BillboardContainer>
             <ImageWrapper>
               <img
-                src="https://img2.sbs.co.kr/img/sbs_cms/WE/2022/02/07/NxE1644218336386.jpg"
-                alt="그 해 우리는"
+                src="https://news.coupang.com/wp-content/uploads/2023/08/01-2.jpg"
+                alt="소년시대"
                 className={`${styles.mainImage}`}
               />
               <VignetteWrapper />
               <HorizonVignette />
               <InfoContainer>
                 <div className={`${styles.info}`}>
-                  <div className={`${styles.vidTitle}`}>그 해 우리는</div>
+                  <div className={`${styles.vidTitle}`}>소년시대</div>
                   <div className={`${styles.btnWrapper}`}>
-                    <PlayButton />
-                    <InfoButton />
+                    <PlayButton onClick={() => navigate("/tv/stream/123")} />
+                    <InfoButton onClick={() => navigate(`/tv/${123}`)} />
                   </div>
                 </div>
               </InfoContainer>

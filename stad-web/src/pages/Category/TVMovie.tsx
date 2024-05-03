@@ -64,8 +64,8 @@ export default function TVMovie() {
                 <div className={`${styles.info}`}>
                   <div className={`${styles.vidTitle}`}>듄-파트2</div>
                   <div className={`${styles.btnWrapper}`}>
-                    <PlayButton />
-                    <InfoButton />
+                    <PlayButton onClick={() => navigate("/tv/stream/6")} />
+                    <InfoButton onClick={() => navigate(`/tv/${6}`)} />
                   </div>
                 </div>
               </InfoContainer>
