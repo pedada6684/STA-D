@@ -16,6 +16,8 @@ import com.klpc.stadspring.global.response.exception.CustomException;
 import com.klpc.stadspring.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
@@ -49,6 +51,7 @@ public class AdvertVideoService {
      */
     @Transactional(readOnly = false)
     public AddVideoListResponse addVideoList(AddVideoListRequestCommand requestCommand){
+        log.info("AddVideoListRequestCommand: "+ requestCommand);
         List<AddVideoListResponseCommand> list = new ArrayList<>();
         for(MultipartFile file : requestCommand.list) {
             String fileName = UUID.randomUUID().toString().replace("-","")+file.getName();
@@ -82,6 +85,7 @@ public class AdvertVideoService {
      */
     @Transactional(readOnly = false)
     public ModifyVideoResponse modifyVideo(ModifyVideoRequestCommand command){
+        log.info("ModifyVideoRequestCommand: "+ command);
         System.out.println("******"+command.getVideoId());
         AdvertVideo advertVideo = advertVideoRepository.findById(command.getVideoId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
@@ -115,6 +119,7 @@ public class AdvertVideoService {
      */
     @Transactional(readOnly = false)
     public AddBannerImgResponse addBannerImg(AddBannerImgRequestCommand command){
+        log.info("AddBannerImgRequestCommand: "+ command);
         MultipartFile file = command.getImg();
         String fileName = UUID.randomUUID().toString().replaceAll("-","")+file.getName();
         URL imgUrl = s3Util.uploadImageToS3(file,"bannerImg",fileName);

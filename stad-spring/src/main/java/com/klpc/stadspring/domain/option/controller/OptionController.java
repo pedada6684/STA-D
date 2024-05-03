@@ -47,6 +47,7 @@ public class OptionController {
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
     public ResponseEntity<?> addNewOption(@RequestBody AddOptionRequest request) {
+        log.info("AddOptionRequest: "+ request);
         try {
             optionService.addProductOption(request.toCommand());
 

@@ -52,6 +52,7 @@ public class AdvertService {
      */
     @Transactional(readOnly = false)
     public AddAdvertResponse addAdvert(AddAdvertRequestCommand command){
+        log.info("AddAdvertRequestCommand: "+ command);
         User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new CustomException(ErrorCode.REQUEST_NOT_FOUND));
 
         Advert adv = Advert.createToAdvert(
@@ -95,6 +96,7 @@ public class AdvertService {
      */
     @Transactional(readOnly = false)
     public ModifyAdvertResponse modifyAdvert(ModifyAdvertRequestCommand command){
+        log.info("ModifyAdvertRequestCommand: "+ command);
         Advert advert = advertRepository.findById(command.getAdvertId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         advert.modifyAdvert(
