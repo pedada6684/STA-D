@@ -1,6 +1,6 @@
 import play from "../../assets/ion_play-sharp.png";
 import styles from "./Button.module.css";
-interface PlayButtonProps {
+export interface PlayButtonProps {
   onClick?: () => void; // onClick prop 추가
 }
 
