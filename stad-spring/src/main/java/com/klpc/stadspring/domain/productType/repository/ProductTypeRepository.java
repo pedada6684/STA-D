@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductTypeRepository extends JpaRepository<ProductType, Long> {
-    @Query("SELECT t FROM ProductType t Where t.product.id = :id")
+    @Query("SELECT t FROM ProductType t Where t.product.id = :id AND t.status= true")
     Optional<List<ProductType>> getProductTypeList(@Param("id") Long id);
 
 }
