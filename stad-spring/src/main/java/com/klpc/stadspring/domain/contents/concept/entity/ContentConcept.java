@@ -1,6 +1,7 @@
 package com.klpc.stadspring.domain.contents.concept.entity;
 
 import com.klpc.stadspring.domain.contents.categoryRelationship.entity.ContentCategoryRelationship;
+import com.klpc.stadspring.domain.contents.labelRelationship.entity.ContentLabelRelationship;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +29,9 @@ public class ContentConcept {
 
     @OneToMany(mappedBy = "contentConcept")
     private List<ContentCategoryRelationship> contentCategoryRelationshipList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "contentConcept")
+    private List<ContentLabelRelationship> contentLabelRelationshipList = new ArrayList<>();
 
     public static ContentConcept createContentConcept (
             String audienceAge,
