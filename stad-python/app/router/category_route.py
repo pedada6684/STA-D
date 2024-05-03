@@ -5,4 +5,5 @@ category_router = APIRouter()
 
 @category_router.post("/category/info")
 def translate_text(request: list[classfication_request]):
+    print(request)
     return get_category(request)

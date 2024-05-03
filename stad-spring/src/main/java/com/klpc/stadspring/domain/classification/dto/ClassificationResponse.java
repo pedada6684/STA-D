@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ClassificationResponse {
-    private String videoId;
+    private Long videoId;
     private String category;
 }
