@@ -37,7 +37,9 @@ export default function VideoDetail() {
   // URL 에서 videoId 가져오기
   // URL에서 videoId 가져오기 및 변환
   const { videoId } = useParams<{ videoId: string }>();
+  console.log(videoId);
   const detailId = Number(videoId);
+  console.log(detailId);
 
   const token = useSelector((state: RootState) => state.token.accessToken);
   // 영화videoConceptData까지
@@ -48,6 +50,7 @@ export default function VideoDetail() {
   if (isLoading) {
     return <Loading />;
   }
+  console.log(videoConceptData);
 
   const handlePlayClick = () => {
     navigate(`/tv/stream/${detailId}`); // 스트리밍 페이지로 이동
@@ -95,6 +98,8 @@ export default function VideoDetail() {
                       {videoConceptData.title}
                     </div>
                     <div className={`${styles.timeAge}`}>
+                      <span>{videoConceptData.releaseYear}</span>
+                      <span>•</span>
                       <span>{videoConceptData.playtime}</span>
                       <span>•</span>
                       <span>{videoConceptData.audienceAge}</span>
