@@ -79,6 +79,9 @@ public class ProductTypeService {
     public void deleteProductType(Long productTypeId) {
         ProductType productType = productTypeRepository.findById(productTypeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        productTypeRepository.delete(productType);
+
+        productType.deleteProductType(productType);
+
+        productTypeRepository.save(productType);
     }
 }
