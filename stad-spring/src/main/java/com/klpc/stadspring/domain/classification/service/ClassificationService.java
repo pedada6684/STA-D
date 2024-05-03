@@ -12,7 +12,7 @@ public class ClassificationService {
     private final WebClient webClient;
 
     public ClassificationService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8000").build(); // FastAPI 서버 URL
+        this.webClient = webClientBuilder.baseUrl("http://127.0.0.1:8000").build(); // FastAPI 서버 URL
     }
 
     public List<ClassificationResponse> getCategory(List<ClassificationRequest> ClassificationRequestList) {

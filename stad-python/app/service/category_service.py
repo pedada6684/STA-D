@@ -42,8 +42,7 @@ def get_category(requests: list[classfication_request]):
     responses = []
     for request in requests:
         text = preprocess(request.video_discription)
-        print(text)
-        result = predict(sentence_to_sequence(text))
+        result = predict(text)
         response = classfication_response(video_id=request.video_id, category=result)
         responses.append(response)
 

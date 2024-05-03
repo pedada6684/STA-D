@@ -2,10 +2,10 @@ from pydantic import BaseModel
 
 
 class classfication_request(BaseModel):
-    video_id: int
-    video_discription: str
+    videoId: int
+    videoDescription: str
 
 
 class classfication_response(BaseModel):
-    video_id: int
+    videoId: int
     category: str
