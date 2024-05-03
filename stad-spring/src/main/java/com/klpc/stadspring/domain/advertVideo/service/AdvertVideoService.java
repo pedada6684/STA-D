@@ -10,6 +10,7 @@ import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVide
 import com.klpc.stadspring.domain.advertVideo.service.command.response.AddVideoListResponseCommand;
 import com.klpc.stadspring.domain.log.repository.AdvertStatisticsRepository;
 import com.klpc.stadspring.domain.selectedContent.repository.SelectedContentRepository;
+import com.klpc.stadspring.global.RedisService;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import com.klpc.stadspring.util.S3Util;
@@ -38,6 +39,7 @@ public class AdvertVideoService {
     private final AdvertRepository advertRepository;
     private final AdvertStatisticsRepository advertStatisticsRepository;
     private final SelectedContentRepository selectedContentRepository;
+    private final RedisService redisService;
     private final S3Util s3Util;
 
     /**
@@ -196,6 +198,11 @@ public class AdvertVideoService {
                 videoIdListByUser.add(video.getId());
             }
         }
+
+        //TODO: 은희 큐에 들어갈 비디오 url 리스트를 넘겨줄 것.
+        List<String> videoUrls = new ArrayList<>();
+        redisService.createUserAdQueue(userId, videoUrls);
+
         return videoIdListByUser;
     }
 
@@ -210,7 +217,9 @@ public class AdvertVideoService {
 
         List<Long> finalList = new ArrayList<>();
 
-        // 태경 - 유저 맞춤 광고 큐에서 2개 추출
+        List<String> videoUrls = redisService.popUserAdQueue(userId);
+        //TODO: 은희/ videoUrl을 받는 것으로 수정할 것
+
         List<Long> videoIdListByUser = new ArrayList<>();
         for (Long tmp : videoIdListByUser) {
             finalList.add(tmp);

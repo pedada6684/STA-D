@@ -1,5 +1,6 @@
 package com.klpc.stadspring.global.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,4 +32,17 @@ public class RedisConfig {
         redisTemplate.setEnableTransactionSupport(true);
         return redisTemplate;
     }
+
+    @Bean
+    @Qualifier("redisTemplateForAdQueue")
+    public RedisTemplate<String, String> redisTemplateForAdQueue() {
+        RedisTemplate<String , String> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setEnableTransactionSupport(true);
+        return redisTemplate;
+    }
+
+
 }
