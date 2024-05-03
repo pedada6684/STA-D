@@ -94,6 +94,7 @@ public class BatchConfig {
                         videoCount,
                         clickCount,
                         orderCount,
+                        orderCancelCount,
                         revenue
                 ));
             }
@@ -121,7 +122,7 @@ public class BatchConfig {
         if (existing != null) {
             // 기존 데이터 업데이트
             existing.updateCounts(advertStatistics.getAdvertClickCount(), advertStatistics.getAdvertVideoCount(),
-                    advertStatistics.getOrderCount(), advertStatistics.getRevenue());
+                    advertStatistics.getOrderCount(), advertStatistics.getOrderCancelCount(), advertStatistics.getRevenue());
             entityManager.merge(existing);
         } else {
             // 새 데이터 삽입

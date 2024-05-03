@@ -89,6 +89,7 @@ public class ProductReviewService {
                     .content(productReview.getContent())
                     .score(productReview.getScore())
                     .reviewImg(productReview.getReviewImg())
+                    .regDate(productReview.getRegDate())
                     .build();
 
             responseList.add(response);
@@ -110,6 +111,7 @@ public class ProductReviewService {
                     .content(productReview.getContent())
                     .score(productReview.getScore())
                     .reviewImg(productReview.getReviewImg())
+                    .regDate(productReview.getRegDate())
                     .build();
 
             responseList.add(response);
