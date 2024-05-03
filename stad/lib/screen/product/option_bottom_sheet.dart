@@ -173,6 +173,7 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
                     ),
                     QuantityChanger(
                       initialQuantity: 1,
+                      maxQuantity:product.quantity,
                       onQuantityChanged: (newQuantity) {
                         // Handle quantity change
                       },

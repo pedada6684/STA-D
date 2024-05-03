@@ -55,7 +55,8 @@ class _MyAddressScreenState extends State<MyAddressScreen>
 
     setState(() => _isLoading = true);
     try {
-      deliveryAddresses = await addressService.fetchAddresses(userProvider.userId!);
+      deliveryAddresses =
+          await addressService.fetchAddresses(userProvider.userId!);
       setState(() => _isLoading = false);
     } catch (e) {
       print('Failed to fetch addresses: $e');
@@ -68,16 +69,17 @@ class _MyAddressScreenState extends State<MyAddressScreen>
   }
 
   void _deleteAddress(int userId, int locationId) async {
-
     try {
       await addressService.deleteAddress(userId, locationId);
       setState(() {
         deliveryAddresses.removeWhere((address) => address.id == locationId);
       });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Address successfully deleted')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Address successfully deleted')));
     } catch (e) {
       print('Error deleting address: $e');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to delete address')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Failed to delete address')));
     }
   }
 
@@ -108,6 +110,10 @@ class _MyAddressScreenState extends State<MyAddressScreen>
         backgroundColor: mainNavy,
         onPressed: () {
           showModalBottomSheet(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0))),
               context: context,
               isScrollControlled: true,
               useSafeArea: true,
