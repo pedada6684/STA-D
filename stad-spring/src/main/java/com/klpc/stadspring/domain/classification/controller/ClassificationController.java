@@ -23,7 +23,7 @@ public class ClassificationController {
 
     private final ClassificationService classificationService;
 
-    @PostMapping("/classify")
+    @PostMapping
     public ResponseEntity<List<ClassificationResponse>> classifyVideos(@RequestBody List<ClassificationRequest> ClassificationRequestList) {
         List<ClassificationResponse> ClassificationResponseList = classificationService.getCategory(ClassificationRequestList);
         return ResponseEntity.ok(ClassificationResponseList);
