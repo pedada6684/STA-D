@@ -17,6 +17,7 @@ public interface AdvertStatisticsRepository extends JpaRepository<AdvertStatisti
             SELECT SUM(a.advertClickCount) as totalClicks,
             SUM(a.advertVideoCount) as totalVideos,
             SUM(a.orderCount) as totalOrders,
+            SUM(a.orderCancelCount) as totalCancelCounts,
             SUM(a.revenue) as totalRevenue
             FROM AdvertStatistics a
             WHERE a.advertId = :advertId AND a.date >= :startDate
