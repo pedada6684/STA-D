@@ -1,13 +1,20 @@
 import styles from "./Advertisement.module.css";
 import plus from "../../assets/plus.png";
-import {ChangeEvent, useEffect, useState} from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import DateRange from "../Calendar/DateRange";
 import { SelectAdCategory, SelectContentsBox } from "../Select/SelectBox";
 import Modal from "../Modal/Modal";
 import ToggleButton from "../Button/ToggleButton";
 import InputContainer from "../Container/InputContainer";
 import GoEnrollButton from "../Button/GoEnrollButton";
-import {advertVideoUpload, bannerImgUpload} from "../../pages/AdEnroll/AdEnrollApi";
+import {
+  advertVideoUpload,
+  bannerImgUpload,
+} from "../../pages/AdEnroll/AdEnrollApi";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { toggleActions } from "../../store/toggle";
+import edit from "../../assets/lucide_edit.png";
 
 interface advertForm {
   title?: string;
@@ -25,92 +32,116 @@ export default function Advertisement() {
   const [formData, setFormData] = useState<advertForm>();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-      setFormData(prevState => ({
-        ...prevState,
-        [name]: value
-      }));
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedContents, setSelectedContents] = useState<string[]>([]);
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
   // 각 항목들 토글을 위한 상태관리
-  const [isAdNameExpanded, setAdNameExpanded] = useState(false);
-  const [isAdVideoExpanded, setAdVideoExpanded] = useState(false);
-  const [isAdPeriodExpanded, setAdPeriodExpanded] = useState(false);
-  const [isAdCategoryExpanded, setAdCategoryExpanded] = useState(false);
-  const [isAdContentExpanded, setAdContentExpanded] = useState(false);
-  const [videoUrlList, setVideoUrlList] = useState<string[]>([])
-  const [bannerImgUrl,setBannerImgUrl] = useState<string>("");
-  const toggleAdName = () => setAdNameExpanded(!isAdNameExpanded); // 광고명
-  const toggleAdVideo = () => setAdVideoExpanded(!isAdVideoExpanded); // 광고 영상
-  const toggleAdPeriod = () => setAdPeriodExpanded(!isAdPeriodExpanded); // 광고 기간
-  const toggleAdCategory = () => setAdCategoryExpanded(!isAdCategoryExpanded); // 광고 카테고리
-  const toggleAdContent = () => setAdContentExpanded(!isAdContentExpanded); // 노출 컨텐츠
+  const dispatch = useDispatch();
+  const toggles = useSelector((state: RootState) => state.toggle);
+  const handleToggle = (toggleKey: string) => {
+    dispatch(toggleActions.toggle(toggleKey));
+  };
+
+  const isAdNameExpanded = useSelector(
+    (state: RootState) => state.toggle.isAdNameExpanded
+  );
+  const isAdVideoExpanded = useSelector(
+    (state: RootState) => state.toggle.isAdVideoExpanded
+  );
+  const isAdPeriodExpanded = useSelector(
+    (state: RootState) => state.toggle.isAdPeriodExpanded
+  );
+  const isAdCategoryExpanded = useSelector(
+    (state: RootState) => state.toggle.isAdCategoryExpanded
+  );
+  const isAdContentExpanded = useSelector(
+    (state: RootState) => state.toggle.isAdContentExpanded
+  );
+  const [videoUrlList, setVideoUrlList] = useState<string[]>([]);
+  const [bannerImgUrl, setBannerImgUrl] = useState<string>("");
+  const [bannerImgPreview, setBannerImgPreview] = useState<string>("");
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date("2024/12/31"));
   const [category, setCategory] = useState<string | null>("");
-  const [contentId, setContentId] = useState<{value : number, label : string}[] | null>([]);
+  const [contentId, setContentId] = useState<
+    { value: number; label: string }[] | null
+  >([]);
 
   useEffect(() => {
-    if(startDate) {
-      setFormData(prevState => ({
+    if (startDate) {
+      setFormData((prevState) => ({
         ...prevState,
-        startDate: startDate.toISOString().split('T')[0]
-      }))
+        startDate: startDate.toISOString().split("T")[0],
+      }));
     }
   }, [startDate]);
   useEffect(() => {
-    if(endDate) {
-      setFormData(prevState => ({
+    if (endDate) {
+      setFormData((prevState) => ({
         ...prevState,
-        endDate: endDate.toISOString().split('T')[0]
-      }))
+        endDate: endDate.toISOString().split("T")[0],
+      }));
     }
   }, [endDate]);
   useEffect(() => {
-    if(contentId) {
-      setFormData(prevState => ({
+    if (contentId) {
+      setFormData((prevState) => ({
         ...prevState,
-        selectedContentList: [...(prevState?.selectedContentList ?? []), ...contentId.map(option => option.value)]
-      }))
+        selectedContentList: [
+          ...(prevState?.selectedContentList ?? []),
+          ...contentId.map((option) => option.value),
+        ],
+      }));
     }
   }, [contentId]);
   useEffect(() => {
-    if(category) {
-      setFormData(prevState => ({
+    if (category) {
+      setFormData((prevState) => ({
         ...prevState,
-        category: category
-      }))
+        category: category,
+      }));
     }
   }, [category]);
   useEffect(() => {
-    console.log(formData)
+    console.log(formData);
   }, [formData]);
 
   const handleAdvertVideoList = async (e: ChangeEvent<HTMLInputElement>) => {
     const videoList = e.target.files;
     const responseData = await advertVideoUpload(videoList);
     const videoUrls = responseData.map((video: any) => video.videoUrl);
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      advertVideoUrlList: [...(prevState?.advertVideoUrlList ?? []), ...videoUrls]
+      advertVideoUrlList: [
+        ...(prevState?.advertVideoUrlList ?? []),
+        ...videoUrls,
+      ],
     }));
+    setVideoUrlList(videoUrls);
     // responseData.forEach((video: any, index: number) => {
     //   console.log(`영상 ${index + 1}:`, video.videoUrl);
     //   setVideoUrlList(prevVideoUrlList => [...prevVideoUrlList, video.videoUrl]);
     // });
   };
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleBannerImg = async (e: ChangeEvent<HTMLInputElement>) => {
     const bannerImgUrl = e.target.files;
     const responseData = await bannerImgUpload(bannerImgUrl);
-    console.log(`배너이미지 : `,responseData);
+    console.log(`배너이미지 : `, responseData);
     setBannerImgUrl(responseData);
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      bannerImgUrl:responseData.bannerUrl
-    }))
+      bannerImgUrl: responseData.bannerUrl,
+    }));
+    setBannerImgPreview(responseData.bannerUrl); // 미리보기 생성
   };
 
   return (
@@ -120,7 +151,10 @@ export default function Advertisement() {
           <div className={`${styles.name}`}>
             광고명<span>*</span>
           </div>
-          <ToggleButton isExpanded={isAdNameExpanded} onToggle={toggleAdName} />
+          <ToggleButton
+            isExpanded={toggles.isAdNameExpanded}
+            onToggle={() => handleToggle("isAdNameExpanded")}
+          />
         </div>
         {isAdNameExpanded && (
           <InputContainer>
@@ -146,8 +180,8 @@ export default function Advertisement() {
             광고영상<span>*</span>
           </div>
           <ToggleButton
-            isExpanded={isAdVideoExpanded}
-            onToggle={toggleAdVideo}
+            isExpanded={toggles.isAdVideoExpanded}
+            onToggle={() => handleToggle("isAdVideoExpanded")}
           />
         </div>
         {isAdVideoExpanded && (
@@ -155,19 +189,63 @@ export default function Advertisement() {
             <div className={`${styles.advideoList}`}>
               <div className={`${styles.subTitle}`}>TV 광고 영상</div>
               <div className={`${styles.videoContainer}`}>
-                <div className={`${styles.video}`}>
-                  <input
-                    type="file"
-                    name="videoList"
-                    id="videoList"
-                    onChange={handleAdvertVideoList}
-                    className={`${styles.videoInput} ${styles.input}`}
-                    multiple
-                    required
-                  />
-                  <label htmlFor="videoList" className={styles.btnUpload}>
-                    <img src={plus} alt="업로드" />
-                  </label>
+                <div
+                  className={
+                    videoUrlList.length > 0
+                      ? `${styles.afterUpload}`
+                      : `${styles.video}`
+                  }
+                >
+                  {videoUrlList.length > 0 ? (
+                    <>
+                      {videoUrlList.map((url, index) => (
+                        <div key={index} className={`${styles.videoPreview}`}>
+                          <video
+                            className={`${styles.videoPrev}`}
+                            controls
+                            src={url}
+                            style={{ width: "100%" }}
+                          />
+                        </div>
+                      ))}
+                      <button
+                        className={styles.videoOverlay}
+                        onClick={() =>
+                          fileInputRef.current && fileInputRef.current.click()
+                        }
+                      >
+                        <img src={edit} alt="Edit videos" />
+                      </button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        name="videoList"
+                        id="videoList"
+                        accept="video/*"
+                        multiple
+                        onChange={handleAdvertVideoList}
+                        className={`${styles.videoInput} ${styles.input}`}
+                        style={{ display: "none" }}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        name="videoList"
+                        id="videoList"
+                        accept="video/*"
+                        multiple
+                        onChange={handleAdvertVideoList}
+                        className={`${styles.videoInput} ${styles.input}`}
+                        style={{ display: "none" }}
+                      />
+                      <label htmlFor="videoList" className={styles.btnUpload}>
+                        <img src={plus} alt="Upload" />
+                      </label>
+                    </>
+                  )}
                 </div>
                 <div className={`${styles.caution}`}>
                   * 가이드에 맞지않은 영상 등록 시 별도 고지없이 제재 될 수
@@ -185,18 +263,51 @@ export default function Advertisement() {
               <div
                 className={`${styles.imageContainer} ${styles.inputContainer}`}
               >
-                <div className={`${styles.image}`}>
-                  <input
-                    type="file"
-                    name="file"
-                    id="file"
-                    onChange={handleBannerImg}
-                    className={`${styles.imageInput} ${styles.input}`}
-                    required
-                  />
-                  <label htmlFor="file" className={`${styles.btnUpload}`}>
-                    <img src={plus} alt="업로드" />
-                  </label>
+                <div className={`${styles.bImage} ${styles.prev}`}>
+                  {!bannerImgPreview ? (
+                    <>
+                      <input
+                        type="file"
+                        name="file"
+                        id="fileInput" // 파일 input ID 설정
+                        ref={fileInputRef}
+                        accept="image/gif, image/jpeg, image/jpg, image/png"
+                        onChange={handleBannerImg}
+                        style={{ display: "none" }}
+                        required
+                      />
+                      <label
+                        htmlFor="fileInput" // htmlFor가 input의 ID를 참조
+                        className={styles.btnUpload}
+                      >
+                        <img src={plus} alt="Upload" />
+                      </label>
+                    </>
+                  ) : (
+                    <>
+                      <img
+                        src={bannerImgPreview}
+                        alt="Preview"
+                        className={styles.imgPrev}
+                      />
+                      <button
+                        onClick={() => fileInputRef.current?.click()} // 버튼 클릭시 input 트리거
+                        className={styles.overlayButton}
+                      >
+                        <img src={edit} alt="편집 버튼" />
+                      </button>
+                      <input
+                        type="file"
+                        name="file"
+                        id="fileInput" // 동일한 input ID를 유지
+                        accept="image/gif, image/jpeg, image/jpg, image/png"
+                        ref={fileInputRef}
+                        onChange={handleBannerImg}
+                        style={{ display: "none" }}
+                        required
+                      />
+                    </>
+                  )}
                 </div>
                 <div className={`${styles.caution}`}>
                   * 가이드에 맞지않은 배너 이미지 등록 시 별도 고지없이 제재 될
@@ -216,17 +327,19 @@ export default function Advertisement() {
             광고기간<span>*</span>
           </div>
           <ToggleButton
-            isExpanded={isAdPeriodExpanded}
-            onToggle={toggleAdPeriod}
+            isExpanded={toggles.isAdPeriodExpanded}
+            onToggle={() => handleToggle("isAdPeriodExpanded")}
           />
         </div>
         {isAdPeriodExpanded && (
           <InputContainer>
             <div className={`${styles.calendar}`}>
-              <DateRange startDate={startDate}
-                         endDate={endDate}
-                         setStartDate={setStartDate}
-                         setEndDate={setEndDate} />
+              <DateRange
+                startDate={startDate}
+                endDate={endDate}
+                setStartDate={setStartDate}
+                setEndDate={setEndDate}
+              />
             </div>
             <div className={`${styles.caution}`}>
               *계약 기간 만료시 광고는 자동으로 삭제됩니다.
@@ -240,14 +353,14 @@ export default function Advertisement() {
             광고 카테고리<span>*</span>
           </div>
           <ToggleButton
-            isExpanded={isAdCategoryExpanded}
-            onToggle={toggleAdCategory}
+            isExpanded={toggles.isAdCategoryExpanded}
+            onToggle={() => handleToggle("isAdCategoryExpanded")}
           />
         </div>
         {isAdCategoryExpanded && (
           <InputContainer>
             <div className={`${styles.selectBox}`}>
-              <SelectAdCategory setCategory={setCategory}/>
+              <SelectAdCategory setCategory={setCategory} />
             </div>
             <div className={`${styles.caution}`}>
               *각 광고 카테고리에 맞는 영상을 매칭해드립니다.
@@ -259,8 +372,8 @@ export default function Advertisement() {
         <div className={`${styles.title}`}>
           <div className={`${styles.name}`}>노출 컨텐츠(선택)</div>
           <ToggleButton
-            isExpanded={isAdContentExpanded}
-            onToggle={toggleAdContent}
+            isExpanded={toggles.isAdContentExpanded}
+            onToggle={() => handleToggle("isAdContentExpanded")}
           />
         </div>
         {isAdContentExpanded && (
@@ -272,8 +385,10 @@ export default function Advertisement() {
               <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
                 <div className={`${styles.modalContent}`}>
                   <div className={`${styles.modalTitle}`}>컨텐츠 선택하기</div>
-                  <SelectContentsBox contentId={contentId}
-                                     setContentId={setContentId}/>
+                  <SelectContentsBox
+                    contentId={contentId}
+                    setContentId={setContentId}
+                  />
                 </div>
               </Modal>
             </div>
