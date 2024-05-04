@@ -25,6 +25,11 @@
 .subTitle span {
   color: #ff1a1a;
 }
+
+.overlayButton img,
+.videoOverlay img {
+  width: 2rem;
+}
 .input3 {
   width: 100%;
   border: 0;
@@ -92,6 +97,16 @@
   margin-left: 3rem;
   width: 80%;
 }
+.overlayButton,
+.videoOverlay {
+  border: 0;
+  background-color: transparent;
+}
+
+.videoOverlay {
+  display: flex;
+  padding-top: 2rem;
+}
 
 .imageContainer,
 .imageListContainer {
@@ -113,17 +128,62 @@
 }
 
 .video,
-.image {
+.image,
+.bImage {
   border: 1px dashed #afb0b4;
+}
+.video {
+  display: flex;
+  width: 10rem;
+  height: 10rem;
+}
+
+.afterUpload {
+  display: flex;
+}
+.bImage {
+  width: 100%;
+  height: 20rem;
+}
+.image {
   width: 10rem;
   height: 10rem;
 }
 .cccc {
   display: flex;
 }
+.prev {
+  display: flex;
+  position: relative;
+}
 .preview {
   width: 10rem;
   height: 10rem;
+}
+
+.videoPrev {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.imgPrev {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.videoPreview {
+  width: 10rem;
+  height: 10rem;
+  display: flex;
+  margin-right: 1rem;
+}
+
+.overlayButton {
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
 .videoInput,
 .imageInput {
