@@ -24,4 +24,5 @@ public class ClassificationService {
                 .collectList()
                 .block(); // 비동기를 동기로 변환, 실제 사용시에는 리액티브 스트림 그대로 사용 권장
     }
+
 }

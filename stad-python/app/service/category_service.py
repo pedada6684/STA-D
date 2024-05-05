@@ -9,16 +9,12 @@ from app.dto.user_dto import user_category_request, user_category_response
 import logging
 
 def token_to_idx(tokenized_document, unk_idx):
-    logging.debug(f"Received document: {tokenized_document}")
     if isinstance(tokenized_document, np.ndarray):
         tokens = tokenized_document.tolist()
-        logging.debug("Converted numpy array to list.")
     elif isinstance(tokenized_document, str):
         tokens = tokenized_document.split(' ')
-        logging.debug("Split string into tokens.")
     else:
         tokens = list(tokenized_document)
-        logging.debug("Handled as iterable, converted to list.")
 
     idx_list = [w2v_model.wv.index_to_key.index(token) if token in w2v_model.wv.index_to_key else unk_idx for token in tokens]
     return idx_list
@@ -52,10 +48,10 @@ def get_category(requests: list[classfication_request]):
     return responses
 
 def predict_top3_categories(request: user_category_request):
-    sequence = user_category_request.text
+    sequence = sentence_to_sequence(request.text)
     prediction = model.predict(sequence)
     
-    user_id = user_category_request.userId 
+    user_id = request.userId 
     top3_indices = np.argsort(prediction[0])[-3:][::-1]
     top3_categories = [label[idx] for idx in top3_indices]
     
