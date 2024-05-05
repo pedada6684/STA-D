@@ -23,6 +23,7 @@ def token_to_idx(tokenized_document, unk_idx):
     return idx_list
 
 
+
 def sentence_to_sequence(sentence):
     sequences = [token_to_idx(sentence, UNK_IDX)]
     sequences = tf.keras.utils.pad_sequences(sequences,
@@ -49,8 +50,18 @@ def get_category(requests: list[classfication_request]):
 
     return responses
 
+def predict_top3_categories(request: user_info_request):
+    sequence = user_info_request.text
+    prediction = model.predict(sequence)
+    # 상위 3개 인덱스와 해당 확률을 추출
+    top3_indices = np.argsort(prediction[0])[-3:][::-1]
+    top3_categories = [label[idx] for idx in top3_indices]
+    top3_probabilities = [prediction[0][idx] for idx in top3_indices]
+    return top3_categories, top3_probabilities
+
+
 w2v_path = './app/models/word2vec.model'
-category_path = './app/models/category.h5'
+category_path = './app/models/category.keras'
 
 label = ['다이어트식품', '주변기기', '자동차용품', '카페트/러그', '여성의류', '음향가전', '공구', '화방용품',
        '악기', 'PC액세서리', '장류', 'DIY자재/용품', '태블릿PC액세서리', '바디케어', '완구/매트',
