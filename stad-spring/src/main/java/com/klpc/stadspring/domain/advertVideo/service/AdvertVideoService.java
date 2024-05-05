@@ -10,6 +10,7 @@ import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVide
 import com.klpc.stadspring.domain.advertVideo.service.command.response.AddVideoListResponseCommand;
 import com.klpc.stadspring.domain.log.repository.AdvertStatisticsRepository;
 import com.klpc.stadspring.domain.selectedContent.repository.SelectedContentRepository;
+import com.klpc.stadspring.global.RedisService;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import com.klpc.stadspring.util.S3Util;
@@ -38,6 +39,7 @@ public class AdvertVideoService {
     private final AdvertRepository advertRepository;
     private final AdvertStatisticsRepository advertStatisticsRepository;
     private final SelectedContentRepository selectedContentRepository;
+    private final RedisService redisService;
     private final S3Util s3Util;
 
     /**
@@ -125,10 +127,10 @@ public class AdvertVideoService {
      * @param userId
      * @return
      */
-    public List<Long> getAdvertVideoByUser(Long userId){
+    public List<String> getAdvertVideoByUser(Long userId){
         log.info("유저 맞춤 광고 큐 조회 서비스" + "\n" + "userId : " + userId);
 
-        // ==지운 - 관심사 추려주는 알고리즘 만들면 바꾸기==
+        // TODO: 지운 - 관심사 추려주는 알고리즘 만들면 바꾸기
         List<String> userCategory = new ArrayList<>();
         userCategory.add("개발");
         userCategory.add("푸드");
@@ -187,16 +189,18 @@ public class AdvertVideoService {
             }
         }
 
-        List<Long> videoIdListByUser = new ArrayList<>();
+        List<String> videoUrlListByUser = new ArrayList<>();
         // 광고 id로 광고 video id 조회
         for (Long id: advertIdListByUser) {
-            // ============= 민형 - 영상 길이 나오면 고치기 ===============
             AdvertVideo video = advertVideoRepository.findTopByAdvert_Id(id);
             if (video != null) {
-                videoIdListByUser.add(video.getId());
+                videoUrlListByUser.add(video.getVideoUrl());
             }
         }
-        return videoIdListByUser;
+
+        redisService.createUserAdQueue(userId, videoUrlListByUser);
+
+        return videoUrlListByUser;
     }
 
     /**
@@ -208,40 +212,37 @@ public class AdvertVideoService {
     public GetFinalAdvertVideoListResponse getFinalAdvertVideoList(Long userId, Long conceptId) {
         log.info("콘텐츠 시청할 때 만들 최종 광고 리스트 조회 서비스" +"\n" + "userId : " + userId + "\n" + "contentId : " + conceptId);
 
-        List<Long> finalList = new ArrayList<>();
+        List<String> finalList = new ArrayList<>();
 
-        // 태경 - 유저 맞춤 광고 큐에서 2개 추출
-        List<Long> videoIdListByUser = new ArrayList<>();
-        for (Long tmp : videoIdListByUser) {
+        List<String> videoUrlListByUser = redisService.popUserAdQueue(userId);
+        for (String tmp : videoUrlListByUser) {
             finalList.add(tmp);
         }
 
         // 유저 맞춤 광고 큐에서 2개 추출하지 못한 경우 랜덤으로 추출
         while (finalList.size() < 2) {
             AdvertVideo video = advertVideoRepository.findRandomTop();
-            finalList.add(video.getId());
+            finalList.add(video.getVideoUrl());
         }
 
         // 콘텐츠 고정 광고 1개 추출
         Long advertId = selectedContentRepository.findRandomTopByConceptId(conceptId);
-        // ============= 민형 - 영상 길이 나오면 고치기 ===============
         AdvertVideo video = advertVideoRepository.findTopByAdvert_Id(advertId);
         if (video != null) {
-            finalList.add(video.getId());
+            finalList.add(video.getVideoUrl());
         }
 
         // 랜덤 기업 광고 1개 추출
         advertId = advertRepository.findRandomNotProductAdvertId();
-        // ============= 민형 - 영상 길이 나오면 고치기 ===============
         video = advertVideoRepository.findTopByAdvert_Id(advertId);
         if (video != null) {
-            finalList.add(video.getId());
+            finalList.add(video.getVideoUrl());
         }
 
         // 최종 큐에 광고가 4개가 들어가야 함
         while (finalList.size() < 4) {
             video = advertVideoRepository.findRandomTop();
-            finalList.add(video.getId());
+            finalList.add(video.getVideoUrl());
         }
 
         return GetFinalAdvertVideoListResponse.builder()
@@ -252,12 +253,10 @@ public class AdvertVideoService {
     /**
      * 영상 스트리밍
      * @param httpHeaders
-     * @param id
+     * @param pathStr
      * @return
      */
-    public ResponseEntity<ResourceRegion> streamingAdvertVideo(HttpHeaders httpHeaders, Long id) {
-        String pathStr = advertVideoRepository.findById(id).get().getVideoUrl();
-
+    public ResponseEntity<ResourceRegion> streamingAdvertVideo(HttpHeaders httpHeaders, String pathStr) {
         // 파일 존재 확인
         try {
             UrlResource video = new UrlResource(pathStr);
