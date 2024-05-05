@@ -7,6 +7,7 @@ import com.klpc.stadspring.domain.advertVideo.service.command.request.AddBannerI
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddVideoListRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVideoRequestCommand;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
+import com.klpc.stadspring.global.RedisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -19,6 +20,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -30,6 +32,7 @@ public class AdvertVideoController {
 
     private final AdvertVideoService advertVideoService;
     private final ContentDetailService detailService;
+    private final RedisService redisService;
 
     @PostMapping("/add-video-list")
     @Operation(summary = "광고 영상 업로드", description = "광고 영상 업로드")
@@ -96,18 +99,31 @@ public class AdvertVideoController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/streaming/{videoId}")
+    @GetMapping("/streaming/{videoUrl}")
     @Operation(summary = "광고 스트리밍", description = "광고 스트리밍")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "광고 스트리밍 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<ResourceRegion> streamingPublicVideo(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long videoId){
-        log.info("광고 스트리밍" + "\n" + "streamingPublicVideo : "+videoId);
+    ResponseEntity<ResourceRegion> streamingPublicVideo(@RequestHeader HttpHeaders httpHeaders, @PathVariable String videoUrl){
+        log.info("광고 스트리밍" + "\n" + "streamingPublicVideo : "+videoUrl);
 
-//        Long conceptId = detailService.getContentDetailById(detailId).getContentConceptId();
-//        List<Long> videoIdList = advertVideoService.getFinalAdvertVideoList(userId, conceptId);
-        return advertVideoService.streamingAdvertVideo(httpHeaders, videoId);
+        return advertVideoService.streamingAdvertVideo(httpHeaders, videoUrl);
     }
+
+    @GetMapping("/redis/test")
+    ResponseEntity<?> test(){
+        ArrayList<String> list = new ArrayList<>();
+        list.add("redis1");
+        list.add("redis2");
+        list.add("redis3");
+        redisService.createUserAdQueue(1L, list);
+        List<String> strings = redisService.popUserAdQueue(1L);
+        for (String res : strings) {
+            System.out.println("result: " + res);
+        }
+        return ResponseEntity.ok().build();
+    }
+
 }
