@@ -69,6 +69,8 @@ def preprocess(text: str) -> str:
     for token in token_list:
         if token.tag == 'NNG' and token.len > 1:
             wordslist.append(token.form)
+            
+    print(' '.join(list(set(wordslist))))
     return ' '.join(list(set(wordslist)))
 
 
