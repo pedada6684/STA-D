@@ -56,7 +56,8 @@ public class ContentDetailService {
             Optional<HttpRange> optional = httpHeaders.getRange().stream().findFirst();
             HttpRange httpRange;
             if (optional.isPresent()) {
-                log.info("ContentsService.streaming");
+                // 로그가 너무 많이 찍힘
+//                log.info("ContentsService.streaming");
                 httpRange = optional.get();
                 long start = httpRange.getRangeStart(contentLength);
                 long end = httpRange.getRangeEnd(contentLength);
