@@ -72,6 +72,8 @@ dependencies {
 	//webClient 사용을 위한 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
+	//json
+	implementation 'org.json:json:20231013'
 }
 
 tasks.named('test') {
