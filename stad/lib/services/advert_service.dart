@@ -4,8 +4,8 @@ import 'package:stad/models/advert_model.dart';
 
 class AdService {
   final Dio dio = Dio();
-  final url = Uri.parse('$svApi/advert');
-  // final String url = ('http://192.168.0.129:8080/api/advert');
+  // final url = Uri.parse('$svApi/advert');
+  final String url = ('http://192.168.0.9:8080/api/advert');
   //광고 정보 받아오기
   //TODO: advertId 수정
   Future<Map<String, dynamic>> getAdInfo(int advertId) async {
@@ -13,12 +13,12 @@ class AdService {
       final response = await dio.get('$url/get?advertId=1');
 
       print(response.data);
-      print(response.data);
-      print(response.data);
-      print(response.data);
-      print(response.data);
-      print(response.data);
-      print(response.data);
+      // print(response.data);
+      // print(response.data);
+      // print(response.data);
+      // print(response.data);
+      // print(response.data);
+      // print(response.data);
       // final response = await dio.get('$url/advert-info?advertId=$advertId');
       if (response.statusCode == 200) {
         // 응답이 성공적이라면 JSON 데이터를 반환
@@ -58,7 +58,7 @@ class AdService {
 
       if (response.statusCode == 200 && response.data != null) {
 
-        print(response.data); // {data:[]}
+        print('콘텐츠 관련 광고 : ${response.data}'); // {data:[]}
         // print(response.data);
         // print(response.data);
         // print(response.data);

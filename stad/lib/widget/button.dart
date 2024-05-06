@@ -19,6 +19,7 @@ class CustomElevatedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
+        color: mainWhite,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ElevatedButton(
@@ -34,7 +35,8 @@ class CustomElevatedButton extends StatelessWidget {
             ),
             onPressed: onPressed,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Text(
                 text,
                 style: TextStyle(fontSize: 16.0),

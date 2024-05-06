@@ -166,14 +166,16 @@ class _CartScreenState extends State<CartScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('${item.price}원', style: TextStyle(color: midGray)),
-                      QuantityChanger(
-                        initialQuantity: item.quantity,
-                        onQuantityChanged: (newQuantity) {
-                          setState(() {
-                            cartItems[index].quantity = newQuantity;
-                          });
-                        },
-                      ),
+                      //TODO:수정하기 quantityChanger
+                      // QuantityChanger(
+                      //   initialQuantity: item.quantity,
+                      //   maxQuantity: ,
+                      //   onQuantityChanged: (newQuantity) {
+                      //     setState(() {
+                      //       cartItems[index].quantity = newQuantity;
+                      //     });
+                      //   },
+                      // ),
                     ],
                   ),
                 ),

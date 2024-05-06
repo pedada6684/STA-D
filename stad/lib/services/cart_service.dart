@@ -25,7 +25,7 @@ class CartService {
 
   // 특정 장바구니 항목을 삭제하는 메서드
   Future<void> deleteCartItem(String id) async {
-    // TODO: http.delete(Uri.parse('https://example.com/api/cart/delete/$id'));
+    // TODO: http.delete(Uri.parse('https://www.mystad.com/api/cart/delete/$id'));
 
     print('Delete item with id: $id');
     // 실제로는 서버에 DELETE 요청을 보내야 합니다.
@@ -33,7 +33,7 @@ class CartService {
 
   // 장바구니에 항목을 추가하는 메서드
   Future<void> addCartItem(CartItem item) async {
-    // TODO: http.post(Uri.parse('https://example.com/api/cart/add'), body: item.toJson());
+    // TODO: http.post(Uri.parse('https://www.mystad.com/api/cart/add'), body: item.toJson());
   }
 
   // TODO: 장바구니 항목 수량을 업데이트

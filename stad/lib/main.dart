@@ -11,6 +11,7 @@ import 'package:stad/screen/home/home_screen.dart';
 import 'package:stad/screen/home/onboarding_screen.dart';
 import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/myStad_screen.dart';
+import 'package:stad/services/user_service.dart';
 import 'package:stad/widget/bottom_bar.dart';
 
 import 'providers/cart_provider.dart';
@@ -70,6 +71,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        Provider(create: (_) => UserService()),
         ChangeNotifierProvider(create: (context) => CartModel()),
       ],
       child: MaterialApp.router(

@@ -8,6 +8,7 @@ class ReviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainWhite,
+      body: Center(child: Text('상품 관련 후기가 없습니다.')),
     );
   }
 }
