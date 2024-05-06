@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/models/delivery_address_model.dart';
+import 'package:stad/models/product_model.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/services/address_service.dart';
 import 'package:stad/widget/address_screen.dart';
@@ -10,7 +11,12 @@ import 'package:stad/widget/button.dart';
 import 'package:stad/widget/product_card.dart';
 
 class OrderScreen extends StatefulWidget {
-  const OrderScreen({super.key});
+  final ProductInfo? productInfo;
+  final List<ProductType>? productTypes;
+  final String? title;
+
+  const OrderScreen(
+      {super.key, this.productInfo, this.productTypes, this.title});
 
   @override
   State<OrderScreen> createState() => _OrderScreenState();
@@ -231,7 +237,10 @@ class _OrderScreenState extends State<OrderScreen> {
                 ? _buildDeliveryAddressButtons()
                 : const Padding(
                     padding: EdgeInsets.all(16.0),
-                    child: Text('배송지를 추가해주세요.'),
+                    child: Text(
+                      '배송지를 추가해주세요.',
+                      style: TextStyle(color: darkGray),
+                    ),
                   ),
             if (selectedDeliveryAddress != null)
               Padding(

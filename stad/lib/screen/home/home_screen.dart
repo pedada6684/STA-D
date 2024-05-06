@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+//TODO:백 SSE contentId, advertId 받아오기
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   bool _isActive = true;
   int _current = 0;
@@ -161,8 +162,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     onPressed: () {
                       //TODO: advertId 수정
                       Navigator.of(context).push(MaterialPageRoute(
+                        //TODO 수정
                           builder: (context) => ProductScreen(
                                 advertId: 1,
+                                // contentId: 1,
                                 title: singleAdverts[0]['title'],
                                 description: singleAdverts[0]['description'],
                               )));
@@ -190,6 +193,7 @@ CarouselSlider buildCarouselSlider(BuildContext context) {
                     MaterialPageRoute(
                         builder: (context) => ProductScreen(
                               advertId: 1,
+                              // contentId: ,
                               title: singleAdverts[0]['title'],
                               description: singleAdverts[0]['description'],
                             )));

@@ -13,7 +13,12 @@ class ProductScreen extends StatefulWidget {
   final String title;
   final String description;
 
-  const ProductScreen({super.key, required this.advertId, required this.title, required this.description});
+  const ProductScreen({
+    super.key,
+    required this.advertId,
+    required this.title,
+    required this.description,
+  });
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -37,7 +42,8 @@ class _ProductScreenState extends State<ProductScreen>
   void _loadProductData() async {
     try {
       _productInfo = await _productService.getProductInfo(widget.advertId);
-      _productTypes = await _productService.getProductTypeList(_productInfo!.id);
+      _productTypes =
+          await _productService.getProductTypeList(_productInfo!.id);
       if (_tabController == null || _tabController.length != 2) {
         _tabController = TabController(length: 2, vsync: this);
       }
@@ -66,9 +72,13 @@ class _ProductScreenState extends State<ProductScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
-          _productInfo != null ?
-          ProductDetailScreen(productInfo: _productInfo, productTypes: _productTypes, title: widget.title, description:widget.description ) :
-          Center(child: Text('상품 정보가 없습니다')),
+          _productInfo != null
+              ? ProductDetailScreen(
+                  productInfo: _productInfo,
+                  productTypes: _productTypes,
+                  title: widget.title,
+                  description: widget.description)
+              : Center(child: Text('상품 정보가 없습니다')),
           Center(child: ReviewScreen()),
         ],
       ),
@@ -78,7 +88,8 @@ class _ProductScreenState extends State<ProductScreen>
         backgroundColor: mainNavy,
         onPressed: () {
           if (_productTypes.isNotEmpty) {
-            showProductOptionBottomSheet(context, _productInfo, _productTypes, widget.title);
+            showProductOptionBottomSheet(
+                context, _productInfo, _productTypes, widget.title);
           }
         },
       ),

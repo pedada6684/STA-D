@@ -59,8 +59,8 @@ class UserService {
         UserModel.fromFirebaseUser(user, googleAccessToken).toJson();
     try {
       final response = await dio.post(
-        'https://www.mystad.com/api/v1/auth/applogin',
-        // 'http://10.0.2.2:8080/api/v1/auth/applogin',
+        // 'https://www.mystad.com/api/v1/auth/applogin',
+        'http://192.168.0.9:8080/api/v1/auth/applogin',
         // 'http://192.168.31.202:8080/api/v1/auth/applogin',
         // 'http://192.168.0.129:8080/api/v1/auth/applogin',
         data: json.encode(userProfile),
@@ -89,29 +89,54 @@ class UserService {
     return false;
   }
 
-  Future<bool> updateUserProfile(
-      BuildContext context, String phone, String profileImagePath) async {
+  Future<bool> updateUserProfile(BuildContext context, String? nickname,
+      String? phone, String? profileImagePath) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    FormData formData = FormData.fromMap({
+    UserModel currentUser = userProvider.user!;
+
+    // 사용자가 입력하지 않은 경우 기존 값을 사용합니다.
+    String finalNickname =
+        nickname?.isNotEmpty == true ? nickname! : currentUser.nickname ?? '';
+    String finalPhone =
+        phone?.isNotEmpty == true ? phone! : currentUser.phone ?? '';
+    print(finalNickname);
+    print(finalPhone);
+
+    Map<String, dynamic> updateData = {
       "userId": userProvider.userId,
-      // "userId": 2,
-      "name": userProvider.user?.name,
-      "nickname": userProvider.user?.nickname,
-      "phone": phone,
-      // "company": null,
-      // "comNo": null,
-      // "department": null,
-      // "password": null,
-      "profile": await MultipartFile.fromFile(profileImagePath,
-          filename: "profile_pic.png"),
-    });
+      "name": currentUser.name, // name은 변경하지 않으므로 기존 값을 그대로 사용합니다.
+      "nickname": finalNickname,
+      "phone": finalPhone,
+    };
+
+    // 파일이 선택된 경우에만 파일을 FormData에 추가
+    if (profileImagePath != null && profileImagePath.isNotEmpty) {
+      updateData['profile'] = await MultipartFile.fromFile(profileImagePath,
+          filename: "profile_pic.png");
+    } else if (currentUser.profilePicture != null &&
+        currentUser.profilePicture!.isNotEmpty) {
+      // 서버 API가 이를 처리할 수 있도록 기존 이미지 URL을 재전송하거나, 필요 없다면 이 라인을 제거
+      updateData['profile'] = currentUser.profilePicture;
+    }
+
+    FormData formData = FormData.fromMap(updateData);
+
+    //
+    // FormData formData = FormData.fromMap({
+    //   "userId": userProvider.userId,
+    //   "name": userProvider.user?.name,
+    //   "nickname": finalNickname,
+    //   "phone": finalPhone,
+    //   "profile": await MultipartFile.fromFile(profileImagePath,
+    //       filename: "profile_pic.png"),
+    // });
 
     print(formData);
 
     try {
       final response = await dio.post(
-        'https://www.mystad.com/api/user/update',
-        // 'http://http://192.168.31.202:8080/api/user/update',
+        // 'https://www.mystad.com/api/user/update',
+        'http://192.168.0.9:8080/api/user/update',
         data: formData,
         options: Options(
           headers: {
