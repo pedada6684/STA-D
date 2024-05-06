@@ -1,0 +1,28 @@
+.scrollSnapContainer {
+  height: 100vh; /* 뷰포트의 전체 높이 */
+  overflow-y: scroll; /* 세로 스크롤 활성화 */
+  scroll-snap-type: y mandatory; /* 세로 방향 스냅 강제 */
+}
+
+.title {
+  margin: 1rem 1rem 1rem 0.5rem;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.main {
+  display: flex;
+  align-items: center;
+}
+
+.chartWrapper {
+  display: flex;
+  width: 100%;
+}
+
+.firstWrapper {
+  padding-top: 5rem;
+}
+.etcContainer {
+  margin-top: 6rem;
+}

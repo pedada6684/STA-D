@@ -1,0 +1,41 @@
+.Wrapper {
+  display: flex;
+  margin-top: -2rem;
+}
+.container {
+  display: flex;
+  width: 25%;
+  height: 6rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 10px 10px -10px;
+}
+.yellow {
+  background-color: #f9ecaf;
+}
+
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  margin-right: 2rem;
+  padding: 0.3rem;
+}
+.w {
+  background-color: white;
+}
+.y {
+  background-color: #f9ecaf;
+}
+.icon {
+  width: 2rem;
+}
+.title {
+  color: #807f7f;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.value {
+  font-weight: bold;
+  font-size: 1.8rem;
+}
