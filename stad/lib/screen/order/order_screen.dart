@@ -14,9 +14,15 @@ class OrderScreen extends StatefulWidget {
   final ProductInfo? productInfo;
   final List<ProductType>? productTypes;
   final String? title;
+  final int deliveryFee;
 
-  const OrderScreen(
-      {super.key, this.productInfo, this.productTypes, this.title});
+  const OrderScreen({
+    super.key,
+    this.productInfo,
+    this.productTypes,
+    this.title,
+    this.deliveryFee = 2500,
+  });
 
   @override
   State<OrderScreen> createState() => _OrderScreenState();
@@ -27,6 +33,7 @@ class _OrderScreenState extends State<OrderScreen> {
   bool isExpanded = false;
   List<DeliveryAddress> deliveryAddresses = [];
   DeliveryAddress? selectedDeliveryAddress;
+  int deliveryFee = 0;
 
   // List<DeliveryAddress> deliveryAddresses = [
   //   DeliveryAddress(
@@ -307,9 +314,13 @@ class _OrderScreenState extends State<OrderScreen> {
                 isExpanded = expanded;
               });
             },
-            children: const <Widget>[
+            children: <Widget>[
               //백에서 받아오기
-              ProductCard(),
+              ProductCard(
+                productInfo: widget.productInfo,
+                productTypes: widget.productTypes,
+                title: widget.title,
+              ),
             ],
           ),
         ),

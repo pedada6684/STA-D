@@ -64,7 +64,7 @@ class _ProductScreenState extends State<ProductScreen>
     return Scaffold(
       appBar: CustomAppBar(
         title: _productInfo != null && _productTypes.isNotEmpty
-            ? _productTypes[0].name
+            ? _productInfo!.name
             : '상품 상세',
         showBackButton: true,
         tabController: _tabController,
