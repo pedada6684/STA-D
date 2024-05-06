@@ -68,6 +68,19 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
     }
   }
 
+  void _navigateToOrderScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OrderScreen(
+          productInfo: widget.productInfo, // 선택된 제품 정보
+          productTypes: selectedProducts, // 선택된 제품 유형 리스트
+          title: widget.title, // 제품 제목
+        ),
+      ),
+    );
+  }
+
   void addProduct(ProductType product) {
     setState(() {
       selectedProducts.add(product);
@@ -173,7 +186,7 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
                     ),
                     QuantityChanger(
                       initialQuantity: 1,
-                      maxQuantity:product.quantity,
+                      maxQuantity: product.quantity,
                       onQuantityChanged: (newQuantity) {
                         // Handle quantity change
                       },
@@ -186,6 +199,66 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
             _buildActionButtons(context),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: mainNavy,
+                textStyle: TextStyle(
+                  fontSize: 16,
+                ),
+                side: BorderSide(color: mainNavy, width: 1),
+                surfaceTintColor: mainWhite,
+                backgroundColor: mainWhite,
+                padding: EdgeInsets.symmetric(vertical: 14),
+                // Button background color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+              ),
+              onPressed: () {
+                //장바구니 담기
+              },
+              child: Text(
+                '장바구니 담기',
+              ),
+            ),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: mainWhite,
+                textStyle: TextStyle(
+                  fontSize: 16,
+                ),
+                surfaceTintColor: mainNavy,
+                backgroundColor: mainNavy,
+                padding: EdgeInsets.symmetric(vertical: 14),
+                // Button background color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+              ),
+              onPressed: _navigateToOrderScreen,
+              child: Text(
+                '구매하기',
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -232,69 +305,4 @@ class ProductDetails extends StatelessWidget {
 Widget _buildTotalPrice() {
   // Return widget for total price
   return Container(); // Placeholder for total price widget
-}
-
-Widget _buildActionButtons(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.only(top: 20.0),
-    child: Row(
-      children: [
-        Expanded(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              foregroundColor: mainNavy,
-              textStyle: TextStyle(
-                fontSize: 16,
-              ),
-              side: BorderSide(color: mainNavy, width: 1),
-              surfaceTintColor: mainWhite,
-              backgroundColor: mainWhite,
-              padding: EdgeInsets.symmetric(vertical: 14),
-              // Button background color
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
-              ),
-            ),
-            onPressed: () {
-              //장바구니 담기
-            },
-            child: Text(
-              '장바구니 담기',
-            ),
-          ),
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              foregroundColor: mainWhite,
-              textStyle: TextStyle(
-                fontSize: 16,
-              ),
-              surfaceTintColor: mainNavy,
-              backgroundColor: mainNavy,
-              padding: EdgeInsets.symmetric(vertical: 14),
-              // Button background color
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
-              ),
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                CustomPageRoute(builder: (context) => OrderScreen()),
-              );
-            },
-            child: Text(
-              '구매하기',
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
 }

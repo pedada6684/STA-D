@@ -75,7 +75,7 @@ class _MyAddressScreenState extends State<MyAddressScreen>
         deliveryAddresses.removeWhere((address) => address.id == locationId);
       });
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Address successfully deleted')));
+          SnackBar(content: Text('배송지가 삭제되었습니다.')));
     } catch (e) {
       print('Error deleting address: $e');
       ScaffoldMessenger.of(context)
