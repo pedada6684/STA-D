@@ -5,7 +5,7 @@ import 'package:stad/constant/colors.dart';
 import 'package:stad/models/advert_model.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/product/product_screen.dart';
-import 'package:stad/services/ad_service.dart';
+import 'package:stad/services/advert_service.dart';
 import 'package:stad/widget/advertising_card.dart';
 import 'package:stad/widget/app_bar.dart';
 

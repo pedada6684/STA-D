@@ -6,12 +6,16 @@ class ProductCard extends StatelessWidget {
   final ProductInfo? productInfo;
   final List<ProductType>? productTypes;
   final String? title;
+  final int? quantities;
+  final int? totalPrice;
 
   const ProductCard({
     super.key,
     this.productInfo,
     this.productTypes,
     this.title,
+    this.quantities,
+    this.totalPrice,
   });
 
   @override
@@ -23,9 +27,9 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (title != null)
+            if (productInfo != null)
               Text(
-                title!,
+                productInfo!.name,
                 style: TextStyle(
                     fontSize: 14.0,
                     color: mainBlack,
@@ -51,12 +55,17 @@ class ProductCard extends StatelessWidget {
                           style: TextStyle(fontSize: 14.0, color: mainBlack)),
                       Text(productTypes!.first.name,
                           style: TextStyle(fontSize: 12.0, color: midGray)),
-                      Text('옵션선택',
+                      if (productTypes != null &&
+                          productTypes!.first.productOptions != [])
+                        Text('옵션선택',
+                            style: TextStyle(fontSize: 12.0, color: midGray)),
+                      Text(quantities.toString(),
                           style: TextStyle(fontSize: 12.0, color: midGray)),
-                      Text('수량',
-                          style: TextStyle(fontSize: 12.0, color: midGray)),
-                      Text('얼마얼마 원',
-                          style: TextStyle(fontSize: 14.0, color: mainBlack)),
+                      Text('${totalPrice.toString()} 원',
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              color: mainBlack,
+                              fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ],

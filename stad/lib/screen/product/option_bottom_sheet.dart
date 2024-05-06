@@ -47,6 +47,7 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   int? selectedProductIndex;
   int? selectedOptionIndex;
   List<ProductType> selectedProducts = [];
+  Map<int, int> quantities = {};
 
   void selectProductOption(String? value) {
     if (value != null) {
@@ -75,6 +76,7 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
         builder: (context) => OrderScreen(
           productInfo: widget.productInfo, // 선택된 제품 정보
           productTypes: selectedProducts, // 선택된 제품 유형 리스트
+          quantities: quantities,
           title: widget.title, // 제품 제목
         ),
       ),
@@ -82,8 +84,11 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   }
 
   void addProduct(ProductType product) {
+    if (!quantities.containsKey(product.id)) {
+      quantities[product.id] = 1; // 초기 수량 설정
+    }
     setState(() {
-      selectedProducts.add(product);
+      quantities.update(product.id, (value) => value + 1);
     });
   }
 
