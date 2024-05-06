@@ -16,8 +16,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -132,12 +136,20 @@ public class LogService {
     public GetDailyCountResponse getDailyAdvertClickCount(Long advertId) {
 
         LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
+        LocalDate today = LocalDate.now();
 
         List<Object[]> results = advertStatisticsRepository.getDailyAdvertClickCount(advertId, thirtyDaysAgo)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-        List<GetDailyCountCommand> dailyCounts = results.stream()
-                .map(result -> new GetDailyCountCommand((LocalDate) result[0], (Long) result[1]))
+        Map<LocalDate, Long> resultMapped = results.stream()
+                .collect(Collectors.toMap(
+                        result -> (LocalDate) result[0],
+                        result -> (Long) result[1]
+                ));
+
+        List<GetDailyCountCommand> dailyCounts = LongStream.rangeClosed(0, ChronoUnit.DAYS.between(thirtyDaysAgo, today))
+                .mapToObj(i -> thirtyDaysAgo.plusDays(i))
+                .map(date -> new GetDailyCountCommand(date, resultMapped.getOrDefault(date, 0L)))
                 .collect(Collectors.toList());
 
         return GetDailyCountResponse.builder().list(dailyCounts).build();
@@ -146,40 +158,64 @@ public class LogService {
     public GetDailyCountResponse getDailyAdvertVideoCount(Long advertId) {
 
         LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
+        LocalDate today = LocalDate.now();
 
         List<Object[]> results = advertStatisticsRepository.getDailyAdvertVideoCount(advertId, thirtyDaysAgo)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-        List<GetDailyCountCommand> dailyVideos = results.stream()
-                .map(result -> new GetDailyCountCommand((LocalDate) result[0], (Long) result[1]))
+        Map<LocalDate, Long> resultMapped = results.stream()
+                .collect(Collectors.toMap(
+                        result -> (LocalDate) result[0],
+                        result -> (Long) result[1]
+                ));
+
+        List<GetDailyCountCommand> dailyAdvertVideoCounts = LongStream.rangeClosed(0, ChronoUnit.DAYS.between(thirtyDaysAgo, today))
+                .mapToObj(i -> thirtyDaysAgo.plusDays(i))
+                .map(date -> new GetDailyCountCommand(date, resultMapped.getOrDefault(date, 0L)))
                 .collect(Collectors.toList());
 
-        return GetDailyCountResponse.builder().list(dailyVideos).build();
+        return GetDailyCountResponse.builder().list(dailyAdvertVideoCounts).build();
     }
 
     public GetDailyCountResponse getDailyOrderCount(Long advertId) {
-
         LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
+        LocalDate today = LocalDate.now();
 
         List<Object[]> results = advertStatisticsRepository.getDailyOrderCount(advertId, thirtyDaysAgo)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-        List<GetDailyCountCommand> dailyOrders = results.stream()
-                .map(result -> new GetDailyCountCommand((LocalDate) result[0], (Long) result[1]))
+        Map<LocalDate, Long> resultMapped = results.stream()
+                .collect(Collectors.toMap(
+                        result -> (LocalDate) result[0],
+                        result -> (Long) result[1]
+                ));
+
+        List<GetDailyCountCommand> dailyOrders = LongStream.rangeClosed(0, ChronoUnit.DAYS.between(thirtyDaysAgo, today))
+                .mapToObj(i -> thirtyDaysAgo.plusDays(i))
+                .map(date -> new GetDailyCountCommand(date, resultMapped.getOrDefault(date, 0L)))
                 .collect(Collectors.toList());
 
         return GetDailyCountResponse.builder().list(dailyOrders).build();
     }
 
+
     public GetDailyCountResponse getDailyRevenueCount(Long advertId) {
 
         LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
+        LocalDate today = LocalDate.now();
 
-        List<Object[]> results = advertStatisticsRepository.getDailyOrderCount(advertId, thirtyDaysAgo)
+        List<Object[]> results = advertStatisticsRepository.getDailyRevenue(advertId, thirtyDaysAgo)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-        List<GetDailyCountCommand> dailyRevenues = results.stream()
-                .map(result -> new GetDailyCountCommand((LocalDate) result[0], (Long) result[1]))
+        Map<LocalDate, Long> resultMapped = results.stream()
+                .collect(Collectors.toMap(
+                        result -> (LocalDate) result[0],
+                        result -> (Long) result[1]
+                ));
+
+        List<GetDailyCountCommand> dailyRevenues = LongStream.rangeClosed(0, ChronoUnit.DAYS.between(thirtyDaysAgo, today))
+                .mapToObj(i -> thirtyDaysAgo.plusDays(i))
+                .map(date -> new GetDailyCountCommand(date, resultMapped.getOrDefault(date, 0L)))
                 .collect(Collectors.toList());
 
         return GetDailyCountResponse.builder().list(dailyRevenues).build();
