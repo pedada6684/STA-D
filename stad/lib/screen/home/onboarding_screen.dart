@@ -19,6 +19,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     return IntroductionScreen(
       key: introKey,
+      dotsDecorator: DotsDecorator(activeColor: mainNavy),
       pages: [
         PageViewModel(
           titleWidget: Column(
@@ -43,7 +44,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Image.asset('assets/image/ad_mockup.png', width: 350),
               SizedBox(height: 40),
               Text(
-                '사용자 맞춤형 광고와 콘텐츠 맞춤형 광고',
+                '사용자 맞춤형 광고와 콘텐츠 맞춤형 광고!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 18, color: mainNavy, fontWeight: FontWeight.w600),
@@ -75,7 +76,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Image.asset('assets/image/ad_mockup.png', width: 350),
               SizedBox(height: 40),
               Text(
-                '광고 중인 상품이 궁금하다면?',
+                '광고 중인 상품이 궁금하다면? ',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 18, color: mainNavy, fontWeight: FontWeight.w600),
@@ -89,8 +90,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ],
       showNextButton: true,
       showBackButton: true,
-      next: Icon(Icons.arrow_forward_ios_rounded, size: 20.0),
-      back: Icon(Icons.arrow_back_ios_rounded, size: 20.0),
+
+      next: Icon(Icons.arrow_forward_ios_rounded, size: 30.0, color: mainNavy,),
+      back: Icon(Icons.arrow_back_ios_rounded, size: 30.0, color: mainNavy,),
       // onDone: () => Builder(
       //   builder: (context) {
       //     context.go('/login');

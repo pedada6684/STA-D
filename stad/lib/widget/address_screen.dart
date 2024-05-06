@@ -8,6 +8,7 @@ import 'package:stad/widget/button.dart';
 
 class AddressScreen extends StatefulWidget {
   final Function onAddressAdded;
+
   const AddressScreen({super.key, required this.onAddressAdded});
 
   @override
@@ -21,7 +22,7 @@ class _AddressScreenState extends State<AddressScreen> {
   final TextEditingController _postcodeController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _addressDetailController =
-  TextEditingController();
+      TextEditingController();
   bool isDefaultAddress = false;
   bool isFormFilled = false;
   bool isPhoneError = false;
@@ -160,11 +161,11 @@ class _AddressScreenState extends State<AddressScreen> {
   }
 
   Widget _buildTextField(
-      TextEditingController controller,
-      String placeholder, {
-        bool readOnly = false,
-        bool isFixedLabel = false,
-      }) {
+    TextEditingController controller,
+    String placeholder, {
+    bool readOnly = false,
+    bool isFixedLabel = false,
+  }) {
     bool isError = placeholder == '핸드폰 번호' && isPhoneError;
 
     return TextFormField(
@@ -176,7 +177,7 @@ class _AddressScreenState extends State<AddressScreen> {
         labelText: placeholder,
         labelStyle: TextStyle(color: midGray),
         floatingLabelBehavior:
-        isFixedLabel ? FloatingLabelBehavior.always : null,
+            isFixedLabel ? FloatingLabelBehavior.always : null,
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: midGray),
         ),
@@ -184,13 +185,13 @@ class _AddressScreenState extends State<AddressScreen> {
             borderSide: BorderSide(color: mainNavy, width: 2)),
         errorBorder: isError
             ? UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.red, width: 2),
-        )
+                borderSide: BorderSide(color: Colors.red, width: 2),
+              )
             : null,
         focusedErrorBorder: isError
             ? UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.red, width: 2),
-        )
+                borderSide: BorderSide(color: Colors.red, width: 2),
+              )
             : null,
         errorText: isError ? '번호를 입력해주세요.' : null,
       ),
@@ -199,53 +200,57 @@ class _AddressScreenState extends State<AddressScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: mainWhite,
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(20.0), topLeft: Radius.circular(20.0))),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16),
-        child: Column(
-          children: <Widget>[
-            Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.only(bottom: 8.0),
-              decoration: BoxDecoration(
-                color: darkGray,
-                borderRadius: BorderRadius.circular(10),
-              ),
+    return Scaffold(
+      backgroundColor: mainWhite,
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(20.0), topLeft: Radius.circular(20.0))),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 8.0),
+                  decoration: BoxDecoration(
+                    color: darkGray,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                _gap(),
+                Text(
+                  '배송지 입력',
+                  style: TextStyle(
+                      fontSize: 18.0, fontWeight: FontWeight.w600, color: mainNavy),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                _buildTextField(_nameController, '이름'),
+                _gap(),
+                _buildTextField(_adnickController, '배송지명'),
+                _gap(),
+                _buildTextField(_phoneController, '핸드폰 번호'),
+                _gap(),
+                _buildPostalCodeField(),
+                _gap(),
+                _buildTextField(_addressController, '기본주소', readOnly: true),
+                _gap(),
+                _buildTextField(_addressDetailController, '상세주소'),
+                _gap(),
+                _gap(),
+                CustomElevatedButton(
+                  text: '완료',
+                  textColor: mainWhite,
+                  onPressed: isFormFilled ? addUserAddress : null,
+                  backgroundColor: mainNavy,
+                )
+              ],
             ),
-            _gap(),
-            Text(
-              '배송지 입력',
-              style: TextStyle(
-                  fontSize: 18.0, fontWeight: FontWeight.w600, color: mainNavy),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            _buildTextField(_nameController, '이름'),
-            _gap(),
-            _buildTextField(_adnickController, '배송지명'),
-            _gap(),
-            _buildTextField(_phoneController, '핸드폰 번호'),
-            _gap(),
-            _buildPostalCodeField(),
-            _gap(),
-            _buildTextField(_addressController, '기본주소', readOnly: true),
-            _gap(),
-            _buildTextField(_addressDetailController, '상세주소'),
-            _gap(),
-            _gap(),
-            CustomElevatedButton(
-              text: '완료',
-              textColor: mainWhite,
-              onPressed: isFormFilled ? addUserAddress : null,
-              backgroundColor: mainNavy,
-            )
-          ],
+          ),
         ),
       ),
     );

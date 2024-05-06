@@ -14,6 +14,7 @@ import 'package:stad/screen/myStad/shop/myorder_scren.dart';
 import 'package:stad/screen/myStad/shop/myreview_screen.dart';
 import 'package:stad/screen/myStad/stad/mycommercial_screen.dart';
 import 'package:stad/screen/myStad/user/edit_user_screen.dart';
+import 'package:stad/services/user_service.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
 
@@ -32,6 +33,7 @@ class _MyStadScreenState extends State<MyStadScreen> {
     super.initState();
     Future.microtask(
         () => Provider.of<UserProvider>(context, listen: false).fetchUser());
+
   }
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -42,7 +44,6 @@ class _MyStadScreenState extends State<MyStadScreen> {
       final storage = FlutterSecureStorage();
       await storage.deleteAll();
       if (mounted) {
-
         GoRouter.of(context).go('/login');
       }
     } catch (error) {
@@ -157,9 +158,9 @@ class _MyStadScreenState extends State<MyStadScreen> {
               color: mainGray,
             ),
             _buildHeadListTile(
-                title: '로그아웃',
-                onTap: _handleSignout,
-                ),
+              title: '로그아웃',
+              onTap: _handleSignout,
+            ),
           ],
         ),
       ),
@@ -266,7 +267,13 @@ class UserInfoContainer extends StatelessWidget {
                           IconButton(
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => EditUserScreen()));
+                                builder: (context) =>
+                                    Provider<UserService>.value(
+                                  value: Provider.of<UserService>(context,
+                                      listen: false),
+                                  child: EditUserScreen(),
+                                ),
+                              ));
                             },
                             icon: Icon(
                               Icons.chevron_right,
