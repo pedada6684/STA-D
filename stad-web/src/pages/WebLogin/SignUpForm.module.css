@@ -22,6 +22,7 @@
 .error {
   margin-top: 1rem;
   margin-left: 20%;
+  color: #ff1a1a;
 }
 .title {
   display: flex;
