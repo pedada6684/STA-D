@@ -37,12 +37,17 @@ export default function EnterprisePage() {
 
   const handleSaveClick = useCallback(async () => {
     console.log(userData);
+    if (!window.confirm("저장하시겠습니까?")) {
+      return;
+    }
     if (!accessToken) {
       console.error("토큰 누락");
       return;
     }
-    if (!userData || !(userData.profile instanceof File)) {
-      console.error("파일 선택X or 사용자 데이터 불완전");
+    // 비밀번호 입력 확인
+    if (!userData || !userData.password || userData.password.trim() === "") {
+      alert("비밀번호를 입력해주세요.");
+      return; // 비밀번호가 비어있으면 여기서 처리를 중단하고, 사용자에게 입력을 요구
     }
     const formData = new FormData();
     if (userData) {
@@ -82,6 +87,7 @@ export default function EnterprisePage() {
       console.log("프로필 수정 완료", response.data);
       updateUserData({ ...userData, ...response.data });
       setEditMode(false);
+      window.location.reload(); // 페이지 새로고침
     } catch (error) {
       console.error("업데이트 실패", error);
     }
