@@ -184,12 +184,15 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
                         });
                       },
                     ),
-                    QuantityChanger(
-                      initialQuantity: 1,
-                      maxQuantity: product.quantity,
-                      onQuantityChanged: (newQuantity) {
-                        // Handle quantity change
-                      },
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: QuantityChanger(
+                        initialQuantity: 1,
+                        maxQuantity: product.quantity,
+                        onQuantityChanged: (newQuantity) {
+                          // Handle quantity change
+                        },
+                      ),
                     ),
                   ],
                 );
@@ -278,15 +281,20 @@ class ProductDetails extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(productType.name,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              Text("${productType.price}원", style: TextStyle(color: midGray)),
-              Text("재고: ${productType.quantity}",
-                  style: TextStyle(color: midGray)),
-            ],
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(productType.name,
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Text("${productType.price}원", style: TextStyle(color: midGray)),
+                Text("재고: ${productType.quantity}",
+                    style: TextStyle(color: midGray)),
+              ],
+            ),
           ),
         ),
         IconButton(

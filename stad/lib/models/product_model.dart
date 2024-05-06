@@ -1,6 +1,7 @@
 // ProductInfo.dart
 class ProductInfo {
   final int id;
+  final String name;
   final List<ProductImage> images;
   final String thumbnail;
   final int cityDeliveryFee;
@@ -10,6 +11,7 @@ class ProductInfo {
 
   ProductInfo({
     required this.id,
+    required this.name,
     required this.images,
     required this.thumbnail,
     required this.cityDeliveryFee,
@@ -20,6 +22,7 @@ class ProductInfo {
 
   factory ProductInfo.fromJson(Map<String, dynamic> json) {
     if (json['id'] == null ||
+        json['name'] == null ||
         json['images'] == null ||
         json['thumbnail'] == null ||
         json['cityDeliveryFee'] == null ||
@@ -31,6 +34,7 @@ class ProductInfo {
     return ProductInfo(
       id: json['id'] ?? 0,
       // 기본값을 0으로 설정
+      name: json['name'] ?? '광고상품',
       images: (json['images'] as List<dynamic>? ?? [])
           .map((i) => ProductImage.fromJson(i))
           .toList(),
