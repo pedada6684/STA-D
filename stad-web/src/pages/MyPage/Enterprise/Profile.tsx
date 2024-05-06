@@ -44,6 +44,10 @@ export default function Profile({
       const imgUrl = URL.createObjectURL(profileImg);
       setPreviewUrl(imgUrl);
       onFileSelect(profileImg);
+    } else {
+      // 파일 선택이 취소되었거나 파일이 선택되지 않았을 때 처리
+      setSelectedFile(null);
+      setPreviewUrl(""); // 미리보기 URL을 비워줌
     }
   };
 
