@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stad/Payment.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/models/delivery_address_model.dart';
 import 'package:stad/models/product_model.dart';
@@ -36,27 +37,6 @@ class _OrderScreenState extends State<OrderScreen> {
   List<DeliveryAddress> deliveryAddresses = [];
   DeliveryAddress? selectedDeliveryAddress;
   int deliveryFee = 0;
-
-  // List<DeliveryAddress> deliveryAddresses = [
-  //   DeliveryAddress(
-  //     name: "박지운",
-  //     phone: "010-1000-1000",
-  //     location: "(34153) 대전광역시 유성구 대학로 124",
-  //     locationNick: "집",
-  //   ),
-  //   DeliveryAddress(
-  //     name: "최은희",
-  //     phone: "010-2000-2000",
-  //     location: "(12345) 서울특별시 강남구 테헤란로 123",
-  //     locationNick: "은희집",
-  //   ),
-  //   DeliveryAddress(
-  //     name: "이태경",
-  //     phone: "010-2000-2000",
-  //     location: "(12345) 서울특별시 강남구 테헤란로 123",
-  //     locationNick: "태경집",
-  //   ),
-  // ];
 
   int calculateTotalPrice() {
     int total = 0;
@@ -98,6 +78,34 @@ class _OrderScreenState extends State<OrderScreen> {
     int totalPrice = calculateTotalPrice();
     int deliveryFee =
         totalPrice >= 30000 ? 0 : widget.productInfo!.cityDeliveryFee;
+    String name = widget.productInfo!.name;
+
+    void navigateToPayment(int totalPrice, UserProvider userProvider) {
+      if (selectedDeliveryAddress != null) {
+        String fullAddress = selectedDeliveryAddress!.location;
+        String postcode =
+            fullAddress.substring(0, 5); // First 5 characters are the postcode
+        String addressDetail =
+            fullAddress.substring(6); // Rest is the detailed address
+
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Payment(
+            pg: 'html5_inicis',
+            payMethod: 'card',
+            name: name,
+            merchantUid: 'mid_${DateTime.now().millisecondsSinceEpoch}',
+            amount: totalPrice,
+            buyerName: userProvider.user?.name ?? 'Guest',
+            buyerTel: userProvider.user?.phone ?? '010-0000-0000',
+            buyerEmail: userProvider.user?.email ?? 'example@example.com',
+            buyerAddr: addressDetail,
+            buyerPostcode: postcode,
+              appScheme: 'example',
+              cardQuota: [2, 3]
+          ),
+        ));
+      }
+    }
 
     return Scaffold(
       backgroundColor: mainWhite,
@@ -126,10 +134,8 @@ class _OrderScreenState extends State<OrderScreen> {
             text: '결제하기',
             textColor: mainWhite,
             backgroundColor: mainNavy,
-            onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => ProductCard()));
-            },
+            onPressed: () => navigateToPayment(
+                totalPrice, Provider.of<UserProvider>(context, listen: false)),
           ),
         ),
       ),
@@ -230,12 +236,25 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
           child: ExpansionTile(
-            title: Text(
-              selectedProduct ?? '주문 상품',
-              style: const TextStyle(
-                  color: mainBlack,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  selectedProduct ?? '주문 상품',
+                  style: const TextStyle(
+                      color: mainBlack,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0),
+                ),
+                Text(
+                  isExpanded ? '' : widget.productInfo?.name ?? '',
+                  style: const TextStyle(color: mainBlack, fontSize: 14.0),
+                  overflow: (widget.productInfo?.name?.length ?? 0) > 10
+                      ? TextOverflow.ellipsis
+                      : null, // Apply ellipsis based on text length
+                  maxLines: 1,
+                ),
+              ],
             ),
             trailing: Icon(
               isExpanded
@@ -249,16 +268,14 @@ class _OrderScreenState extends State<OrderScreen> {
               });
             },
             children: widget.productTypes?.map((productType) {
-                  int quantity =
-                      widget.quantities[productType.id] ?? 0; // 수량 안전하게 가져오기
-                  int totalPrice = quantity * productType.price; // 총 가격 계산
+                  int quantity = widget.quantities[productType.id] ?? 0;
+                  int totalPrice = quantity * productType.price;
                   return ProductCard(
                     productInfo: widget.productInfo,
                     productTypes: [productType],
                     title: widget.title,
                     quantities: quantity,
-                    // 수량 전달
-                    totalPrice: totalPrice, // 총 가격 전달
+                    totalPrice: totalPrice,
                   );
                 }).toList() ??
                 [],
@@ -282,7 +299,7 @@ class _OrderScreenState extends State<OrderScreen> {
               label: Text(
                 address.locationNick,
                 style: TextStyle(
-                  color: isSelected ? mainWhite : mainNavy, // 조건부 색상 지정
+                  color: isSelected ? mainWhite : mainNavy,
                 ),
               ),
               showCheckmark: false,
@@ -299,6 +316,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   () {
                     if (selected) {
                       selectedDeliveryAddress = address;
+                      print(address.location);
                     }
                   },
                 );
@@ -325,7 +343,7 @@ class _buildTotalPrice extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
-      color: mainWhite, // 배경색 설정
+      color: mainWhite,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -336,7 +354,7 @@ class _buildTotalPrice extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 20.0), // 텍스트 사이의 간격
+          SizedBox(height: 20.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -345,7 +363,7 @@ class _buildTotalPrice extends StatelessWidget {
                 style: TextStyle(fontSize: 16.0),
               ),
               Text(
-                '${totalPrice.toString()} 원', // 예시 금액
+                '${totalPrice.toString()} 원',
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
               ),
             ],
@@ -361,7 +379,7 @@ class _buildTotalPrice extends StatelessWidget {
                   style: TextStyle(fontSize: 14.0, color: midGray),
                 ),
                 Text(
-                  '0 원', // 예시 금액
+                  '0 원',
                   style: TextStyle(fontSize: 14.0, color: midGray),
                 ),
               ],
@@ -387,7 +405,7 @@ class _buildTotalPrice extends StatelessWidget {
           Divider(
             height: 40,
             color: mainBlack,
-          ), // 구분선
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -396,7 +414,7 @@ class _buildTotalPrice extends StatelessWidget {
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
               ),
               Text(
-                '${deliveryFee + totalPrice} 원', // 예시 금액
+                '${deliveryFee + totalPrice} 원',
                 style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
               ),
             ],

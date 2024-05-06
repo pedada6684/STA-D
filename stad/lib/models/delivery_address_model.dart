@@ -17,8 +17,7 @@ class DeliveryAddress {
 
   factory DeliveryAddress.fromJson(Map<String, dynamic> json) {
     return DeliveryAddress(
-      // userId: json['userId'] as int, // null safety 적용
-      id: json['id'] as int, // null safety 적용
+      id: json['id'] as int,
       name: json['name'] as String,
       phone: json['phone'] as String,
       location: json['location'] as String,
@@ -28,7 +27,6 @@ class DeliveryAddress {
 
   Map<String, dynamic> toJson() {
     return {
-      // 'userId': userId,
       'id': id,
       'name': name,
       'phone': phone,
