@@ -13,12 +13,19 @@ import com.klpc.stadspring.global.response.exception.CustomException;
 import com.klpc.stadspring.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
+
 
 @Service
 @RequiredArgsConstructor
@@ -152,7 +159,66 @@ public class UserService {
 
     private String getUserYoutubeInfo(String googleAT) {
         //TODO: 유튜브에 api통신을 통해 채널을 가져오고 pasing해 하나의 스트링으로 만드는 코드를 만들어주길 부탁
-        return null;
+        String concern = "축산물";
+        BufferedReader in = null;
+        try {
+            URL url = new URL("https://youtube.googleapis.com/youtube/v3/subscriptions?part=snippet,contentDetails&mine=true&maxResults=50");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer " + googleAT);
+
+            int responseCode = con.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) { //성공
+                in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+
+                try {
+                    // JSON 문자열을 JSONObject로 파싱
+                    JSONObject jsonObject = new JSONObject(response.toString());
+                    // "items" 배열 가져오기
+                    JSONArray itemsArray = jsonObject.getJSONArray("items");
+
+                    // "items" 배열 안의 각 객체의 "snippet" 안의 "description" 값을 한 줄로 모아서 저장할 문자열
+                    StringBuilder descriptions = new StringBuilder();
+
+                    if (itemsArray.length() != 0) {
+                        // "items" 배열 안의 각 객체에 대해 반복
+                        for (int i = 0; i < itemsArray.length(); i++) {
+                            JSONObject item = itemsArray.getJSONObject(i);
+                            JSONObject snippet = item.getJSONObject("snippet");
+                            // "description" 값을 가져와서 descriptions에 추가
+                            descriptions.append(snippet.getString("description").replaceAll("\\n", " "));
+                            // 마지막 객체인 경우 줄바꿈 없이 추가
+                            if (i < itemsArray.length() - 1) {
+                                descriptions.append(" ");
+                            }
+                        }
+                        concern = descriptions.toString();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else { // 에러 발생
+                System.out.println("GET request not worked");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return concern;
     }
 
     public void logout(LogoutCommand command) {
