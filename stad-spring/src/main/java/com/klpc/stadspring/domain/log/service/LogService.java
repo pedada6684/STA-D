@@ -9,10 +9,10 @@ import com.klpc.stadspring.domain.log.repository.*;
 import com.klpc.stadspring.domain.log.service.command.*;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +26,7 @@ import java.util.stream.LongStream;
 @Log4j2
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class LogService {
 
     private final AdvertClickLogRepository advertClickLogRepository;
@@ -51,7 +52,6 @@ public class LogService {
     }
 
     @Transactional
-
     public AdvertVideoLog addAdvertVideoLog(AddAdvertVideoLogCommand command) {
         log.info("AddAdvertVideoLogCommand: " + command);
 
@@ -69,13 +69,11 @@ public class LogService {
     }
 
     @Transactional
-
     public OrderLog addOrderLog(AddOrderLogCommand command) {
         log.info("AddOrderLogCommand: " + command);
 
         OrderLog newOrderLog = OrderLog.createNewOrderLog(
                 command.getAdvertId(),
-                command.getAdvertVideoId(),
                 command.getUserId(),
                 command.getOrderId(),
                 command.getContentId(),
@@ -92,13 +90,11 @@ public class LogService {
     }
 
     @Transactional
-
     public OrderLog addOrderCancelLog(AddCancelOrderLogCommand command) {
         log.info("AddCancelOrderLogCommand: " + command);
 
         OrderLog newOrderLog = OrderLog.createNewOrderLog(
                 command.getAdvertId(),
-                command.getAdvertVideoId(),
                 command.getUserId(),
                 command.getOrderId(),
                 command.getContentId(),

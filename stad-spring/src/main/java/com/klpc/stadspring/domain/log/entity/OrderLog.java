@@ -22,9 +22,6 @@ public class OrderLog {
     @Column(name = "advert_id")
     private Long advertId;
 
-    @Column(name = "advert_video_id")
-    private Long advertVideoId;
-
     @Column(name = "user_id")
     private Long userId;
 
@@ -51,7 +48,6 @@ public class OrderLog {
 
     public static OrderLog createNewOrderLog(
         Long advertId,
-        Long advertVideoId,
         Long userId,
         Long orderId,
         Long contentId,
@@ -63,7 +59,6 @@ public class OrderLog {
     ) {
         OrderLog orderLog = new OrderLog();
         orderLog.advertId = advertId;
-        orderLog.advertVideoId = advertVideoId;
         orderLog.userId = userId;
         orderLog.orderId = orderId;
         orderLog.contentId = contentId;
