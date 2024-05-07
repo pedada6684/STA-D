@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/models/cart_model.dart';
+import 'package:stad/providers/user_provider.dart';
 import 'package:stad/services/cart_service.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
-import 'package:stad/widget/quantity_changer.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -22,10 +23,18 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     super.initState();
     cartService = CartService();
-    // cartItems = cartService.getDummyCartData();
-    cartItems.forEach((item) {
-      item.isSelected = !item.isSelected;
-    });
+    _loadCartItems();
+    // cartItems.forEach((item) {
+    //   item.isSelected = !item.isSelected;
+    // });
+  }
+
+  void _loadCartItems() async {
+    final userId = Provider.of<UserProvider>(context, listen: false).userId;
+
+    cartItems = await cartService.fetchCartProducts(userId!);
+    isSelectAll = cartItems.every((item) => item.isSelected);
+    setState(() {});
   }
 
   void toggleItemSelection(int index) {
@@ -203,25 +212,28 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Widget _buildEmptyCart() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Spacer(),
-          Text(
-            '장바구니에 담긴 상품이 없습니다.',
-            style: TextStyle(fontSize: 16.0, color: darkGray),
-            textAlign: TextAlign.center,
-          ),
-          Spacer(),
-          CustomElevatedButton(
-              text: '상품을 담아주세요.',
-              onPressed: null,
-              textColor: mainWhite,
-              backgroundColor: mainGray),
-          SizedBox(height: 10.0),
-        ],
+    return Scaffold(
+      backgroundColor: mainWhite,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Spacer(),
+            Text(
+              '장바구니에 담긴 상품이 없습니다.',
+              style: TextStyle(fontSize: 16.0, color: darkGray),
+              textAlign: TextAlign.center,
+            ),
+            Spacer(),
+            CustomElevatedButton(
+                text: '상품을 담아주세요.',
+                onPressed: null,
+                textColor: mainWhite,
+                backgroundColor: mainGray),
+            SizedBox(height: 10.0),
+          ],
+        ),
       ),
     );
   }
