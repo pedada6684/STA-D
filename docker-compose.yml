@@ -16,6 +16,15 @@ services:
       - "18081:8080"
     networks:
       - ubuntu_my-network
+    restart: unless-stopped
+
+  stad-stats:
+    image: stad-stats-image
+    container_name: stad-stats
+    ports:
+      - "18082:8080"
+    networks:
+      - ubuntu_my-network
     restart: unless-stopped 
 
   stad-react:
