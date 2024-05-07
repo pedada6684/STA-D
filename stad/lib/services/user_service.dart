@@ -60,8 +60,8 @@ class UserService {
     try {
       final response = await dio.post(
         // 'https://www.mystad.com/api/v1/auth/applogin',
-        'http://192.168.0.9:8080/api/v1/auth/applogin',
-        // 'http://192.168.31.202:8080/api/v1/auth/applogin',
+        // 'http://192.168.0.9:8080/api/v1/auth/applogin',
+        'http://192.168.31.202:8080/api/v1/auth/applogin',
         // 'http://192.168.0.129:8080/api/v1/auth/applogin',
         data: json.encode(userProfile),
         options: Options(
