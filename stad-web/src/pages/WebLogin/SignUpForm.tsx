@@ -37,7 +37,8 @@ export default function SignUpForm() {
     comNo: ["", "", ""],
     department: "",
   });
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [pwConfirmMessage, setPwConfirmMessage] = useState("");
   // 리액트 쿼리의 useMutation 훅 사용
   const mutation = useMutation(postSignUp, {
     onSuccess: (data) => {
@@ -45,8 +46,14 @@ export default function SignUpForm() {
       window.alert("회원가입이 완료되었습니다");
       navigate(`/web-login`);
     },
-    onError: (error) => {
-      console.log("회원가입 실패", error);
+    onError: (error: any) => {
+      if (error.response && error.response.data.statusCode === 409) {
+        setError("이미 사용 중인 이메일입니다.");
+        setErrorMessage("이미 사용 중인 이메일입니다.");
+      } else {
+        console.log("회원가입 실패", error);
+        setError("회원가입 과정에서 오류가 발생했습니다.");
+      }
     },
   });
 
@@ -78,9 +85,9 @@ export default function SignUpForm() {
       setPasswordConfirm(value);
       // 비밀번호와 비밀번호 확인 입력이 동시에 검증
       if (formData.password !== value) {
-        setError("비밀번호가 일치하지 않습니다.");
+        setPwConfirmMessage("비밀번호가 일치하지 않습니다.");
       } else {
-        setError("");
+        setPwConfirmMessage("");
       }
     } else {
       setFormData((prevState) => ({
@@ -107,20 +114,23 @@ export default function SignUpForm() {
     <>
       <form className={`${styles.container}`} onSubmit={handleSubmit}>
         <div className={`${styles.itemContainer}`}>
-          <div className={styles.item}>
-            <div className={styles.title}>
-              이메일<span>*</span>
+          <div className={`${styles.item} ${styles.pwConfirm}`}>
+            <div className={`${styles.items}`}>
+              <div className={styles.title}>
+                이메일<span>*</span>
+              </div>
+              <div className={styles.inputContainer}>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="이메일을 입력해주세요."
+                  required
+                />
+              </div>
             </div>
-            <div className={styles.inputContainer}>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="이메일을 입력해주세요."
-                required
-              />
-            </div>
+            {errorMessage && <div className={styles.error}>{errorMessage}</div>}
           </div>
           <div className={styles.item}>
             <div className={styles.title}>
@@ -195,7 +205,9 @@ export default function SignUpForm() {
                 />
               </div>
             </div>
-            {error && <div className={styles.error}>{error}</div>}
+            {pwConfirmMessage && (
+              <div className={styles.error}>{pwConfirmMessage}</div>
+            )}
           </div>
           <div className={styles.item}>
             <div className={styles.title}>
