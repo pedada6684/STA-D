@@ -60,7 +60,7 @@ export default function BarChart({ title, dataType }: PieChartProps) {
       categories: labels,
     },
     title: {
-      text: title,
+      // text: title,
       align: "center",
     },
   };
