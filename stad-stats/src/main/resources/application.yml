@@ -11,3 +11,4 @@ spring:
       - classpath:/jpa.yml
       - classpath:/logging.yml
       - classpath:/db.yml
+      - classpath:/kafka.yml
