@@ -93,21 +93,39 @@ class ProductType {
           .toList(),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'quantity': quantity,
+      'productOptions':
+          productOptions.map((option) => option.toJson()).toList(),
+    };
+  }
 }
 
 class ProductOption {
   final String name;
-  final int additionalCost;
+  final int value;
 
   ProductOption({
     required this.name,
-    required this.additionalCost,
+    required this.value,
   });
 
   factory ProductOption.fromJson(Map<String, dynamic> json) {
     return ProductOption(
       name: json['name'] as String,
-      additionalCost: json['additionalCost'] as int,
+      value: json['value'] as int,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'value': value,
+    };
   }
 }

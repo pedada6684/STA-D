@@ -4,8 +4,10 @@ import 'package:stad/models/advert_model.dart';
 
 class AdService {
   final Dio dio = Dio();
+
   // final url = Uri.parse('$svApi/advert');
-  final String url = ('http://192.168.0.9:8080/api/advert');
+  final String url = ('http://192.168.31.202:8080/api/advert');
+
   //광고 정보 받아오기
   //TODO: advertId 수정
   Future<Map<String, dynamic>> getAdInfo(int advertId) async {
@@ -25,7 +27,8 @@ class AdService {
         return response.data;
       } else {
         // 실패 응답 처리
-        throw Exception('Failed to fetch advert with statusCode: ${response.statusCode}');
+        throw Exception(
+            'Failed to fetch advert with statusCode: ${response.statusCode}');
       }
     } on DioException catch (e) {
       throw Exception('Error fetching advert: ${e.message}');
@@ -40,14 +43,16 @@ class AdService {
 
       if (response.statusCode == 200 && response.data != null) {
         List<dynamic> advertsData = response.data['data'] as List<dynamic>;
-        List<Advert> adverts = advertsData.map((data) => Advert.fromJson(data)).toList();
+        List<Advert> adverts =
+            advertsData.map((data) => Advert.fromJson(data)).toList();
         return adverts;
       } else {
         throw Exception('Failed to load adverts for user $userId');
       }
     } on DioException catch (e) {
       print('Error fetching adverts for user $userId: ${e.message}');
-      throw Exception('Error occurred while fetching adverts for user $userId: ${e.message}');
+      throw Exception(
+          'Error occurred while fetching adverts for user $userId: ${e.message}');
     }
   }
 
@@ -57,7 +62,6 @@ class AdService {
       final response = await dio.get('$url/get-list-by-content?contentId=1');
 
       if (response.statusCode == 200 && response.data != null) {
-
         print('콘텐츠 관련 광고 : ${response.data}'); // {data:[]}
         // print(response.data);
         // print(response.data);
@@ -66,7 +70,8 @@ class AdService {
         // print(response.data);
 
         List<dynamic> advertsData = response.data['data'] as List<dynamic>;
-        List<Advert> adverts = advertsData.map((data) => Advert.fromJson(data)).toList();
+        List<Advert> adverts =
+            advertsData.map((data) => Advert.fromJson(data)).toList();
         return adverts;
       } else {
         throw Exception('컨텐츠 관련 광고 로드 실패');

@@ -99,8 +99,10 @@ class _MyCommercialScreenState extends State<MyCommercialScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
+                            //TODO: 나중에 백에서 contetnId 받아오기
                               builder: (context) => ProductScreen(
                                     advertId: 1,
+                                    contentId: 1,
                                     description: advert.title,
                                     title: advert.description,
                                   )),

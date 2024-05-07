@@ -162,10 +162,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     onPressed: () {
                       //TODO: advertId 수정
                       Navigator.of(context).push(MaterialPageRoute(
-                        //TODO 수정
+                          //TODO 수정
                           builder: (context) => ProductScreen(
                                 advertId: 1,
-                                // contentId: 1,
+                                contentId: 1,
                                 title: singleAdverts[0]['title'],
                                 description: singleAdverts[0]['description'],
                               )));
@@ -180,44 +180,44 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
-CarouselSlider buildCarouselSlider(BuildContext context) {
-  return CarouselSlider(
-    items: adverts
-        .map((advert) => AdvertisingCard(
-              bannerImgUrl: advert.bannerImgUrl,
-              buttonText: '콘텐츠 관련 광고 보러가기',
-              subText: advert.title,
-              onPressed: () {
-                Navigator.of(context).push(
-                    //TODO:advertId 수정, 여러가지 수정
-                    MaterialPageRoute(
-                        builder: (context) => ProductScreen(
-                              advertId: 1,
-                              // contentId: ,
-                              title: singleAdverts[0]['title'],
-                              description: singleAdverts[0]['description'],
-                            )));
-              },
-            ))
-        .toList(),
-    options: CarouselOptions(
-      autoPlay: true,
-      autoPlayInterval: Duration(seconds: 3),
-      autoPlayAnimationDuration: Duration(milliseconds: 800),
-      enableInfiniteScroll: true,
-      aspectRatio: 16 / 9,
-      viewportFraction: 1,
-      enlargeCenterPage: true,
-      scrollDirection: Axis.horizontal,
-      onPageChanged: (index, reason) {
-        setState(() {
-          _current = index;
-        });
-      },
-    ),
-    carouselController: _controller,
-  );
-}
+  CarouselSlider buildCarouselSlider(BuildContext context) {
+    return CarouselSlider(
+      items: adverts
+          .map((advert) => AdvertisingCard(
+                bannerImgUrl: advert.bannerImgUrl,
+                buttonText: '콘텐츠 관련 광고 보러가기',
+                subText: advert.title,
+                onPressed: () {
+                  Navigator.of(context).push(
+                      //TODO:advertId 수정, 여러가지 수정
+                      MaterialPageRoute(
+                          builder: (context) => ProductScreen(
+                                advertId: 1,
+                                contentId: 1,
+                                title: singleAdverts[0]['title'],
+                                description: singleAdverts[0]['description'],
+                              )));
+                },
+              ))
+          .toList(),
+      options: CarouselOptions(
+        autoPlay: true,
+        autoPlayInterval: Duration(seconds: 3),
+        autoPlayAnimationDuration: Duration(milliseconds: 800),
+        enableInfiniteScroll: true,
+        aspectRatio: 16 / 9,
+        viewportFraction: 1,
+        enlargeCenterPage: true,
+        scrollDirection: Axis.horizontal,
+        onPageChanged: (index, reason) {
+          setState(() {
+            _current = index;
+          });
+        },
+      ),
+      carouselController: _controller,
+    );
+  }
 
 // CarouselSlider buildCarouselSlider(BuildContext context) {
 //   return CarouselSlider(

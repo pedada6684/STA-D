@@ -17,6 +17,9 @@ class OrderScreen extends StatefulWidget {
   final String? title;
   final int deliveryFee;
   final Map<int, int> quantities;
+  final List<int> optionIds;
+  final int advertId;
+  final int contentId;
 
   const OrderScreen({
     super.key,
@@ -25,6 +28,9 @@ class OrderScreen extends StatefulWidget {
     this.title,
     this.deliveryFee = 2500,
     required this.quantities,
+    required this.advertId,
+    required this.contentId,
+    required this.optionIds,
   });
 
   @override
@@ -90,19 +96,24 @@ class _OrderScreenState extends State<OrderScreen> {
 
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Payment(
-            pg: 'html5_inicis',
-            payMethod: 'card',
-            name: name,
-            merchantUid: 'mid_${DateTime.now().millisecondsSinceEpoch}',
-            amount: totalPrice,
-            buyerName: userProvider.user?.name ?? 'Guest',
-            buyerTel: userProvider.user?.phone ?? '010-0000-0000',
-            buyerEmail: userProvider.user?.email ?? 'example@example.com',
-            buyerAddr: addressDetail,
-            buyerPostcode: postcode,
+              advertId: widget.advertId,
+              contentId: widget.contentId,
+              optionIds: widget.optionIds,
+              quantities: widget.quantities,
+              productTypes: widget.productTypes ?? [],
+              // productInfo: widget.productInfo,
+              pg: 'html5_inicis',
+              payMethod: 'card',
+              name: name,
+              merchantUid: 'mid_${DateTime.now().millisecondsSinceEpoch}',
+              amount: totalPrice,
+              buyerName: userProvider.user?.name ?? 'Guest',
+              buyerTel: userProvider.user?.phone ?? '010-0000-0000',
+              buyerEmail: userProvider.user?.email ?? 'example@example.com',
+              buyerAddr: addressDetail,
+              buyerPostcode: postcode,
               appScheme: 'example',
-              cardQuota: [2, 3]
-          ),
+              cardQuota: [2, 3]),
         ));
       }
     }
