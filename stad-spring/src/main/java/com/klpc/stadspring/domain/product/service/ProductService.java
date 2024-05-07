@@ -4,22 +4,25 @@ import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.image.product_image.entity.ProductImage;
 import com.klpc.stadspring.domain.image.product_image.repository.ProductImageRepository;
+import com.klpc.stadspring.domain.option.entity.ProductOption;
+import com.klpc.stadspring.domain.option.repository.OptionRepository;
+import com.klpc.stadspring.domain.product.controller.request.AddProductRequest;
+import com.klpc.stadspring.domain.product.controller.request.AddProductRequestOption;
+import com.klpc.stadspring.domain.product.controller.request.AddProductRequestProductType;
 import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdvertResponse;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
 import com.klpc.stadspring.domain.product.service.command.*;
+import com.klpc.stadspring.domain.productType.entity.ProductType;
+import com.klpc.stadspring.domain.productType.repository.ProductTypeRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import com.klpc.stadspring.util.S3Util;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -27,9 +30,10 @@ import java.util.UUID;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ProductImageRepository productImageRepository;
     private final AdvertRepository advertRepository;
-    private final S3Util s3Util;
+    private final ProductImageRepository productImageRepository;
+    private final ProductTypeRepository productTypeRepository;
+    private final OptionRepository optionRepository;
 
     // 상품 리스트
 //    @Override
@@ -78,37 +82,52 @@ public class ProductService {
         return product;
     }
 
-    // 상품 등록
-    public Product addProduct(AddProductCommand command) {
-        log.info("AddProductCommand: "+command);
+    /**
+     * 상품 등록
+     * @param request : product, productImg, productType, option
+     * @return
+     */
+    public String addProduct(AddProductRequest request) {
+        log.info("상품 등록 Service"+"\n"+"ProductPostRequest-advertId: "+request.getAdvertId());
+        Advert advert = advertRepository.findById(request.getAdvertId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-        Advert advert = advertRepository.findById(command.getAdvertId())
-                .orElseThrow(NullPointerException::new);
-
-        URL thumbnailUrl = s3Util.uploadImageToS3(command.getThumbnail(), "product_thumbnail", UUID.randomUUID().toString());
-        Objects.requireNonNull(thumbnailUrl);
-
-        Product newProduct = Product.createNewProduct(
+        Product productCase = Product.createNewProduct(
                 advert,
-                thumbnailUrl.toString(),
-                command.getName(),
-                command.getCityDeliveryFee(),
-                command.getMtDeliveryFee(),
-                command.getExpStart(),
-                command.getExpEnd()
+                request.getThumbnail(),
+                request.getName(),
+                request.getCityDeliveryFee(),
+                request.getMtDeliveryFee(),
+                request.getExpStart(),
+                request.getExpEnd()
         );
 
-        productRepository.save(newProduct);
+        Product product = productRepository.save(productCase);
 
-        command.getImages().forEach(image -> {
-            URL imageUrl = s3Util.uploadImageToS3(image, "product_introduction", UUID.randomUUID().toString());
-            if (imageUrl != null) {
-                ProductImage productImage = new ProductImage(null, imageUrl.toString(), newProduct);
-                productImageRepository.save(productImage);
+        for(String imgUrl : request.getImgs()) {
+            ProductImage productImage = ProductImage.createNewProductImage(imgUrl,product);
+            productImageRepository.save(productImage);
+        }
+
+        for(AddProductRequestProductType pt : request.getProductTypeList()){
+            ProductType productTypeCase = ProductType.createNewProductType(
+                    product,
+                    pt.getProductTypeName(),
+                    pt.getProductTypePrice(),
+                    pt.getProductTypeQuantity()
+            );
+
+            ProductType productType = productTypeRepository.save(productTypeCase);
+            for(AddProductRequestOption ot : pt.getOptions()){
+                ProductOption po = ProductOption.createNewOption(
+                        productType,
+                        ot.getOptionName(),
+                        ot.getOptionValue()
+                );
+                optionRepository.save(po);
             }
-        });
+        }
 
-        return newProduct;
+        return "success";
     }
 
     public void deleteProduct(Long productId) {
