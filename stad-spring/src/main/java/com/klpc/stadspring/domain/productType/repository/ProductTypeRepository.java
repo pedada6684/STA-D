@@ -16,8 +16,10 @@ public interface ProductTypeRepository extends JpaRepository<ProductType, Long> 
     @Query("""
            SELECT new com.klpc.stadspring.domain.productType.service.command.GetProductTypeListByUserIdCommand(
            pt.id, pt.product.thumbnail, pt.name,
-           pt.price, pt.quantity, COUNT(pt)) FROM ProductType pt
+           pt.price, pt.quantity, (SELECT COUNT(op.productType) as cnt FROM OrderProduct op WHERE pt.id = op.productType.id GROUP BY op.productType)) 
+           FROM ProductType pt
            WHERE pt.product.id IN (SELECT (SELECT ptt.id FROM ad.products ptt) FROM Advert ad WHERE ad.user.id=:userId)
+                 AND pt.status = true
            GROUP BY pt
            """)
     Optional<List<GetProductTypeListByUserIdCommand>> getProductTypeByUserId(@Param("userId") Long userId);
