@@ -82,10 +82,8 @@ public class BookmarkedContentService {
     public DeleteBookmarkResponse deleteBookmark(DeleteBookmarkRequsetCommand command) {
         log.info("DeleteBookmarkRequsetCommand: "+command);
 
-        BookmarkedContent bookmark = repository.findByUserIdAndContentDetailId(command.getUserId(), command.getDetailId())
-                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-
-        repository.delete(bookmark);
+        repository.delete(repository.findByUserIdAndContentDetailId(command.getUserId(), command.getDetailId())
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND)));
 
         return DeleteBookmarkResponse.builder().result("북마크한 컨텐츠가 성공적으로 삭제되었습니다.").build();
     }

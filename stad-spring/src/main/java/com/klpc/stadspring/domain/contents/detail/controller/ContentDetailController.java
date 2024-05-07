@@ -42,7 +42,8 @@ public class ContentDetailController {
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
     ResponseEntity<ResourceRegion> streamingPublicVideo(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long detailId){
-        log.info("콘텐츠 스트리밍" + "\n" + "streamingPublicVideo : "+detailId);
+        // 로그가 너무 많이 찍힘
+//        log.info("콘텐츠 스트리밍" + "\n" + "streamingPublicVideo : "+detailId);
 
         return detailService.streamingPublicVideo(httpHeaders, detailId);
     }
