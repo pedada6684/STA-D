@@ -90,6 +90,7 @@ public class CartService {
                     .quantity(cartProduct.getQuantity())
                     .advertId(cartProduct.getAdvertId())
                     .contentId(cartProduct.getContentId())
+                    .thumbnail(cartProduct.getProductType().getProduct().getThumbnail())
                     .option(productOption)
                     .build();
 
