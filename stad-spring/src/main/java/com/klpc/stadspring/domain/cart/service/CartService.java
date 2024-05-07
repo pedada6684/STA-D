@@ -82,8 +82,14 @@ public class CartService {
 
         for(CartProduct cartProduct : cartProductList){
 
-            ProductOption productOption = optionRepository.findById(cartProduct.getOptionId())
-                    .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+            ProductOption productOption;
+
+            if(cartProduct.getOptionId() != -1) {
+                productOption = optionRepository.findById(cartProduct.getOptionId())
+                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+            } else {
+                productOption = null;
+            }
 
             GetCartProductCommand response = GetCartProductCommand.builder()
                     .productType(cartProduct.getProductType())
