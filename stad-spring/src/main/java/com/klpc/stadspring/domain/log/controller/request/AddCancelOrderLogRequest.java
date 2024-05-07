@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Builder
 public class AddCancelOrderLogRequest {
     private Long advertId;
-    private Long advertVideoId;
     private Long userId;
     private Long orderId;
     private Long contentId;
@@ -26,7 +25,6 @@ public class AddCancelOrderLogRequest {
     public AddCancelOrderLogCommand toCommand() {
         return AddCancelOrderLogCommand.builder().
                 advertId(advertId).
-                advertVideoId(advertVideoId).
                 userId(userId).
                 contentId(contentId).
                 productId(productId).

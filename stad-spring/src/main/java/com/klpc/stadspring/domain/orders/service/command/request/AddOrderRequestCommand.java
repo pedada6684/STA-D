@@ -11,13 +11,5 @@ public class AddOrderRequestCommand {
 
     Long userId;
     List<AddOrdersProductTypeRequestCommand> addOrdersProductTypeRequestCommands;
-    Long contentId;
-    Long advertId;
-    String name;
-    String phoneNumber;
-    String locationName;
-    String location;
-    String locationDetail;
-    String locationNum;
 
 }
