@@ -1,10 +1,9 @@
 package com.klpc.stadspring.domain.productType.controller;
 
+import com.klpc.stadspring.domain.productType.controller.response.GetProductTypeListByUserIdResponse;
 import com.klpc.stadspring.domain.productType.controller.request.AddProductTypeRequest;
 import com.klpc.stadspring.domain.productType.controller.response.GetProductTypeListResponse;
-import com.klpc.stadspring.domain.productType.entity.ProductType;
 import com.klpc.stadspring.domain.productType.service.ProductTypeService;
-import com.klpc.stadspring.domain.productType.service.command.ProductTypeInfoCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -14,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @Tag(name = "상품 종류 컨트롤러", description = "Product Type Controller API")
@@ -64,5 +61,14 @@ public class ProductTypeController {
     public ResponseEntity<?> deleteProductType(@RequestParam("productTypeId") Long productTypeId) {
         productTypeService.deleteProductType(productTypeId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/list-by-user-id")
+    @Operation(summary = "등록한 상품 목록 조회", description = "등록한 상품 목록 조회")
+    @ApiResponse(responseCode = "200", description = "상품 목록이 조회 되었습니다.")
+    public ResponseEntity<GetProductTypeListByUserIdResponse> getProductTypeListByUserId(@RequestParam("userId") Long userId){
+        log.info("등록한 상품 목록 조회"+"\n"+"userId : "+userId);
+        GetProductTypeListByUserIdResponse response = productTypeService.getProductTypeListByUserId(userId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
