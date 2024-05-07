@@ -46,6 +46,10 @@ export default function SelectAdListBox({ onAdSelect }: SelectAdListBoxProps) {
         label: ad.title,
       }));
       setOptions(newOptions);
+      if (newOptions.length > 0) {
+        setSelectedOption(newOptions[0]); // 첫 번째 옵션을 초기 선택으로 설정
+        onAdSelect(newOptions[0].value); // 부모 컴포넌트에 초기 선택값 전달
+      }
     }
   }, [ads]);
 
@@ -64,6 +68,7 @@ export default function SelectAdListBox({ onAdSelect }: SelectAdListBoxProps) {
   };
   return (
     <Select
+      defaultValue={selectedOption}
       options={options}
       value={selectedOption}
       onChange={handleChange}

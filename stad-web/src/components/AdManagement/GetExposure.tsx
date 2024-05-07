@@ -6,17 +6,40 @@ import { AdvertIdProps } from "../../pages/AdManagement/All/AllExposure";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { getViewCount } from "./DashboardAPI";
+interface SeriesData {
+  name: string;
+  data: { x: string; y: number }[];
+}
+// // 날짜와 수익 데이터를 생성하는 함수
+// function generateDummyRevenueData() {
+//   const result = [];
+//   const currentDate = new Date();
+//   for (let i = 0; i < 30; i++) {
+//     const date = new Date(currentDate.getTime() - i * 24 * 60 * 60 * 1000);
+//     result.push({
+//       date: date.toISOString().split("T")[0], // 날짜 형식을 YYYY-MM-DD로 조정
+//       value: Math.floor(Math.random() * 1000) + 100, // 100에서 1100 사이의 임의의 수익 값
+//     });
+//   }
+//   return result.reverse(); // 최근 날짜가 먼저 오도록 배열 뒤집기
+// } // 더미함수
 
 export default function GetExposure({ advertId }: AdvertIdProps) {
   // const dates = getRecent30Days(); // 최근 30일 날짜 생성
   const accessToken = useSelector(
     (state: RootState) => state.token.accessToken
   );
-  const [seriesData, setSeriesData] = useState([
+  const [seriesData, setSeriesData] = useState<SeriesData[]>([
     { name: "광고시청수", data: [] }, // 초기 데이터 빈 배열로 설정
   ]);
 
   useEffect(() => {
+    // const dummyData = generateDummyRevenueData();
+    // const chartData = dummyData.map((item) => ({
+    //   x: item.date,
+    //   y: item.value,
+    // }));
+    // setSeriesData([{ name: "수익", data: chartData }]);
     if (advertId && accessToken) {
       getViewCount(advertId, accessToken).then((apiData) => {
         if (apiData && apiData.list) {
@@ -47,7 +70,10 @@ export default function GetExposure({ advertId }: AdvertIdProps) {
         opacity: 0.06,
       },
     },
-    colors: ["#00127A"], // 그래프 색상 설정
+    colors: ["#6671AF"], // 그래프 색상 설정
+    fill: {
+      type: "solid", // 그라데이션 없이 단색으로 채우기
+    },
     dataLabels: {
       enabled: false,
     },
