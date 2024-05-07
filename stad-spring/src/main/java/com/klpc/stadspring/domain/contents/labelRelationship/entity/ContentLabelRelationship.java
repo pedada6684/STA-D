@@ -1,6 +1,6 @@
 package com.klpc.stadspring.domain.contents.labelRelationship.entity;
 
-import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
+import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.label.entity.ContentLabel;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -20,16 +20,16 @@ public class ContentLabelRelationship {
     private ContentLabel contentLabel;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "content_concept_id")
-    private ContentConcept contentConcept;
+    @JoinColumn(name = "content_detail_id")
+    private ContentDetail contentDetail;
 
     public static ContentLabelRelationship createContentLabelRelationship(
             ContentLabel contentLabel,
-            ContentConcept contentConcept
+            ContentDetail contentDetail
     ) {
         ContentLabelRelationship contentLabelRelationship = new ContentLabelRelationship();
         contentLabelRelationship.contentLabel = contentLabel;
-        contentLabelRelationship.contentConcept = contentConcept;
+        contentLabelRelationship.contentDetail = contentDetail;
 
         return contentLabelRelationship;
     }
