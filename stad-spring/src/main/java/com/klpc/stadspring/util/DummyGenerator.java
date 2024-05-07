@@ -133,6 +133,34 @@ public class DummyGenerator {
         contentDetailService.addDetail(detailCommand1);
     }
 
+//        public void createContent() {
+//        String conceptFilePath = "src/main/resources/crawl.json";
+//
+//        try {
+//            // JSON 파일을 파싱하고 저장하는 메서드 호출
+//            contentConceptParsingService.parseAndSaveJson(conceptFilePath);
+//            // 성공 시, 필요한 경우 성공 메시지 로깅
+//            System.out.println("Content successfully parsed and saved from file: " + conceptFilePath);
+//        } catch (Exception e) {
+//            // 일반적인 예외 처리
+//            System.err.println("An unexpected error occurred while parsing the JSON file: " + conceptFilePath);
+//            e.printStackTrace();
+//        }
+//
+//
+//        String detailFilePath = "src/main/resources/crawl_detail.json";
+//        try {
+//            contentDetailParsingService.parseAndSaveJson(detailFilePath);
+//            // 성공 시, 필요한 경우 성공 메시지 로깅
+//            System.out.println("Content successfully parsed and saved from file: " + detailFilePath);
+//        } catch (Exception e) {
+//            // 일반적인 예외 처리
+//            System.err.println("An unexpected error occurred while parsing the JSON file: " + detailFilePath);
+//            e.printStackTrace();
+//        }
+//    }
+
+
     /**
      * 유저 생성
      */
