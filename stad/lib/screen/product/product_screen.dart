@@ -10,12 +10,14 @@ import 'package:stad/widget/button.dart';
 
 class ProductScreen extends StatefulWidget {
   final int advertId;
+  final int contentId;
   final String title;
   final String description;
 
   const ProductScreen({
     super.key,
     required this.advertId,
+    required this.contentId,
     required this.title,
     required this.description,
   });
@@ -88,8 +90,8 @@ class _ProductScreenState extends State<ProductScreen>
         backgroundColor: mainNavy,
         onPressed: () {
           if (_productTypes.isNotEmpty) {
-            showProductOptionBottomSheet(
-                context, _productInfo, _productTypes, widget.title);
+            showProductOptionBottomSheet(context, _productInfo, _productTypes,
+                widget.title, widget.advertId, widget.contentId);
           }
         },
       ),
