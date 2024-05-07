@@ -92,7 +92,7 @@ export default function GetExposure({ advertId }: AdvertIdProps) {
           options={chartOptions}
           series={seriesData}
           type="area"
-          height={300}
+          height={280}
         />
       </div>
       <div id="html-dist"></div>
