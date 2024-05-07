@@ -154,6 +154,8 @@ public class UserService {
         //유저 구독채널 저장
         String youtubeInfo = getUserYoutubeInfo(command.getGoogleAT());
         newMember.updateYoutubeInfo(youtubeInfo);
+
+        log.info("youtubeInfo: "+youtubeInfo);
         return newMember;
     }
 
@@ -168,6 +170,8 @@ public class UserService {
             con.setRequestProperty("Authorization", "Bearer " + googleAT);
 
             int responseCode = con.getResponseCode();
+
+            log.info("responseCode22222222222222222222222222: "+responseCode);
             if (responseCode == HttpURLConnection.HTTP_OK) { //성공
                 in = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 String inputLine;
@@ -199,8 +203,11 @@ public class UserService {
                             }
                         }
                         concern = descriptions.toString();
+
+                        log.info("concern :"+ concern);
                     }
                 } catch (JSONException e) {
+                    log.info("errorerrorerrorerror");
                     e.printStackTrace();
                 }
 

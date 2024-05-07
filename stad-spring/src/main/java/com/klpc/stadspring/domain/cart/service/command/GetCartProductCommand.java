@@ -15,5 +15,6 @@ public class GetCartProductCommand {
     private Long quantity;
     private Long advertId;
     private Long contentId;
+    private String thumbnail;
     private ProductOption option;
 }
