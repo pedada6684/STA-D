@@ -7,8 +7,13 @@ import 'package:stad/widget/page_animation.dart';
 import 'package:stad/widget/quantity_changer.dart';
 
 // 모달 바텀 시트를 띄우는 함수
-void showProductOptionBottomSheet(BuildContext context,
-    ProductInfo? productInfo, List<ProductType> productTypes, String title) {
+void showProductOptionBottomSheet(
+    BuildContext context,
+    ProductInfo? productInfo,
+    List<ProductType> productTypes,
+    String title,
+    int advertId,
+    int contentId) {
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
@@ -17,6 +22,8 @@ void showProductOptionBottomSheet(BuildContext context,
         productInfo: productInfo,
         productTypes: productTypes,
         title: title,
+        advertId: advertId,
+        contentId: contentId,
       );
     },
   );
@@ -27,12 +34,17 @@ class ProductOptionBottomSheet extends StatefulWidget {
   final ProductInfo? productInfo;
   final List<ProductType> productTypes;
   final String title;
+  final int advertId;
+  final int contentId;
 
-  const ProductOptionBottomSheet(
-      {super.key,
-      this.productInfo,
-      required this.productTypes,
-      required this.title});
+  const ProductOptionBottomSheet({
+    super.key,
+    this.productInfo,
+    required this.productTypes,
+    required this.title,
+    required this.advertId,
+    required this.contentId,
+  });
 
   @override
   _ProductOptionBottomSheetState createState() =>
@@ -48,6 +60,7 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   int? selectedOptionIndex;
   List<ProductType> selectedProducts = [];
   Map<int, int> quantities = {};
+  List<int> optionIds = [];
 
   void selectProductOption(String? value) {
     if (value != null) {
@@ -74,10 +87,17 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
       context,
       MaterialPageRoute(
         builder: (context) => OrderScreen(
-          productInfo: widget.productInfo, // 선택된 제품 정보
-          productTypes: selectedProducts, // 선택된 제품 유형 리스트
+          productInfo: widget.productInfo,
+          // 선택된 제품 정보
+          productTypes: selectedProducts,
+          // 선택된 제품 유형 리스트
           quantities: quantities,
-          title: widget.title, // 제품 제목
+          deliveryFee: 2500,
+          //선택한 수량
+          title: widget.title,
+          optionIds: optionIds,
+          advertId: widget.advertId,
+          contentId: widget.contentId,
         ),
       ),
     );
@@ -107,10 +127,19 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   }
 
   void selectOption(String? option) {
-    setState(() {
-      selectedOption = option;
-      isOptionExpanded = false;
-    });
+    if (option != null) {
+      int optionIndex = widget
+          .productTypes[selectedProductIndex!].productOptions
+          .indexWhere((o) => o.name == option);
+      int optionId = widget.productTypes[selectedProductIndex!]
+          .productOptions[optionIndex].value; // 옵션 ID를 가져옴
+      setState(() {
+        selectedOption = option;
+        selectedOptionIndex = optionIndex;
+        optionIds.add(optionId); // 옵션 ID를 리스트에 추가
+        isOptionExpanded = false;
+      });
+    }
   }
 
   @override
@@ -287,8 +316,7 @@ class ProductDetails extends StatelessWidget {
       children: [
         Expanded(
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

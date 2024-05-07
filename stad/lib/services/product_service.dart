@@ -1,12 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:stad/constant/api.dart';
 import 'package:stad/models/product_model.dart';
 
 class ProductService {
   final Dio _dio = Dio();
 
   // final String _baseUrl = svApi;
-  final String _baseUrl = 'http://192.168.0.9:8080/api';
+  final String _baseUrl = 'http://192.168.31.202:8080/api';
   //
   ProductService() {
     _dio.options.baseUrl = _baseUrl;
@@ -16,7 +15,7 @@ class ProductService {
   //TODO: advertId 수정하기
   Future<ProductInfo> getProductInfo(int advertId) async {
     try {
-      final response = await _dio.get('/product/list', queryParameters: {'advertId': advertId});
+      final response = await _dio.get('/product/list', queryParameters: {'advertId': 1});
       print('광고 상품 정보 조회 response :${response.data}');
       if (response.statusCode == 200) {
         var productList = response.data['productList'];
