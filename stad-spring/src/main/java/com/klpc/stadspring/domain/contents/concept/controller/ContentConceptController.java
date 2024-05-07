@@ -48,8 +48,7 @@ public class ContentConceptController {
             List<Long> contentIdList = categoryRelationshipService.getConceptIdByCategory(aLong);
             List<GetConceptResponse> contentResponseList = new ArrayList<>();
             for (Long value : contentIdList) {
-                ContentDetail detail = detailService.getContentDetailById(value);
-                ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
+                ContentConcept concept = conceptService.getContentConceptById(value);
 
                 contentResponseList.add(GetConceptResponse.from(concept));
             }
@@ -98,8 +97,7 @@ public class ContentConceptController {
             List<Long> contentIdList = categoryRelationshipService.getConceptIdByCategory(aLong);
             List<GetConceptResponse> contentResponseList = new ArrayList<>();
             for (Long value : contentIdList) {
-                ContentDetail detail = detailService.getContentDetailById(value);
-                ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
+                ContentConcept concept = conceptService.getContentConceptById(value);
 
                 contentResponseList.add(GetConceptResponse.from(concept));
             }
