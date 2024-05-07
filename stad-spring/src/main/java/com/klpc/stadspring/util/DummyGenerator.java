@@ -57,7 +57,7 @@ public class DummyGenerator {
     private final OrdersService ordersService;
     private final ContentDetailService contentDetailService;
 
-//    @EventListener(ApplicationReadyEvent.class)
+    @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void createDummy(){
         createContent();
