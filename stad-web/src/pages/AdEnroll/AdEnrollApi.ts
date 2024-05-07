@@ -91,6 +91,24 @@ export const getAdvertList = async (userId : number) => {
     }
 };
 
+export const getProductTypeList = async (userId : number) => {
+    try {
+        const response = await fetch(`/api/type/list-by-user-id?userId=${userId}`, {
+            method: 'GET',
+        });
+        if (!response.ok) {
+            throw new Error('상품 목록 조회 실패');
+        }
+        const data = await response.json(); // JSON 형태로 응답 받음
+        const result = data.data;
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error('광고 목록 조회 실패 : ', error);
+        return null;
+    }
+};
+
 export const deleteAdvert = async (advertId : number | undefined) => {
     try {
         const response = await fetch(`/api/advert?advertId=${advertId}`, {
