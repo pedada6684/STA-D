@@ -267,6 +267,8 @@ public class DummyGenerator {
         AddOrdersProductTypeRequestCommand ptRequestCommand = AddOrdersProductTypeRequestCommand.builder()
                 .productTypeId(productType.getId())
                 .productCnt(Math.max(productType.getQuantity()-10,1))
+                .contentId(contentId)
+                .advertId(advertId)
                 .optionId(null)
                 .build();
         productTypeList.add(ptRequestCommand);
@@ -274,14 +276,6 @@ public class DummyGenerator {
         AddOrderRequestCommand command1 = AddOrderRequestCommand.builder()
                 .userId(user.getId())
                 .addOrdersProductTypeRequestCommands(productTypeList)
-                .contentId(contentId)
-                .advertId(advertId)
-                .name("이태경")
-                .phoneNumber("010-4124-2572")
-                .locationName("집")
-                .location("대전광역시 유성구 구암동678-2")
-                .locationDetail("206호")
-                .locationNum("46271")
                 .build();
         ordersService.addOrders(command1);
     }

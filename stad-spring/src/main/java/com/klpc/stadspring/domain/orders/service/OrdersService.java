@@ -1,6 +1,10 @@
 package com.klpc.stadspring.domain.orders.service;
 
+import com.klpc.stadspring.domain.advert.entity.Advert;
+import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.cart.controller.response.GetCartProductInfoResponse;
+import com.klpc.stadspring.domain.log.service.LogService;
+import com.klpc.stadspring.domain.log.service.command.AddOrderLogCommand;
 import com.klpc.stadspring.domain.option.entity.ProductOption;
 import com.klpc.stadspring.domain.option.repository.OptionRepository;
 import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
@@ -29,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +48,8 @@ public class OrdersService {
     private final OrderProductRepository orderProductRepository;
     private final OrdersRepository ordersRepository;
     private final OptionRepository optionRepository;
+    private final LogService logService;
+    private final AdvertRepository advertRepository;
 
     /**
      * 주문 생성
@@ -54,7 +61,7 @@ public class OrdersService {
         log.info("주문 추가 Service"+"\n"+"Command userId : "+command.getUserId());
         User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-        Orders orders = Orders.createToOrders(user, command.getContentId(), command.getAdvertId());
+        Orders orders = Orders.createToOrders(user);
         ordersRepository.save(orders);
 
         for(AddOrdersProductTypeRequestCommand ptCommand : command.getAddOrdersProductTypeRequestCommands()){
@@ -65,6 +72,19 @@ public class OrdersService {
             orderProduct.linkedOrders(orders);
             orderProduct.linkedProductType(productType);
             orderProductRepository.save(orderProduct);
+
+            AddOrderLogCommand addOrderLogCommand = AddOrderLogCommand.builder()
+                    .advertId(ptCommand.getAdvertId())
+                    .userId(command.getUserId())
+                    .orderId(orders.getId())
+                    .contentId(ptCommand.getContentId())
+                    .productId(ptCommand.getProductTypeId())
+                    .price(productType.getPrice())
+                    .status(true)
+                    .regDate(LocalDateTime.now())
+                    .updateDate(LocalDateTime.now())
+                    .build();
+            logService.addOrderLog(addOrderLogCommand);
             productType.modifyQuantity(-1* ptCommand.getProductCnt());
         }
 
@@ -102,8 +122,6 @@ public class OrdersService {
                     .ordersId(orders.getId())
                     .orderDate(orders.getOrderDate().toLocalDate().toString())
                     .orderStatus(orders.getStatus().name())
-                    .contentId(orders.getContentId())
-                    .advertId(orders.getAdvertId())
                     .productTypes(productTypeList)
                     .build();
             response.add(command);
@@ -139,8 +157,6 @@ public class OrdersService {
                 .ordersId(orders.getId())
                 .orderDate(orders.getOrderDate().toLocalDate().toString())
                 .orderStatus(orders.getStatus().name())
-                .contentId(orders.getContentId())
-                .advertId(orders.getAdvertId())
                 .productTypes(productTypeList)
                 .build();
 

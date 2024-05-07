@@ -12,5 +12,7 @@ public class AddOrdersProductTypeRequestCommand {
     Long productTypeId;
     Long productCnt;
     Long optionId;
+    Long contentId;
+    Long advertId;
 
 }

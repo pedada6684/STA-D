@@ -44,20 +44,14 @@ public class OrdersController {
                         .productTypeId(productType.getProductTypeId())
                         .optionId(productType.getOptionId())
                         .productCnt(productType.getProductCnt())
+                        .contentId(productType.getContentId())
+                        .advertId(productType.getAdvertId())
                         .build();
                 list.add(rc);
             }
             AddOrderRequestCommand command = AddOrderRequestCommand.builder()
                     .userId(request.getUserId())
                     .addOrdersProductTypeRequestCommands(list)
-                    .contentId(request.getContentId())
-                    .advertId(request.getAdvertId())
-                    .name(request.getName())
-                    .phoneNumber(request.getPhoneNumber())
-                    .locationName(request.getLocationName())
-                    .location(request.getLocation())
-                    .locationDetail(request.getLocationDetail())
-                    .locationNum(request.getLocationNum())
                     .build();
             response = ordersService.addOrders(command);
         }
