@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @GetMapping("/withdraw")
     @Operation(summary = "회원 탈퇴", description = "회원 탈퇴")
@@ -47,6 +49,15 @@ public class UserController {
     public ResponseEntity<GetUserInfoResponse> getUserInfo(@RequestParam("userId") Long userId) {
         User user = userService.findUserById(userId);
         GetUserInfoResponse response = GetUserInfoResponse.from(user);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/kafka-test")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetUserInfoResponse.class)))
+    public ResponseEntity<GetUserInfoResponse> kafkaTest() {
+        User user = userService.findUserById(1L);
+        GetUserInfoResponse response = GetUserInfoResponse.from(user);
+        kafkaTemplate.send("kafka-test", response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
