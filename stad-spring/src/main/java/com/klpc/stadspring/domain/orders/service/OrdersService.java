@@ -49,7 +49,6 @@ public class OrdersService {
     private final OrdersRepository ordersRepository;
     private final OptionRepository optionRepository;
     private final LogService logService;
-    private final AdvertRepository advertRepository;
 
     /**
      * 주문 생성
@@ -68,10 +67,12 @@ public class OrdersService {
             ProductType productType = productTypeRepository.findById(ptCommand.getProductTypeId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
             if(ptCommand.getProductCnt()>productType.getQuantity())
                 throw new CustomException(ErrorCode.QUANTITY_ERROR);
-            OrderProduct orderProduct = OrderProduct.createToOrderProduct(ptCommand.getProductCnt(), ptCommand.getOptionId());
-            orderProduct.linkedOrders(orders);
-            orderProduct.linkedProductType(productType);
-            orderProductRepository.save(orderProduct);
+            if(ptCommand.getContentId()>0) {
+                OrderProduct orderProduct = OrderProduct.createToOrderProduct(ptCommand.getProductCnt(), ptCommand.getOptionId());
+                orderProduct.linkedOrders(orders);
+                orderProduct.linkedProductType(productType);
+                orderProductRepository.save(orderProduct);
+            }
 
             AddOrderLogCommand addOrderLogCommand = AddOrderLogCommand.builder()
                     .advertId(ptCommand.getAdvertId())
