@@ -22,7 +22,7 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     super.initState();
     cartService = CartService();
-    cartItems = cartService.getDummyCartData();
+    // cartItems = cartService.getDummyCartData();
     cartItems.forEach((item) {
       item.isSelected = !item.isSelected;
     });

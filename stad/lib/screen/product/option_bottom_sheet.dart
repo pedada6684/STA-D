@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/models/cart_model.dart';
 import 'package:stad/models/product_model.dart';
+import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/order/order_screen.dart';
+import 'package:stad/services/cart_service.dart';
 import 'package:stad/widget/custom_dropdown.dart';
 import 'package:stad/widget/page_animation.dart';
 import 'package:stad/widget/quantity_changer.dart';
@@ -61,6 +65,22 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   List<ProductType> selectedProducts = [];
   Map<int, int> quantities = {};
   List<int> optionIds = [];
+  final CartService _cartService = CartService();
+
+  void addToCart() async {
+    List<CartProductDetail> products = selectedProducts.map((product) {
+      return CartProductDetail(
+        productTypeId: product.id,
+        quantity: quantities[product.id] ?? 0,
+        advertId: widget.advertId,
+        contentId: widget.contentId,
+        optionId: optionIds.isNotEmpty ? optionIds[0] : -1, // 예시로 첫 번째 옵션을 사용
+      );
+    }).toList();
+
+    int userId = Provider.of<UserProvider>(context, listen: false).userId ?? 0;
+    await _cartService.addProductToCart(userId, products);
+  }
 
   void selectProductOption(String? value) {
     if (value != null) {
@@ -232,7 +252,6 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
                 );
               }).toList(),
             ],
-            _buildTotalPrice(),
             _buildActionButtons(context),
           ],
         ),
@@ -263,9 +282,7 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
                   ),
                 ),
               ),
-              onPressed: () {
-                //장바구니 담기
-              },
+              onPressed: addToCart,
               child: Text(
                 '장바구니 담기',
               ),
@@ -341,9 +358,4 @@ class ProductDetails extends StatelessWidget {
       ],
     );
   }
-}
-
-Widget _buildTotalPrice() {
-  // Return widget for total price
-  return Container(); // Placeholder for total price widget
 }
