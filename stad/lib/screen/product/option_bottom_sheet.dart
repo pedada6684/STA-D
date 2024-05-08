@@ -92,7 +92,7 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
 
       int userId =
           Provider.of<UserProvider>(context, listen: false).userId ?? 0;
-      await _cartService.addProductToCart(userId, products);
+      await _cartService.addProductToCart(context,userId, products);
       widget.onClose();
       showCustomSnackbar(context, '상품이 추가되었습니다.');
     }

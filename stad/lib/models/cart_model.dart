@@ -18,10 +18,10 @@ class CartItem {
   // JSON에서 CartItem 객체를 생성하는 factory 생성자
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
-      id: json['product']['id'].toString(),
-      title: json['product']['name'],
-      thumbnail: json['product']['thumbnail'],
-      price: json['product']['price'] as int,
+      id: json['productType']['id'].toString(),
+      title: json['productType']['name'],
+      thumbnail: json['thumbnail'],
+      price: json['productType']['price'] as int,
       quantity: json['quantity'] as int,
     );
   }

@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
         Provider(create: (_) => UserService()),
-        ChangeNotifierProvider(create: (context) => CartModel()),
+        ChangeNotifierProvider(create: (context) => CartProvider()),
       ],
       child: MaterialApp.router(
         routerDelegate: _router.routerDelegate,

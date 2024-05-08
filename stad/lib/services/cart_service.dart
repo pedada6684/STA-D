@@ -1,16 +1,20 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stad/models/cart_model.dart';
+import 'package:stad/providers/cart_provider.dart';
 
 class CartService {
   final Dio dio = Dio();
-  // final url = 'http://192.168.31.202:8080/api/cart';
-  final url = 'http://192.168.0.9:8080/api/cart';
+  final url = 'http://192.168.31.202:8080/api/cart';
+
+  // final url = 'http://192.168.0.9:8080/api/cart';
 
   //장바구니에 추가하기
-  Future<void> addProductToCart(
-      int userId, List<CartProductDetail> products) async {
+  Future<void> addProductToCart(BuildContext context, int userId,
+      List<CartProductDetail> products) async {
     try {
       final response = await dio.post('$url/regist',
           data: jsonEncode({
@@ -20,6 +24,8 @@ class CartService {
           }));
       if (response.statusCode == 200) {
         print('장바구니에 잘 담겼음: ${response.data}');
+        await Provider.of<CartProvider>(context, listen: false)
+            .fetchCartItems(userId);
       } else {
         print("장바구니에 담기 실패: ${response.statusCode}");
       }

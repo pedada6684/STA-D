@@ -7,6 +7,7 @@ class AdService {
 
   // final url = Uri.parse('$svApi/advert');
   final String url = ('http://192.168.31.202:8080/api/advert');
+  // final String url = 'http://192.168.0.9:8080/api/advert';
 
   //광고 정보 받아오기
   //TODO: advertId 수정
