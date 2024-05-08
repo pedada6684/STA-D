@@ -16,11 +16,40 @@ interface digitalForm {
   selectedContentList?: number[];
   advertVideoUrlList?: string[];
 }
+
+interface goodsForm {
+  advertId?: number;
+  name?: string;
+  imgs?: string[];
+  thumbnail?: String;
+  cityDeliveryFee?: number;
+  mtDeliveryFee?: number;
+  expStart?: string
+  expEnd?: string;
+  productTypeList?: ProductType[];
+}
+
+// 상품 interface
+interface ProductType {
+  id: number;
+  productTypeName: string; // 상품명
+  productTypePrice: number; // 상품 가격
+  productTypeQuantity: number; // 재고 수량
+  options: ProductOption[]; // 옵션 목록
+}
+
+// 옵션 interface
+interface ProductOption {
+  id: number;
+  optionName: string; // 옵션명
+  optionValue: number; // 옵션값
+}
 export default function Digital() {
 
   const location = useLocation();
   const initialFormData: digitalForm = location.state;
   const [formData, setFormData] = useState<digitalForm>(initialFormData);
+  const [goodsFormData, setGoofsFormData] = useState<goodsForm>();
 
   useEffect(() => {
     console.log("FormData on Digital page:", formData);
@@ -72,7 +101,7 @@ export default function Digital() {
           </InputContainer>
         )}
       </div>
-      <EnrollButton formData={formData} from="digital"/>
+      <EnrollButton goodsFormData={goodsFormData} formData={formData} from="digital"/>
     </div>
   );
 }

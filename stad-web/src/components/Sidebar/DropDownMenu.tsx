@@ -23,7 +23,7 @@ export default function DropDownMenu({ activeTab, onClickTab }: SideBarProps) {
           }
           onClick={onClickTab("enroll-list")}
         >
-          등록 상품 목록 조회 / 수정
+          등록 상품 목록 조회
         </li>
         <li
           className={

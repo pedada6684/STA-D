@@ -91,6 +91,24 @@ export const getAdvertList = async (userId : number) => {
     }
 };
 
+export const getProductTypeList = async (userId : number) => {
+    try {
+        const response = await fetch(`/api/type/list-by-user-id?userId=${userId}`, {
+            method: 'GET',
+        });
+        if (!response.ok) {
+            throw new Error('상품 목록 조회 실패');
+        }
+        const data = await response.json(); // JSON 형태로 응답 받음
+        const result = data.data;
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error('광고 목록 조회 실패 : ', error);
+        return null;
+    }
+};
+
 export const deleteAdvert = async (advertId : number | undefined) => {
     try {
         const response = await fetch(`/api/advert?advertId=${advertId}`, {
@@ -138,6 +156,55 @@ export const modifyAdvert = async (body : adType | undefined) => {
         return result;
     } catch (error) {
         console.error('광고 수정 실패 : ', error);
+        return null;
+    }
+};
+
+export const productThumbnailUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+
+    const formData = new FormData();
+    formData.append('thumbnail',files[0]);
+
+    try {
+        const response = await fetch(`/api/product-img/add-thumbnail`, {
+            method: 'POST',
+            body: formData
+        });
+        if (!response.ok) {
+            throw new Error('상품 썸네일 업로드 요청 실패');
+        }
+        const data = await response.json(); // JSON 형태로 응답 받음
+        const result = data;
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error('상품 썸네일 업로드 서버 요청 실패 : ', error);
+        return null;
+    }
+};
+
+export const productDetailImgUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+
+    const formData = new FormData();
+    Array.from(files).forEach(file => {
+        formData.append('imgs', file);
+    });
+    try {
+        const response = await fetch(`/api/product-img/add-img-list`, {
+            method: 'POST',
+            body: formData
+        });
+        if (!response.ok) {
+            throw new Error('상품 상세 이미지 업로드 요청 실패');
+        }
+        const data = await response.json(); // JSON 형태로 응답 받음
+        const result = data;
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error('상품 상세 이미지 업로드 서버 요청 실패 : ', error);
         return null;
     }
 };
