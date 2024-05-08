@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/models/cart_model.dart';
+import 'package:stad/models/product_model.dart';
 import 'package:stad/providers/cart_provider.dart';
 import 'package:stad/providers/user_provider.dart';
+import 'package:stad/screen/order/order_screen.dart';
 import 'package:stad/services/cart_service.dart';
+import 'package:stad/services/product_service.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
 import 'package:stad/widget/quantity_changer.dart';
@@ -19,12 +22,14 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   late CartService cartService;
   late List<CartItem> cartItems = [];
+  late ProductService productService;
   bool isSelectAll = false;
 
   @override
   void initState() {
     super.initState();
     cartService = CartService();
+    productService = ProductService();
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadCartItems());
   }
 
@@ -32,6 +37,50 @@ class _CartScreenState extends State<CartScreen> {
     final userId = Provider.of<UserProvider>(context, listen: false).userId;
     List<CartItem> items = await cartService.fetchCartProducts(userId!);
     Provider.of<CartProvider>(context, listen: false).setCartItems(items);
+  }
+
+  void navigateToOrderScreen() async{
+    // 선택된 항목들만 필터링
+    List<CartItem> selectedItems = Provider.of<CartProvider>(context, listen: false)
+        .cartItems
+        .where((item) => item.isSelected)
+        .toList();
+
+    if (selectedItems.isNotEmpty) {
+      List<ProductType> productTypes = selectedItems.map((item) {
+        return ProductType(
+          id: int.parse(item.id),
+          name: item.title,
+          price: item.price,
+          quantity: item.quantity,
+          // 상품 옵션 처리도 고려해야 할 수 있음
+        );
+      }).toList();
+
+      ProductInfo? productInfo = await productService.getProductInfo(1);
+
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OrderScreen(
+            productInfo: productInfo, // 필요하다면 적절히 설정
+            productTypes: productTypes,
+            title: productInfo?.name ?? "Order Details", // 혹은 다른 제목
+            quantities: {for (var item in productTypes) item.id: item.quantity},
+            advertId: 1, // 예시 ID, 적절한 값으로 변경 필요
+            contentId: 1, // 예시 ID, 적절한 값으로 변경 필요
+            //TODO: optionIds 수정하기
+            optionIds: [], // 옵션 ID 처리 필요
+            deliveryFee: 2500, // 배송료 처리
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("선택된 상품이 없습니다."))
+      );
+    }
   }
 
   // void toggleItemSelection(int index) {
@@ -214,9 +263,7 @@ class _CartScreenState extends State<CartScreen> {
   Widget _buildTotalPriceButton(int totalPrice) {
     return totalPrice > 0
         ? CustomElevatedButton(
-            onPressed: () {
-              // TODO: Implement order logic
-            },
+            onPressed: navigateToOrderScreen,
             text: '${totalPrice}원 주문하기',
             textColor: mainWhite,
             backgroundColor: mainNavy,

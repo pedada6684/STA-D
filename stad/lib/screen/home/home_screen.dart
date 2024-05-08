@@ -169,6 +169,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 title: singleAdverts[0]['title'],
                                 description: singleAdverts[0]['description'],
                               )));
+
                     },
                   ),
                 buildCarouselSlider(context),
