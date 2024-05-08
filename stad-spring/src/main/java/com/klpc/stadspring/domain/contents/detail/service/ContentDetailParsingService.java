@@ -43,21 +43,25 @@ public class ContentDetailParsingService {
                 JSONObject jsonObject = (JSONObject) obj;
 
                 // ContentConcept 객체 생성
-                ContentConcept concept = contentConceptRepository.findByIsMovieAndTitle(false,(String) jsonObject.get("title"))
+                ContentConcept concept = contentConceptRepository.findByIsMovieAndTitle(false, (String) jsonObject.get("title"))
                         .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
                 // `episode` 값을 `Long`에서 `Integer`로 변환
                 Long episodeLong = (Long) jsonObject.get("episode");
                 int episode = episodeLong.intValue();
 
-                // ContentDetail 객체 생성
-                ContentDetail newDetail = ContentDetail.createSeriesDetail(
-                        concept.getId(),
-                        episode,
-                        (String) jsonObject.get("video_url"),
-                        (String) jsonObject.get("summary"));
+                ContentDetail newDetail;
+                // ContentDetail이 존재하지 않으면 엔티티를 데이터베이스에 저장
+                if (!contentDetailRepository.findByConceptIdAndEpisode(concept.getId(), episode).isPresent()) {
+                    // ContentDetail 객체 생성
+                    newDetail = ContentDetail.createSeriesDetail(
+                            concept.getId(),
+                            episode,
+                            (String) jsonObject.get("video_url"),
+                            (String) jsonObject.get("summary"));
 
-                contentDetailRepository.save(newDetail);
+                    contentDetailRepository.save(newDetail);
+                }
             }
 
             // JSON 파일 읽기 리소스를 닫음
