@@ -59,6 +59,14 @@ class _QRScreenState extends State<QRScreen> {
     controller.scannedDataStream.listen((scanData) {
       // 스캔된 데이터 처리
       print('스캔된 데이터: ${scanData.code}');
+      print('스캔된 데이터: ${scanData.code}');
+      print('스캔된 데이터: ${scanData.code}');
+      print('스캔된 데이터: ${scanData.code}');
+      print('스캔된 데이터: ${scanData.code}');
+      print('스캔된 데이터: ${scanData.code}');
+      print('스캔된 데이터: ${scanData.code}');
+      print('스캔된 데이터: ${scanData.code}');
+      print('스캔된 데이터: ${scanData.code}');
     });
   }
 
