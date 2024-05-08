@@ -32,10 +32,11 @@ export default function GetOrder({ advertId }: AdvertIdProps) {
   }, [advertId, accessToken]);
   const [chartOptions, setChartOptions] = useState<ApexOptions>({
     chart: {
+      id: "area-datetime",
       type: "area",
       height: 350,
       zoom: {
-        enabled: false,
+        autoScaleYaxis: true,
       },
       stacked: true,
       dropShadow: {
@@ -46,7 +47,7 @@ export default function GetOrder({ advertId }: AdvertIdProps) {
         opacity: 0.06,
       },
     },
-    colors: ["#00127A"], // 그래프 색상 설정
+    colors: ["#6671AF"], // 그래프 색상 설정
     dataLabels: {
       enabled: false,
     },

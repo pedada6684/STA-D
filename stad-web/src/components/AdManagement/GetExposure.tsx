@@ -11,18 +11,18 @@ interface SeriesData {
   data: { x: string; y: number }[];
 }
 // // 날짜와 수익 데이터를 생성하는 함수
-// function generateDummyRevenueData() {
-//   const result = [];
-//   const currentDate = new Date();
-//   for (let i = 0; i < 30; i++) {
-//     const date = new Date(currentDate.getTime() - i * 24 * 60 * 60 * 1000);
-//     result.push({
-//       date: date.toISOString().split("T")[0], // 날짜 형식을 YYYY-MM-DD로 조정
-//       value: Math.floor(Math.random() * 1000) + 100, // 100에서 1100 사이의 임의의 수익 값
-//     });
-//   }
-//   return result.reverse(); // 최근 날짜가 먼저 오도록 배열 뒤집기
-// } // 더미함수
+function generateDummyRevenueData() {
+  const result = [];
+  const currentDate = new Date();
+  for (let i = 0; i < 30; i++) {
+    const date = new Date(currentDate.getTime() - i * 24 * 60 * 60 * 1000);
+    result.push({
+      date: date.toISOString().split("T")[0], // 날짜 형식을 YYYY-MM-DD로 조정
+      value: Math.floor(Math.random() * 1000) + 10, // 10에서 110 사이의 임의의 수익 값
+    });
+  }
+  return result.reverse(); // 최근 날짜가 먼저 오도록 배열 뒤집기
+} // 더미함수
 
 export default function GetExposure({ advertId }: AdvertIdProps) {
   // const dates = getRecent30Days(); // 최근 30일 날짜 생성
@@ -34,32 +34,33 @@ export default function GetExposure({ advertId }: AdvertIdProps) {
   ]);
 
   useEffect(() => {
-    // const dummyData = generateDummyRevenueData();
-    // const chartData = dummyData.map((item) => ({
-    //   x: item.date,
-    //   y: item.value,
-    // }));
-    // setSeriesData([{ name: "수익", data: chartData }]);
-    if (advertId && accessToken) {
-      getViewCount(advertId, accessToken).then((apiData) => {
-        if (apiData && apiData.list) {
-          const chartData = apiData.list.map(
-            (item: { date: string; value: number }) => ({
-              x: item.date,
-              y: item.value,
-            })
-          );
-          setSeriesData([{ name: "광고시청수", data: chartData }]);
-        }
-      });
-    }
+    const dummyData = generateDummyRevenueData();
+    const chartData = dummyData.map((item) => ({
+      x: item.date,
+      y: item.value,
+    }));
+    setSeriesData([{ name: "수익", data: chartData }]);
+    // if (advertId && accessToken) {
+    //   getViewCount(advertId, accessToken).then((apiData) => {
+    //     if (apiData && apiData.list) {
+    //       const chartData = apiData.list.map(
+    //         (item: { date: string; value: number }) => ({
+    //           x: item.date,
+    //           y: item.value,
+    //         })
+    //       );
+    //       setSeriesData([{ name: "광고시청수", data: chartData }]);
+    //     }
+    //   });
+    // }
   }, [advertId, accessToken]);
   const [chartOptions, setChartOptions] = useState<ApexOptions>({
     chart: {
+      id: "area-datetime",
       type: "area",
       height: 350,
       zoom: {
-        enabled: false,
+        autoScaleYaxis: true,
       },
       stacked: true,
       dropShadow: {
