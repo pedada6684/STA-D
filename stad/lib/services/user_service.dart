@@ -13,7 +13,9 @@ import 'package:stad/services/user_secure_storage.dart';
 
 class UserService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email', 'https://www.googleapis.com/auth/youtube.readonly'],
+  );
   final Dio dio = Dio();
   final EmUrl = Uri.parse('http://192.168.31.202:8080/api/v1/auth/applogin');
   final locUrl = Uri.parse('http://10.0.2.2:8080/api/v1/auth/applogin');
@@ -38,6 +40,7 @@ class UserService {
           UserModel.fromFirebaseUser(user, googleAuth.accessToken);
 
       print(userModel.nickname);
+      print(userModel.email);
       print(userModel.googleAccessToken);
 
       // 서버로 사용자 프로필을 전송하고 응답을 기다림
@@ -55,18 +58,25 @@ class UserService {
 
   Future<bool> sendUserProfile(
       BuildContext context, User user, String? googleAccessToken) async {
+    print(user);
+    print('sendUserProfile:$googleAccessToken');
+
     final userProfile =
         UserModel.fromFirebaseUser(user, googleAccessToken).toJson();
+
+    print('userProfile: $userProfile');
     try {
       final response = await dio.post(
         // 'https://www.mystad.com/api/v1/auth/applogin',
-        'http://192.168.0.9:8080/api/v1/auth/applogin',
+        'http://192.168.31.190:8080/api/v1/auth/applogin',
         // 'http://192.168.31.202:8080/api/v1/auth/applogin',
         // 'http://192.168.0.129:8080/api/v1/auth/applogin',
         data: json.encode(userProfile),
         options: Options(
             followRedirects: false, validateStatus: (status) => status! < 500),
       );
+
+      print('response:${response.data}');
 
       if (response.statusCode == 200) {
         String token =

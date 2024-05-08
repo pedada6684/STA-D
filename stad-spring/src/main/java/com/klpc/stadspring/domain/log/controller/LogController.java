@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/log")
 public class LogController {
     private final LogService logService;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @PostMapping(value = "/click")
     @Operation(summary = "광고 클릭 로그 추가", description = "광고 클릭 로그 추가")
