@@ -76,6 +76,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
+  void advertClickLog() async {
+
+  }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -161,6 +165,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     subText: singleAdverts[0]['title'],
                     onPressed: () {
                       //TODO: advertId 수정
+
                       Navigator.of(context).push(MaterialPageRoute(
                           //TODO 수정
                           builder: (context) => ProductScreen(
