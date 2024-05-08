@@ -33,3 +33,7 @@
 .subText div span {
   margin: 0 0.3rem;
 }
+.qr svg {
+  width: 10rem;
+  height: 10rem;
+}
