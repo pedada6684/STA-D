@@ -1,5 +1,8 @@
 package com.klpc.stadspring.domain.user.service;
 
+import com.klpc.stadspring.domain.classification.dto.UserCategoryRequest;
+import com.klpc.stadspring.domain.classification.dto.UserCategoryResponse;
+import com.klpc.stadspring.domain.classification.service.ClassificationService;
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.entity.UserLocation;
 import com.klpc.stadspring.domain.user.repository.UserLocationRepository;
@@ -37,6 +40,7 @@ public class UserService {
     private final UserLocationRepository userLocationRepository;
     private final AuthTokenGenerator authTokenGenerator;
     private final RefreshTokenService refreshTokenService;
+    private final ClassificationService classificationService;
     private final S3Util s3Util;
 
 
@@ -171,7 +175,6 @@ public class UserService {
 
             int responseCode = con.getResponseCode();
 
-            log.info("responseCode22222222222222222222222222: "+responseCode);
             if (responseCode == HttpURLConnection.HTTP_OK) { //성공
                 in = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 String inputLine;
@@ -203,11 +206,8 @@ public class UserService {
                             }
                         }
                         concern = descriptions.toString();
-
-                        log.info("concern :"+ concern);
                     }
                 } catch (JSONException e) {
-                    log.info("errorerrorerrorerror");
                     e.printStackTrace();
                 }
 
@@ -225,7 +225,20 @@ public class UserService {
                 e.printStackTrace();
             }
         }
-        return concern;
+
+        UserCategoryRequest userCategoryRequest = UserCategoryRequest.builder()
+                .userId(1L)
+                .text(concern)
+                .build();
+
+        List<UserCategoryResponse> response = classificationService.getUserCategory(userCategoryRequest);
+
+        StringBuilder sb = new StringBuilder();
+
+        for(UserCategoryResponse userCategoryResponse : response) {
+            sb.append(userCategoryResponse.getCategory()).append(" ");
+        }
+        return sb.toString();
     }
 
     public void logout(LogoutCommand command) {
