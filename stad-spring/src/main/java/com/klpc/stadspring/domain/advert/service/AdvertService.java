@@ -81,9 +81,9 @@ public class AdvertService {
 
         AddAdvertResponse addAdvertResponse;
         if(advert.getId()>0)
-            addAdvertResponse = AddAdvertResponse.builder().result("success").build();
+            addAdvertResponse = AddAdvertResponse.builder().advertId(advert.getId()).build();
         else
-            addAdvertResponse = AddAdvertResponse.builder().result("fail").build();
+            addAdvertResponse = AddAdvertResponse.builder().advertId(advert.getId()).build();
 
         return addAdvertResponse;
     }
@@ -120,9 +120,9 @@ public class AdvertService {
 
         ModifyAdvertResponse modifyAdvertResponse;
         if(advert.getId()>0)
-            modifyAdvertResponse = ModifyAdvertResponse.builder().result("success").build();
+            modifyAdvertResponse = ModifyAdvertResponse.builder().advertId(advert.getId()).build();
         else
-            modifyAdvertResponse = ModifyAdvertResponse.builder().result("fail").build();
+            modifyAdvertResponse = ModifyAdvertResponse.builder().advertId(advert.getId()).build();
 
         return modifyAdvertResponse;
     }

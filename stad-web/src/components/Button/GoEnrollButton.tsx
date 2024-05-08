@@ -2,6 +2,7 @@ import styles from "./Button.module.css";
 import { useNavigate } from "react-router-dom";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store";
+import {useState} from "react";
 interface GoEnrollButtonProps {
   children: React.ReactNode;
   to: string;
@@ -21,12 +22,14 @@ interface GoEnrollButtonProps {
 export default function GoEnrollButton({ children, to, formData }: GoEnrollButtonProps) {
   const navigate = useNavigate();
   const userId = useSelector((state: RootState)=> state.user.userId);
-  const handleClick = () => {
+  const [advertId,setAdvertId] = useState<number>();
+  const handleClick = async () => {
     if (formData && formData.title!=undefined && formData.category!=undefined && formData.startDate!=undefined
     && formData.endDate!=undefined && formData.bannerImgUrl!=undefined && formData.advertVideoUrlList!=undefined) {
       if (to === "/ad-enroll/merchandise") {
-        addAdvert(formData); // 광고 추가 요청
-        navigate(to); // to 프로퍼티로 받은 경로로 이동
+        const response = await addAdvert(formData); // 광고 추가 요청
+        setAdvertId(response);
+        navigate(to, {state : response.advertId}); // to 프로퍼티로 받은 경로로 이동
       }
       else{
         navigate(to, { state: formData });
@@ -68,7 +71,6 @@ export default function GoEnrollButton({ children, to, formData }: GoEnrollButto
       return result;
     } catch (error) {
       console.error('광고 생성 요청 실패 : ', error);
-      return null;
     }
   };
   return (

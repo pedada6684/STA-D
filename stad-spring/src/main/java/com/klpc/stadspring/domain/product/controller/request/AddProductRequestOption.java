@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public class AddProductRequestOption {
 
+    Long id;
     String optionName;
     Long optionValue;
 

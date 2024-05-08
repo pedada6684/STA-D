@@ -9,6 +9,7 @@ import java.util.List;
 @Builder
 public class AddProductRequestProductType {
 
+    Long id;
     String productTypeName;
     Long productTypePrice;
     Long productTypeQuantity;
