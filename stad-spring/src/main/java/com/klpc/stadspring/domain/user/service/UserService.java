@@ -236,7 +236,7 @@ public class UserService {
         StringBuilder sb = new StringBuilder();
 
         for(UserCategoryResponse userCategoryResponse : response) {
-            sb.append(userCategoryResponse.getCategory()).append("*");
+            sb.append(userCategoryResponse.getCategory()).append(" ");
         }
         return sb.toString();
     }
