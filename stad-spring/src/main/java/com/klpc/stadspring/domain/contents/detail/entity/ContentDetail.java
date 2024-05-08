@@ -1,6 +1,7 @@
 package com.klpc.stadspring.domain.contents.detail.entity;
 
 import com.klpc.stadspring.domain.contents.bookmark.entity.BookmarkedContent;
+import com.klpc.stadspring.domain.contents.labelRelationship.entity.ContentLabelRelationship;
 import com.klpc.stadspring.domain.contents.watched.entity.WatchedContent;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -29,6 +30,9 @@ public class ContentDetail {
 
     @OneToMany(mappedBy = "contentDetail")
     private List<WatchedContent> watchedContentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "contentDetail")
+    private List<ContentLabelRelationship> contentLabelRelationshipList = new ArrayList<>();
 
     public static ContentDetail createSeriesDetail (
             Long contentConceptId,

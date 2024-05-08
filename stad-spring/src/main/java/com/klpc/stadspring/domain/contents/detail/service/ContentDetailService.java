@@ -95,7 +95,7 @@ public class ContentDetailService {
      * 인기 영상 목록 조회
      * @return
      */
-    // ========================== 태경 수정 ===================================
+    // TODO: 태경 - 레디스에서 인기 영상 조회
     public List<ContentDetail> getPopularContent() {
         List<ContentDetail> list = repository.findPopularContentDetail()
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
@@ -106,7 +106,7 @@ public class ContentDetailService {
      * 최신 영상 목록 조회
      * @return
      */
-    // ========================== 태경 수정 ===================================
+    // TODO: 태경 - 레디스에서 최신 영상 조회
     public List<ContentDetail> getUpdatedContent() {
         List<ContentDetail> list = repository.findPopularContentDetail()
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));

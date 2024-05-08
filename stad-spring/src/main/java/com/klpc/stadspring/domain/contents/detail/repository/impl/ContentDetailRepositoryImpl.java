@@ -25,15 +25,15 @@ public class ContentDetailRepositoryImpl implements ContentDetailRepositoryCusto
     }
 
     @Override
-    public Optional<List<ContentDetail>> findContentDetailsByConceptId(Long conceptId) {
+    public Optional<ContentDetail> findByConceptIdAndEpisode(Long conceptId, Integer episode) {
         return Optional.ofNullable(query.select(contentDetail)
                 .from(contentDetail)
-                .where(contentDetail.contentConceptId.eq(conceptId))
-                .fetch());
+                .where(contentDetail.contentConceptId.eq(conceptId)
+                        .and(contentDetail.episode.eq(episode)))
+                .fetchOne());
     }
 
-    // 인기 영상 추출
-    // ========================== 태경 수정 ===================================
+    // TODO: 태경 - 레디스에서 인기 영상 추출
     @Override
     public Optional<List<ContentDetail>> findPopularContentDetail() {
         return Optional.of(query.select(contentDetail)

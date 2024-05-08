@@ -30,9 +30,6 @@ public class ContentConcept {
     @OneToMany(mappedBy = "contentConcept")
     private List<ContentCategoryRelationship> contentCategoryRelationshipList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "contentConcept")
-    private List<ContentLabelRelationship> contentLabelRelationshipList = new ArrayList<>();
-
     public static ContentConcept createContentConcept (
             String audienceAge,
             String playtime,
