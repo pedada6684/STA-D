@@ -90,8 +90,17 @@ class _ProductScreenState extends State<ProductScreen>
         backgroundColor: mainNavy,
         onPressed: () {
           if (_productTypes.isNotEmpty) {
-            showProductOptionBottomSheet(context, _productInfo, _productTypes,
-                widget.title, widget.advertId, widget.contentId);
+            showProductOptionBottomSheet(
+              context,
+              _productInfo,
+              _productTypes,
+              widget.title,
+              widget.advertId,
+              widget.contentId,
+              () {
+                Navigator.pop(context); // Bottom sheet를 닫는 동작
+              },
+            );
           }
         },
       ),
