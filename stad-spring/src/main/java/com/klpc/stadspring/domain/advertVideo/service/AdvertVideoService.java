@@ -8,6 +8,9 @@ import com.klpc.stadspring.domain.advertVideo.service.command.request.AddBannerI
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddVideoListRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVideoRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.response.AddVideoListResponseCommand;
+import com.klpc.stadspring.domain.contents.label.repository.ContentLabelRepository;
+import com.klpc.stadspring.domain.contents.labelRelationship.repository.ContentLabelRelationshipRepository;
+import com.klpc.stadspring.domain.contents.watched.repository.WatchedContentRepository;
 import com.klpc.stadspring.domain.log.repository.AdvertStatisticsRepository;
 import com.klpc.stadspring.domain.selectedContent.repository.SelectedContentRepository;
 import com.klpc.stadspring.global.RedisService;
@@ -41,6 +44,9 @@ public class AdvertVideoService {
     private final AdvertRepository advertRepository;
     private final AdvertStatisticsRepository advertStatisticsRepository;
     private final SelectedContentRepository selectedContentRepository;
+    private final WatchedContentRepository watchedContentRepository;
+    private final ContentLabelRepository contentLabelRepository;
+    private final ContentLabelRelationshipRepository contentLabelRelationshipRepository;
     private final RedisService redisService;
     private final S3Util s3Util;
 
@@ -135,12 +141,22 @@ public class AdvertVideoService {
     public List<String> getAdvertVideoByUser(Long userId){
         log.info("유저 맞춤 광고 큐 조회 서비스" + "\n" + "userId : " + userId);
 
-        // TODO: 지운 - 관심사 추려주는 알고리즘 만들면 바꾸기
         List<String> userCategory = new ArrayList<>();
-        userCategory.add("개발");
-        userCategory.add("푸드");
-        userCategory.add("튀김");
-        // ===========================================
+
+        // 최근 시청한 영상 20개
+        List<Long> watchedContentDetailIdList = watchedContentRepository.findWatchingAndWatchedContentDetailIdByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        Long[] totalLabel = new Long[232];
+        for (int i = 0; i < watchedContentDetailIdList.size(); i++) {
+            int tmp = contentLabelRelationshipRepository.findContentLabel_IdByContentDetail_Id(watchedContentDetailIdList.get(i)).intValue();
+            totalLabel[tmp]++;
+        }
+        Arrays.sort(totalLabel);
+
+        // 많이 시청한 콘텐츠의 라벨 3개
+        for (int i = 231; i > 228; i++) {
+            userCategory.add(contentLabelRepository.findNameById(totalLabel[i]));
+        }
 
         List<Long> advertIdListByUser = new ArrayList<>();
 
