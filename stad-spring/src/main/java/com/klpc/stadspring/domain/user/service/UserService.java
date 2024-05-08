@@ -131,7 +131,6 @@ public class UserService {
                         ()->joinMember(command.convertToJoinUserCommand())
                 );
 
-
         LoginResult result = LoginResult.builder()
                 .accessToken(authTokenGenerator.generateAT(user.getId()))
                 .refreshToken(authTokenGenerator.generateRT(user.getId()))
