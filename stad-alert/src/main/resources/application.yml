@@ -9,3 +9,4 @@ spring:
     import:
       - classpath:/db.yml
       - classpath:/msa.yml
+      - classpath:/kafka.yml
