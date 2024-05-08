@@ -11,6 +11,7 @@ import lombok.Setter;
 @Data
 @Builder
 public class GetCartProductCommand {
+    private Long cartProductId;
     private ProductType productType;
     private Long quantity;
     private Long advertId;
