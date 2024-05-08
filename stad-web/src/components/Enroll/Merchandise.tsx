@@ -15,38 +15,66 @@ import {
   NameContainer,
   TitleContainer,
 } from "../Container/EnrollContainer";
-import { bannerImgUpload } from "../../pages/AdEnroll/AdEnrollApi";
-interface goodsForm {
-  name?: string;
-  price?: number;
-  quantity?: number;
-  introduction?: string;
-  thumbnail?: string;
+import {bannerImgUpload, productDetailImgUpload, productThumbnailUpload} from "../../pages/AdEnroll/AdEnrollApi";
+import {useLocation} from "react-router-dom";
+
+interface formData {
+  userId?: number;
+  title?: string;
+  description?: string;
+  startDate?: string;
+  endDate?: string;
   category?: string;
-  option?: string[];
+  directVideoUrl?: string;
+  bannerImgUrl?: string;
+  selectedContentList?: number[];
+  advertVideoUrlList?: string[];
+}
+interface goodsForm {
+  advertId?: number;
+  name?: string;
+  imgs?: string[];
+  thumbnail?: String;
+  cityDeliveryFee?: number;
+  mtDeliveryFee?: number;
+  expStart?: string
+  expEnd?: string;
+  productTypeList?: ProductType[];
+}
+
+// 상품 interface
+interface ProductType {
+  id: number;
+  productTypeName: string; // 상품명
+  productTypePrice: number; // 상품 가격
+  productTypeQuantity: number; // 재고 수량
+  options: ProductOption[]; // 옵션 목록
 }
 
 // 옵션 interface
 interface ProductOption {
   id: number;
-  name: string; // 옵션명
-  value: string; // 옵션값
-}
-
-// 상품 interface
-interface Product {
-  id: number;
-  name: string; // 상품명
-  price: number; // 상품 가격
-  quantity: number; // 재고 수량
-  options: ProductOption[]; // 옵션 목록
+  optionName: string; // 옵션명
+  optionValue: number; // 옵션값
 }
 
 export default function Merchandise() {
-  const [formData, setFormData] = useState<goodsForm>();
+  const location = useLocation();
+  const advertId : number = location.state;
+  const [formData, setFormData] = useState<formData>();
+  const [goodsFormData, setGoodsFormData] = useState<goodsForm>();
+
+  useEffect(() => {
+    console.log(advertId);
+    setGoodsFormData((prevState) => ({
+      ...prevState,
+      advertId: advertId,
+    }));
+  }, [advertId]);
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
+    setGoodsFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -82,42 +110,51 @@ export default function Merchandise() {
   const [detailImages, setDetailImages] = useState<File[]>([]);
   const [detailImagePreviews, setDetailImagePreviews] = useState<string[]>([]);
   useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+    console.log(goodsFormData);
+  }, [goodsFormData]);
+
+  useEffect(() => {
+    if (startDate) {
+      setGoodsFormData((prevState) => ({
+        ...prevState,
+        expStart: startDate.toISOString().split("T")[0],
+      }));
+    }
+  }, [startDate]);
+  useEffect(() => {
+    if (endDate) {
+      setGoodsFormData((prevState) => ({
+        ...prevState,
+        expEnd: endDate.toISOString().split("T")[0],
+      }));
+    }
+  }, [endDate]);
 
   // 대표 이미지 추가
   const handleThumbnailImg = async (e: ChangeEvent<HTMLInputElement>) => {
     const thumbnailImgUrl = e.target.files;
-    const data = await bannerImgUpload(thumbnailImgUrl); // api 요청 썸네일 업로드하는 api로 바꾸기
+    const data = await productThumbnailUpload(thumbnailImgUrl);
     console.log("대표 이미지:", data);
     setThumbnailImgUrl(data);
-    createImagePreview(thumbnailImgUrl, setThumbnailPreviewUrl);
-  };
-
-  // 이미지 미리보기 생성
-  const createImagePreview = (
-    file: any,
-    setPreviewUrl: (url: string) => void
-  ) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreviewUrl(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  };
-  const handleThumbnailImgChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      createImagePreview(file, setThumbnailPreviewUrl);
-    }
+    setGoodsFormData((prevState) => ({
+      ...prevState,
+      thumbnail: data.data,
+    }));
   };
 
   // 설명 이미지 추가
   const handleDetailImg = async (e: ChangeEvent<HTMLInputElement>) => {
     const imgList = e.target.files;
-    const dataList = await bannerImgUpload(imgList); // api 요청 이미지 리스트 업로드 하는 걸로 바꾸기
+    const dataList = await productDetailImgUpload(imgList);
+    console.log("상품 상세 이미지:", dataList);
+    setDetailImages(dataList);
+    setGoodsFormData((prevState) => ({
+      ...prevState,
+      imgs: dataList.data,
+    }));
     console.log("이미지 리스트 추가", dataList);
   };
+
   const handleDetailImagesChange = (
     e: ChangeEvent<HTMLInputElement>,
     index: number
@@ -139,14 +176,20 @@ export default function Merchandise() {
     }
   };
   // 상품 상태관리
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductType[]>([]);
+  useEffect(() => {
+    setGoodsFormData((prevState) => ({
+      ...prevState,
+      productTypeList: products,
+    }));
+  }, [products]);
   // 상품 추가
   const addProduct = () => {
     const newProduct = {
       id: Date.now(), // 고유 ID 생성
-      name: "",
-      price: 0,
-      quantity: 0,
+      productTypeName: "",
+      productTypePrice: 0,
+      productTypeQuantity: 0,
       options: [],
     };
     // 기존 상품 배열 + 스프레드 연산 사용해서 새 상품 추가해 새 배열 생성 후 setProducts에 담아줌
@@ -160,7 +203,7 @@ export default function Merchandise() {
   // 옵션 추가
   const addOption = (productId: number) => {
     // 초기값 설정
-    const newOption = { id: Date.now(), name: "", value: "" };
+    const newOption: ProductOption = { id: Date.now(), optionName: "", optionValue: 0 };
     setProducts(
       // 각 상품 확인해서 옵션 추가할 상품 Id랑 일치하는 경우 옵션 배열 추가
       products.map((product) =>
@@ -273,7 +316,8 @@ export default function Merchandise() {
                         type="file"
                         name="thumbnail"
                         id="thumbnail"
-                        onChange={handleThumbnailImgChange}
+                        accept="image/gif, image/jpeg, image/jpg, image/png"
+                        onChange={handleThumbnailImg}
                         className={`${styles.imageInput}`}
                       />
                       <label
@@ -302,7 +346,7 @@ export default function Merchandise() {
             <div className={`${styles.merDesImages}`}>
               <div className={`${styles.subTitle}`}>상품 설명 내용 이미지</div>
               <div className={`${styles.imageContainer}`}>
-                {Array.from({ length: 3 }).map((_, index) => (
+                {Array.from({ length: 1 }).map((_, index) => (
                   <div key={index} className={`${styles.imageUploadContainer}`}>
                     {detailImagePreviews[index] ? (
                       <div className={`${styles.imagePreviewContainer}`}>
@@ -318,8 +362,10 @@ export default function Merchandise() {
                           type="file"
                           name={`detailImage-${index}`}
                           id={`detailImage-${index}`}
+                          multiple
                           required
-                          onChange={(e) => handleDetailImagesChange(e, index)}
+                          accept="image/gif, image/jpeg, image/jpg, image/png"
+                          onChange={(e) => handleDetailImg(e)}
                           className={`${styles.imageInput} ${styles.input}`}
                         />
                         <label
@@ -360,7 +406,7 @@ export default function Merchandise() {
               <div className={`${styles.priceContainer}`}>
                 <input
                   type="number"
-                  name="merchandise-shipping-price-city"
+                  name="cityDeliveryFee"
                   onChange={handleChange}
                   className={`${styles.input}`}
                   required
@@ -376,7 +422,7 @@ export default function Merchandise() {
               <div className={`${styles.priceContainer}`}>
                 <input
                   type="number"
-                  name="merchandise-shipping-price-jeju"
+                  name="mtDeliveryFee"
                   onChange={handleChange}
                   className={`${styles.input}`}
                   required
@@ -430,9 +476,9 @@ export default function Merchandise() {
                     {/* 상품명 입력란 */}
                     <input
                       type="text"
-                      name="name"
+                      name="productTypeName"
                       className={`${styles.input2}`}
-                      value={product.name}
+                      value={product.productTypeName}
                       onChange={(e) => handleProductChange(e, product.id)}
                     />
                     <label>상품명</label>
@@ -441,9 +487,9 @@ export default function Merchandise() {
                   <div className={`${styles.productInput}`}>
                     <input
                       type="number"
-                      name="price"
+                      name="productTypePrice"
                       className={`${styles.input2}`}
-                      value={product.price}
+                      value={product.productTypePrice}
                       onChange={(e) => handleProductChange(e, product.id)}
                     />
                     <label>판매가(KRW)</label>
@@ -453,9 +499,9 @@ export default function Merchandise() {
                   <div className={`${styles.productInput}`}>
                     <input
                       type="number"
-                      name="quantity"
+                      name="productTypeQuantity"
                       className={`${styles.input2}`}
-                      value={product.quantity}
+                      value={product.productTypeQuantity}
                       onChange={(e) => handleProductChange(e, product.id)}
                     />
                     <label>재고</label>
@@ -497,9 +543,9 @@ export default function Merchandise() {
                           <div className={`${styles.optionInput}`}>
                             <input
                               type="text"
-                              name="name"
+                              name="optionName"
                               className={`${styles.input3}`}
-                              value={option.name}
+                              value={option.optionName}
                               onChange={(e) =>
                                 handleOptionChange(e, product.id, option.id)
                               }
@@ -512,8 +558,8 @@ export default function Merchandise() {
                           <div className={`${styles.optionInput}`}>
                             <input
                               type="text"
-                              name="value"
-                              value={option.value}
+                              name="optionValue"
+                              value={option.optionValue}
                               className={`${styles.input3}`}
                               onChange={(e) =>
                                 handleOptionChange(e, product.id, option.id)
@@ -544,7 +590,7 @@ export default function Merchandise() {
         )}
       </ItemContainer>
 
-      <EnrollButton formData={formData} from="merchandise" />
+      <EnrollButton goodsFormData={goodsFormData} formData={formData} from="merchandise" />
     </div>
   );
 }
