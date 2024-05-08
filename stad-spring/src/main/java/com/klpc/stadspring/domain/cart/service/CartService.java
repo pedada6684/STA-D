@@ -92,6 +92,7 @@ public class CartService {
             }
 
             GetCartProductCommand response = GetCartProductCommand.builder()
+                    .cartProductId(cartProduct.getId())
                     .productType(cartProduct.getProductType())
                     .quantity(cartProduct.getQuantity())
                     .advertId(cartProduct.getAdvertId())
