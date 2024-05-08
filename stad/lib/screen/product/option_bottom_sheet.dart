@@ -1,41 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/models/cart_model.dart';
 import 'package:stad/models/product_model.dart';
+import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/order/order_screen.dart';
+import 'package:stad/services/cart_service.dart';
 import 'package:stad/widget/custom_dropdown.dart';
-import 'package:stad/widget/page_animation.dart';
 import 'package:stad/widget/quantity_changer.dart';
 
-// 모달 바텀 시트를 띄우는 함수
 void showProductOptionBottomSheet(
     BuildContext context,
     ProductInfo? productInfo,
     List<ProductType> productTypes,
     String title,
     int advertId,
-    int contentId) {
+    int contentId,
+    VoidCallback onClose) {
   showModalBottomSheet(
     isScrollControlled: true,
+    isDismissible: true,
     context: context,
     builder: (BuildContext context) {
-      return ProductOptionBottomSheet(
-        productInfo: productInfo,
-        productTypes: productTypes,
-        title: title,
-        advertId: advertId,
-        contentId: contentId,
+      return SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height * 0.5,
+          ),
+          child: IntrinsicHeight(
+            child: ProductOptionBottomSheet(
+              productInfo: productInfo,
+              productTypes: productTypes,
+              title: title,
+              advertId: advertId,
+              contentId: contentId,
+              onClose: onClose,
+            ),
+          ),
+        ),
       );
     },
   );
 }
 
-// 바텀 시트의 내용을 관리할 StatefulWidget
 class ProductOptionBottomSheet extends StatefulWidget {
   final ProductInfo? productInfo;
   final List<ProductType> productTypes;
   final String title;
   final int advertId;
   final int contentId;
+  final VoidCallback onClose;
 
   const ProductOptionBottomSheet({
     super.key,
@@ -44,6 +58,7 @@ class ProductOptionBottomSheet extends StatefulWidget {
     required this.title,
     required this.advertId,
     required this.contentId,
+    required this.onClose,
   });
 
   @override
@@ -61,21 +76,87 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   List<ProductType> selectedProducts = [];
   Map<int, int> quantities = {};
   List<int> optionIds = [];
+  final CartService _cartService = CartService();
+
+  void addToCart() async {
+    if (selectedProducts.isNotEmpty) {
+      List<CartProductDetail> products = selectedProducts.map((product) {
+        return CartProductDetail(
+          productTypeId: product.id,
+          quantity: quantities[product.id] ?? 0,
+          advertId: widget.advertId,
+          contentId: widget.contentId,
+          optionId: optionIds.isNotEmpty ? optionIds[0] : -1,
+        );
+      }).toList();
+
+      int userId =
+          Provider.of<UserProvider>(context, listen: false).userId ?? 0;
+      await _cartService.addProductToCart(context,userId, products);
+      widget.onClose();
+      showCustomSnackbar(context, '상품이 추가되었습니다.');
+    }
+  }
+
+  void showCustomSnackbar(BuildContext context, String message) {
+    final snackbar = SnackBar(
+      content: Container(
+        padding: EdgeInsets.symmetric(horizontal: 24.0), // 내부 여백 조정
+        width: MediaQuery.of(context).size.width * 0.6, // 너비를 화면의 60%로 설정
+        child: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
+      ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: mainBlack.withOpacity(0.7),
+      // 투명도 조정
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10), // 모서리 둥글게 처리
+      ),
+      duration: Duration(seconds: 2),
+      //TODO: 부드럽게 사라지는 애니메이션 넣기
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackbar);
+  }
+
+  void addProduct(ProductType product, int optionId) {
+    // 이미 선택된 동일 상품과 옵션이 있는지 확인
+    for (var i = 0; i < selectedProducts.length; i++) {
+      if (selectedProducts[i].id == product.id && optionIds[i] == optionId) {
+        //있으면 수량만 늘리기
+        setState(() {
+          quantities[product.id] = (quantities[product.id] ?? 0) + 1;
+        });
+        return;
+      }
+    }
+    // 새로운 상품 추가
+    setState(() {
+      quantities[product.id] = 1;
+      selectedProducts.add(product);
+      optionIds.add(optionId);
+    });
+  }
 
   void selectProductOption(String? value) {
     if (value != null) {
       int index = widget.productTypes.indexWhere((p) => p.name == value);
-      addProduct(widget.productTypes.firstWhere((p) => p.name == value));
+      int optionId = -1;
+      if (!widget.productTypes[index].productOptions.isEmpty) {
+        optionId = widget.productTypes[index].productOptions.first.value;
+      }
       setState(
         () {
           selectedProductIndex = index;
           selectedOptionIndex = null;
           isProductExpanded = false;
+          addProduct(widget.productTypes[index], optionId);
           if (widget.productTypes[index].productOptions.isEmpty) {
             isOptionExpanded = false;
-          }
-          if (!selectedProducts.contains(widget.productTypes[index])) {
-            selectedProducts.add(widget.productTypes[index]);
           }
         },
       );
@@ -83,63 +164,75 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   }
 
   void _navigateToOrderScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => OrderScreen(
-          productInfo: widget.productInfo,
-          // 선택된 제품 정보
-          productTypes: selectedProducts,
-          // 선택된 제품 유형 리스트
-          quantities: quantities,
-          deliveryFee: 2500,
-          //선택한 수량
-          title: widget.title,
-          optionIds: optionIds,
-          advertId: widget.advertId,
-          contentId: widget.contentId,
+    if (selectedProducts.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OrderScreen(
+            productInfo: widget.productInfo,
+            productTypes: selectedProducts,
+            quantities: quantities,
+            deliveryFee: 2500,
+            title: widget.title,
+            optionIds: optionIds,
+            advertId: widget.advertId,
+            contentId: widget.contentId,
+          ),
         ),
+      );
+    }
+  }
+
+  Widget _buildActionButtons(BuildContext context) {
+    bool isCartButtonDisabled = selectedProducts.isEmpty;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: mainNavy,
+                textStyle: TextStyle(fontSize: 16),
+                side: isCartButtonDisabled
+                    ? null
+                    : BorderSide(color: mainNavy, width: 1),
+                surfaceTintColor: mainWhite,
+                backgroundColor: isCartButtonDisabled ? mainGray : mainWhite,
+                padding: EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+              ),
+              onPressed: isCartButtonDisabled ? null : addToCart,
+              child: Text('장바구니 담기'),
+            ),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: mainWhite,
+                textStyle: TextStyle(fontSize: 16),
+                surfaceTintColor: mainNavy,
+                backgroundColor: isCartButtonDisabled ? mainGray : mainNavy,
+                padding: EdgeInsets.symmetric(vertical: 15.8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+              ),
+              onPressed: isCartButtonDisabled ? null : _navigateToOrderScreen,
+              child: Text('구매하기'),
+            ),
+          ),
+        ],
       ),
     );
-  }
-
-  void addProduct(ProductType product) {
-    if (!quantities.containsKey(product.id)) {
-      quantities[product.id] = 1; // 초기 수량 설정
-    }
-    setState(() {
-      quantities.update(product.id, (value) => value + 1);
-    });
-  }
-
-  // void toggleProductExpanded() {
-  //   setState(() {
-  //     isProductExpanded = !isProductExpanded;
-  //     if (isOptionExpanded) isOptionExpanded = false;
-  //   });
-  // }
-
-  void toggleOptionExpanded() {
-    setState(() {
-      isOptionExpanded = !isOptionExpanded;
-      if (isProductExpanded) isProductExpanded = false;
-    });
-  }
-
-  void selectOption(String? option) {
-    if (option != null) {
-      int optionIndex = widget
-          .productTypes[selectedProductIndex!].productOptions
-          .indexWhere((o) => o.name == option);
-      int optionId = widget.productTypes[selectedProductIndex!]
-          .productOptions[optionIndex].value; // 옵션 ID를 가져옴
-      setState(() {
-        selectedOption = option;
-        selectedOptionIndex = optionIndex;
-        optionIds.add(optionId); // 옵션 ID를 리스트에 추가
-        isOptionExpanded = false;
-      });
-    }
   }
 
   @override
@@ -180,7 +273,6 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
             CustomDropdown(
               title: '상품선택',
               options: productOptions,
-              //서버에서 받아올 것
               isExpanded: isProductExpanded,
               selectedOption: selectedProductIndex != null
                   ? productOptions[selectedProductIndex!]
@@ -194,17 +286,13 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
               CustomDropdown(
                 title: '옵션선택',
                 options: currentOptions,
-                //서버에서 받아올 것
                 isExpanded: isOptionExpanded,
                 selectedOption: selectedOptionIndex != null
                     ? currentOptions[selectedOptionIndex!]
                     : null,
-                onToggle: toggleOptionExpanded,
-                onSelect: (String? value) {
-                  setState(() {
-                    selectedOptionIndex = currentOptions.indexOf(value!);
-                  });
-                },
+                onToggle: () =>
+                    setState(() => isOptionExpanded = !isOptionExpanded),
+                onSelect: selectOption,
               ),
             if (selectedProductIndex != null) ...[
               ...selectedProducts.map((product) {
@@ -215,16 +303,22 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
                       onCancel: () {
                         setState(() {
                           selectedProducts.remove(product);
+                          quantities.remove(product.id);
+                          if (selectedProducts.isEmpty) {
+                            selectedProductIndex = null;
+                          }
                         });
                       },
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: QuantityChanger(
-                        initialQuantity: 1,
+                        initialQuantity: quantities[product.id] ?? 1,
                         maxQuantity: product.quantity,
                         onQuantityChanged: (newQuantity) {
-                          // Handle quantity change
+                          setState(() {
+                            quantities[product.id] = newQuantity;
+                          });
                         },
                       ),
                     ),
@@ -232,7 +326,6 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
                 );
               }).toList(),
             ],
-            _buildTotalPrice(),
             _buildActionButtons(context),
           ],
         ),
@@ -240,64 +333,21 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
     );
   }
 
-  Widget _buildActionButtons(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: mainNavy,
-                textStyle: TextStyle(
-                  fontSize: 16,
-                ),
-                side: BorderSide(color: mainNavy, width: 1),
-                surfaceTintColor: mainWhite,
-                backgroundColor: mainWhite,
-                padding: EdgeInsets.symmetric(vertical: 14),
-                // Button background color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
-                  ),
-                ),
-              ),
-              onPressed: () {
-                //장바구니 담기
-              },
-              child: Text(
-                '장바구니 담기',
-              ),
-            ),
-          ),
-          SizedBox(width: 10),
-          Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: mainWhite,
-                textStyle: TextStyle(
-                  fontSize: 16,
-                ),
-                surfaceTintColor: mainNavy,
-                backgroundColor: mainNavy,
-                padding: EdgeInsets.symmetric(vertical: 14),
-                // Button background color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
-                  ),
-                ),
-              ),
-              onPressed: _navigateToOrderScreen,
-              child: Text(
-                '구매하기',
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  void selectOption(String? option) {
+    if (option != null && selectedProductIndex != null) {
+      int optionIndex = widget
+          .productTypes[selectedProductIndex!].productOptions
+          .indexWhere((o) => o.name == option);
+      int optionId = widget.productTypes[selectedProductIndex!]
+          .productOptions[optionIndex].value; // 옵션 ID를 가져옴
+      setState(() {
+        selectedOption = option;
+        selectedOptionIndex = optionIndex;
+        addProduct(widget.productTypes[selectedProductIndex!],
+            optionId); // 옵션 ID와 함께 상품 추가
+        isOptionExpanded = false;
+      });
+    }
   }
 }
 
@@ -305,9 +355,11 @@ class ProductDetails extends StatelessWidget {
   final ProductType productType;
   final VoidCallback onCancel;
 
-  const ProductDetails(
-      {Key? key, required this.productType, required this.onCancel})
-      : super(key: key);
+  const ProductDetails({
+    Key? key,
+    required this.productType,
+    required this.onCancel,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -341,9 +393,4 @@ class ProductDetails extends StatelessWidget {
       ],
     );
   }
-}
-
-Widget _buildTotalPrice() {
-  // Return widget for total price
-  return Container(); // Placeholder for total price widget
 }
