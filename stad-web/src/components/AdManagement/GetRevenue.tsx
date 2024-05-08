@@ -32,10 +32,11 @@ export default function GetRevenue({ advertId }: AdvertIdProps) {
   }, [advertId, accessToken]);
   const [chartOptions, setChartOptions] = useState<ApexOptions>({
     chart: {
+      id: "area-datetime",
       type: "area",
       height: 350,
       zoom: {
-        enabled: false,
+        autoScaleYaxis: true,
       },
       stacked: true,
       dropShadow: {
