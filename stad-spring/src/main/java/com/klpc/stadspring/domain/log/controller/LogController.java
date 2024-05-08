@@ -34,6 +34,7 @@ public class LogController {
         log.info("AddAdvertClickLogRequest: " + request);
         try {
             AdvertClickLog advertClickLog = logService.addAdvertClickLog(request.toCommand());
+            kafkaTemplate.send("log-add-click", advertClickLog);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -46,6 +47,7 @@ public class LogController {
         log.info("AddAdvertClickLogRequest: " + request);
         try {
             AdvertVideoLog advertVideoLog = logService.addAdvertVideoLog(request.toCommand());
+            kafkaTemplate.send("log-add-video", advertVideoLog);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -58,6 +60,7 @@ public class LogController {
         log.info("AddOrderLogRequest: " + request);
         try {
             OrderLog orderLog = logService.addOrderLog(request.toCommand());
+            kafkaTemplate.send("log-add-order", orderLog);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -70,6 +73,7 @@ public class LogController {
         log.info("AddOrderReturnLogRequest: " + request);
         try {
             OrderLog orderCancelLog = logService.addOrderCancelLog(request.toCommand());
+            kafkaTemplate.send("log-add-cancel", orderCancelLog);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -81,6 +85,7 @@ public class LogController {
     public ResponseEntity<?> GetTotalLog(@RequestParam("advertId") Long advertId)  {
         try {
             GetTotalLogResponse response = logService.getTotalLog(advertId);
+            kafkaTemplate.send("log-total", response);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -93,6 +98,7 @@ public class LogController {
         try {
             GetDailyCountResponse response = logService.getDailyAdvertClickCount(advertId);
             log.info("success");
+            kafkaTemplate.send("log-click", response);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.info("problem?");
@@ -105,6 +111,7 @@ public class LogController {
     public ResponseEntity<?> GetDailyAdvertVideo(@RequestParam("advertId") Long advertId)  {
         try {
             GetDailyCountResponse response = logService.getDailyAdvertVideoCount(advertId);
+            kafkaTemplate.send("log-video", response);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -116,6 +123,7 @@ public class LogController {
     public ResponseEntity<?> GetDailyOrder(@RequestParam("advertId") Long advertId)  {
         try {
             GetDailyCountResponse response = logService.getDailyOrderCount(advertId);
+            kafkaTemplate.send("log-order", response);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -127,6 +135,7 @@ public class LogController {
     public ResponseEntity<?> GetDailyRevenue(@RequestParam("advertId") Long advertId)  {
         try {
             GetDailyCountResponse response = logService.getDailyRevenueCount(advertId);
+            kafkaTemplate.send("log-revenue", response);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
