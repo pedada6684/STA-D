@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class AddAdvertResponse {
 
-    String result;
+    Long advertId;
 
 }

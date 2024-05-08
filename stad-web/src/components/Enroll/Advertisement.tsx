@@ -156,7 +156,7 @@ export default function Advertisement() {
             onToggle={() => handleToggle("isAdNameExpanded")}
           />
         </div>
-        {isAdNameExpanded && (
+        {!isAdNameExpanded && (
           <InputContainer>
             <div>
               <input
@@ -184,7 +184,7 @@ export default function Advertisement() {
             onToggle={() => handleToggle("isAdVideoExpanded")}
           />
         </div>
-        {isAdVideoExpanded && (
+        {!isAdVideoExpanded && (
           <InputContainer>
             <div className={`${styles.advideoList}`}>
               <div className={`${styles.subTitle}`}>TV 광고 영상</div>
@@ -331,7 +331,7 @@ export default function Advertisement() {
             onToggle={() => handleToggle("isAdPeriodExpanded")}
           />
         </div>
-        {isAdPeriodExpanded && (
+        {!isAdPeriodExpanded && (
           <InputContainer>
             <div className={`${styles.calendar}`}>
               <DateRange
@@ -357,7 +357,7 @@ export default function Advertisement() {
             onToggle={() => handleToggle("isAdCategoryExpanded")}
           />
         </div>
-        {isAdCategoryExpanded && (
+        {!isAdCategoryExpanded && (
           <InputContainer>
             <div className={`${styles.selectBox}`}>
               <SelectAdCategory setCategory={setCategory} />
@@ -376,7 +376,7 @@ export default function Advertisement() {
             onToggle={() => handleToggle("isAdContentExpanded")}
           />
         </div>
-        {isAdContentExpanded && (
+        {!isAdContentExpanded && (
           <InputContainer>
             <div>
               <button className={`${styles.contents}`} onClick={openModal}>

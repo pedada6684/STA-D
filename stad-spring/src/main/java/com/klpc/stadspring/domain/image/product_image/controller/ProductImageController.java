@@ -34,7 +34,7 @@ public class ProductImageController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/add-thumbnail")
+    @PostMapping("/add-thumbnail")
     @Operation(summary = "상품 썸네일 추가", description = "상품 썸네일 추가")
     @ApiResponse(responseCode = "200", description = "상품 썸네일이 업로드 되었습니다.")
     public ResponseEntity<AddProductThumbnailResponse> getAdvertVideo(@RequestPart("thumbnail") MultipartFile thumbnail){
