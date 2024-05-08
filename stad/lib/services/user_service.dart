@@ -138,7 +138,7 @@ class UserService {
     try {
       final response = await dio.post(
         // 'https://www.mystad.com/api/user/update',
-        'http://192.168.0.9:8080/api/user/update',
+        'http://192.168.31.202:8080/api/user/update',
         data: formData,
         options: Options(
           headers: {

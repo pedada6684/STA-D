@@ -1,5 +1,6 @@
 class CartItem {
   final String id;
+  final String cartProductId;
   final String title;
   final String thumbnail;
   final int price;
@@ -8,6 +9,7 @@ class CartItem {
 
   CartItem({
     required this.id,
+    required this.cartProductId,
     required this.title,
     required this.price,
     required this.thumbnail,
@@ -19,6 +21,7 @@ class CartItem {
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
       id: json['productType']['id'].toString(),
+      cartProductId: json['cartProductId'].toString(),
       title: json['productType']['name'],
       thumbnail: json['thumbnail'],
       price: json['productType']['price'] as int,
@@ -30,6 +33,11 @@ class CartItem {
   Map<String, dynamic> toJson() {
     return {
       'productId': id,
+      'cartProductId': cartProductId,
+      'quantity': quantity,
+      'thumbnail': thumbnail,
+      'title': title,
+      'price': price,
       'quantity': quantity,
     };
   }
