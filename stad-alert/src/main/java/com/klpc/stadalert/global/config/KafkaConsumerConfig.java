@@ -1,6 +1,5 @@
 package com.klpc.stadalert.global.config;
 
-import com.klpc.stadstats.domain.tmp.entity.GetUserInfoResponse;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,12 +22,12 @@ public class KafkaConsumerConfig {
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapServers;
 
-	@Bean
-	ConcurrentKafkaListenerContainerFactory<String, GetUserInfoResponse> testEventKafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, GetUserInfoResponse> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(consumerFactory(GetUserInfoResponse.class));
-		return factory;
-	}
+//	@Bean
+//	ConcurrentKafkaListenerContainerFactory<String, GetUserInfoResponse> testEventKafkaListenerContainerFactory() {
+//		ConcurrentKafkaListenerContainerFactory<String, GetUserInfoResponse> factory = new ConcurrentKafkaListenerContainerFactory<>();
+//		factory.setConsumerFactory(consumerFactory(GetUserInfoResponse.class));
+//		return factory;
+//	}
 
 	public <V> ConsumerFactory<String, V> consumerFactory(
 		Class<V> valueType
