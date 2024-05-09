@@ -24,10 +24,10 @@ class CartProvider extends ChangeNotifier {
   }
 
   Future<void> fetchCartItems(int userId) async {
-
     var items = await CartService().fetchCartProducts(userId);
-    _cartItems = items;
-    notifyListeners();
+    setCartItems(items);
+    _cartStreamController.add(items); // 스트림 업데이트 강제화
+    notifyListeners(); // 상태 업데이트
   }
 
   void addToCart(CartItem newItem) {
@@ -41,7 +41,10 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeFromCart(int index) {
+  void removeFromCart(int index) async {
+    int cartProductId = int.parse(_cartItems[index].cartProductId);
+    await CartService().deleteCartProducts(cartProductId);
+
     _cartItems.removeAt(index);
     _cartStreamController.add(_cartItems); // 스트림 업데이트
     notifyListeners();
@@ -76,6 +79,16 @@ class CartProvider extends ChangeNotifier {
         0,
         (previousValue, element) =>
             previousValue + (element.price * element.quantity));
+  }
+
+  // 선택된 상품들의 총 금액을 계산합니다.
+  int getTotalSelectedPrice() {
+    return _cartItems.fold(0, (sum, item) {
+      if (item.isSelected) {
+        return sum + (item.price * item.quantity);
+      }
+      return sum;
+    });
   }
 
   @override
