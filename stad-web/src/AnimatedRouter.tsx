@@ -73,7 +73,7 @@ export default function AnimatedRouter() {
             <Route path="review" element={<Review />} />
           </Route>
           <Route
-            path="ads/:id"
+            path="/ads/:id"
             element={
               <RequireAuth>
                 <AdDetail />
