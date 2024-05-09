@@ -6,15 +6,9 @@ interface VideoEpisodeProps extends SeriesDetailProps {
 }
 export default function VideoEpisode(props: VideoEpisodeProps) {
   const navigate = useNavigate();
-  const { videoId } = useParams<{ videoId: string }>();
-  console.log(videoId);
-  const detailId = Number(videoId);
 
   return (
-    <div
-      className={`${styles.episodeContainer}`}
-      onClick={() => navigate(`/tv/stream/${detailId}`)}
-    >
+    <div className={`${styles.episodeContainer}`} onClick={() => navigate(`/tv/stream/${props.detailId}`)}>
       <div className={`${styles.thumbnail}`}>
         <img src={props.thumbnailUrl} />
       </div>

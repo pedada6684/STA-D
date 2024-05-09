@@ -37,3 +37,21 @@
 .playPause {
   width: 4.5rem;
 }
+
+/* modalContent: 모달의 콘텐츠 스타일 */
+.modalContent {
+  position: fixed; /* 화면 전체를 덮기 위해 fixed 위치를 사용 */
+  top: 0; /* 화면 맨 위 */
+  left: 0; /* 화면 맨 왼쪽 */
+  width: 100%; /* 화면 전체 너비 */
+  height: 100%; /* 화면 전체 높이 */
+  background: rgb(0, 0, 0); /* 검정 배경 */
+  z-index: 1000; /* 다른 콘텐츠 위에 배치되도록 z-index 설정 */
+  display: flex; /* 콘텐츠를 중앙에 배치하기 위해 flex 사용 */
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: center; /* 수평 중앙 정렬 */
+}
+
+.videoContainer > .screen-box::-webkit-scrollbar {
+  display: none; /* Chrome , Safari , Opera */
+}

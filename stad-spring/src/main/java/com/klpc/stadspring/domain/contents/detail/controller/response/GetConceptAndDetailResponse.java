@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Builder
 public class GetConceptAndDetailResponse {
+    Long conceptId;
     String title;
     String thumbnailUrl;
     String playtime;
@@ -22,6 +23,7 @@ public class GetConceptAndDetailResponse {
 
     public static GetConceptAndDetailResponse from(ContentConcept contentConcept, List<GetDetailListByConceptIdResponseCommand> commandList) {
         return GetConceptAndDetailResponse.builder()
+                .conceptId(contentConcept.getId())
                 .title(contentConcept.getTitle())
                 .thumbnailUrl(contentConcept.getThumbnailUrl())
                 .playtime(contentConcept.getPlaytime())

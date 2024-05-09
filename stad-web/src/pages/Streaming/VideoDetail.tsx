@@ -26,6 +26,7 @@ interface VideoDetailProps {
 }
 
 export interface SeriesDetailProps {
+  detailId: number;
   episode: number;
   summary: string;
   videoUrl: string;
@@ -38,14 +39,13 @@ export default function VideoDetail() {
   // URL에서 videoId 가져오기 및 변환
   const { videoId } = useParams<{ videoId: string }>();
   console.log(videoId);
-  const detailId = Number(videoId);
-  console.log(detailId);
+  const contentId = Number(videoId);
+  console.log(contentId);
 
   const token = useSelector((state: RootState) => state.token.accessToken);
   // 영화videoConceptData까지
-  const { data: videoConceptData, isLoading } = useQuery(
-    ["concept", token, detailId],
-    () => getVideoConcept(token, detailId)
+  const { data: videoConceptData, isLoading } = useQuery(["concept", token, contentId], () =>
+    getVideoConcept(token, contentId)
   );
   if (isLoading) {
     return <Loading />;
@@ -53,7 +53,7 @@ export default function VideoDetail() {
   console.log(videoConceptData);
 
   const handlePlayClick = () => {
-    navigate(`/tv/stream/${detailId}`); // 스트리밍 페이지로 이동
+    navigate(`/tv/stream/${contentId}`); // 스트리밍 페이지로 이동
   };
 
   const backgroundStyle = {
@@ -77,10 +77,7 @@ export default function VideoDetail() {
             <BillboardContainer>
               <div>
                 <div className={`${styles.imgWrapper}`}>
-                  <div
-                    style={backgroundStyle}
-                    className={`${styles.coverImage}`}
-                  >
+                  <div style={backgroundStyle} className={`${styles.coverImage}`}>
                     <img
                       src={videoConceptData.thumbnailUrl}
                       alt={videoConceptData.title}
@@ -94,9 +91,7 @@ export default function VideoDetail() {
                 </div>
                 <div className={`${styles.detailContainer}`}>
                   <div className={`${styles.detailWrapper}`}>
-                    <div className={`${styles.vidTitle}`}>
-                      {videoConceptData.title}
-                    </div>
+                    <div className={`${styles.vidTitle}`}>{videoConceptData.title}</div>
                     <div className={`${styles.timeAge}`}>
                       <span>{videoConceptData.releaseYear}</span>
                       <span>•</span>
@@ -106,12 +101,10 @@ export default function VideoDetail() {
                     </div>
                     <div className={`${styles.bar}`}></div>
                     <div className={`${styles.buttonWrapper}`}>
-                      <PlayButton onClick={handlePlayClick} />
+                      {/* <PlayButton onClick={handlePlayClick} /> */}
                       <AddButton />
                     </div>
-                    <div className={`${styles.description}`}>
-                      {videoConceptData.description}
-                    </div>
+                    <div className={`${styles.description}`}>{videoConceptData.description}</div>
                     <div className={`${styles.staff}`}>
                       <span>크리에이터</span>
                       <span>{videoConceptData.creator}</span>
@@ -126,18 +119,12 @@ export default function VideoDetail() {
             </BillboardContainer>
             {videoConceptData.data && videoConceptData.data.length > 0 && (
               <>
-                {videoConceptData.data.map(
-                  (data: SeriesDetailProps, index: number) => (
-                    <>
-                      {/* 객체 속성 직접 전달 */}
-                      <VideoEpisode
-                        key={data.episode}
-                        {...data}
-                        thumbnailUrl={videoConceptData.thumbnailUrl}
-                      />
-                    </>
-                  )
-                )}
+                {videoConceptData.data.map((data: SeriesDetailProps, index: number) => (
+                  <>
+                    {/* 객체 속성 직접 전달 */}
+                    <VideoEpisode key={data.episode} {...data} thumbnailUrl={videoConceptData.thumbnailUrl} />
+                  </>
+                ))}
               </>
             )}
           </Content>

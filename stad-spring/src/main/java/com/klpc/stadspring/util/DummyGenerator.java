@@ -59,7 +59,7 @@ public class DummyGenerator {
     private final ContentDetailService contentDetailService;
     private final Environment environment;
 
-    @EventListener(ApplicationReadyEvent.class)
+//    @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void createDummy(){
         log.info("DummyGenerator start");
@@ -73,7 +73,7 @@ public class DummyGenerator {
             }
         }
 
-        createContent();
+//        createContent();
         User normalUser = createDummyUsers();
         createDummyCompanyUsers();
         User companyUser1 = userRepository.findByEmail("ssafyCompany@ssafy.com").get();

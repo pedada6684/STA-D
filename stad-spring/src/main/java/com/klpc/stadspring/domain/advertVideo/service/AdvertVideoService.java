@@ -266,8 +266,12 @@ public class AdvertVideoService {
             finalList.add(video.getVideoUrl());
         }
 
+        // TODO: 은희 - 광고 데이터 넣고 수정하기
+        List<String> test = new ArrayList<>();
+        test.add("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/%EC%9A%A9%EA%B0%80%EB%A6%AC.mp4");
+
         return GetFinalAdvertVideoListResponse.builder()
-                .data(finalList)
+                .data(test)
                 .build();
     }
 

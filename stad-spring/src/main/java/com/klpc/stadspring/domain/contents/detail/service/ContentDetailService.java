@@ -144,6 +144,7 @@ public class ContentDetailService {
         List<GetDetailListByConceptIdResponseCommand> responseList = new ArrayList<>();
         for(ContentDetail detail:allDetails) {
             GetDetailListByConceptIdResponseCommand command = GetDetailListByConceptIdResponseCommand.builder()
+                    .detailId(detail.getId())
                     .episode(detail.getEpisode())
                     .videoUrl(detail.getVideoUrl())
                     .summary(detail.getSummary())
@@ -152,5 +153,10 @@ public class ContentDetailService {
             responseList.add(command);
         }
         return responseList;
+    }
+
+    public Long getConceptId(Long detailId) {
+        Long conceptId = repository.findById(detailId).get().getContentConceptId();
+        return conceptId;
     }
 }
