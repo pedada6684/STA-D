@@ -81,6 +81,16 @@ class CartProvider extends ChangeNotifier {
             previousValue + (element.price * element.quantity));
   }
 
+  // 선택된 상품들의 총 금액을 계산합니다.
+  int getTotalSelectedPrice() {
+    return _cartItems.fold(0, (sum, item) {
+      if (item.isSelected) {
+        return sum + (item.price * item.quantity);
+      }
+      return sum;
+    });
+  }
+
   @override
   void dispose() {
     _cartStreamController.close();

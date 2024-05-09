@@ -126,7 +126,10 @@ class _CartScreenState extends State<CartScreen> {
                 stream: cartProvider.cartItemsStream,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(
+                        child: CircularProgressIndicator(
+                      color: mainNavy,
+                    ));
                   }
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return _buildEmptyCart();
@@ -150,7 +153,7 @@ class _CartScreenState extends State<CartScreen> {
       //     : SizedBox.shrink(),
       bottomNavigationBar: Consumer<CartProvider>(
         builder: (context, cartProvider, child) {
-          return _buildTotalPriceButton(cartProvider.getTotalPrice());
+          return _buildTotalPriceButton();
         },
       ),
     );
@@ -265,15 +268,21 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  Widget _buildTotalPriceButton(int totalPrice) {
-    return totalPrice > 0
-        ? CustomElevatedButton(
-            onPressed: navigateToOrderScreen,
-            text: '${totalPrice}원 주문하기',
-            textColor: mainWhite,
-            backgroundColor: mainNavy,
-          )
-        : SizedBox.shrink();
+  Widget _buildTotalPriceButton() {
+    return Consumer<CartProvider>(
+      builder: (context, cartProvider, child) {
+        int totalPrice =
+            cartProvider.getTotalSelectedPrice(); // 선택된 상품들의 총 금액을 계산
+        return totalPrice > 0
+            ? CustomElevatedButton(
+                onPressed: navigateToOrderScreen,
+                text: '${totalPrice}원 주문하기',
+                textColor: mainWhite,
+                backgroundColor: mainNavy,
+              )
+            : SizedBox.shrink();
+      },
+    );
   }
 
   Widget _buildEmptyCart() {
