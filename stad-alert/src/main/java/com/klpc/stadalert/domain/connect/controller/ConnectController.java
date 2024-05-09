@@ -19,9 +19,9 @@ public class ConnectController {
 	final SseEmitters sseEmitters;
 	final ConnectService connectService;
 
-	@GetMapping("/{type}/{tmpId}/{userId}")
-	public ResponseEntity<SseEmitter> connect(@PathVariable String type, @PathVariable String tmpId, @PathVariable Long userId) {
-		ConnectRequest request = new ConnectRequest(type, tmpId, userId);
+	@GetMapping("/{type}/{userId}")
+	public ResponseEntity<SseEmitter> connect(@PathVariable String type, @PathVariable String userId) {
+		ConnectRequest request = new ConnectRequest(type, userId);
 		log.info("CreateConnectRequest: "+ request);
 		SseEmitter emitter = sseEmitters.subscribe(request.toCommand());
 		return ResponseEntity.ok(emitter);
@@ -29,7 +29,7 @@ public class ConnectController {
 
 	@PostMapping("/qrlogin")
 	public ResponseEntity<?> qrLogin(@RequestBody QrLoginRequest request) {
-		log.info("CreateConnectRequest: "+ request);
+		log.info("qrLoginRequest: "+ request);
 		connectService.qrLogin(request.toCommand());
 		return ResponseEntity.ok().build();
 	}

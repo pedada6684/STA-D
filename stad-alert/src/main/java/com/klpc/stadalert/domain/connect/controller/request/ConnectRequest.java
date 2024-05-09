@@ -1,8 +1,6 @@
 package com.klpc.stadalert.domain.connect.controller.request;
 
 import com.klpc.stadalert.global.service.command.ConnectCommand;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,24 +8,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ConnectRequest {
     String type;
-    String tmpId;
-    Long userId;
-    public ConnectCommand toCommand(){
-        String strUserId;
-        if (tmpId != null && !tmpId.isEmpty()){
-            strUserId = tmpId;
-        }else{
-            strUserId = Long.toString(userId);
-        }
-        return ConnectCommand.builder()
-                .userId(strUserId)
-                .type(type)
-                .build();
+    String userId;
+
+    public ConnectRequest(String type, String userId) {
+        this.type = type;
+        this.userId = userId;
     }
 
-    public ConnectRequest(String type, String tmpId, Long  userId) {
-        this.type = type;
-        this.tmpId = tmpId;
-        this.userId = userId;
+    public ConnectCommand toCommand(){
+        return ConnectCommand.builder()
+                .userId(userId)
+                .type(type)
+                .build();
     }
 }

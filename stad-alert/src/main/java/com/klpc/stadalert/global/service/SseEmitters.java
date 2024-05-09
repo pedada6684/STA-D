@@ -19,14 +19,14 @@ public class SseEmitters {
 	private final Map<String, SseEmitter> emitterMap = new ConcurrentHashMap<>();
 
 	public SseEmitter subscribe(ConnectCommand command) {
-		log.info("ConnectCommand: "+ command);
+		log.info("ConnectCommand: " + command);
 		SseEmitter emitter = createEmitter();
 		emitter.onTimeout(emitter::complete);
 
 		emitter.onError(e -> {
 			emitter.complete();
 		});
-		String emitId = command.getUserId()+command.getType();
+		String emitId = command.getType() + command.getUserId();
 		emitterMap.put(emitId, emitter);
 
 		return emit(emitId, "SSE connected", "connect");

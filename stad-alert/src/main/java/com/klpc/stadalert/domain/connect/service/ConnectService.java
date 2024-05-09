@@ -24,7 +24,7 @@ public class ConnectService {
         log.info("QrLoginCommand: "+command);
         User user = userService.findUser(command.getUserId());
         SseEmitter emitter = sseEmitters.emit(
-                command.getTvId() + "tv",
+                "tmp"+ command.getTvId(),
                 user,
                 "Qr login"
         );
