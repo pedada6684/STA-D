@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent } from "react";
+import { ChangeEvent, KeyboardEvent, MouseEvent } from "react";
 import { Video } from "../Category/TVDetail";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -31,12 +31,25 @@ export default function TVSearchInput({
     // 검색 결과가 있으면 그 결과를 사용하고, 없으면 null로 설정
     onSearch(response ? response : null);
   };
+  const handleKeyPress = async (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      executeSearch();
+    }
+  };
+
+  const executeSearch = async () => {
+    onSearchAttempted();
+    const response = await GetSearch(value, accessToken);
+    onSearch(response ? response : []);
+  };
 
   return (
     <div className={`${styles.inputContainer}`}>
       <input
         className={`${styles.Input}`}
         value={value}
+        onKeyPress={handleKeyPress}
         onChange={onChange}
         placeholder="검색어를 입력하세요"
       />
