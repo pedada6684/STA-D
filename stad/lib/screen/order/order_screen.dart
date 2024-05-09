@@ -68,11 +68,13 @@ class _OrderScreenState extends State<OrderScreen> {
     if (userProvider.userId != null) {
       AddressService addressService = AddressService();
       try {
-        deliveryAddresses =
+        var fetchedAddresses =
             await addressService.fetchAddresses(userProvider.userId!);
-        if (deliveryAddresses.isNotEmpty) {
-          selectedDeliveryAddress = deliveryAddresses.first;
-        }
+        setState(() {
+          deliveryAddresses = fetchedAddresses;
+          selectedDeliveryAddress =
+              deliveryAddresses.isNotEmpty ? deliveryAddresses.first : null;
+        });
       } catch (e) {
         print("Failed to fetch addresses: $e");
       }
@@ -114,6 +116,14 @@ class _OrderScreenState extends State<OrderScreen> {
               buyerPostcode: postcode,
               appScheme: 'example',
               cardQuota: [2, 3]),
+        ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            "배송지를 추가해주세요.",
+            style: TextStyle(color: mainWhite),
+          ),
+          backgroundColor: mainBlack.withOpacity(0.7),
         ));
       }
     }
@@ -284,7 +294,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   return ProductCard(
                     productInfo: widget.productInfo,
                     productTypes: [productType],
-                    title: widget.title,
+                    title: '상세 항목',
                     quantities: quantity,
                     totalPrice: totalPrice,
                   );

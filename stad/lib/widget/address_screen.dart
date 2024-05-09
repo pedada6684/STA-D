@@ -79,7 +79,7 @@ class _AddressScreenState extends State<AddressScreen> {
 
   void validateNumber(String input) {
     setState(() {
-      isPhoneError = !RegExp(r'^01[016789]\d{3,4}\d{4}$').hasMatch(input);
+      isPhoneError = !RegExp(r'^01[016789][1-9]\d{6,7}$').hasMatch(input);
     });
   }
 
@@ -165,12 +165,15 @@ class _AddressScreenState extends State<AddressScreen> {
     String placeholder, {
     bool readOnly = false,
     bool isFixedLabel = false,
+    String? errorText,
+    TextInputType keyboardType = TextInputType.text,
   }) {
     bool isError = placeholder == '핸드폰 번호' && isPhoneError;
 
     return TextFormField(
       controller: controller,
       readOnly: readOnly,
+      keyboardType: keyboardType,
       cursorColor: mainNavy,
       style: TextStyle(color: mainBlack),
       decoration: InputDecoration(
@@ -206,7 +209,8 @@ class _AddressScreenState extends State<AddressScreen> {
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(20.0), topLeft: Radius.circular(20.0))),
+                  topRight: Radius.circular(20.0),
+                  topLeft: Radius.circular(20.0))),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16),
             child: Column(
@@ -224,7 +228,9 @@ class _AddressScreenState extends State<AddressScreen> {
                 Text(
                   '배송지 입력',
                   style: TextStyle(
-                      fontSize: 18.0, fontWeight: FontWeight.w600, color: mainNavy),
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                      color: mainNavy),
                 ),
                 SizedBox(
                   height: 20,
@@ -233,7 +239,12 @@ class _AddressScreenState extends State<AddressScreen> {
                 _gap(),
                 _buildTextField(_adnickController, '배송지명'),
                 _gap(),
-                _buildTextField(_phoneController, '핸드폰 번호'),
+                _buildTextField(
+                  _phoneController,
+                  '핸드폰 번호 / - 제외',
+                  keyboardType: TextInputType.phone,
+                  errorText: isPhoneError ? '유효한 번호를 입력해주세요.' : null,
+                ),
                 _gap(),
                 _buildPostalCodeField(),
                 _gap(),
@@ -245,7 +256,8 @@ class _AddressScreenState extends State<AddressScreen> {
                 CustomElevatedButton(
                   text: '완료',
                   textColor: mainWhite,
-                  onPressed: isFormFilled ? addUserAddress : null,
+                  onPressed:
+                      isFormFilled && !isPhoneError ? addUserAddress : null,
                   backgroundColor: mainNavy,
                 )
               ],
