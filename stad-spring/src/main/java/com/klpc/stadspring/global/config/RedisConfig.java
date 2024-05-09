@@ -34,7 +34,6 @@ public class RedisConfig {
     }
 
     @Bean
-    @Qualifier("redisTemplateForAdQueue")
     public RedisTemplate<String, String> redisTemplateForAdQueue() {
         RedisTemplate<String , String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
@@ -44,5 +43,16 @@ public class RedisConfig {
         return redisTemplate;
     }
 
-
+    @Bean
+    @Qualifier("redisTemplateDefault")
+    public RedisTemplate<String, String> redisTemplateDefault() {
+        RedisTemplate<String , String> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+        redisTemplate.setEnableTransactionSupport(true);
+        return redisTemplate;
+    }
 }
