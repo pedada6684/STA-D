@@ -268,7 +268,6 @@ public class AdvertVideoService {
 
         // TODO: 은희 - 광고 데이터 넣고 수정하기
         List<String> test = new ArrayList<>();
-        test.add("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/%EB%86%8D%EB%A6%BC%EC%B6%95%EC%82%B0%EC%8B%9D%ED%92%88%EB%B6%80.mp4");
         test.add("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/%EC%9A%A9%EA%B0%80%EB%A6%AC.mp4");
 
         return GetFinalAdvertVideoListResponse.builder()
