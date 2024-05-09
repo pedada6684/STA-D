@@ -146,11 +146,6 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ],
       ),
-      // bottomNavigationBar: cartItems.isNotEmpty
-      //     ? Consumer<CartProvider>(builder: (context, cartProvider, child) {
-      //         return _buildTotalPriceButton(cartProvider.getTotalPrice());
-      //       })
-      //     : SizedBox.shrink(),
       bottomNavigationBar: Consumer<CartProvider>(
         builder: (context, cartProvider, child) {
           return _buildTotalPriceButton();
@@ -182,16 +177,6 @@ class _CartScreenState extends State<CartScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildCartList() {
-    return Consumer<CartProvider>(
-      builder: (context, cartProvider, child) => ListView.builder(
-        itemCount: cartProvider.cartItems.length,
-        itemBuilder: (context, index) =>
-            _buildCartItem(cartProvider.cartItems[index], index),
       ),
     );
   }
@@ -238,14 +223,16 @@ class _CartScreenState extends State<CartScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(width: 48.0),
-                Image.network(item.thumbnail, width: 70, height: 70),
+                Image.network(item.thumbnail, width: 80, height: 80),
                 SizedBox(width: 16.0),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text('${item.title}', style: TextStyle(color: midGray)),
                       Text('${item.quantity}개',
                           style: TextStyle(color: midGray)),
                       Text('${item.price}원', style: TextStyle(color: midGray)),
