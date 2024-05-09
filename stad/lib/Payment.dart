@@ -118,12 +118,12 @@ class _PaymentState extends State<Payment> {
           }).toList();
 
           if (userProvider.userId != null) {
-            OrderService()
-                .createOrder(userId: userProvider.userId!, products: products)
-                .then((_) {
+            // OrderService()
+            //     .createOrder(userId: userProvider.userId!, products: products)
+            //     .then((_) {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => PaymentResultScreen()));
-            });
+            // });
           }
         }
       },
