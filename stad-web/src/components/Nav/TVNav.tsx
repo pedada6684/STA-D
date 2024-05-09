@@ -4,6 +4,8 @@ import search from "../../assets/ic_sharp-search.png";
 import dummyProfile from "../../assets/Ellipse 5.png";
 import { Link, useNavigate } from "react-router-dom";
 import { MouseEvent } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 export default function TVNav() {
   const navigate = useNavigate();
@@ -11,6 +13,8 @@ export default function TVNav() {
   const handleSearchIconClick = (e: MouseEvent<HTMLButtonElement>) => {
     navigate("/tv-search"); // 검색 입력창이 열릴 때 검색 페이지로 이동
   };
+
+  const profile = useSelector((state: RootState) => state.tvUser.profile);
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.left}`}>
@@ -36,7 +40,7 @@ export default function TVNav() {
         </div>
 
         <div className={`${styles.profile}`}>
-          <img src={dummyProfile} alt="더미 프로필사진" />
+          <img src={profile} />
         </div>
       </div>
     </div>
