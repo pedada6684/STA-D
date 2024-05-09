@@ -27,6 +27,7 @@ import ProductManagement from "./pages/ProductManagement/ProductManagement";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import RequireAuth from "./pages/WebLogin/RequireAuth";
+import AdDetail from "./pages/AdEdit/AdDetail";
 export default function AnimatedRouter() {
   const location = useLocation();
   return (
@@ -71,6 +72,14 @@ export default function AnimatedRouter() {
             />
             <Route path="review" element={<Review />} />
           </Route>
+          <Route
+            path="ads/:id"
+            element={
+              <RequireAuth>
+                <AdDetail />
+              </RequireAuth>
+            }
+          />
           <Route
             path="/ad-management"
             element={
