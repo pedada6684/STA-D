@@ -5,8 +5,9 @@ import 'package:stad/models/product_model.dart';
 class ProductService {
   final Dio _dio = Dio();
 
-  // final String _baseUrl = svApi;
-  final String _baseUrl = 'http://192.168.31.202:8080/api';
+  final String _baseUrl = svApi;
+
+  // final String _baseUrl = 'http://192.168.31.202:8080/api';
   // final String _baseUrl = 'http://192.168.0.9:8080/api';
   //
   ProductService() {
@@ -15,19 +16,54 @@ class ProductService {
 
   //상품 정보 조회
   //TODO: advertId 수정하기
+  // Future<ProductInfo> getProductInfo(int advertId) async {
+  //   try {
+  //     final response = await _dio.get('/product/list', queryParameters: {'advertId': 3});
+  //     print('광고 상품 정보 조회 response :${response.data}');
+  //     if (response.statusCode == 200) {
+  //       var productList = response.data['productList'];
+  //       if (productList != null && productList.isNotEmpty) {
+  //         return ProductInfo.fromJson(productList[0]);  // 첫 번째 상품 정보만 사용
+  //       } else {
+  //         throw Exception('Product list is empty');
+  //       }
+  //     } else {
+  //       throw Exception('Failed to load product info with status code ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     print('Error fetching product info: $e');
+  //     throw Exception('Error fetching product info: $e');
+  //   }
+  // }
   Future<ProductInfo> getProductInfo(int advertId) async {
     try {
-      final response = await _dio.get('/product/list', queryParameters: {'advertId': 1});
-      print('광고 상품 정보 조회 response :${response.data}');
+      final response = await _dio
+          .get('/product/list', queryParameters: {'advertId': advertId});
+      print('광고 상품 정보 조회 response : ${response.data}');
       if (response.statusCode == 200) {
-        var productList = response.data['productList'];
-        if (productList != null && productList.isNotEmpty) {
-          return ProductInfo.fromJson(productList[0]);  // 첫 번째 상품 정보만 사용
+        var responseData = response.data;
+        var productList = responseData['productList'] as List; // List로 명시적 형 변환
+
+        print(productList);
+        print(productList);
+        print(productList);
+
+        if (productList.isNotEmpty) {
+          var firstProduct = productList[0]
+              as Map<String, dynamic>; // Map<String, dynamic>로 명시적 형 변환
+          print(firstProduct);
+          print(firstProduct);
+          print(firstProduct);
+          print(firstProduct);
+          print(firstProduct);
+
+          return ProductInfo.fromJson(firstProduct);
         } else {
           throw Exception('Product list is empty');
         }
       } else {
-        throw Exception('Failed to load product info with status code ${response.statusCode}');
+        throw Exception(
+            'Failed to load product info with status code ${response.statusCode}');
       }
     } catch (e) {
       print('Error fetching product info: $e');
@@ -40,7 +76,8 @@ class ProductService {
   Future<List<ProductType>> getProductTypeList(int productId) async {
     try {
       final response =
-          await _dio.get('/type/list', queryParameters: {'productId': productId});
+          await _dio.get('/type/list', queryParameters: {'productId': 2});
+      // await _dio.get('/type/list', queryParameters: {'productId': productId});
       print('광고 상품 타입 리스트 response :${response.data}');
       if (response.statusCode == 200) {
         List<dynamic> typeList = response.data['list'];
