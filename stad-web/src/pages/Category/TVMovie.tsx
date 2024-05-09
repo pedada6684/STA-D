@@ -81,15 +81,20 @@ export default function TVMovie() {
             )}
           </BillboardContainer>
           {othersCategories &&
-            othersCategories.map((category: CategoryProps) => (
-              <CategoryCarousel
-                title={category.category}
-                items={category.getConceptResponseList}
-                key={category.category}
-                marginTop="2rem"
-                marginBottom="2rem"
-              />
-            ))}
+            othersCategories
+              .filter(
+                (category: CategoryProps) =>
+                  category.getConceptResponseList.length >= 4
+              )
+              .map((category: CategoryProps) => (
+                <CategoryCarousel
+                  title={category.category}
+                  items={category.getConceptResponseList}
+                  key={category.category}
+                  marginTop="2rem"
+                  marginBottom="2rem"
+                />
+              ))}
         </Content>
       </TVContainer>
     </div>
