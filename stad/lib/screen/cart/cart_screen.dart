@@ -59,7 +59,7 @@ class _CartScreenState extends State<CartScreen> {
         );
       }).toList();
 
-      ProductInfo? productInfo = await productService.getProductInfo(1);
+      ProductInfo? productInfo = await productService.getProductInfo(3);
 
       Navigator.push(
         context,
@@ -78,7 +78,7 @@ class _CartScreenState extends State<CartScreen> {
             //TODO: optionIds 수정하기
             optionIds: [],
             // 옵션 ID 처리 필요
-            deliveryFee: 2500, // 배송료 처리
+            deliveryFee: 2500,// 배송료 처리
           ),
         ),
       );
@@ -182,6 +182,7 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Widget _buildCartItem(CartItem item, int index) {
+
     return Container(
       margin: EdgeInsets.only(top: 10.0),
       color: mainWhite,

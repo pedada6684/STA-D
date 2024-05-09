@@ -33,23 +33,15 @@ class ProductInfo {
     }
     return ProductInfo(
       id: json['id'] ?? 0,
-      // 기본값을 0으로 설정
       name: json['name'] ?? '광고상품',
-      images: (json['images'] as List<dynamic>? ?? [])
-          .map((i) => ProductImage.fromJson(i))
-          .toList(),
+      images: (json['images'] as List<dynamic>? ?? []).map((i) =>
+          ProductImage.fromJson(i)).toList(),
       thumbnail: json['thumbnail'] ?? 'default_thumbnail.png',
-      // 기본 썸네일 이미지
       cityDeliveryFee: json['cityDeliveryFee'] ?? 0,
-      // 기본 배송료
       mtDeliveryFee: json['mtDeliveryFee'] ?? 0,
-      expStart: json['expStart'] != null
-          ? DateTime.parse(json['expStart'])
-          : DateTime.now(),
-      // 시작 기본값 오늘
-      expEnd: json['expEnd'] != null
-          ? DateTime.parse(json['expEnd'])
-          : DateTime.now().add(Duration(days: 365)), // 종료 기본값 1년 후
+      expStart: DateTime.parse(json['expStart'] ?? DateTime.now().toString()),
+      expEnd: DateTime.parse(
+          json['expEnd'] ?? DateTime.now().add(Duration(days: 365)).toString()),
     );
   }
 }
@@ -59,12 +51,13 @@ class ProductImage {
 
   ProductImage({required this.imageUrl});
 
-  factory ProductImage.fromJson(Map<String, dynamic> json) {
+  factory ProductImage.fromJson(dynamic json) {
     return ProductImage(
-      imageUrl: json['url'] as String,
+      imageUrl: json as String, // 직접 String을 받아서 처리
     );
   }
 }
+
 
 // ProductType.dart
 class ProductType {
