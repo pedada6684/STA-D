@@ -61,8 +61,8 @@ class UserService {
         UserModel.fromFirebaseUser(user, googleAccessToken).toJson();
     try {
       final response = await dio.post(
-        // 'https://www.mystad.com/api/v1/auth/applogin',
-        'http://192.168.31.202:8080/api/v1/auth/applogin',
+        'https://www.mystad.com/api/v1/auth/applogin',
+        // 'http://192.168.31.202:8080/api/v1/auth/applogin',
         // 'http://192.168.0.9:8080/api/v1/auth/applogin',
         // 'http://192.168.0.129:8080/api/v1/auth/applogin',
         data: json.encode(userProfile),
@@ -137,8 +137,8 @@ class UserService {
 
     try {
       final response = await dio.post(
-        // 'https://www.mystad.com/api/user/update',
-        'http://192.168.31.202:8080/api/user/update',
+        'https://www.mystad.com/api/user/update',
+        // 'http://192.168.31.202:8080/api/user/update',
         data: formData,
         options: Options(
           headers: {

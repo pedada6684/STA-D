@@ -8,9 +8,10 @@ import 'package:stad/providers/cart_provider.dart';
 
 class CartService {
   final Dio dio = Dio();
-  final url = 'http://192.168.31.202:8080/api/cart';
-  // final url = 'https://www.mystad.com/api/cart';
 
+  // final url = 'http://192.168.0.9:8080/api/cart';
+  // final url = 'http://192.168.31.202:8080/api/cart';
+  final url = 'https://www.mystad.com/api/cart';
 
   //장바구니에 추가하기
   Future<void> addProductToCart(BuildContext context, int userId,
@@ -56,9 +57,11 @@ class CartService {
   }
 
   Future<void> deleteCartProducts(int cartProductId) async {
+    print(cartProductId);
+
     try {
-      final response =
-          await dio.delete('$url/delete?cartProductId=$cartProductId');
+      final response = await dio
+          .delete('$url/delete', data: {'cartProductId': cartProductId});
 
       if (response.statusCode == 200) {
         print('카트 상품 정상적으로 삭제:${response.data}');

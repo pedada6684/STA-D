@@ -2,8 +2,9 @@ import 'package:dio/dio.dart';
 
 class AlertService {
   final Dio dio = Dio();
-  final String url = 'http://192.168.31.202:8081/alert/connect';
-  // final String url = 'https://www.mystad.com/alert/connect';
+  // final String url = 'http://192.168.31.202:8081/alert/connect';
+  // final String url = 'http://192.168.0.9:8081/alert/connect';
+  final String url = 'https://www.mystad.com/alert/connect';
 
   Future<bool> sendQrResponse(int userId, String tvId) async {
     print(tvId.toString());
