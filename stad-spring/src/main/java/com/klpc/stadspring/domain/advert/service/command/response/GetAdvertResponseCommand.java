@@ -19,6 +19,6 @@ public class GetAdvertResponseCommand {
     String directVideoUrl;
     String bannerImgUrl;
     List<Long> selectedContentList;
-    List<String> advertVideoUrlList;
+    List<GetAdvertAdvertVideo> advertVideoUrlList;
 
 }

@@ -34,7 +34,7 @@ export default function EnrolledAdList() {
     };
 
     fetchAdsList();
-  }, []);
+  }, [adsList]);
 
   const editClick = (advert : adType) => {
     console.log(`Edit clicked for ad with ID:`);
@@ -44,6 +44,7 @@ export default function EnrolledAdList() {
   const deleteClick = (advertId : number | undefined) => {
     console.log(`Delete clicked for ad with ID:`+advertId);
     deleteAdvert(advertId);
+    // window.location.reload();
   };
 
   return (
