@@ -27,7 +27,9 @@
 }
 
 .overlayButton img,
-.videoOverlay img {
+.deleteButton img,
+.videoOverlay img,
+.deleteVidButton img {
   width: 2rem;
 }
 .input3 {
@@ -98,7 +100,9 @@
   width: 80%;
 }
 .overlayButton,
-.videoOverlay {
+.videoOverlay,
+.deleteButton,
+.deleteVidButton {
   border: 0;
   background-color: transparent;
 }
@@ -106,6 +110,7 @@
 .videoOverlay {
   display: flex;
   padding-top: 2rem;
+  margin-left: 1rem;
 }
 
 .imageContainer,
@@ -161,7 +166,8 @@
   height: 10rem;
 }
 
-.videoPrev {
+.videoPrev,
+.imagePrev {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -178,6 +184,13 @@
   width: 10rem;
   height: 10rem;
   display: flex;
+  margin-right: 2rem;
+}
+
+.imagePreview {
+  width: 20rem;
+  height: 20rem;
+  display: flex;
   margin-right: 1rem;
 }
 
@@ -186,7 +199,17 @@
   right: 10px;
   top: 10px;
 }
-.videoInput,
+.deleteButton {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+.deleteVidButton {
+  display: flex;
+  padding-top: 1.3rem;
+  padding-right: 1rem;
+}
+.delte .videoInput,
 .imageInput {
   display: none;
 }

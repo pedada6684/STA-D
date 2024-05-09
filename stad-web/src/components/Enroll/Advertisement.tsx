@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { toggleActions } from "../../store/toggle";
 import edit from "../../assets/lucide_edit.png";
+import close from "../../assets/material-symbols-light_close.png";
 
 interface advertForm {
   title?: string;
@@ -143,7 +144,23 @@ export default function Advertisement() {
     }));
     setBannerImgPreview(responseData.bannerUrl); // 미리보기 생성
   };
+  const handleBannerImgDelete = () => {
+    setBannerImgUrl(""); // 이미지 URL 상태 초기화
+    setBannerImgPreview(""); // 미리보기 상태 초기화
+    setFormData((prevState) => ({
+      ...prevState,
+      bannerImgUrl: undefined,
+    }));
+  };
 
+  const handleAdvertVideoDelete = (index: number) => {
+    const filteredVideos = videoUrlList.filter((_, i) => i !== index);
+    setVideoUrlList(filteredVideos);
+    setFormData((prevState) => ({
+      ...prevState,
+      advertVideoUrlList: filteredVideos,
+    }));
+  };
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.item}`}>
@@ -156,7 +173,7 @@ export default function Advertisement() {
             onToggle={() => handleToggle("isAdNameExpanded")}
           />
         </div>
-        {!isAdNameExpanded && (
+        {isAdNameExpanded && (
           <InputContainer>
             <div>
               <input
@@ -184,7 +201,7 @@ export default function Advertisement() {
             onToggle={() => handleToggle("isAdVideoExpanded")}
           />
         </div>
-        {!isAdVideoExpanded && (
+        {isAdVideoExpanded && (
           <InputContainer>
             <div className={`${styles.advideoList}`}>
               <div className={`${styles.subTitle}`}>TV 광고 영상</div>
@@ -206,6 +223,12 @@ export default function Advertisement() {
                             src={url}
                             style={{ width: "100%" }}
                           />
+                          <button
+                            onClick={() => handleAdvertVideoDelete(index)}
+                            className={`${styles.deleteVidButton}`}
+                          >
+                            <img src={close} alt="Delete" />
+                          </button>
                         </div>
                       ))}
                       <button
@@ -216,6 +239,7 @@ export default function Advertisement() {
                       >
                         <img src={edit} alt="Edit videos" />
                       </button>
+
                       <input
                         ref={fileInputRef}
                         type="file"
@@ -296,6 +320,12 @@ export default function Advertisement() {
                       >
                         <img src={edit} alt="편집 버튼" />
                       </button>
+                      <button
+                        onClick={handleBannerImgDelete}
+                        className={styles.deleteButton}
+                      >
+                        <img src={close} alt="Delete" />
+                      </button>
                       <input
                         type="file"
                         name="file"
@@ -331,7 +361,7 @@ export default function Advertisement() {
             onToggle={() => handleToggle("isAdPeriodExpanded")}
           />
         </div>
-        {!isAdPeriodExpanded && (
+        {isAdPeriodExpanded && (
           <InputContainer>
             <div className={`${styles.calendar}`}>
               <DateRange
@@ -357,7 +387,7 @@ export default function Advertisement() {
             onToggle={() => handleToggle("isAdCategoryExpanded")}
           />
         </div>
-        {!isAdCategoryExpanded && (
+        {isAdCategoryExpanded && (
           <InputContainer>
             <div className={`${styles.selectBox}`}>
               <SelectAdCategory setCategory={setCategory} />
@@ -376,7 +406,7 @@ export default function Advertisement() {
             onToggle={() => handleToggle("isAdContentExpanded")}
           />
         </div>
-        {!isAdContentExpanded && (
+        {isAdContentExpanded && (
           <InputContainer>
             <div>
               <button className={`${styles.contents}`} onClick={openModal}>
