@@ -18,6 +18,6 @@ public class ModifyAdvertRequest {
     private String directVideoUrl;
     private String bannerImgUrl;
     private List<Long> selectedContentList;
-    private List<String> advertVideoUrlList;
+    private List<ModifyAdvertVideo> advertVideoUrlList;
 
 }

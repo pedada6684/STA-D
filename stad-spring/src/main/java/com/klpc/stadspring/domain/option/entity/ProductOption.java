@@ -42,4 +42,12 @@ public class ProductOption {
         productOption.value = value;
         return productOption;
     }
+
+    public void modifyOption(
+            String name,
+            Long value
+    ){
+        this.name=name;
+        this.value=value;
+    }
 }

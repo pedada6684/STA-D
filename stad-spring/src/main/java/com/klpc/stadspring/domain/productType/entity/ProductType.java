@@ -30,7 +30,7 @@ public class ProductType {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @OneToMany(mappedBy = "productType", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    @OneToMany(mappedBy = "productType")
     private List<ProductOption> productOptions;
 
     @OneToMany(mappedBy = "productType", cascade = CascadeType.REMOVE,  orphanRemoval = true)
@@ -66,6 +66,17 @@ public class ProductType {
         productType.quantity = quantity;
         productType.status = true;
         return productType;
+    }
+
+    public void modifyProductType(
+            String name,
+            Long price,
+            Long quantity
+    ){
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.status = true;
     }
 
     public void modifyQuantity(Long cnt){

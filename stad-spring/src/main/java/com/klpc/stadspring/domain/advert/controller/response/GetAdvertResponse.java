@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.advert.controller.response;
 
+import com.klpc.stadspring.domain.advert.service.command.response.GetAdvertAdvertVideo;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ public class GetAdvertResponse {
     String bannerImgUrl;
     String type;
     List<Long> selectedContentList;
-    List<String> advertVideoUrlList;
+    List<GetAdvertAdvertVideo> advertVideoUrlList;
     String category;
 
 }
