@@ -25,6 +25,9 @@ export default function TVSearch() {
     const nextValue = e.target.value;
     console.log("검색 키워드", nextValue);
     setSearchValue(nextValue);
+    // 검색창의 값이 변경될 때마다 이전 검색 결과를 초기화하고, 검색 시도 상태를 false로 설정
+    setSearchResults(null); // 이전 검색 결과 초기화
+    setSearchAttempted(false); // 검색 시도 상태 초기화
   }
 
   return (
