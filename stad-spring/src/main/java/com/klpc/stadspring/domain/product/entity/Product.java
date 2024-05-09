@@ -30,7 +30,7 @@ public class Product {
     @JoinColumn(name = "advert_id")
     private Advert advert;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    @OneToMany(mappedBy = "product")
     private List<ProductImage> images;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE,  orphanRemoval = true)
@@ -79,6 +79,22 @@ public class Product {
         product.name = name;
         product.status = true;
         return product;
+    }
+
+    public void modifyProduct(
+            String thumbnail,
+            String name,
+            Long cityDeliveryFee,
+            Long mtDeliveryFee,
+            LocalDateTime expStart,
+            LocalDateTime expEnd
+    ) {
+        this.thumbnail = thumbnail;
+        this.cityDeliveryFee = cityDeliveryFee;
+        this.mtDeliveryFee = mtDeliveryFee;
+        this.expStart = expStart;
+        this.expEnd = expEnd;
+        this.name = name;
     }
 
     public void update(UpdateProductInfoCommand command) {

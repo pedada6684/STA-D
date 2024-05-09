@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.advert.service.command.request;
 
+import com.klpc.stadspring.domain.advert.controller.request.ModifyAdvertVideo;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,6 +21,6 @@ public class ModifyAdvertRequestCommand {
     private String directVideoUrl;
     private String bannerImgUrl;
     private List<Long> selectedContentList;
-    private List<String> advertVideoUrlList;
+    private List<ModifyAdvertVideo> advertVideoUrlList;
 
 }

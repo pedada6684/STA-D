@@ -106,6 +106,7 @@ public class Advert {
         this.directVideoUrl = directVideoUrl;
         this.bannerImgUrl=bannerImgUrl;
         this.advertCategory=advertCategory;
+        this.status=true;
     }
 
     public void deleteAdvert(){
