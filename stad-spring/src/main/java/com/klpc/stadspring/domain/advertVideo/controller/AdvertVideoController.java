@@ -126,10 +126,4 @@ public class AdvertVideoController {
         }
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping("testtest")
-    ResponseEntity<?> testtest() {
-        advertVideoService.getTotalLogData(1L);
-        return ResponseEntity.ok().build();
-    }
 }
