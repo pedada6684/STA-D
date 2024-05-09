@@ -144,7 +144,7 @@ public class ProductService {
         log.info("UpdateUserInfoCommand: " + command);
         log.info("id: "+command.getId());
         Product product = getProductInfo(command.getId());
-        product.update(command);
+//        product.update(command);
 
         productRepository.save(product);
         return product;

@@ -15,7 +15,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdvertController {
 
     private final AdvertService advertService;
+    private final KafkaTemplate<String, GetAdvertIdListResponse> kafkaTemplate;
 
     @PostMapping
     @Operation(summary = "광고 등록", description = "광고 등록")
@@ -122,4 +126,12 @@ public class AdvertController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("get-advert-id-list")
+    @Operation(summary = "광고 아이디 리스트 조회", description = "광고 아이디 리스트 조회")
+    @ApiResponse(responseCode = "200", description = "광고 아이디 리스트가 조회 되었습니다.")
+    public ResponseEntity<GetAdvertIdListResponse> getAdvertIdList(){
+        GetAdvertIdListResponse response = advertService.GetAdvertIdList();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

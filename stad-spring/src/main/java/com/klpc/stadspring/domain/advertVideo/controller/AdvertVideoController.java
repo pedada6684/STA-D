@@ -6,6 +6,7 @@ import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddBannerImgRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddVideoListRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVideoRequestCommand;
+import com.klpc.stadspring.domain.advertVideo.service.command.response.GetTotalLogResponse;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
 import com.klpc.stadspring.global.RedisService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -126,4 +127,9 @@ public class AdvertVideoController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/kafka/test")
+    ResponseEntity<?> testkafka(@RequestBody GetTotalLogResponse response) {
+        advertVideoService.listenTotalLogData(response);
+        return ResponseEntity.ok().build();
+    }
 }
