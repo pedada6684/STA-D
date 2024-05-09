@@ -34,7 +34,7 @@ public class LogController {
         log.info("AddAdvertClickLogRequest: " + request);
         try {
             AdvertClickLog advertClickLog = logService.addAdvertClickLog(request.toCommand());
-            kafkaTemplate.send("log-add-click", advertClickLog);
+//            kafkaTemplate.send("log-add-click", advertClickLog);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
