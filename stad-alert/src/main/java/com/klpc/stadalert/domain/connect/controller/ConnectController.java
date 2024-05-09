@@ -19,8 +19,9 @@ public class ConnectController {
 	final SseEmitters sseEmitters;
 	final ConnectService connectService;
 
-	@PostMapping()
-	public ResponseEntity<SseEmitter> connect(@RequestBody ConnectRequest request) {
+	@GetMapping("/{type}/{tmpId}/{userId}")
+	public ResponseEntity<SseEmitter> connect(@PathVariable String type, @PathVariable String tmpId, @PathVariable Long userId) {
+		ConnectRequest request = new ConnectRequest(type, tmpId, userId);
 		log.info("CreateConnectRequest: "+ request);
 		SseEmitter emitter = sseEmitters.subscribe(request.toCommand());
 		return ResponseEntity.ok(emitter);
