@@ -85,7 +85,7 @@ export default function AdDetail() {
     isLoading,
   } = useQuery(["adDetail", id], () => getAdvertDetail(advertId), {
     onSuccess: (data) => {
-      // 데이터가 성공적으로 로드되면 폼 데이터를 업데이트
+      // 데이터가 성공적으로 로드되면 폼 데이터 기본값으로 덮어씌우기
       setFormData({
         title: data.title,
         description: data.description,
@@ -119,7 +119,9 @@ export default function AdDetail() {
     setVideoUrlList(videoUrls);
   };
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  // 비디오 파일 입력과 이미지 파일 입력에 대해 서로 다른 ref 사용
+  const videoInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const handleBannerImg = async (e: ChangeEvent<HTMLInputElement>) => {
     const bannerImgUrl = e.target.files;
@@ -185,7 +187,7 @@ export default function AdDetail() {
                     <div className={`${styles.videoContainer}`}>
                       <div
                         className={
-                          videoUrlList.length > 0
+                          ad?.advertVideoUrlList?.length > 0
                             ? `${styles.afterUpload}`
                             : `${styles.video}`
                         }
@@ -208,18 +210,18 @@ export default function AdDetail() {
                             <button
                               className={styles.videoOverlay}
                               onClick={() =>
-                                fileInputRef.current &&
-                                fileInputRef.current.click()
+                                videoInputRef.current &&
+                                videoInputRef.current.click()
                               }
                             >
                               <img src={edit} alt="Edit videos" />
                             </button>
                             <input
-                              ref={fileInputRef}
                               type="file"
                               name="videoList"
                               id="videoList"
                               accept="video/*"
+                              ref={videoInputRef}
                               multiple
                               onChange={handleAdvertVideoList}
                               className={`${styles.videoInput} ${styles.input}`}
@@ -228,6 +230,7 @@ export default function AdDetail() {
                           </>
                         ) : (
                           <>
+                            {/* 기존 advertVideoUrlList 조회해서 보여주기 */}
                             {ad?.advertVideoUrlList?.map(
                               (url: string, index: number) => (
                                 <div
@@ -246,14 +249,14 @@ export default function AdDetail() {
                             <button
                               className={styles.videoOverlay}
                               onClick={() =>
-                                fileInputRef.current &&
-                                fileInputRef.current.click()
+                                videoInputRef.current &&
+                                videoInputRef.current.click()
                               }
                             >
                               <img src={edit} alt="Edit videos" />
                             </button>
                             <input
-                              ref={fileInputRef}
+                              ref={videoInputRef}
                               type="file"
                               name="videoList"
                               id="videoList"
@@ -293,7 +296,7 @@ export default function AdDetail() {
                               alt="기존이미지"
                             />
                             <button
-                              onClick={() => fileInputRef.current?.click()} // 버튼 클릭시 input 트리거
+                              onClick={() => imageInputRef.current?.click()} // 버튼 클릭시 input 트리거
                               className={styles.overlayButton}
                             >
                               <img src={edit} alt="편집 버튼" />
@@ -302,7 +305,7 @@ export default function AdDetail() {
                               type="file"
                               name="file"
                               id="fileInput" // 파일 input ID 설정
-                              ref={fileInputRef}
+                              ref={imageInputRef}
                               accept="image/gif, image/jpeg, image/jpg, image/png"
                               onChange={handleBannerImg}
                               style={{ display: "none" }}
@@ -317,7 +320,7 @@ export default function AdDetail() {
                               className={styles.imgPrev}
                             />
                             <button
-                              onClick={() => fileInputRef.current?.click()} // 버튼 클릭시 input 트리거
+                              onClick={() => imageInputRef.current?.click()} // 버튼 클릭시 input 트리거
                               className={styles.overlayButton}
                             >
                               <img src={edit} alt="편집 버튼" />
@@ -327,7 +330,7 @@ export default function AdDetail() {
                               name="file"
                               id="fileInput" // 동일한 input ID를 유지
                               accept="image/gif, image/jpeg, image/jpg, image/png"
-                              ref={fileInputRef}
+                              ref={imageInputRef}
                               onChange={handleBannerImg}
                               style={{ display: "none" }}
                               required
