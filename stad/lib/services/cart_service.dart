@@ -54,4 +54,19 @@ class CartService {
       return [];
     }
   }
+
+  Future<void> deleteCartProducts(int cartProductId) async {
+    try {
+      final response =
+          await dio.delete('$url/delete?cartProductId=$cartProductId');
+
+      if (response.statusCode == 200) {
+        print('카트 상품 정상적으로 삭제:${response.data}');
+      } else {
+        print('카트 상품 삭제 실패:${response.statusCode}');
+      }
+    } catch (e) {
+      print('카트 상품 삭제하려다가 말았습니다:$e');
+    }
+  }
 }

@@ -37,14 +37,16 @@ class _CartScreenState extends State<CartScreen> {
     final userId = Provider.of<UserProvider>(context, listen: false).userId;
     List<CartItem> items = await cartService.fetchCartProducts(userId!);
     Provider.of<CartProvider>(context, listen: false).setCartItems(items);
+    setState(() {});
   }
 
-  void navigateToOrderScreen() async{
+  void navigateToOrderScreen() async {
     // 선택된 항목들만 필터링
-    List<CartItem> selectedItems = Provider.of<CartProvider>(context, listen: false)
-        .cartItems
-        .where((item) => item.isSelected)
-        .toList();
+    List<CartItem> selectedItems =
+        Provider.of<CartProvider>(context, listen: false)
+            .cartItems
+            .where((item) => item.isSelected)
+            .toList();
 
     if (selectedItems.isNotEmpty) {
       List<ProductType> productTypes = selectedItems.map((item) {
@@ -59,27 +61,30 @@ class _CartScreenState extends State<CartScreen> {
 
       ProductInfo? productInfo = await productService.getProductInfo(1);
 
-
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => OrderScreen(
-            productInfo: productInfo, // 필요하다면 적절히 설정
+            productInfo: productInfo,
+            // 필요하다면 적절히 설정
             productTypes: productTypes,
-            title: productInfo?.name ?? "Order Details", // 혹은 다른 제목
+            title: productInfo?.name ?? "Order Details",
+            // 혹은 다른 제목
             quantities: {for (var item in productTypes) item.id: item.quantity},
-            advertId: 1, // 예시 ID, 적절한 값으로 변경 필요
-            contentId: 1, // 예시 ID, 적절한 값으로 변경 필요
+            advertId: 1,
+            // 예시 ID, 적절한 값으로 변경 필요
+            contentId: 1,
+            // 예시 ID, 적절한 값으로 변경 필요
             //TODO: optionIds 수정하기
-            optionIds: [], // 옵션 ID 처리 필요
+            optionIds: [],
+            // 옵션 ID 처리 필요
             deliveryFee: 2500, // 배송료 처리
           ),
         ),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("선택된 상품이 없습니다."))
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("선택된 상품이 없습니다.")));
     }
   }
 
@@ -121,7 +126,10 @@ class _CartScreenState extends State<CartScreen> {
                 stream: cartProvider.cartItemsStream,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(
+                        child: CircularProgressIndicator(
+                      color: mainNavy,
+                    ));
                   }
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return _buildEmptyCart();
@@ -138,14 +146,9 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ],
       ),
-      // bottomNavigationBar: cartItems.isNotEmpty
-      //     ? Consumer<CartProvider>(builder: (context, cartProvider, child) {
-      //         return _buildTotalPriceButton(cartProvider.getTotalPrice());
-      //       })
-      //     : SizedBox.shrink(),
       bottomNavigationBar: Consumer<CartProvider>(
         builder: (context, cartProvider, child) {
-          return _buildTotalPriceButton(cartProvider.getTotalPrice());
+          return _buildTotalPriceButton();
         },
       ),
     );
@@ -174,16 +177,6 @@ class _CartScreenState extends State<CartScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildCartList() {
-    return Consumer<CartProvider>(
-      builder: (context, cartProvider, child) => ListView.builder(
-        itemCount: cartProvider.cartItems.length,
-        itemBuilder: (context, index) =>
-            _buildCartItem(cartProvider.cartItems[index], index),
       ),
     );
   }
@@ -230,14 +223,16 @@ class _CartScreenState extends State<CartScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(width: 48.0),
-                Image.network(item.thumbnail, width: 70, height: 70),
+                Image.network(item.thumbnail, width: 80, height: 80),
                 SizedBox(width: 16.0),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text('${item.title}', style: TextStyle(color: midGray)),
                       Text('${item.quantity}개',
                           style: TextStyle(color: midGray)),
                       Text('${item.price}원', style: TextStyle(color: midGray)),
@@ -260,15 +255,21 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  Widget _buildTotalPriceButton(int totalPrice) {
-    return totalPrice > 0
-        ? CustomElevatedButton(
-            onPressed: navigateToOrderScreen,
-            text: '${totalPrice}원 주문하기',
-            textColor: mainWhite,
-            backgroundColor: mainNavy,
-          )
-        : SizedBox.shrink();
+  Widget _buildTotalPriceButton() {
+    return Consumer<CartProvider>(
+      builder: (context, cartProvider, child) {
+        int totalPrice =
+            cartProvider.getTotalSelectedPrice(); // 선택된 상품들의 총 금액을 계산
+        return totalPrice > 0
+            ? CustomElevatedButton(
+                onPressed: navigateToOrderScreen,
+                text: '${totalPrice}원 주문하기',
+                textColor: mainWhite,
+                backgroundColor: mainNavy,
+              )
+            : SizedBox.shrink();
+      },
+    );
   }
 
   Widget _buildEmptyCart() {
