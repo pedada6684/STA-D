@@ -1,0 +1,14 @@
+server:
+  servlet:
+    context-path: '/stats'
+  port: 8082
+spring:
+  profiles:
+    group:
+      default: dev
+  config:
+    import:
+      - classpath:/jpa.yml
+      - classpath:/logging.yml
+      - classpath:/db.yml
+      - classpath:/kafka.yml

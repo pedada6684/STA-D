@@ -3,8 +3,6 @@ package com.klpc.stadspring.domain.orders.service;
 import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.cart.controller.response.GetCartProductInfoResponse;
-import com.klpc.stadspring.domain.log.service.LogService;
-import com.klpc.stadspring.domain.log.service.command.AddOrderLogCommand;
 import com.klpc.stadspring.domain.option.entity.ProductOption;
 import com.klpc.stadspring.domain.option.repository.OptionRepository;
 import com.klpc.stadspring.domain.orderProduct.entity.OrderProduct;
@@ -48,7 +46,7 @@ public class OrdersService {
     private final OrderProductRepository orderProductRepository;
     private final OrdersRepository ordersRepository;
     private final OptionRepository optionRepository;
-    private final LogService logService;
+//    private final LogService logService;
 
     /**
      * 주문 생성
@@ -73,19 +71,19 @@ public class OrdersService {
                 orderProduct.linkedProductType(productType);
                 orderProductRepository.save(orderProduct);
             }
-
-            AddOrderLogCommand addOrderLogCommand = AddOrderLogCommand.builder()
-                    .advertId(ptCommand.getAdvertId())
-                    .userId(command.getUserId())
-                    .orderId(orders.getId())
-                    .contentId(ptCommand.getContentId())
-                    .productId(ptCommand.getProductTypeId())
-                    .price(productType.getPrice())
-                    .status(true)
-                    .regDate(LocalDateTime.now())
-                    .updateDate(LocalDateTime.now())
-                    .build();
-            logService.addOrderLog(addOrderLogCommand);
+// TODO : 이 부분 카프카로 바꿀 것
+//            AddOrderLogCommand addOrderLogCommand = AddOrderLogCommand.builder()
+//                    .advertId(ptCommand.getAdvertId())
+//                    .userId(command.getUserId())
+//                    .orderId(orders.getId())
+//                    .contentId(ptCommand.getContentId())
+//                    .productId(ptCommand.getProductTypeId())
+//                    .price(productType.getPrice())
+//                    .status(true)
+//                    .regDate(LocalDateTime.now())
+//                    .updateDate(LocalDateTime.now())
+//                    .build();
+//            logService.addOrderLog(addOrderLogCommand);
             productType.modifyQuantity(-1* ptCommand.getProductCnt());
         }
 
