@@ -1,7 +1,6 @@
 server:
   servlet:
     context-path: '/stats'
-  port: 8082
 spring:
   profiles:
     group:
@@ -12,3 +11,4 @@ spring:
       - classpath:/logging.yml
       - classpath:/db.yml
       - classpath:/kafka.yml
+      - classpath:/msa.yml
