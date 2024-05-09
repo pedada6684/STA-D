@@ -43,7 +43,8 @@ class _ProductScreenState extends State<ProductScreen>
 
   void _loadProductData() async {
     try {
-      _productInfo = await _productService.getProductInfo(widget.advertId);
+      _productInfo = await _productService.getProductInfo(3);
+      // _productInfo = await _productService.getProductInfo(widget.advertId);
       _productTypes =
           await _productService.getProductTypeList(_productInfo!.id);
       if (_tabController == null || _tabController.length != 2) {

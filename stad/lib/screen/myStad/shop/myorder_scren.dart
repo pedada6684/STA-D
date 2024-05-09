@@ -15,18 +15,6 @@ class MyOrderScreen extends StatefulWidget {
 }
 
 class _MyOrderScreenState extends State<MyOrderScreen> {
-  // final List<Map<String, dynamic>> _orders = List.generate(15, (index) {
-  //   // Assuming every 3rd item starts a new group with a random date
-  //   final isNewDate = index % 3 == 0;
-  //   final randomDay = isNewDate ? (1 + index ~/ 3) : 0;
-  //   return {
-  //     'title': 'Product Title $index',
-  //     'description': 'Product Description $index',
-  //     'isNewDate': isNewDate,
-  //     'date':
-  //         isNewDate ? '2024.04.${randomDay.toString().padLeft(2, '1')}' : '',
-  //   };
-  // });
 
   List<Order>? _orders;
   bool _isLoading = false;

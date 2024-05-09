@@ -282,18 +282,18 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
               onSelect: selectProductOption,
             ),
             SizedBox(height: 15),
-            if (currentOptions != null && currentOptions.isNotEmpty)
-              CustomDropdown(
-                title: '옵션선택',
-                options: currentOptions,
-                isExpanded: isOptionExpanded,
-                selectedOption: selectedOptionIndex != null
-                    ? currentOptions[selectedOptionIndex!]
-                    : null,
-                onToggle: () =>
-                    setState(() => isOptionExpanded = !isOptionExpanded),
-                onSelect: selectOption,
-              ),
+            // if (currentOptions != null && currentOptions.isNotEmpty)
+            //   CustomDropdown(
+            //     title: '옵션선택',
+            //     options: currentOptions,
+            //     isExpanded: isOptionExpanded,
+            //     selectedOption: selectedOptionIndex != null
+            //         ? currentOptions[selectedOptionIndex!]
+            //         : null,
+            //     onToggle: () =>
+            //         setState(() => isOptionExpanded = !isOptionExpanded),
+            //     onSelect: selectOption,
+            //   ),
             if (selectedProductIndex != null) ...[
               ...selectedProducts.map((product) {
                 return Column(

@@ -79,7 +79,7 @@ class _AddressScreenState extends State<AddressScreen> {
 
   void validateNumber(String input) {
     setState(() {
-      isPhoneError = !RegExp(r'^01[016789][1-9]\d{6,7}$').hasMatch(input);
+      isPhoneError = !RegExp(r'^01[016789]\d{3,4}\d{4}$').hasMatch(input);
     });
   }
 
@@ -104,6 +104,18 @@ class _AddressScreenState extends State<AddressScreen> {
   }
 
   void addUserAddress() {
+    if (isPhoneError) {
+      // 핸드폰 번호가 유효하지 않은 경우
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('유효한 핸드폰 번호를 입력해주세요.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     if (userProvider.userId != null) {
       final addressService = AddressService();
@@ -165,7 +177,6 @@ class _AddressScreenState extends State<AddressScreen> {
     String placeholder, {
     bool readOnly = false,
     bool isFixedLabel = false,
-    String? errorText,
     TextInputType keyboardType = TextInputType.text,
   }) {
     bool isError = placeholder == '핸드폰 번호' && isPhoneError;
@@ -173,9 +184,9 @@ class _AddressScreenState extends State<AddressScreen> {
     return TextFormField(
       controller: controller,
       readOnly: readOnly,
-      keyboardType: keyboardType,
       cursorColor: mainNavy,
       style: TextStyle(color: mainBlack),
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         labelText: placeholder,
         labelStyle: TextStyle(color: midGray),
@@ -196,7 +207,7 @@ class _AddressScreenState extends State<AddressScreen> {
                 borderSide: BorderSide(color: Colors.red, width: 2),
               )
             : null,
-        errorText: isError ? '번호를 입력해주세요.' : null,
+        errorText: isError ? '- 제외 010 0000 0000' : null,
       ),
     );
   }
@@ -239,12 +250,8 @@ class _AddressScreenState extends State<AddressScreen> {
                 _gap(),
                 _buildTextField(_adnickController, '배송지명'),
                 _gap(),
-                _buildTextField(
-                  _phoneController,
-                  '핸드폰 번호 / - 제외',
-                  keyboardType: TextInputType.phone,
-                  errorText: isPhoneError ? '유효한 번호를 입력해주세요.' : null,
-                ),
+                _buildTextField(_phoneController, '핸드폰 번호',
+                    keyboardType: TextInputType.phone),
                 _gap(),
                 _buildPostalCodeField(),
                 _gap(),
@@ -256,8 +263,7 @@ class _AddressScreenState extends State<AddressScreen> {
                 CustomElevatedButton(
                   text: '완료',
                   textColor: mainWhite,
-                  onPressed:
-                      isFormFilled && !isPhoneError ? addUserAddress : null,
+                  onPressed: isFormFilled ? addUserAddress : null,
                   backgroundColor: mainNavy,
                 )
               ],
