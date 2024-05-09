@@ -41,7 +41,7 @@ export default function TVLogin() {
 
     // api 연결 부분 (header에 jwt 토큰 요청시 event-source-polyfill 필요)
     const eventSource = new EventSource(
-      `${URL}/alert/connect/${"tv"}/${sessionId}/${0}`
+      `${URL}/alert/connect/${"tv"}/${sessionId}`
     );
 
     // 연결 성공
