@@ -24,10 +24,10 @@ class CartProvider extends ChangeNotifier {
   }
 
   Future<void> fetchCartItems(int userId) async {
-
     var items = await CartService().fetchCartProducts(userId);
-    _cartItems = items;
-    notifyListeners();
+    setCartItems(items);
+    _cartStreamController.add(items); // 스트림 업데이트 강제화
+    notifyListeners(); // 상태 업데이트
   }
 
   void addToCart(CartItem newItem) {
