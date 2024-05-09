@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /* 아임포트 결제 모듈을 불러옵니다. */
 import 'package:iamport_flutter/iamport_payment.dart';
@@ -63,70 +64,95 @@ class _PaymentState extends State<Payment> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     return IamportPayment(
-      appBar: CustomAppBar(
-        title: '결제하기',
-        showBackButton: true,
-      ),
-      /* 웹뷰 로딩 컴포넌트 */
-      initialChild: Container(
-        color: mainWhite,
-        child: Center(
-          child: Center(
-              child: Text('잠시만 기다려주세요...', style: TextStyle(fontSize: 16))),
+        appBar: CustomAppBar(
+          title: '결제하기',
+          showBackButton: true,
         ),
-      ),
-      /* [필수입력] 가맹점 식별코드 */
-      userCode: 'iamport',
-      /* [필수입력] 결제 데이터 */
-      data: PaymentData(
-          pg: 'html5_inicis',
-          // PG사
-          payMethod: 'card',
-          // 결제수단
-          name: widget.name,
-          // 주문명
-          merchantUid: 'mid_${DateTime.now().millisecondsSinceEpoch}',
-          // 주문번호
-          amount: 100,
-          // 결제금액
-          buyerName: widget.buyerName,
-          // 구매자 이름
-          buyerTel: widget.buyerTel,
-          // 구매자 연락처
-          buyerEmail: widget.buyerEmail,
-          // 구매자 이메일
-          buyerAddr: widget.buyerAddr,
-          // 구매자 주소
-          buyerPostcode: widget.buyerPostcode,
-          // 구매자 우편번호
-          appScheme: 'intent://',
-          // 앱 URL scheme
-          cardQuota: [2, 3] //결제창 UI 내 할부개월수 제한
+        /* 웹뷰 로딩 컴포넌트 */
+        initialChild: Container(
+          color: mainWhite,
+          child: Center(
+            child: Center(
+                child: Text('잠시만 기다려주세요...', style: TextStyle(fontSize: 16))),
           ),
-      /* [필수입력] 콜백 함수 */
-      callback: (Map<String, String> result) {
-        if (result['success'] == 'true') {
+        ),
+        /* [필수입력] 가맹점 식별코드 */
+        userCode: 'iamport',
+        /* [필수입력] 결제 데이터 */
+        data: PaymentData(
+            pg: 'html5_inicis',
+            // PG사
+            payMethod: 'card',
+            // 결제수단
+            name: widget.name,
+            // 주문명
+            merchantUid: 'mid_${DateTime.now().millisecondsSinceEpoch}',
+            // 주문번호
+            amount: 100,
+            // 결제금액
+            buyerName: widget.buyerName,
+            // 구매자 이름
+            buyerTel: widget.buyerTel,
+            // 구매자 연락처
+            buyerEmail: widget.buyerEmail,
+            // 구매자 이메일
+            buyerAddr: widget.buyerAddr,
+            // 구매자 주소
+            buyerPostcode: widget.buyerPostcode,
+            // 구매자 우편번호
+            appScheme: 'example://',
+            // 앱 URL scheme
+            cardQuota: [2, 3] //결제창 UI 내 할부개월수 제한
+            ),
+        /* [필수입력] 콜백 함수 */
+        // callback: (Map<String, String> result) {
+        //   if (result['success'] == 'true') {
+        //     List<Map<String, dynamic>> products = widget.productTypes.map((type) {
+        //       return {
+        //         'productTypeId': type.id,
+        //         'productCnt': widget.quantities[type.id] ?? 0,
+        //         'optionId': widget.optionIds.isEmpty ? -1 : widget.optionIds[0],
+        //         // 가정: 모든 제품이 같은 옵션을 가짐
+        //         'contentId': widget.contentId,
+        //         'advertId': widget.advertId,
+        //       };
+        //     }).toList();
+
+        //     if (userProvider.userId != null) {
+        //       // OrderService()
+        //       //     .createOrder(userId: userProvider.userId!, products: products)
+        //       //     .then((_) {
+        //         Navigator.of(context).pushReplacement(MaterialPageRoute(
+        //             builder: (context) => PaymentResultScreen()));
+        //       // });
+        //     }
+        //   }
+        // },
+        //   callback: (Map<String, String> result) {
+        //     Navigator.pushReplacementNamed(
+        //       context,
+        //       '/result',
+        //       arguments: result,
+        //     );
+        //   },
+
+        callback: (Map<String, String> result) {
           List<Map<String, dynamic>> products = widget.productTypes.map((type) {
             return {
               'productTypeId': type.id,
               'productCnt': widget.quantities[type.id] ?? 0,
               'optionId': widget.optionIds.isEmpty ? -1 : widget.optionIds[0],
-              // 가정: 모든 제품이 같은 옵션을 가짐
               'contentId': widget.contentId,
               'advertId': widget.advertId,
             };
           }).toList();
 
-          if (userProvider.userId != null) {
-            // OrderService()
-            //     .createOrder(userId: userProvider.userId!, products: products)
-            //     .then((_) {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => PaymentResultScreen()));
-            // });
-          }
-        }
-      },
-    );
+          final int? userId = userProvider.userId;
+          context.go('/done', extra: {
+            'result': result,
+            'products': products,
+            'userId': userId,
+          });
+        });
   }
 }
