@@ -47,12 +47,13 @@ public class AdvertService {
     /**
      * 광고 추가
      * 순서 : 광고 엔티티(title, description 등) 생성 -> 연관 관계 엔티티 생성 & 광고 엔티티 입력
+     *
      * @param command
      * @return
      */
     @Transactional(readOnly = false)
-    public AddAdvertResponse addAdvert(AddAdvertRequestCommand command){
-        log.info("AddAdvertRequestCommand: "+ command);
+    public AddAdvertResponse addAdvert(AddAdvertRequestCommand command) {
+        log.info("AddAdvertRequestCommand: " + command);
         User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new CustomException(ErrorCode.REQUEST_NOT_FOUND));
 
         Advert adv = Advert.createToAdvert(
@@ -67,20 +68,20 @@ public class AdvertService {
                 command.getAdvertCategory());
         Advert advert = advertRepository.save(adv);
 
-        for(Long i : command.getSelectedContentList()){
+        for (Long i : command.getSelectedContentList()) {
             SelectedContent sc = SelectedContent.createToSelectedContent(i);
             SelectedContent selectedContent = selectedContentRepository.save(sc);
             selectedContent.linkAdvert(advert);
         }
-        for(String i : command.getAdvertVideoUrlList()){
+        for (String i : command.getAdvertVideoUrlList()) {
             Long len = 0L;
-            AdvertVideo advertVideo = AdvertVideo.createToAdvertVideo(len,i);
+            AdvertVideo advertVideo = AdvertVideo.createToAdvertVideo(len, i);
             advertVideo.linkAdvert(advert);
             advertVideoRepository.save(advertVideo);
         }
 
         AddAdvertResponse addAdvertResponse;
-        if(advert.getId()>0)
+        if (advert.getId() > 0)
             addAdvertResponse = AddAdvertResponse.builder().advertId(advert.getId()).build();
         else
             addAdvertResponse = AddAdvertResponse.builder().advertId(advert.getId()).build();
@@ -91,12 +92,13 @@ public class AdvertService {
     /**
      * 광고 수정
      * 영상은 각자 별도 수정 진행됨
+     *
      * @param command
      * @return
      */
     @Transactional(readOnly = false)
-    public ModifyAdvertResponse modifyAdvert(ModifyAdvertRequestCommand command){
-        log.info("ModifyAdvertRequestCommand: "+ command);
+    public ModifyAdvertResponse modifyAdvert(ModifyAdvertRequestCommand command) {
+        log.info("ModifyAdvertRequestCommand: " + command);
         Advert advert = advertRepository.findById(command.getAdvertId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         advert.modifyAdvert(
@@ -109,7 +111,7 @@ public class AdvertService {
                 command.getBannerImgUrl(),
                 command.getAdvertType()
         );
-        if(!command.getSelectedContentList().isEmpty()) {
+        if (!command.getSelectedContentList().isEmpty()) {
             selectedContentRepository.deleteAll(advert.getSelectedContents());
             for (Long i : command.getSelectedContentList()) {
                 SelectedContent sc = SelectedContent.createToSelectedContent(i);
@@ -119,7 +121,7 @@ public class AdvertService {
         }
 
         ModifyAdvertResponse modifyAdvertResponse;
-        if(advert.getId()>0)
+        if (advert.getId() > 0)
             modifyAdvertResponse = ModifyAdvertResponse.builder().advertId(advert.getId()).build();
         else
             modifyAdvertResponse = ModifyAdvertResponse.builder().advertId(advert.getId()).build();
@@ -129,11 +131,12 @@ public class AdvertService {
 
     /**
      * 광고 삭제
+     *
      * @param id
      * @return
      */
     @Transactional(readOnly = false)
-    public DeleteAdvertResponse deleteAdvert(Long id){
+    public DeleteAdvertResponse deleteAdvert(Long id) {
         Advert advert = advertRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         advert.deleteAdvert();
@@ -143,20 +146,21 @@ public class AdvertService {
 
     /**
      * 광고 정보 조회
+     *
      * @param id : advertId
      * @return
      */
-    public GetAdvertResponse getAdvert(Long id){
+    public GetAdvertResponse getAdvert(Long id) {
         Advert advert = advertRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        if(!advert.getStatus()){
+        if (!advert.getStatus()) {
             throw new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
         }
         List<Long> selectedContentList = new ArrayList<>();
-        for(SelectedContent i : advert.getSelectedContents())
+        for (SelectedContent i : advert.getSelectedContents())
             selectedContentList.add(i.getId());
 
         List<String> advertVideoUrlList = new ArrayList<>();
-        for(AdvertVideo i : advert.getAdvertVideos())
+        for (AdvertVideo i : advert.getAdvertVideos())
             advertVideoUrlList.add(i.getVideoUrl());
 
         GetAdvertResponse response = GetAdvertResponse.builder()
@@ -176,21 +180,22 @@ public class AdvertService {
 
     /**
      * 광고 리스트 조회
+     *
      * @param id : userId
      * @return
      */
-    public GetAdvertListResponse getAdvertList(Long id){
+    public GetAdvertListResponse getAdvertList(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         List<Advert> listByUser = advertRepository.findAllByUser(user);
 
         List<GetAdvertResponseCommand> responseList = new ArrayList<>();
-        for(Advert advert : listByUser){
+        for (Advert advert : listByUser) {
             List<Long> selectedContentList = new ArrayList<>();
-            for(SelectedContent i : advert.getSelectedContents())
+            for (SelectedContent i : advert.getSelectedContents())
                 selectedContentList.add(i.getId());
 
             List<String> advertVideoUrlList = new ArrayList<>();
-            for(AdvertVideo i : advert.getAdvertVideos())
+            for (AdvertVideo i : advert.getAdvertVideos())
                 advertVideoUrlList.add(i.getVideoUrl());
 
             GetAdvertResponseCommand response = GetAdvertResponseCommand.builder()
@@ -217,24 +222,25 @@ public class AdvertService {
      * 인기 광고 출력
      * ORDER BY click_cnt DESC
      * LIMIT 3
+     *
      * @return
      */
-    public GetAdvertListByClickResponse getAdvertListByClick(){
+    public GetAdvertListByClickResponse getAdvertListByClick() {
         List<Advert> listOrderClick = new ArrayList<>();
         try {
             listOrderClick = advertVideoRepository.findAllOrderClick();
-        }catch (CustomException e){
+        } catch (CustomException e) {
             throw new CustomException(ErrorCode.ORDERBYDESC_ERROR);
         }
 
         List<GetAdvertListByClickResponseCommand> responseList = new ArrayList<>();
-        for(Advert advert : listOrderClick){
+        for (Advert advert : listOrderClick) {
             List<Long> selectedContentList = new ArrayList<>();
-            for(SelectedContent i : advert.getSelectedContents())
+            for (SelectedContent i : advert.getSelectedContents())
                 selectedContentList.add(i.getId());
 
             List<String> advertVideoUrlList = new ArrayList<>();
-            for(AdvertVideo i : advert.getAdvertVideos())
+            for (AdvertVideo i : advert.getAdvertVideos())
                 advertVideoUrlList.add(i.getVideoUrl());
 
             GetAdvertListByClickResponseCommand response = GetAdvertListByClickResponseCommand.builder()
@@ -258,25 +264,26 @@ public class AdvertService {
 
     /**
      * 컨텐츠 관련 광고 목록 조회
+     *
      * @param contentId
      * @return
      */
-    public GetAdvertListByContentResponse getAdvertListByContent(Long contentId){
-        log.info("컨텐츠 관련 광고 목록 조회 Service"+'\n'+"contentId : "+contentId);
+    public GetAdvertListByContentResponse getAdvertListByContent(Long contentId) {
+        log.info("컨텐츠 관련 광고 목록 조회 Service" + '\n' + "contentId : " + contentId);
         ContentConcept contentConcept = contentConceptRepository.findById(contentId).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         List<Advert> advertList = advertRepository.findAllByContentId(contentId);
         List<GetAdvertListByContentResponseCommand> list = new ArrayList<>();
         List<Long> selectedContentList = new ArrayList<>();
         List<String> advertVideoUrlList = new ArrayList<>();
-        for(Advert advert : advertList){
+        for (Advert advert : advertList) {
             selectedContentList.clear();
             advertVideoUrlList.clear();
 
-            for(SelectedContent sc : advert.getSelectedContents()){
+            for (SelectedContent sc : advert.getSelectedContents()) {
                 selectedContentList.add(sc.getFixedContentId());
             }
-            for(AdvertVideo av : advert.getAdvertVideos()){
+            for (AdvertVideo av : advert.getAdvertVideos()) {
                 advertVideoUrlList.add(av.getVideoUrl());
             }
 
@@ -300,4 +307,13 @@ public class AdvertService {
         return GetAdvertListByContentResponse.builder().data(list).build();
     }
 
+    public GetAdvertIdListResponse GetAdvertIdList() {
+        List<Long> advertIdList = advertRepository.findAllAdvertIds();
+
+        GetAdvertIdListResponse response = GetAdvertIdListResponse.builder()
+                .advertIdList(advertIdList)
+                .build();
+
+        return response;
+    }
 }
