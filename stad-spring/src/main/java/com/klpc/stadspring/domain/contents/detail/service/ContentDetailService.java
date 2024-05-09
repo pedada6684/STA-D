@@ -59,7 +59,8 @@ public class ContentDetailService {
         }
     }
 
-    private String getStreamVideoUrl(Long id) {
+    @Cacheable(value = "getStreamVideoUrl", key = "#id", cacheManager = "StadCacheManager")
+    public String getStreamVideoUrl(Long id) {
         return repository.findVideoUrlById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
     }
