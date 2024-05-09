@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/models/advert_model.dart';
 import 'package:stad/models/contents_model.dart';
+import 'package:stad/models/user_model.dart';
+import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/product/product_screen.dart';
 import 'package:stad/services/advert_service.dart';
 import 'package:stad/services/contents_service.dart';
+import 'package:stad/services/log_service.dart';
 import 'package:stad/widget/advertising_card.dart';
 import 'package:stad/widget/content_bottom_sheet.dart';
 
@@ -54,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     AdService adService = AdService();
     try {
       List<Advert> fetchedAdverts =
-          await adService.getAdvertsByContentId(1); // 컨텐츠 ID를 적절히 설정
+      await adService.getAdvertsByContentId(1); // 컨텐츠 ID를 적절히 설정
       setState(() {
         adverts = fetchedAdverts;
       });
@@ -76,8 +80,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
-  void advertClickLog() async {
+  void advertClickLog(int advertId, int advertVideoId, int contentId,
+      int userId) async {
+    LogService logService = LogService();
 
+    try {
+      await logService.advertClickLog(
+        advertId: advertId,
+        advertVideoId: advertVideoId,
+        contentId: contentId,
+        userId: userId,
+      );
+    } catch (e) {
+      print('Failed to fetch content: $e');
+    }
   }
 
   @override
@@ -103,6 +119,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    int? userId = Provider
+        .of<UserProvider>(context, listen: false)
+        .userId;
     return Scaffold(
       backgroundColor: mainWhite,
       appBar: PreferredSize(
@@ -142,15 +161,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
-                    builder: (BuildContext context) => ContentDetailBottomSheet(
-                      title: featuredContent!.title,
-                      imagePath: featuredContent!.thumbnailUrl,
-                      synopsis: featuredContent!.description,
-                      seasonInfo:
-                          '${featuredContent!.releaseYear} | ${featuredContent!.audienceAge}',
-                      additionalText:
-                          '${featuredContent!.creator} | ${featuredContent!.cast}',
-                    ),
+                    builder: (BuildContext context) =>
+                        ContentDetailBottomSheet(
+                          title: featuredContent!.title,
+                          imagePath: featuredContent!.thumbnailUrl,
+                          synopsis: featuredContent!.description,
+                          seasonInfo:
+                          '${featuredContent!.releaseYear} | ${featuredContent!
+                              .audienceAge}',
+                          additionalText:
+                          '${featuredContent!.creator} | ${featuredContent!
+                              .cast}',
+                        ),
                   );
                 }
               },
@@ -165,10 +187,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     subText: singleAdverts[0]['title'],
                     onPressed: () {
                       //TODO: advertId 수정
-
+                      advertClickLog(1,1,1,userId!
+                          //TODO: 파라미터  수정할 것
+                      );
                       Navigator.of(context).push(MaterialPageRoute(
-                          //TODO 수정
-                          builder: (context) => ProductScreen(
+                        //TODO 수정
+                          builder: (context) =>
+                              ProductScreen(
                                 advertId: 1,
                                 contentId: 1,
                                 title: singleAdverts[0]['title'],
@@ -189,22 +214,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   CarouselSlider buildCarouselSlider(BuildContext context) {
     return CarouselSlider(
       items: adverts
-          .map((advert) => AdvertisingCard(
-                bannerImgUrl: advert.bannerImgUrl,
-                buttonText: '콘텐츠 관련 광고 보러가기',
-                subText: advert.title,
-                onPressed: () {
-                  Navigator.of(context).push(
-                      //TODO:advertId 수정, 여러가지 수정
-                      MaterialPageRoute(
-                          builder: (context) => ProductScreen(
-                                advertId: 1,
-                                contentId: 1,
-                                title: singleAdverts[0]['title'],
-                                description: singleAdverts[0]['description'],
-                              )));
-                },
-              ))
+          .map((advert) =>
+          AdvertisingCard(
+            bannerImgUrl: advert.bannerImgUrl,
+            buttonText: '콘텐츠 관련 광고 보러가기',
+            subText: advert.title,
+            onPressed: () {
+              Navigator.of(context).push(
+                //TODO:advertId 수정, 여러가지 수정
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ProductScreen(
+                            advertId: 1,
+                            contentId: 1,
+                            title: singleAdverts[0]['title'],
+                            description: singleAdverts[0]['description'],
+                          )));
+            },
+          ))
           .toList(),
       options: CarouselOptions(
         autoPlay: true,
@@ -288,14 +315,14 @@ class buildTopThumbnail extends StatelessWidget {
           blendMode: BlendMode.dstIn,
           child: featuredContent == null
               ? Center(
-                  child:
-                      CircularProgressIndicator()) // Show loading spinner if content is null
+              child:
+              CircularProgressIndicator()) // Show loading spinner if content is null
               : Image.network(
-                  featuredContent!.thumbnailUrl,
-                  height: 420,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+            featuredContent!.thumbnailUrl,
+            height: 420,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
         ),
         Positioned(
           top: 0,
