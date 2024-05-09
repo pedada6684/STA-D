@@ -15,7 +15,7 @@ import com.klpc.stadstats.global.response.ErrorCode;
 import com.klpc.stadstats.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -38,6 +38,9 @@ public class LogService {
     private final OrderLogRepository orderLogRepository;
     private final AdvertStatisticsRepository advertStatisticsRepository;
     private final RestTemplate restTemplate;
+
+    @Value("${spring.stad-main}")
+    private String stadMainUrl;
 
     @Transactional
     public AdvertClickLog addAdvertClickLog(AddAdvertClickLogCommand command) {
@@ -223,7 +226,7 @@ public class LogService {
     }
 
     public GetAdvertIdListResponse listenAdvertIdList() {
-        GetAdvertIdListResponse response = restTemplate.getForObject("http://localhost:8080/api/advert/get-advert-id-list", GetAdvertIdListResponse.class);
+        GetAdvertIdListResponse response = restTemplate.getForObject(stadMainUrl+"/advert/get-advert-id-list", GetAdvertIdListResponse.class);
         return response;
     }
 }
