@@ -41,7 +41,10 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeFromCart(int index) {
+  void removeFromCart(int index) async {
+    int cartProductId = int.parse(_cartItems[index].cartProductId);
+    await CartService().deleteCartProducts(cartProductId);
+
     _cartItems.removeAt(index);
     _cartStreamController.add(_cartItems); // 스트림 업데이트
     notifyListeners();
