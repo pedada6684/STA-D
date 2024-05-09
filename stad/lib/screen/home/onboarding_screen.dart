@@ -22,20 +22,32 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             image: 'assets/image/ad_mockup.png',
             title: 'advertising',
             cardContent: '사용자 맞춤형 광고와 콘텐츠 맞춤형 광고!',
-            button: TextButton(
-              onPressed: () => context.go('/login'),
-              child: Text('STA:D 입장하기',
-                  style: TextStyle(color: mainNavy, fontFamily: 'LogoFont')),
+            button: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: TextButton(
+                onPressed: () => context.go('/login'),
+                child: Text('STA:D 로그인하기',
+                    style: TextStyle(
+                        color: mainNavy,
+                        fontFamily: 'LogoFont',
+                        fontSize: 18.0)),
+              ),
             ),
           ),
           _GetCardsContent(
             image: 'assets/image/ad_mockup.png',
             title: 'get',
             cardContent: '광고 중인 상품이 궁금하다면?',
-            button: TextButton(
-              onPressed: () => context.go('/login'),
-              child: Text('STA:D 입장하기',
-                  style: TextStyle(color: mainNavy, fontFamily: 'LogoFont')),
+            button: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: TextButton(
+                onPressed: () => context.go('/login'),
+                child: Text('STA:D 로그인하기',
+                    style: TextStyle(
+                        color: mainNavy,
+                        fontFamily: 'LogoFont',
+                        fontSize: 18.0)),
+              ),
             ),
           ),
         ],
@@ -88,13 +100,19 @@ class _GetCardsContent extends StatelessWidget {
               borderRadius: const BorderRadius.all(Radius.circular(20.0)),
               child: Image.asset(image, width: 350),
             ),
-            Text(
-              cardContent,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 18, color: mainNavy, fontWeight: FontWeight.w600),
+            Column(
+              children: [
+                Text(
+                  cardContent,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: mainNavy,
+                      fontWeight: FontWeight.w600),
+                ),
+                if (button != null) button!,
+              ],
             ),
-            if (button != null) button!,
           ],
         ),
       ),
