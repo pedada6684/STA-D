@@ -173,4 +173,18 @@ public class ContentDetailController {
         GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/contents-detail/get-conceptId/{detailId}")
+    @Operation(summary = "detailId로 conceptId 조회", description = "detailId로 conceptId 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "detailId로 conceptId 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<Long> getConceptId(@PathVariable Long detailId) {
+        log.info("detailId로 conceptId 조회" + "\n" + "getUpdatedContent : " + detailId);
+
+        Long response = detailService.getConceptId(detailId);
+        return ResponseEntity.ok(response);
+    }
 }
