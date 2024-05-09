@@ -27,6 +27,15 @@ services:
       - ubuntu_my-network
     restart: unless-stopped 
 
+  stad-stream:
+    image: stad-stream-image
+    container_name: stad-stream
+    ports:
+      - "18083:8080"
+    networks:
+      - ubuntu_my-network
+    restart: unless-stopped 
+
   stad-react:
     image: stad-react-image
     container_name: stad-react

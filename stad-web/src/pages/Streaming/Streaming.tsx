@@ -23,7 +23,10 @@ export default function Streaming() {
   const userId = 1;
   const detailId = Number(videoId);
 
-  const videoUrl = `https://mystad.com/api/contents-detail/streaming/${detailId}`;
+  // const videoUrl = `http://localhost:8080/api/contents-detail/streaming/1/${detailId}`;
+  // const videoUrl = `http://localhost:8083/stream/contents/1/${detailId}`;
+  const videoUrl = `https://mystad.com/stream/contents/1/${detailId}`;
+  // const videoUrl = `https://mystad.com/api/contents-detail/streaming/${detailId}`;
 
   // 광고 URL 리스트를 가져와 상태에 저장
   const fetchAdvertList = async () => {
