@@ -341,4 +341,14 @@ public class AdvertService {
         return GetAdvertListByContentResponse.builder().data(list).build();
     }
 
+    public GetAdvertIdListResponse GetAdvertIdList() {
+        List<Long> advertIdList = advertRepository.findAllAdvertIds();
+
+        GetAdvertIdListResponse response = GetAdvertIdListResponse.builder()
+                .advertIdList(advertIdList)
+                .build();
+
+        return response;
+    }
+
 }
