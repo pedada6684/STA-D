@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface AdvertVideoRepository extends JpaRepository<AdvertVideo, Long> {
 
+    public List<AdvertVideo> findByVideoUrl(String videoUrl);
+
     @Query("""
            select adv.advert from AdvertVideo adv
            where adv.advert.status = true
