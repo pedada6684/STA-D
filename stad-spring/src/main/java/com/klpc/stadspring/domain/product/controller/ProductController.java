@@ -2,6 +2,7 @@ package com.klpc.stadspring.domain.product.controller;
 
 import com.klpc.stadspring.domain.image.product_image.service.ProductImageService;
 import com.klpc.stadspring.domain.product.controller.request.AddProductRequest;
+import com.klpc.stadspring.domain.product.controller.request.ModifyProductRequest;
 import com.klpc.stadspring.domain.product.controller.response.GetProductInfoResponse;
 import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdvertResponse;
 import com.klpc.stadspring.domain.product.entity.Product;
@@ -103,11 +104,9 @@ public class ProductController {
     @PutMapping("/update")
     @Operation(summary = "상품 정보 변경", description = "상품 정보 변경")
     @ApiResponse(responseCode = "200", description = "상품 정보 수정 성공")
-    public ResponseEntity<?> updateProductInfo(@RequestBody UpdateProductInfoRequest request) {
-        log.info("UpdateProductInfoRequest: " + request);
-        Product product = productService.updateProductInfo(request.toCommand());
-        log.info("Post: "+ product);
-        GetProductInfoResponse response = GetProductInfoResponse.from(product);
+    public ResponseEntity<?> modifyProductInfo(@RequestBody ModifyProductRequest request) {
+        log.info("상품 정보 변경"+"\n"+"productId : "+request.getProductId());
+        String response = productService.modifyProduct(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -115,8 +114,6 @@ public class ProductController {
      *
      * @param advertId
      * @return
-     *
-     *
      */
     @GetMapping("/list")
     @Operation(summary = "특정 광고에 속한 상품 리스트 조회", description = "특정 광고에 속한 상품들의 리스트를 조회합니다.")
