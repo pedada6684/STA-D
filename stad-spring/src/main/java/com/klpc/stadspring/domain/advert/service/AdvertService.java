@@ -341,6 +341,7 @@ public class AdvertService {
         return GetAdvertListByContentResponse.builder().data(list).build();
     }
 
+
     public GetAdvertIdListResponse GetAdvertIdList() {
         List<Long> advertIdList = advertRepository.findAllAdvertIds();
 
