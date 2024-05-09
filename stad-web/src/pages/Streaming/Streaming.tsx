@@ -23,8 +23,7 @@ export default function Streaming() {
   const userId = 1;
   const detailId = Number(videoId);
 
-  // const videoUrl = `https://mystad.com/api/contents-detail/streaming/${detailId}`;
-  const videoUrl = `http://localhost:8080/api/contents-detail/streaming/${detailId}`;
+  const videoUrl = `https://mystad.com/api/contents-detail/streaming/${detailId}`;
 
   // 광고 URL 리스트를 가져와 상태에 저장
   const fetchAdvertList = async () => {
@@ -40,10 +39,6 @@ export default function Streaming() {
       console.log(typeof Object.values(advertUrlsArray));
 
       setAdvertUrls(Object.values(advertUrlsArray));
-      // setAdvertUrls([
-      //   "https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/71cc0506891f4de4aa5bc28389e971c9videoList",
-      //   "https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/%EC%9A%A9%EA%B0%80%EB%A6%AC.mp4",
-      // ]);
       console.log("광고 URL 리스트 조회 완료");
     } catch (error) {
       console.error("광고 URL 리스트 조회 실패");
