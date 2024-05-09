@@ -37,14 +37,16 @@ class _CartScreenState extends State<CartScreen> {
     final userId = Provider.of<UserProvider>(context, listen: false).userId;
     List<CartItem> items = await cartService.fetchCartProducts(userId!);
     Provider.of<CartProvider>(context, listen: false).setCartItems(items);
+    setState(() {});
   }
 
-  void navigateToOrderScreen() async{
+  void navigateToOrderScreen() async {
     // 선택된 항목들만 필터링
-    List<CartItem> selectedItems = Provider.of<CartProvider>(context, listen: false)
-        .cartItems
-        .where((item) => item.isSelected)
-        .toList();
+    List<CartItem> selectedItems =
+        Provider.of<CartProvider>(context, listen: false)
+            .cartItems
+            .where((item) => item.isSelected)
+            .toList();
 
     if (selectedItems.isNotEmpty) {
       List<ProductType> productTypes = selectedItems.map((item) {
@@ -59,27 +61,30 @@ class _CartScreenState extends State<CartScreen> {
 
       ProductInfo? productInfo = await productService.getProductInfo(1);
 
-
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => OrderScreen(
-            productInfo: productInfo, // 필요하다면 적절히 설정
+            productInfo: productInfo,
+            // 필요하다면 적절히 설정
             productTypes: productTypes,
-            title: productInfo?.name ?? "Order Details", // 혹은 다른 제목
+            title: productInfo?.name ?? "Order Details",
+            // 혹은 다른 제목
             quantities: {for (var item in productTypes) item.id: item.quantity},
-            advertId: 1, // 예시 ID, 적절한 값으로 변경 필요
-            contentId: 1, // 예시 ID, 적절한 값으로 변경 필요
+            advertId: 1,
+            // 예시 ID, 적절한 값으로 변경 필요
+            contentId: 1,
+            // 예시 ID, 적절한 값으로 변경 필요
             //TODO: optionIds 수정하기
-            optionIds: [], // 옵션 ID 처리 필요
+            optionIds: [],
+            // 옵션 ID 처리 필요
             deliveryFee: 2500, // 배송료 처리
           ),
         ),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("선택된 상품이 없습니다."))
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("선택된 상품이 없습니다.")));
     }
   }
 
