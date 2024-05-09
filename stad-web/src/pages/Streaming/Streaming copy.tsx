@@ -1,20 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { useNavigate, useParams } from "react-router-dom";
+import { useMutation } from "react-query";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import styles from "./Streaming.module.css";
 import backIcon from "../../assets/material-symbols_arrow-back.png";
+import pauseIcon from "../../assets/material-symbols_pause.png";
+import playIcon from "../../assets/mdi_play.png";
 import { getStreaming, postWatchAdd, getAdvertUrlList } from "./StreamingAPI";
 
 export default function Streaming() {
   const [isHovered, setIsHovered] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [advertUrls, setAdvertUrls] = useState<string[]>([]);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [conceptId, setConceptId] = useState(0);
 
   const videoRef = useRef<ReactPlayer | null>(null);
   const { videoId } = useParams<{ videoId: string }>();
@@ -23,28 +24,12 @@ export default function Streaming() {
   const userId = 1;
   const detailId = Number(videoId);
 
-  // const videoUrl = `https://mystad.com/api/contents-detail/streaming/${detailId}`;
-  const videoUrl = `http://localhost:8080/api/contents-detail/streaming/${detailId}`;
-
   // 광고 URL 리스트를 가져와 상태에 저장
   const fetchAdvertList = async () => {
     try {
       const response = await getAdvertUrlList(token, userId, detailId);
-      console.log("response : " + typeof response.data);
-      const a = response.data;
-      const result = JSON.stringify(a);
-      console.log("result: " + result);
-      const advertUrlsArray = JSON.parse(result);
-      console.log(advertUrlsArray);
-      console.log(Object.values(advertUrlsArray));
-      console.log(typeof Object.values(advertUrlsArray));
-
-      setAdvertUrls(Object.values(advertUrlsArray));
-      // setAdvertUrls([
-      //   "https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/71cc0506891f4de4aa5bc28389e971c9videoList",
-      //   "https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/%EC%9A%A9%EA%B0%80%EB%A6%AC.mp4",
-      // ]);
       console.log("광고 URL 리스트 조회 완료");
+      setAdvertUrls(Object.values(response.data));
     } catch (error) {
       console.error("광고 URL 리스트 조회 실패");
     }
@@ -56,18 +41,16 @@ export default function Streaming() {
       await postWatchAdd(token, userId, detailId);
       console.log("시청 영상 생성 완료");
     } catch (error) {
-      console.error("시청 영상 생성 실패");
+      console.error("시청 영상 생성 실패", error);
     }
   };
 
-  // 동영상이 끝났을 때 모달 닫기
+  // 동영상이 끝났을 때 다음 동영상으로 이동
   const handleEnded = () => {
     if (currentVideoIndex < advertUrls.length - 1) {
-      // 다음 동영상 인덱스 증가
       setCurrentVideoIndex(currentVideoIndex + 1);
     } else {
-      // 모든 동영상이 끝났을 때 모달을 닫습니다.
-      setIsModalOpen(false);
+      setIsModalOpen(false); // 모든 동영상이 끝난 후 모달 닫기
     }
   };
 
@@ -78,7 +61,8 @@ export default function Streaming() {
 
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
-  const handleClick = () => setIsPlaying(true);
+
+  const handleCloseModal = () => setIsModalOpen(false);
 
   // 컴포넌트 마운트 시 실행
   useEffect(() => {
@@ -90,49 +74,33 @@ export default function Streaming() {
   const currentVideoUrl = advertUrls[currentVideoIndex];
 
   return (
-    <div
-      className={styles.videoContainer}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
-    >
-      {!isModalOpen && (
+    <div className={styles.videoContainer} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      {isHovered && (
         <>
-          <ReactPlayer
-            className="player"
-            url={videoUrl}
-            controls={true}
-            playing={!isModalOpen}
-            width="100%"
-            height="100%"
-            onProgress={handleProgress}
-            onEnded={() => navigate(-1)} // 컨텐츠 종료되면 이전으로
-            ref={videoRef}
-          />
-          {isHovered && (
-            <>
-              <div className={styles.videoControls}>
-                <button onClick={() => navigate(-1)} className={styles.back}>
-                  <img src={backIcon} alt="뒤로가기" />
-                </button>
-              </div>
-            </>
-          )}
+          <div className={styles.videoControls}>
+            <button onClick={() => navigate(-1)} className={styles.back}>
+              <img src={backIcon} alt="뒤로가기" />
+            </button>
+          </div>
+          <div className={styles.centerControls}>
+            <button onClick={() => setIsModalOpen(false)}>
+              <img src={playIcon} alt="닫기" />
+            </button>
+          </div>
         </>
       )}
-
       {/* ReactPlayer에서 현재 동영상 URL로 재생 */}
-      {isModalOpen && (
+      {isModalOpen && currentVideoUrl && (
         <ReactPlayer
-          className="modalContent"
+          className="player"
           url={currentVideoUrl}
-          playing={isPlaying} // 클릭시 재생 설정
-          width="100vw"
-          height="100vh"
+          controls={true}
+          playing={true} // 자동 재생 설정
+          width="100%"
+          height="100%"
           onProgress={handleProgress}
-          onEnded={handleEnded} // 동영상이 끝났을 때 handleEnded 함수 호출
+          onEnded={handleEnded} // 동영상이 끝났을 때 다음 동영상으로 이동
           ref={videoRef}
-          style={{ objectFit: "contain" }} // 동영상이 비율에 따라 전체 화면에 맞추도록 설정
         />
       )}
     </div>
