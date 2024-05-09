@@ -1,5 +1,5 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import styles from "./Advertisement.module.css";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import styles from "./Merchandise.module.css";
 import ToggleButton from "../Button/ToggleButton";
 import InputContainer from "../Container/InputContainer";
 import plus from "../../assets/plus.png";
@@ -15,9 +15,13 @@ import {
   NameContainer,
   TitleContainer,
 } from "../Container/EnrollContainer";
-import {bannerImgUpload, productDetailImgUpload, productThumbnailUpload} from "../../pages/AdEnroll/AdEnrollApi";
-import {useLocation} from "react-router-dom";
-
+import {
+  bannerImgUpload,
+  productDetailImgUpload,
+  productThumbnailUpload,
+} from "../../pages/AdEnroll/AdEnrollApi";
+import { useLocation } from "react-router-dom";
+import edit from "../../assets/lucide_edit.png";
 interface formData {
   userId?: number;
   title?: string;
@@ -37,7 +41,7 @@ interface goodsForm {
   thumbnail?: String;
   cityDeliveryFee?: number;
   mtDeliveryFee?: number;
-  expStart?: string
+  expStart?: string;
   expEnd?: string;
   productTypeList?: ProductType[];
 }
@@ -60,10 +64,10 @@ interface ProductOption {
 
 export default function Merchandise() {
   const location = useLocation();
-  const advertId : number = location.state;
+  const advertId: number = location.state;
   const [formData, setFormData] = useState<formData>();
   const [goodsFormData, setGoodsFormData] = useState<goodsForm>();
-
+  const fileInputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     console.log(advertId);
     setGoodsFormData((prevState) => ({
@@ -140,6 +144,7 @@ export default function Merchandise() {
       ...prevState,
       thumbnail: data.data,
     }));
+    setThumbnailPreviewUrl(data.data);
   };
 
   // 설명 이미지 추가
@@ -153,28 +158,10 @@ export default function Merchandise() {
       imgs: dataList.data,
     }));
     console.log("이미지 리스트 추가", dataList);
+    setDetailImagePreviews(dataList.data);
+    console.log(detailImagePreviews);
   };
 
-  const handleDetailImagesChange = (
-    e: ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    if (e.target.files && e.target.files[0]) {
-      const newFile = e.target.files[0];
-      const updatedFiles = [...detailImages];
-      updatedFiles[index] = newFile;
-      setDetailImages(updatedFiles);
-
-      // 미리보기 생성
-      const reader = new FileReader();
-      reader.onload = () => {
-        const updatedPreviews = [...detailImagePreviews];
-        updatedPreviews[index] = reader.result as string;
-        setDetailImagePreviews(updatedPreviews);
-      };
-      reader.readAsDataURL(newFile);
-    }
-  };
   // 상품 상태관리
   const [products, setProducts] = useState<ProductType[]>([]);
   useEffect(() => {
@@ -203,7 +190,11 @@ export default function Merchandise() {
   // 옵션 추가
   const addOption = (productId: number) => {
     // 초기값 설정
-    const newOption: ProductOption = { id: Date.now(), optionName: "", optionValue: 0 };
+    const newOption: ProductOption = {
+      id: Date.now(),
+      optionName: "",
+      optionValue: 0,
+    };
     setProducts(
       // 각 상품 확인해서 옵션 추가할 상품 Id랑 일치하는 경우 옵션 배열 추가
       products.map((product) =>
@@ -264,6 +255,29 @@ export default function Merchandise() {
       )
     );
   };
+  const handleBannerImgDelete = () => {
+    setThumbnailImgUrl(""); // 이미지 URL 상태 초기화
+    setThumbnailPreviewUrl(""); // 미리보기 상태 초기화
+    setGoodsFormData((prevState) => ({
+      ...prevState,
+      bannerImgUrl: undefined,
+    }));
+  };
+
+  // const handleGoodsImagesDelete = (index: number) => {
+  //   // 상세 이미지 파일 배열에서 삭제
+  //   const newDetailImages = detailImagePreviews.filter((_, i: number) => i !== index);
+  //   setDetailImages(newDetailImages);
+
+  //   // URL 배열에서 삭제
+  //   if (goodsFormData && goodsFormData.imgs) {
+  //     const newImgs = goodsFormData.imgs.filter((_, i) => i !== index);
+  //     setGoodsFormData((prevState) => ({
+  //       ...prevState,
+  //       imgs: newImgs,
+  //     }));
+  //   }
+  // };
   return (
     <div className={`${styles.container}`}>
       <ItemContainer>
@@ -308,17 +322,21 @@ export default function Merchandise() {
           <InputContainer>
             <div className={`${styles.merImage}`}>
               <div className={`${styles.subTitle}`}>상품 대표 이미지</div>
-              <div className={`${styles.imageContainer}`}>
-                <div className={`${styles.image}`}>
+              <div
+                className={`${styles.imageContainer} ${styles.inputContainer}`}
+              >
+                <div className={`${styles.image} ${styles.prev}`}>
                   {!thumbnailPreviewUrl ? (
                     <>
                       <input
                         type="file"
+                        ref={fileInputRef}
                         name="thumbnail"
                         id="thumbnail"
                         accept="image/gif, image/jpeg, image/jpg, image/png"
                         onChange={handleThumbnailImg}
                         className={`${styles.imageInput}`}
+                        required
                       />
                       <label
                         htmlFor="thumbnail"
@@ -328,13 +346,35 @@ export default function Merchandise() {
                       </label>
                     </>
                   ) : (
-                    <div className={`${styles.image}`}>
+                    <>
                       <img
                         className={`${styles.preview}`}
                         src={thumbnailPreviewUrl}
                         alt="Thumbnail Preview"
                       />
-                    </div>
+                      <button
+                        onClick={() => fileInputRef.current?.click()} // 버튼 클릭시 input 트리거
+                        className={styles.overlayButton}
+                      >
+                        <img src={edit} alt="편집 버튼" />
+                      </button>
+                      <button
+                        onClick={handleBannerImgDelete}
+                        className={styles.deleteButton}
+                      >
+                        <img src={close} alt="Delete" />
+                      </button>
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        name="thumbnail"
+                        id="thumbnail"
+                        accept="image/gif, image/jpeg, image/jpg, image/png"
+                        onChange={handleThumbnailImg}
+                        className={`${styles.imageInput}`}
+                        required
+                      />
+                    </>
                   )}
                 </div>
                 <div className={`${styles.caution}`}>
@@ -346,7 +386,7 @@ export default function Merchandise() {
             <div className={`${styles.merDesImages}`}>
               <div className={`${styles.subTitle}`}>상품 설명 내용 이미지</div>
               <div className={`${styles.imageContainer}`}>
-                {Array.from({ length: 1 }).map((_, index) => (
+                {/* {Array.from({ length: 1 }).map((_, index) => (
                   <div key={index} className={`${styles.imageUploadContainer}`}>
                     {detailImagePreviews[index] ? (
                       <div className={`${styles.imagePreviewContainer}`}>
@@ -377,7 +417,75 @@ export default function Merchandise() {
                       </div>
                     )}
                   </div>
-                ))}
+                ))} */}
+                <div
+                  className={
+                    detailImagePreviews.length > 0
+                      ? `${styles.afterUpload}`
+                      : `${styles.image}`
+                  }
+                >
+                  {detailImagePreviews.length > 0 ? (
+                    <>
+                      {detailImagePreviews.map((url, index) => (
+                        <div key={index}>
+                          <div className={styles.imagePreviewContainer}>
+                            <img
+                              src={url}
+                              alt={`Detail ${index + 1}`}
+                              className={styles.preview}
+                            />
+                            {/* <button
+                              onClick={() => handleGoodsImagesDelete(index)}
+                              className={`${styles.deleteImgButton}`}
+                            >
+                              <img src={close} alt="Delete" />
+                            </button> */}
+                          </div>
+                        </div>
+                      ))}
+
+                      <button
+                        className={styles.videoOverlay}
+                        onClick={() =>
+                          fileInputRef.current && fileInputRef.current.click()
+                        }
+                      >
+                        <img src={edit} alt="Edit image" />
+                      </button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        name={`detailImage`}
+                        id={`detailImage`}
+                        multiple
+                        required
+                        accept="image/gif, image/jpeg, image/jpg, image/png"
+                        onChange={(e) => handleDetailImg(e)}
+                        className={styles.imageInput}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <input
+                        type="file"
+                        name="detailImage-0"
+                        id="detailImage-0"
+                        multiple
+                        required
+                        accept="image/gif, image/jpeg, image/jpg, image/png"
+                        onChange={(e) => handleDetailImg(e)}
+                        className={styles.imageInput}
+                      />
+                      <label
+                        htmlFor="detailImage-0"
+                        className={styles.btnUpload}
+                      >
+                        <img src={plus} alt="Upload" />
+                      </label>
+                    </>
+                  )}
+                </div>
                 <div className={`${styles.caution}`}>
                   * 가이드에 맞지않은 상품 이미지 등록 시 별도 고지없이 제재 될
                   수 있습니다.
@@ -467,7 +575,7 @@ export default function Merchandise() {
             onToggle={() => handleToggle("isMerAddExpanded")}
           />
         </TitleContainer>
-        {!isMerAddExpanded && (
+        {isMerAddExpanded && (
           <InputContainer>
             {products.map((product, index) => (
               <div key={product.id} className={`${styles.productContainer}`}>
@@ -590,7 +698,11 @@ export default function Merchandise() {
         )}
       </ItemContainer>
 
-      <EnrollButton goodsFormData={goodsFormData} formData={formData} from="merchandise" />
+      <EnrollButton
+        goodsFormData={goodsFormData}
+        formData={formData}
+        from="merchandise"
+      />
     </div>
   );
 }

@@ -1,0 +1,300 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+
+.input {
+  width: 95%;
+  border: 1px solid #d9d9d9;
+  background-color: #f4f4f4;
+  padding: 1rem 0 1rem 1rem;
+  border-radius: 5px;
+}
+
+.caution {
+  font-size: 0.8rem;
+  color: #00127a;
+  margin-top: 1rem;
+}
+
+.advideoList,
+.adBanner,
+.merImage,
+.merDesImages,
+.sell,
+.sellPeriod,
+.priceContainer,
+.sellContainer,
+.optionInput,
+.city,
+.jejuMountain {
+  display: flex;
+}
+.adBanner,
+.merDesImages,
+.sellPeriod,
+.jejuMountain {
+  padding-top: 2rem;
+}
+
+.subTitle {
+  width: 10%;
+}
+
+.subTitle span {
+  color: #ff1a1a;
+}
+
+.videoContainer,
+.imageContainer,
+.priceContainer,
+.sellContainer,
+.imageListContainer {
+  margin-left: 3rem;
+  width: 80%;
+}
+.image {
+  width: 10rem;
+  height: 10rem;
+}
+.video,
+.image,
+.bImage {
+  border: 1px dashed #afb0b4;
+}
+
+.imagePreviewContainer {
+  margin: 0 1rem;
+}
+
+.prev {
+  display: flex;
+  position: relative;
+}
+
+.preview {
+  width: 10rem;
+  display: flex;
+  margin-right: 2rem;
+  height: 10rem;
+}
+.imageInput {
+  display: none;
+}
+
+.btnUpload {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+.btnUpload img {
+  cursor: pointer;
+  width: 3rem;
+}
+.overlayButton img,
+.deleteButton img,
+.videoOverlay img,
+.deleteImgButton img {
+  width: 2rem;
+}
+
+.overlayButton,
+.videoOverlay,
+.deleteButton,
+.deleteImgButton {
+  border: 0;
+  background-color: transparent;
+}
+
+.deleteImgButton {
+  display: flex;
+  padding-top: 1.3rem;
+  padding-right: 1rem;
+}
+.deleteButton {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.overlayButton {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.videoOverlay {
+  display: flex;
+  padding-top: 2rem;
+}
+
+.afterUpload {
+  display: flex;
+}
+
+.letter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  margin-left: 1rem;
+}
+
+.calendar {
+  display: flex;
+}
+
+.productContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem;
+}
+
+.productContainer > div {
+  flex: 1;
+}
+
+.productWrapper {
+  display: flex;
+}
+
+.productInput {
+  position: relative;
+  width: 100%;
+  margin: 0.5rem 1rem;
+}
+
+.productInput span {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0%;
+  background-color: #666;
+  width: 0;
+  height: 0.125rem;
+  border-radius: 0.125rem;
+  transition: 0.5s;
+}
+.productInput label {
+  position: absolute;
+  color: #aaa;
+  left: 0.8rem;
+  font-size: 1.25rem;
+  bottom: 0.5rem;
+  transition: all 0.2s;
+}
+.input2 {
+  font-size: 1rem;
+  color: #565656;
+  width: 100%;
+  border: none;
+  /* border-bottom: solid #aaaaaa 1px; */
+  padding-bottom: 0.8rem;
+  padding-left: 0.8rem;
+  position: relative;
+  background: none;
+  z-index: 5;
+}
+
+.input2::placeholder {
+  color: #aaaaaa;
+}
+
+.input2:focus {
+  outline: none;
+}
+
+.input2:focus ~ span,
+.input2:valid ~ span {
+  width: 100%;
+}
+.input2:focus ~ label,
+.input2:valid ~ label {
+  font-size: 1rem;
+  bottom: 2.5rem;
+  color: #666;
+  font-weight: bold;
+}
+
+.closeBtn,
+.removeOptionBtn {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+.removeOptionBtn img {
+  width: 2rem;
+}
+.icon {
+  width: 3rem;
+}
+
+.option {
+  display: flex;
+  /* justify-content: center */
+  align-items: center;
+}
+.optionAdd {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  width: 8rem;
+  border: 0;
+  background-color: #00127a;
+  border-radius: 1rem;
+  color: #fff;
+  cursor: pointer;
+}
+.optionAdd img {
+  width: 1rem;
+}
+.optionContainer {
+  display: flex;
+}
+.optionWrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.optionContainer > div {
+  flex: 1;
+}
+.optionContainer {
+  margin-left: 1rem;
+}
+.detailO {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.borderR {
+  border-right: 1px solid #aaa;
+}
+.tt {
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+  padding-bottom: 1rem;
+}
+.input3 {
+  width: 100%;
+  border: 0;
+  background-color: transparent;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.addProductBtn {
+  margin-top: 2rem;
+  padding: 1rem;
+  color: #00127a;
+  font-size: 1.1rem;
+  border-radius: 1rem;
+  background-color: transparent;
+  cursor: pointer;
+  border: 2px solid #00127a;
+}
