@@ -37,7 +37,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           _GetCardsContent(
             image: 'assets/image/ad_mockup.png',
             title: 'get',
-            cardContent: '광고 중인 상품이 궁금하다면?',
+            cardContent: '시청과 쇼핑을 하나로!',
             button: Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: TextButton(
