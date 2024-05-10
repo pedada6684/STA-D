@@ -215,6 +215,7 @@ public class AdvertService {
                 .bannerImgUrl(advert.getBannerImgUrl())
                 .selectedContentList(selectedContentList)
                 .advertVideoUrlList(advertVideoUrlList)
+                .category(advert.getAdvertCategory())
                 .build();
 
         return response;
