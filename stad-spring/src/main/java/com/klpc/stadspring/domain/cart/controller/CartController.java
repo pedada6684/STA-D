@@ -80,10 +80,9 @@ public class CartController {
     public ResponseEntity<?> updateCartProductCount(@RequestBody UpdateCartProductCountRequest request) {
         log.info("UpdateCartProductCountRequest: "  + request);
 
-        CartProduct cartProduct = cartService.updateCartProductCount(request.toCommand());
+        GetCartProductInfoResponse response = cartService.updateCartProductCount(request.toCommand());
 
-        GetCartProductInfoResponse response = GetCartProductInfoResponse.from(cartProduct);
         // 변환된 응답을 ResponseEntity에 담아 반환
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok().build();
     }
 }

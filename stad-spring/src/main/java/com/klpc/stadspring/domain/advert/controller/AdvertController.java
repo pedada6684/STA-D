@@ -134,4 +134,14 @@ public class AdvertController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("get-user-advert")
+    @Operation(summary = "유저가 본 광고 조회", description = "유저가 본 광고 조회")
+    @ApiResponse(responseCode = "200", description = "유저가 본 광고가 조회 되었습니다.")
+    public ResponseEntity<GetAdvertListResponse> getAdvertListByUser(Long userId){
+
+        GetAdvertListResponse response = advertService.GetAdvertById(userId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

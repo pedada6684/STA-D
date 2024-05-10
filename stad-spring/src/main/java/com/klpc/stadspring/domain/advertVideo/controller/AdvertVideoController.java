@@ -126,10 +126,4 @@ public class AdvertVideoController {
         }
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping("/kafka/test")
-    ResponseEntity<?> testkafka(@RequestBody GetTotalLogResponse response) {
-        advertVideoService.listenTotalLogData(response);
-        return ResponseEntity.ok().build();
-    }
 }
