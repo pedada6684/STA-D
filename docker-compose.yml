@@ -43,6 +43,15 @@ services:
       - "3000:3000"
     restart: unless-stopped 
 
+  stad-python:
+    image: stad-python-image
+    container_name: stad-python
+    ports:
+      - "18000:8000"
+    networks:
+      - ubuntu_my-network
+    restart: unless-stopped 
+
 networks:
   ubuntu_my-network:
     external: true
