@@ -13,6 +13,7 @@ import com.klpc.stadspring.domain.advert.service.command.response.GetAdvertRespo
 import com.klpc.stadspring.domain.advertVideo.entity.AdvertVideo;
 import com.klpc.stadspring.domain.advertVideo.repository.AdvertVideoRepository;
 import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
+import com.klpc.stadspring.domain.advertVideo.service.command.response.GetTotalLogResponse;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
 import com.klpc.stadspring.domain.contents.concept.repository.impl.ContentConceptRepositoryImpl;
@@ -30,6 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +50,7 @@ public class AdvertService {
     private final ProductRepository productRepository;
     private final SelectedContentRepository selectedContentRepository;
     private final ContentConceptRepository contentConceptRepository;
+    private final RestTemplate restTemplate;
 
     /**
      * 광고 추가
@@ -348,6 +352,56 @@ public class AdvertService {
         GetAdvertIdListResponse response = GetAdvertIdListResponse.builder()
                 .advertIdList(advertIdList)
                 .build();
+
+        return response;
+    }
+
+    public GetAdvertListResponse GetAdvertById(Long userId) {
+        List<Long> advertIdList = GetAdvertIdByUser(userId).getAdvertIdList();
+
+        List<GetAdvertResponseCommand> list = new ArrayList<>();
+
+        for(Long advertId : advertIdList) {
+            Advert advert = advertRepository.findById(advertId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+            List<Long> selectedContentList = new ArrayList<>();
+            for(SelectedContent i : advert.getSelectedContents())
+                selectedContentList.add(i.getId());
+
+            List<GetAdvertAdvertVideo> advertVideoUrlList = new ArrayList<>();
+            for(AdvertVideo i : advert.getAdvertVideos()) {
+                GetAdvertAdvertVideo getAdvertAdvertVideo = GetAdvertAdvertVideo.builder().advertVideoId(i.getId()).advertVideoUrl(i.getVideoUrl()).build();
+                advertVideoUrlList.add(getAdvertAdvertVideo);
+            }
+
+            GetAdvertResponseCommand response = GetAdvertResponseCommand.builder()
+                    .advertId(advert.getId())
+                    .title(advert.getTitle())
+                    .description(advert.getDescription())
+                    .startDate(advert.getStartDate().toLocalDate().toString())
+                    .endDate(advert.getEndDate().toLocalDate().toString())
+                    .advertType(advert.getAdvertType().toString())
+                    .advertCategory(advert.getAdvertCategory())
+                    .directVideoUrl(advert.getDirectVideoUrl())
+                    .bannerImgUrl(advert.getBannerImgUrl())
+                    .selectedContentList(selectedContentList)
+                    .advertVideoUrlList(advertVideoUrlList)
+                    .build();
+
+            list.add(response);
+        }
+        return GetAdvertListResponse.builder().data(list).build();
+    }
+
+    public GetAdvertIdListResponse GetAdvertIdByUser(Long userId) {
+        String url = "http://localhost:8082/stats/log/advert-id/list";
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+                .queryParam("userId", userId);
+
+        GetAdvertIdListResponse response = restTemplate.getForObject(builder.toUriString(), GetAdvertIdListResponse.class);
+
+        log.info("GetAdvertIdListResponse: " + response);
 
         return response;
     }
