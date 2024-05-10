@@ -2,6 +2,7 @@ package com.klpc.stadspring.domain.orders.service;
 
 import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
+import com.klpc.stadspring.domain.advertVideo.service.command.response.GetTotalLogResponse;
 import com.klpc.stadspring.domain.cart.controller.response.GetCartProductInfoResponse;
 import com.klpc.stadspring.domain.option.entity.ProductOption;
 import com.klpc.stadspring.domain.option.repository.OptionRepository;
@@ -14,6 +15,7 @@ import com.klpc.stadspring.domain.orders.controller.response.GetOrdersListRespon
 import com.klpc.stadspring.domain.orders.controller.response.GetOrdersResponse;
 import com.klpc.stadspring.domain.orders.entity.Orders;
 import com.klpc.stadspring.domain.orders.repository.OrdersRepository;
+import com.klpc.stadspring.domain.orders.service.command.request.AddOrderLogCommand;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequestCommand;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrdersProductTypeRequestCommand;
 import com.klpc.stadspring.domain.orders.service.command.response.GetOrderListProductTypeResponseCommand;
@@ -28,8 +30,14 @@ import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -72,19 +80,18 @@ public class OrdersService {
                 orderProductRepository.save(orderProduct);
             }
 // TODO : 이 부분 카프카로 바꿀 것
-//            AddOrderLogCommand addOrderLogCommand = AddOrderLogCommand.builder()
-//                    .advertId(ptCommand.getAdvertId())
-//                    .userId(command.getUserId())
-//                    .orderId(orders.getId())
-//                    .contentId(ptCommand.getContentId())
-//                    .productId(ptCommand.getProductTypeId())
-//                    .price(productType.getPrice())
-//                    .status(true)
-//                    .regDate(LocalDateTime.now())
-//                    .updateDate(LocalDateTime.now())
-//                    .build();
-//            logService.addOrderLog(addOrderLogCommand);
+            AddOrderLogCommand addOrderLogCommand = AddOrderLogCommand.builder()
+                    .advertId(ptCommand.getAdvertId())
+                    .userId(command.getUserId())
+                    .orderId(orders.getId())
+                    .contentId(ptCommand.getContentId())
+                    .productId(ptCommand.getProductTypeId())
+                    .price(productType.getPrice())
+                    .build();
+
             productType.modifyQuantity(-1* ptCommand.getProductCnt());
+
+            sendOrderLogRequest(addOrderLogCommand);
         }
 
         return AddOrdersResponse.builder().result("success").build();
@@ -178,6 +185,24 @@ public class OrdersService {
     public Long cntOrdersByproductTypeId(Long productTypeId){
         Long cnt = ordersRepository.findCntOrdersByProductType(productTypeId).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         return cnt;
+    }
+
+    public void sendOrderLogRequest(AddOrderLogCommand requestData) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        // HttpHeaders 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // HttpEntity에 요청 데이터와 헤더 포함
+        HttpEntity<AddOrderLogCommand> entity = new HttpEntity<>(requestData, headers);
+
+        // POST 요청 보내기
+        String url = "http://localhost:8082/stats/log/order-log";
+        String response = restTemplate.postForObject(url, entity, String.class);
+
+        // 응답 출력
+        System.out.println("Response Body: " + response);
     }
 
 }

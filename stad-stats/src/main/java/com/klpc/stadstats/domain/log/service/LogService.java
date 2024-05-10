@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -227,6 +228,19 @@ public class LogService {
 
     public GetAdvertIdListResponse listenAdvertIdList() {
         GetAdvertIdListResponse response = restTemplate.getForObject(stadMainUrl+"/advert/get-advert-id-list", GetAdvertIdListResponse.class);
+        return response;
+    }
+
+    public GetAdvertIdListResponse getAdvertIdListByUser(Long userId) {
+        List<Long> advertIdList = advertVideoLogRepository.getAdvertVideoIdByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        Collections.reverse(advertIdList);
+
+        GetAdvertIdListResponse response = GetAdvertIdListResponse.builder()
+                .advertIdList(advertIdList)
+                .build();
+
         return response;
     }
 }

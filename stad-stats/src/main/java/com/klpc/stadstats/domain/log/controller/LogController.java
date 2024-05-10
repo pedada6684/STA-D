@@ -4,6 +4,7 @@ import com.klpc.stadstats.domain.log.controller.request.AddAdvertClickLogRequest
 import com.klpc.stadstats.domain.log.controller.request.AddAdvertVideoLogRequest;
 import com.klpc.stadstats.domain.log.controller.request.AddCancelOrderLogRequest;
 import com.klpc.stadstats.domain.log.controller.request.AddOrderLogRequest;
+import com.klpc.stadstats.domain.log.controller.response.GetAdvertIdListResponse;
 import com.klpc.stadstats.domain.log.controller.response.GetDailyCountResponse;
 import com.klpc.stadstats.domain.log.controller.response.GetTotalLogResponse;
 import com.klpc.stadstats.domain.log.entity.AdvertClickLog;
@@ -60,7 +61,7 @@ public class LogController {
         log.info("AddOrderLogRequest: " + request);
         try {
             OrderLog orderLog = logService.addOrderLog(request.toCommand());
-            kafkaTemplate.send("log-add-order", orderLog);
+//            kafkaTemplate.send("log-add-order", orderLog);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -142,4 +143,14 @@ public class LogController {
         }
     }
 
+    @GetMapping("/advert-id/list")
+    @Operation(summary = "유저가 본 광고 아이디 조회", description = "유저가 본 광고 아이디 조회")
+    public ResponseEntity<?> getAdvertIdByUserId(@RequestParam("userId") Long userId)  {
+        try {
+            GetAdvertIdListResponse response = logService.getAdvertIdListByUser(userId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

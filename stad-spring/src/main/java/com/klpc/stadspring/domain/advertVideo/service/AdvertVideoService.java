@@ -27,7 +27,9 @@ import org.springframework.http.*;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URL;
@@ -48,6 +50,7 @@ public class AdvertVideoService {
     private final ContentLabelRepository contentLabelRepository;
     private final ContentLabelRelationshipRepository contentLabelRelationshipRepository;
     private final RedisService redisService;
+    private final RestTemplate restTemplate;
     private final S3Util s3Util;
 
     /**
@@ -139,87 +142,85 @@ public class AdvertVideoService {
      * @return
      */
     public List<String> getAdvertVideoByUser(Long userId){
-//        log.info("유저 맞춤 광고 큐 조회 서비스" + "\n" + "userId : " + userId);
-//
-//        List<String> userCategory = new ArrayList<>();
-//
-//        // 최근 시청한 영상 20개
-//        List<Long> watchedContentDetailIdList = watchedContentRepository.findWatchingAndWatchedContentDetailIdByUserId(userId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-//        Long[] totalLabel = new Long[232];
-//        for (int i = 0; i < watchedContentDetailIdList.size(); i++) {
-//            int tmp = contentLabelRelationshipRepository.findContentLabel_IdByContentDetail_Id(watchedContentDetailIdList.get(i)).intValue();
-//            totalLabel[tmp]++;
-//        }
-//        Arrays.sort(totalLabel);
-//
-//        // 많이 시청한 콘텐츠의 라벨 3개
-//        for (int i = 231; i > 228; i++) {
-//            userCategory.add(contentLabelRepository.findNameById(totalLabel[i]));
-//        }
-//
-//        List<Long> advertIdListByUser = new ArrayList<>();
-//
-//        for (int i = 0; i < userCategory.size(); i++) {
-//            // 인기 광고
-//            List<Long> listByCategory = advertRepository.findAdvertIdByCategory(userCategory.get(i));
-//            if (listByCategory == null) {
-//                new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
-//                continue;
-//            }
-//
-//            // 해당 카테고리에 속하는 advert 중 광고 클릭수와 판매량의 합이 높은 순으로 정렬하여 3:2:1 비율로 유저 맞춤 광고에 삽입
-//            LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
-//            Map<Long, Long> logAndAdvertIdMap = new HashMap<>();
-//            for (Long advertId : listByCategory) {
-//                Object[] results = advertStatisticsRepository.getTotalLog(advertId, thirtyDaysAgo)
-//                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-//
-//                Object[] result = (Object[]) results[0];
-//                Long totalAdvertClick = result[0] != null ? (Long) result[0] : 0L;
-//                Long totalOrder = result[2] != null ? (Long) result[2] : 0L;
-//
-//                Long sumAdvertClickAndOrder = totalAdvertClick + totalOrder;
-//                logAndAdvertIdMap.put(sumAdvertClickAndOrder, advertId);
-//            }
-//            List<Long> keySetList = new ArrayList<>(logAndAdvertIdMap.keySet());
-//
-//            // 내림차순 정렬
-//            keySetList.sort(Comparator.reverseOrder());
-//
-//            for (int j = 0; j < 3 - i; j++) {
-//                if (keySetList.size() > j) {
-//                    advertIdListByUser.add(logAndAdvertIdMap.get(keySetList.get(j)));
-//                }
-//            }
-//
-//            // 랜덤 광고
-//            List<Long> randomListByCategory = advertRepository.findRandomAdvertIdByCategory(userCategory.get(i));
-//            if (randomListByCategory == null) {
-//                new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
-//                continue;
-//            }
-//            int cnt = 0;
-//            for (Long videoId : randomListByCategory) {
-//                for (int k = 0; k < advertIdListByUser.size() && cnt < 3 - i; k++) {
-//                    if (Objects.equals(videoId, listByCategory.get(k))) {
-//                        cnt++;
-//                        listByCategory.add(videoId);
-//                    }
-//                }
-//            }
-//        }
-//
+        log.info("유저 맞춤 광고 큐 조회 서비스" + "\n" + "userId : " + userId);
+
+        List<String> userCategory = new ArrayList<>();
+
+        // 최근 시청한 영상 20개
+        List<Long> watchedContentDetailIdList = watchedContentRepository.findWatchingAndWatchedContentDetailIdByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        Long[] totalLabel = new Long[232];
+        for (int i = 0; i < watchedContentDetailIdList.size(); i++) {
+            int tmp = contentLabelRelationshipRepository.findContentLabel_IdByContentDetail_Id(watchedContentDetailIdList.get(i)).intValue();
+            totalLabel[tmp]++;
+        }
+        Arrays.sort(totalLabel);
+
+        // 많이 시청한 콘텐츠의 라벨 3개
+        for (int i = 231; i > 228; i++) {
+            userCategory.add(contentLabelRepository.findNameById(totalLabel[i]));
+        }
+
+        List<Long> advertIdListByUser = new ArrayList<>();
+
+        for (int i = 0; i < userCategory.size(); i++) {
+            // 인기 광고
+            List<Long> listByCategory = advertRepository.findAdvertIdByCategory(userCategory.get(i));
+            if (listByCategory == null) {
+                new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
+                continue;
+            }
+
+            // 해당 카테고리에 속하는 advert 중 광고 클릭수와 판매량의 합이 높은 순으로 정렬하여 3:2:1 비율로 유저 맞춤 광고에 삽입
+            LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
+            Map<Long, Long> logAndAdvertIdMap = new HashMap<>();
+            for (Long advertId : listByCategory) {
+                GetTotalLogResponse response = getTotalLogData(advertId);
+
+                Long totalAdvertClick = response.getTotalAdvertClick();
+                Long totalOrder = response.getTotalOrder();
+
+                Long sumAdvertClickAndOrder = totalAdvertClick + totalOrder;
+                logAndAdvertIdMap.put(sumAdvertClickAndOrder, advertId);
+            }
+            List<Long> keySetList = new ArrayList<>(logAndAdvertIdMap.keySet());
+
+            // 내림차순 정렬
+            keySetList.sort(Comparator.reverseOrder());
+
+            for (int j = 0; j < 3 - i; j++) {
+                if (keySetList.size() > j) {
+                    advertIdListByUser.add(logAndAdvertIdMap.get(keySetList.get(j)));
+                }
+            }
+
+            // 랜덤 광고
+            List<Long> randomListByCategory = advertRepository.findRandomAdvertIdByCategory(userCategory.get(i));
+            if (randomListByCategory == null) {
+                new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
+                continue;
+            }
+            int cnt = 0;
+            for (Long videoId : randomListByCategory) {
+                for (int k = 0; k < advertIdListByUser.size() && cnt < 3 - i; k++) {
+                    if (Objects.equals(videoId, listByCategory.get(k))) {
+                        cnt++;
+                        listByCategory.add(videoId);
+                    }
+                }
+            }
+        }
+
         List<String> videoUrlListByUser = new ArrayList<>();
-//        // 광고 id로 광고 video id 조회
-//        for (Long id: advertIdListByUser) {
-//            AdvertVideo video = advertVideoRepository.findTopByAdvert_Id(id);
-//            if (video != null) {
-//                videoUrlListByUser.add(video.getVideoUrl());
-//            }
-//        }
-//
-//        redisService.createUserAdQueue(userId, videoUrlListByUser);
+        // 광고 id로 광고 video id 조회
+        for (Long id: advertIdListByUser) {
+            AdvertVideo video = advertVideoRepository.findTopByAdvert_Id(id);
+            if (video != null) {
+                videoUrlListByUser.add(video.getVideoUrl());
+            }
+        }
+
+        redisService.createUserAdQueue(userId, videoUrlListByUser);
 
         return videoUrlListByUser;
     }
@@ -318,8 +319,20 @@ public class AdvertVideoService {
         }
     }
 
-    @KafkaListener(topics = "log-total", groupId = "log-group")
-    public void listenTotalLogData(GetTotalLogResponse response) {
-        System.out.println("Received data from Kafka: " + response);
+    /**
+     *
+     * @param advertId
+     * @return
+     */
+    public GetTotalLogResponse getTotalLogData(Long advertId) {
+        String url = "http://localhost:8082/stats/log/total";
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+                .queryParam("advertId", advertId);
+
+        GetTotalLogResponse response = restTemplate.getForObject(builder.toUriString(), GetTotalLogResponse.class);
+
+        log.info("GetTotalLogResponse: " + response);
+
+        return response;
     }
 }
