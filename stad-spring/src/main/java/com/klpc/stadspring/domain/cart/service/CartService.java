@@ -2,6 +2,7 @@ package com.klpc.stadspring.domain.cart.service;
 
 import com.klpc.stadspring.domain.advert.service.command.response.GetAdvertResponseCommand;
 import com.klpc.stadspring.domain.cart.controller.request.CartProductPostRequest;
+import com.klpc.stadspring.domain.cart.controller.response.GetCartProductInfoResponse;
 import com.klpc.stadspring.domain.cart.controller.response.GetCartProductListResponse;
 import com.klpc.stadspring.domain.cart.entity.CartProduct;
 import com.klpc.stadspring.domain.cart.repository.CartProductRepository;
@@ -93,6 +94,7 @@ public class CartService {
 
             GetCartProductCommand response = GetCartProductCommand.builder()
                     .cartProductId(cartProduct.getId())
+                    .productId(cartProduct.getProductType().getProduct().getId())
                     .productType(cartProduct.getProductType())
                     .quantity(cartProduct.getQuantity())
                     .advertId(cartProduct.getAdvertId())
@@ -106,21 +108,53 @@ public class CartService {
         return GetCartProductListResponse.builder().cartProductList(responseList).build();
     }
 
-    public CartProduct getCartProduct(Long cartProductId){
+    public GetCartProductInfoResponse getCartProduct(Long cartProductId) {
+        CartProduct cartProduct = cartProductRepository.findById(cartProductId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        ProductOption productOption = optionRepository.findById(cartProduct.getOptionId())
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        GetCartProductInfoResponse response = GetCartProductInfoResponse.builder()
+                .cartProductId(cartProduct.getId())
+                .productId(cartProduct.getProductType().getProduct().getId())
+                .productType(cartProduct.getProductType())
+                .quantity(cartProduct.getQuantity())
+                .advertId(cartProduct.getAdvertId())
+                .contentId(cartProduct.getContentId())
+                .thumbnail(cartProduct.getProductType().getProduct().getThumbnail())
+                .option(productOption)
+                .build();
+
+        return response;
+    }
+
+    public CartProduct getCartProductOne(Long cartProductId) {
         CartProduct cartProduct = cartProductRepository.findById(cartProductId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         return cartProduct;
     }
 
-    public CartProduct updateCartProductCount(UpdateCartProductCountCommand command) {
+    public GetCartProductInfoResponse updateCartProductCount(UpdateCartProductCountCommand command) {
         log.info("UpdateCartProductCountCommand: " + command);
 
-        CartProduct cartProduct = getCartProduct(command.getCartProductId());
+        CartProduct cartProduct = getCartProductOne(command.getCartProductId());
         cartProduct.setQuantity(command.getQuantity());
 
         cartProductRepository.save(cartProduct);
 
-        return cartProduct;
+        GetCartProductInfoResponse response = GetCartProductInfoResponse.builder()
+                .cartProductId(cartProduct.getId())
+                .productId(cartProduct.getProductType().getProduct().getId())
+                .productType(cartProduct.getProductType())
+                .quantity(cartProduct.getQuantity())
+                .advertId(cartProduct.getAdvertId())
+                .contentId(cartProduct.getContentId())
+                .thumbnail(cartProduct.getProductType().getProduct().getThumbnail())
+                .option(null)
+                .build();
+
+        return response;
     }
 }
