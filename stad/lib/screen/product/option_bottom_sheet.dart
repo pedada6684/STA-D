@@ -52,14 +52,14 @@ class ProductOptionBottomSheet extends StatefulWidget {
   final VoidCallback onClose;
 
   const ProductOptionBottomSheet({
-    Key? key,
+    super.key,
     this.productInfo,
     required this.productTypes,
     required this.title,
     required this.advertId,
     required this.contentId,
     required this.onClose,
-  }) : super(key: key);
+  });
 
   @override
   _ProductOptionBottomSheetState createState() =>
@@ -122,6 +122,10 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   }
 
   void addProduct(ProductType product, int optionId) {
+    if (product.productOptions.isNotEmpty && optionId == -1) {
+      // 옵션이 있지만 선택되지 않은 경우 아무 작업도 수행하지 않음
+      return;
+    }
     for (var i = 0; i < selectedProducts.length; i++) {
       if (selectedProducts[i].id == product.id && optionIds[i] == optionId) {
         setState(() {
@@ -140,17 +144,13 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   void selectProductOption(String? value) {
     if (value != null) {
       int index = widget.productTypes.indexWhere((p) => p.name == value);
-      int optionId = -1;
-      if (!widget.productTypes[index].productOptions.isEmpty) {
-        optionId = widget.productTypes[index].productOptions.first.value;
-      }
       setState(() {
         selectedProductIndex = index;
-        selectedOptionIndex = null;
         isProductExpanded = false;
-        addProduct(widget.productTypes[index], optionId);
         if (widget.productTypes[index].productOptions.isEmpty) {
-          isOptionExpanded = false;
+          addProduct(widget.productTypes[index], -1);
+        } else {
+          isOptionExpanded = true; // 옵션 선택 가능하게 상태 변경
         }
       });
     }
@@ -243,11 +243,11 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   @override
   Widget build(BuildContext context) {
     List<String> productOptions =
-    widget.productTypes.map((p) => p.name).toList();
+        widget.productTypes.map((p) => p.name).toList();
     List<String>? currentOptions = selectedProductIndex != null
         ? widget.productTypes[selectedProductIndex!].productOptions
-        .map((o) => o.name)
-        .toList()
+            .map((o) => o.name)
+            .toList()
         : ["상품을 선택해주세요"];
 
     return Container(
@@ -291,42 +291,40 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
               onSelect: selectProductOption,
             ),
             SizedBox(height: 15),
-            if (selectedProductIndex != null &&
-                !widget.productTypes[selectedProductIndex!]
-                    .productOptions.isEmpty) ...[
-              CustomDropdown(
-                title: '옵션선택',
-                options: currentOptions,
-                isExpanded: isOptionExpanded,
-                selectedOption: selectedOptionIndex != null
-                    ? currentOptions[selectedOptionIndex!]
-                    : null,
-                onToggle: () {
-                  if (isProductExpanded) {
-                    setState(() {
-                      isProductExpanded = false;
-                    });
-                  }
-                  setState(() => isOptionExpanded = !isOptionExpanded);
-                },
-                onSelect: selectOption,
-              ),
-            ],
-            if (selectedProductIndex != null &&
-                (selectedOptionIndex != null ||
-                    widget.productTypes[selectedProductIndex!]
-                        .productOptions.isEmpty)) ...[
-              ...selectedProducts.map((product) {
+            CustomDropdown(
+              title: '옵션선택',
+              options: currentOptions,
+              isExpanded: isOptionExpanded && selectedProductIndex != null,
+              selectedOption: selectedOptionIndex != null
+                  ? currentOptions[selectedOptionIndex!]
+                  : null,
+              onToggle: () {
+                if (isProductExpanded) {
+                  setState(() {
+                    isProductExpanded = false;
+                  });
+                }
+                setState(() => isOptionExpanded = !isOptionExpanded);
+              },
+              onSelect: selectOption,
+            ),
+            if (selectedProductIndex != null) ...[
+              ...selectedProducts.asMap().entries.map((entry) {
+                int productIndex = entry.key;
+                ProductType product = entry.value;
                 return Column(
                   children: [
                     ProductDetails(
                       productType: product,
+                      optionId: optionIds[productIndex], // 옵션 ID를 전달
                       onCancel: () {
                         setState(() {
-                          selectedProducts.remove(product);
+                          selectedProducts.removeAt(productIndex);
                           quantities.remove(product.id);
+                          optionIds.removeAt(productIndex); // 옵션 ID도 삭제
                           if (selectedProducts.isEmpty) {
                             selectedProductIndex = null;
+                            selectedOptionIndex = null;
                           }
                         });
                       },
@@ -358,15 +356,21 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
 class ProductDetails extends StatelessWidget {
   final ProductType productType;
   final VoidCallback onCancel;
+  final int optionId;
 
   const ProductDetails({
     Key? key,
     required this.productType,
     required this.onCancel,
+    required this.optionId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String optionText = productType.productOptions
+        .firstWhere((opt) => opt.value == optionId,
+            orElse: () => ProductOption(name: "", value: -1))
+        .name;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -378,7 +382,9 @@ class ProductDetails extends StatelessWidget {
               children: [
                 Text(productType.name,
                     style:
-                    TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                if (optionText.isNotEmpty)
+                  Text("옵션: $optionText", style: TextStyle(color: midGray)),
                 Text("${productType.price}원", style: TextStyle(color: midGray)),
                 Text("재고: ${productType.quantity}",
                     style: TextStyle(color: midGray)),
