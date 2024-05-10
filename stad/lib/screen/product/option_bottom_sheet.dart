@@ -52,14 +52,14 @@ class ProductOptionBottomSheet extends StatefulWidget {
   final VoidCallback onClose;
 
   const ProductOptionBottomSheet({
-    super.key,
+    Key? key,
     this.productInfo,
     required this.productTypes,
     required this.title,
     required this.advertId,
     required this.contentId,
     required this.onClose,
-  });
+  }) : super(key: key);
 
   @override
   _ProductOptionBottomSheetState createState() =>
@@ -243,11 +243,11 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
   @override
   Widget build(BuildContext context) {
     List<String> productOptions =
-        widget.productTypes.map((p) => p.name).toList();
+    widget.productTypes.map((p) => p.name).toList();
     List<String>? currentOptions = selectedProductIndex != null
         ? widget.productTypes[selectedProductIndex!].productOptions
-            .map((o) => o.name)
-            .toList()
+        .map((o) => o.name)
+        .toList()
         : ["상품을 선택해주세요"];
 
     return Container(
@@ -291,24 +291,31 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
               onSelect: selectProductOption,
             ),
             SizedBox(height: 15),
-            CustomDropdown(
-              title: '옵션선택',
-              options: currentOptions,
-              isExpanded: isOptionExpanded && selectedProductIndex != null,
-              selectedOption: selectedOptionIndex != null
-                  ? currentOptions[selectedOptionIndex!]
-                  : null,
-              onToggle: () {
-                if (isProductExpanded) {
-                  setState(() {
-                    isProductExpanded = false;
-                  });
-                }
-                setState(() => isOptionExpanded = !isOptionExpanded);
-              },
-              onSelect: selectOption,
-            ),
-            if (selectedProductIndex != null) ...[
+            if (selectedProductIndex != null &&
+                !widget.productTypes[selectedProductIndex!]
+                    .productOptions.isEmpty) ...[
+              CustomDropdown(
+                title: '옵션선택',
+                options: currentOptions,
+                isExpanded: isOptionExpanded,
+                selectedOption: selectedOptionIndex != null
+                    ? currentOptions[selectedOptionIndex!]
+                    : null,
+                onToggle: () {
+                  if (isProductExpanded) {
+                    setState(() {
+                      isProductExpanded = false;
+                    });
+                  }
+                  setState(() => isOptionExpanded = !isOptionExpanded);
+                },
+                onSelect: selectOption,
+              ),
+            ],
+            if (selectedProductIndex != null &&
+                (selectedOptionIndex != null ||
+                    widget.productTypes[selectedProductIndex!]
+                        .productOptions.isEmpty)) ...[
               ...selectedProducts.map((product) {
                 return Column(
                   children: [
@@ -371,7 +378,7 @@ class ProductDetails extends StatelessWidget {
               children: [
                 Text(productType.name,
                     style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 Text("${productType.price}원", style: TextStyle(color: midGray)),
                 Text("재고: ${productType.quantity}",
                     style: TextStyle(color: midGray)),
