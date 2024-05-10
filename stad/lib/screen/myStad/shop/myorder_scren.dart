@@ -38,22 +38,6 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
     );
   }
 
-  // Future<void> _initializeUserAndFetchOrders() async {
-  //   final userProvider = Provider.of<UserProvider>(context, listen: false);
-  //
-  //   // fetchUser가 비동기적으로 처리됩니다.
-  //   await userProvider.fetchUser();
-  //
-  //   if (userProvider.userId != null) {
-  //     _fetchOrderData();
-  //   } else {
-  //     setState(() {
-  //       _isLoading = false; // 로딩 상태 업데이트
-  //       print("User ID is not available. Ensure user is logged in.");
-  //     });
-  //   }
-  // }
-
   Future<void> _fetchOrderData() async {
     setState(() => _isLoading = true);
     try {

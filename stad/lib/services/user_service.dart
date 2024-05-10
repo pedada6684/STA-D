@@ -123,16 +123,7 @@ class UserService {
 
     FormData formData = FormData.fromMap(updateData);
 
-    //
-    // FormData formData = FormData.fromMap({
-    //   "userId": userProvider.userId,
-    //   "name": userProvider.user?.name,
-    //   "nickname": finalNickname,
-    //   "phone": finalPhone,
-    //   "profile": await MultipartFile.fromFile(profileImagePath,
-    //       filename: "profile_pic.png"),
-    // });
-
+    print(updateData);
     print(formData);
 
     try {

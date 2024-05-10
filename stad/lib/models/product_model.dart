@@ -58,7 +58,6 @@ class ProductImage {
   }
 }
 
-
 // ProductType.dart
 class ProductType {
   final int id;
