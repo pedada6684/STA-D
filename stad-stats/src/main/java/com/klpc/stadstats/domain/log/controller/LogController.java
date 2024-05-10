@@ -61,7 +61,7 @@ public class LogController {
         log.info("AddOrderLogRequest: " + request);
         try {
             OrderLog orderLog = logService.addOrderLog(request.toCommand());
-            kafkaTemplate.send("log-add-order", orderLog);
+//            kafkaTemplate.send("log-add-order", orderLog);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
