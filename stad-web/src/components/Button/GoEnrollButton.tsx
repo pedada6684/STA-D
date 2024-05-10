@@ -24,8 +24,9 @@ export default function GoEnrollButton({ children, to, formData }: GoEnrollButto
   const userId = useSelector((state: RootState)=> state.user.userId);
   const [advertId,setAdvertId] = useState<number>();
   const handleClick = async () => {
-    if (formData && formData.title!=undefined && formData.category!=undefined && formData.startDate!=undefined
-    && formData.endDate!=undefined && formData.bannerImgUrl!=undefined && formData.advertVideoUrlList!=undefined) {
+    if (formData && formData.title!=undefined && formData.title!="" && formData.category!=undefined && formData.category!=""
+        && formData.startDate!=undefined && formData.startDate!="" && formData.endDate!=undefined && formData.endDate!=""
+        && formData.bannerImgUrl!=undefined && formData.bannerImgUrl!="" && formData.advertVideoUrlList!=undefined && formData.advertVideoUrlList!=null) {
       if (to === "/ad-enroll/merchandise") {
         const response = await addAdvert(formData); // 광고 추가 요청
         setAdvertId(response);
