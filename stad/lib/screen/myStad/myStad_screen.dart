@@ -4,10 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
-import 'package:stad/main.dart';
 import 'package:stad/providers/user_provider.dart';
-import 'package:stad/screen/home/home_screen.dart';
-import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/qr_screen.dart';
 import 'package:stad/screen/myStad/shop/myaddress_screen.dart';
 import 'package:stad/screen/myStad/shop/myorder_scren.dart';
@@ -206,16 +203,6 @@ class UserInfoContainer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Align(
-                    //   alignment: Alignment.topRight,
-                    //   child: TextButton(
-                    //     onPressed: () {},
-                    //     child: Text(
-                    //       '내 정보 수정하기',
-                    //       style: TextStyle(color: mainNavy),
-                    //     ),
-                    //   ),
-                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 4.0),
