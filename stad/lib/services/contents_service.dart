@@ -8,8 +8,8 @@ class ContentsService {
   //콘텐츠 상세정보 TODO:서버에서 보내줄거임 sse
   Future<Content> fetchContentDetails(int detailId) async {
     try {
-      // final response = await dio.get('$svApi/contents-detail/2');
-      final response = await dio.get('http://192.168.31.202:8080/api/contents-detail/1');
+      final response = await dio.get('$svApi/contents-detail/4');
+      // final response = await dio.get('http://192.168.31.202:8080/api/contents-detail/1');
       // final response = await dio.get('http://192.168.0.9:8080/api/contents-detail/1');
       print('${response.data}');
 
@@ -30,7 +30,8 @@ class ContentsService {
     try {
       final response = await dio.get(
           // '$svApi/contents-detail/collections/watching',
-          'http://192.168.31.202:8080/api/contents-detail/collections/watching',
+          'http://192.168.0.9:8080/api/contents-detail/collections/watching',
+          // 'http://192.168.31.202:8080/api/contents-detail/collections/watching',
           queryParameters: {'userId': userId});
 
       print('내가 본 콘텐츠 목록 불러오기:${response.data}');

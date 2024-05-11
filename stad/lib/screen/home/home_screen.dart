@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
@@ -35,20 +36,23 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     fetchFeaturedContent();
     fetchAdverts();
-    fetchSingleAdvert(1);
+    fetchSingleAdvert(3);
   }
 
   void fetchSingleAdvert(int advertId) async {
     AdService adService = AdService();
     try {
       Map<String, dynamic> advertData = await adService.getAdInfo(advertId);
+      print(advertData.toString());
       setState(() {
         singleAdverts.add({
           'bannerImgUrl': advertData['bannerImgUrl'],
           'title': advertData['title'],
           'description': advertData['description'],
         });
-      });
+      }
+
+      );
     } catch (e) {
       print('Failed to fetch single advert: $e');
     }
@@ -58,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     AdService adService = AdService();
     try {
       List<Advert> fetchedAdverts =
-      await adService.getAdvertsByContentId(1); // 컨텐츠 ID를 적절히 설정
+          await adService.getAdvertsByContentId(4); // 컨텐츠 ID를 적절히 설정
       setState(() {
         adverts = fetchedAdverts;
       });
@@ -71,17 +75,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     ContentsService contentsService = ContentsService();
     try {
       var fetchedContent = await contentsService
-          .fetchContentDetails(1); // assuming 1 is a valid ID
+          .fetchContentDetails(4); // assuming 1 is a valid ID
       setState(() {
         featuredContent = fetchedContent;
       });
+
     } catch (e) {
       print('Failed to fetch content: $e');
     }
   }
 
-  void advertClickLog(int advertId, int advertVideoId, int contentId,
-      int userId) async {
+  void advertClickLog(
+      int advertId, int advertVideoId, int contentId, int userId) async {
     LogService logService = LogService();
 
     try {
@@ -119,9 +124,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    int? userId = Provider
-        .of<UserProvider>(context, listen: false)
-        .userId;
+    int? userId = Provider.of<UserProvider>(context, listen: false).userId;
     return Scaffold(
       backgroundColor: mainWhite,
       appBar: PreferredSize(
@@ -161,18 +164,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
-                    builder: (BuildContext context) =>
-                        ContentDetailBottomSheet(
-                          title: featuredContent!.title,
-                          imagePath: featuredContent!.thumbnailUrl,
-                          synopsis: featuredContent!.description,
-                          seasonInfo:
-                          '${featuredContent!.releaseYear} | ${featuredContent!
-                              .audienceAge}',
-                          additionalText:
-                          '${featuredContent!.creator} | ${featuredContent!
-                              .cast}',
-                        ),
+                    builder: (BuildContext context) => ContentDetailBottomSheet(
+                      title: featuredContent!.title,
+                      imagePath: featuredContent!.thumbnailUrl,
+                      synopsis: featuredContent!.description,
+                      seasonInfo:
+                          '${featuredContent!.releaseYear} | ${featuredContent!.audienceAge} | ${featuredContent!.playtime}',
+                      additionalText:
+                          '감독 : ${featuredContent!.creator}\n출연 : ${featuredContent!.cast}',
+                    ),
                   );
                 }
               },
@@ -187,19 +187,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     subText: singleAdverts[0]['title'],
                     onPressed: () {
                       //TODO: advertId 수정
-                      advertClickLog(1,1,1,userId!
+                      advertClickLog(1, 1, 1, userId!
                           //TODO: 파라미터  수정할 것
-                      );
+                          );
                       Navigator.of(context).push(MaterialPageRoute(
-                        //TODO 수정
-                          builder: (context) =>
-                              ProductScreen(
+                          //TODO 수정
+                          builder: (context) => ProductScreen(
                                 advertId: 1,
                                 contentId: 1,
                                 title: singleAdverts[0]['title'],
                                 description: singleAdverts[0]['description'],
                               )));
-
                     },
                   ),
                 buildCarouselSlider(context),
@@ -214,24 +212,22 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   CarouselSlider buildCarouselSlider(BuildContext context) {
     return CarouselSlider(
       items: adverts
-          .map((advert) =>
-          AdvertisingCard(
-            bannerImgUrl: advert.bannerImgUrl,
-            buttonText: '콘텐츠 관련 광고 보러가기',
-            subText: advert.title,
-            onPressed: () {
-              Navigator.of(context).push(
-                //TODO:advertId 수정, 여러가지 수정
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          ProductScreen(
-                            advertId: 1,
-                            contentId: 1,
-                            title: singleAdverts[0]['title'],
-                            description: singleAdverts[0]['description'],
-                          )));
-            },
-          ))
+          .map((advert) => AdvertisingCard(
+                bannerImgUrl: advert.bannerImgUrl,
+                buttonText: '콘텐츠 관련 광고 보러가기',
+                subText: advert.title,
+                onPressed: () {
+                  Navigator.of(context).push(
+                      //TODO:advertId 수정, 여러가지 수정
+                      MaterialPageRoute(
+                          builder: (context) => ProductScreen(
+                                advertId: 1,
+                                contentId: 1,
+                                title: singleAdverts[0]['title'],
+                                description: singleAdverts[0]['description'],
+                              )));
+                },
+              ))
           .toList(),
       options: CarouselOptions(
         autoPlay: true,
@@ -315,14 +311,14 @@ class buildTopThumbnail extends StatelessWidget {
           blendMode: BlendMode.dstIn,
           child: featuredContent == null
               ? Center(
-              child:
-              CircularProgressIndicator()) // Show loading spinner if content is null
+                  child:
+                      CircularProgressIndicator()) // Show loading spinner if content is null
               : Image.network(
-            featuredContent!.thumbnailUrl,
-            height: 420,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
+                  featuredContent!.thumbnailUrl,
+                  height: 360,
+                  width: double.infinity,
+                  fit: BoxFit.fill,
+                ),
         ),
         Positioned(
           top: 0,

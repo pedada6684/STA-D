@@ -11,6 +11,7 @@ import 'package:stad/screen/home/home_screen.dart';
 import 'package:stad/screen/home/onboarding_screen.dart';
 import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/myStad_screen.dart';
+import 'package:stad/screen/order/payment_result_screen.dart';
 import 'package:stad/services/user_service.dart';
 import 'package:stad/widget/bottom_bar.dart';
 
@@ -61,6 +62,17 @@ class _MyAppState extends State<MyApp> {
         GoRoute(
           path: '/home',
           builder: (context, state) => MainNavigation(),
+        ),
+        GoRoute(
+          path: '/done',
+          builder: (BuildContext context, GoRouterState state) {
+            final data = state.extra as Map<String, dynamic>;
+            return PaymentResultScreen(
+              result: data['result'],
+              products: data['products'],
+              userId: data['userId'],
+            );
+          },
         ),
       ],
     );

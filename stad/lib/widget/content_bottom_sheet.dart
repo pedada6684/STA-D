@@ -66,7 +66,7 @@ class ContentDetailBottomSheet extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 10),
                     if (seasonInfo != null)
                       Text(
                         seasonInfo!,
@@ -74,15 +74,18 @@ class ContentDetailBottomSheet extends StatelessWidget {
                       ),
                     if (synopsis != null)
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
                           synopsis!,
                           style: TextStyle(color: mainWhite, fontSize: 14),
                         ),
                       ),
-                    Text(
-                      additionalText ?? '더 많은 정보를 표시할 수 있습니다.',
-                      style: TextStyle(color: mainWhite, fontSize: 14),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Text(
+                        additionalText ?? '더 많은 정보를 표시할 수 있습니다.',
+                        style: TextStyle(color: mainWhite, fontSize: 14),
+                      ),
                     ),
                   ],
                 ),

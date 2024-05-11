@@ -5,10 +5,11 @@ import 'package:stad/models/order_model.dart';
 class OrderService {
   final Dio dio = Dio();
 
-  // final String EmUrl = 'http://192.168.0.9:8080/api/user/location';
+  // final String orderUrl = 'http://192.168.0.9:8080/api/user/location';
   // final String orderUrl = '$svApi/orders/list?userId=';
-  final String orderUrl = 'http://192.168.0.9:8080/orders';
+  // final String orderUrl = 'http://192.168.0.9:8080/api/orders';
   // final String orderUrl = 'http://192.168.31.202:8080/orders';
+  final String orderUrl = 'https://www.mystad.com/api/orders';
 
   //내 주문목록 불러오기 => 백엔드 수정 필요
   Future<List<Order>> fetchOrders(int userId) async {
@@ -16,8 +17,9 @@ class OrderService {
       final response = await dio.get('${orderUrl}/list?userId=$userId');
       if (response.statusCode == 200) {
         // 'content' 필드가 null인지 확인
+        print('내 주문 정보 : ${response.data}');
         if (response.data['content'] != null) {
-          List<dynamic> ordersJson = response.data['content'];
+          List<dynamic> ordersJson = response.data['data'];
           List<Order> orders =
               ordersJson.map((json) => Order.fromJson(json)).toList();
           return orders;
