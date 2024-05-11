@@ -41,9 +41,11 @@ class _EditUserScreenState extends State<EditUserScreen> {
   }
 
   Future<void> _updateProfile() async {
+    // 이미지 파일이 선택되지 않았다면 기본 이미지 경로나 null을 사용
+    String? imagePath = _imageFile?.path;
+
     bool success = await Provider.of<UserService>(context, listen: false)
-        .updateUserProfile(context, _nicknameController.text,
-            _phoneController.text, _imageFile!.path);
+        .updateUserProfile(context, _nicknameController.text, _phoneController.text, imagePath);
 
     if (success) {
       showDialog(
@@ -84,6 +86,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
       print('에러');
     }
   }
+
 
   Future<void> _pickImage() async {
     final XFile? pickedFile =
