@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/models/advert_model.dart';
 import 'package:stad/models/contents_model.dart';
-import 'package:stad/models/user_model.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/product/product_screen.dart';
 import 'package:stad/services/advert_service.dart';
