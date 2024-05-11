@@ -61,6 +61,7 @@ class UserService {
         UserModel.fromFirebaseUser(user, googleAccessToken).toJson();
     try {
       final response = await dio.post(
+        // 'http://172.29.40.139:8080/api/v1/auth/applogin',
         'https://www.mystad.com/api/v1/auth/applogin',
         // 'http://192.168.31.202:8080/api/v1/auth/applogin',
         // 'http://192.168.0.9:8080/api/v1/auth/applogin',
@@ -96,16 +97,6 @@ class UserService {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     UserModel currentUser = userProvider.user!;
 
-    bool dataUpdated =
-        nickname?.isNotEmpty == true || phone?.isNotEmpty == true;
-    bool profileUpdated =
-        profileImagePath != null && profileImagePath.isNotEmpty;
-
-    if (!dataUpdated && !profileUpdated) {
-      print("No changes to update");
-      return true; // No changes made
-    }
-
     String finalNickname =
         nickname?.isNotEmpty == true ? nickname! : currentUser.nickname ?? '';
     String finalPhone =
@@ -113,13 +104,13 @@ class UserService {
 
     Map<String, dynamic> updateData = {
       "userId": userProvider.userId,
-      "name": currentUser.name,
       "nickname": finalNickname,
       "phone": finalPhone,
     };
 
-    if (profileUpdated) {
-      updateData['profile'] = await MultipartFile.fromFile(profileImagePath,
+    if (profileImagePath != null && profileImagePath.isNotEmpty) {
+      updateData['profileImage'] = await MultipartFile.fromFile(
+          profileImagePath,
           filename: "profile_pic.png");
     }
 
@@ -128,10 +119,10 @@ class UserService {
     try {
       final response = await dio.post(
         'https://www.mystad.com/api/user/update',
+        // 'http://172.29.40.139:8080/api/user/update',
         data: formData,
         options: Options(
           headers: {
-            'Cookie': userProvider.cookie,
             'Authorization': 'Bearer ${userProvider.token}',
           },
         ),
@@ -139,15 +130,16 @@ class UserService {
 
       if (response.statusCode == 200) {
         UserModel updatedUser = UserModel.fromJson(response.data);
-        userProvider
-            .setUser(updatedUser); // This updates the local state immediately
+        Provider.of<UserProvider>(context, listen: false).setUser(updatedUser);
         return true;
+      } else {
+        print('Update failed with status code: ${response.statusCode}');
+        return false;
       }
     } catch (e) {
       print('Error updating user profile: $e');
       return false;
     }
-    return false;
   }
 
   //프로필 사진 업데이트
@@ -162,6 +154,7 @@ class UserService {
 
     try {
       final response = await dio.post(
+        // 'http://172.29.40.139:8080/api/user/profile',
         'https://www.mystad.com/api/user/profile',
         data: formData,
         options: Options(

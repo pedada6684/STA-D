@@ -139,11 +139,14 @@ class _PaymentState extends State<Payment> {
         callback: (Map<String, String> result) {
           List<Map<String, dynamic>> products = widget.productTypes.map((type) {
             return {
-              'productTypeId': type.id,
+              'productTypeId': 2,
+              // 'productTypeId': type.id,
               'productCnt': widget.quantities[type.id] ?? 0,
               'optionId': widget.optionIds.isEmpty ? -1 : widget.optionIds[0],
-              'contentId': widget.contentId,
-              'advertId': widget.advertId,
+              // 'contentId': widget.contentId,
+              'contentId': 4,
+              'advertId': 3,
+              // 'advertId': widget.advertId,
             };
           }).toList();
 

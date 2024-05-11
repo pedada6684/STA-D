@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     fetchFeaturedContent();
     fetchAdverts();
-    fetchSingleAdvert(3);
+    fetchSingleAdvert(1);
   }
 
   void fetchSingleAdvert(int advertId) async {

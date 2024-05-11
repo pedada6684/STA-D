@@ -29,11 +29,12 @@ class _PaymentResultScreenState extends State<PaymentResultScreen> {
   @override
   void initState() {
     super.initState();
-    // ConfettiController 초기화
     _confettiController = ConfettiController(duration: Duration(seconds: 10));
     _confettiController.play();
+    print(widget.products);
+    print(widget.userId);
 
-    if (widget.result['success'] == 'true') {
+    if (widget.result['imp_success'] == 'true') {
       createOrder();
     }
   }
@@ -43,7 +44,6 @@ class _PaymentResultScreenState extends State<PaymentResultScreen> {
     try {
       await orderService.createOrder(
           userId: widget.userId, products: widget.products);
-      // 주문 생성 후 추가적인 액션 (예: 성공 알림)을 취할 수 있습니다.
       print('Order successfully created.');
     } catch (e) {
       print('Failed to create order: $e');
@@ -52,7 +52,6 @@ class _PaymentResultScreenState extends State<PaymentResultScreen> {
 
   @override
   void dispose() {
-    // ConfettiController 해제
     _confettiController.dispose();
     super.dispose();
   }
