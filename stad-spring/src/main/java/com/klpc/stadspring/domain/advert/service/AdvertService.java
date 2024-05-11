@@ -28,6 +28,7 @@ import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +53,8 @@ public class AdvertService {
     private final ContentConceptRepository contentConceptRepository;
     private final RestTemplate restTemplate;
 
+    @Value("${spring.stad-stats.url}")
+    private String stadStatsUrl;
     /**
      * 광고 추가
      * 순서 : 광고 엔티티(title, description 등) 생성 -> 연관 관계 엔티티 생성 & 광고 엔티티 입력
@@ -395,7 +398,7 @@ public class AdvertService {
     }
 
     public GetAdvertIdListResponse GetAdvertIdByUser(Long userId) {
-        String url = "http://localhost:8082/stats/log/advert-id/list";
+        String url = stadStatsUrl+"/log/advert-id/list";
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam("userId", userId);
 

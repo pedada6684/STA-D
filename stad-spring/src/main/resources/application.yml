@@ -14,3 +14,4 @@ spring:
       - classpath:/application-secret.yml
       - classpath:/db.yml
       - classpath:/kafka.yml
+      - classpath:/msa.yml

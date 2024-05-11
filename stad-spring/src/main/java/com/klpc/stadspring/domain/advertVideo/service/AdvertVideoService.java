@@ -19,6 +19,7 @@ import com.klpc.stadspring.global.response.exception.CustomException;
 import com.klpc.stadspring.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.UrlResource;
@@ -53,6 +54,8 @@ public class AdvertVideoService {
     private final RestTemplate restTemplate;
     private final S3Util s3Util;
 
+    @Value("${spring.stad-stats.url}")
+    private String stadStatsUrl;
     /**
      * 광고 영상 리스트 추가
      * @param requestCommand
@@ -325,7 +328,7 @@ public class AdvertVideoService {
      * @return
      */
     public GetTotalLogResponse getTotalLogData(Long advertId) {
-        String url = "http://localhost:8082/stats/log/total";
+        String url = stadStatsUrl+"/log/total";
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam("advertId", advertId);
 

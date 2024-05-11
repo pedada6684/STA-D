@@ -1,0 +1,13 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  stad-stats:
+    url: "http://localhost:8082/stats"
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  stad-stats:
+    url: "http://stad-stats:8080/stats"
