@@ -285,10 +285,7 @@ export default function Merchandise() {
           <NameContainer>
             상품제목<span>*</span>
           </NameContainer>
-          <ToggleButton
-            isExpanded={toggles.isMerTitleExpanded}
-            onToggle={() => handleToggle("isMerTitleExpanded")}
-          />
+          <ToggleButton />
         </TitleContainer>
         {isMerTitleExpanded && (
           <InputContainer>
@@ -313,10 +310,7 @@ export default function Merchandise() {
           <NameContainer>
             상품 이미지 등록<span>*</span>
           </NameContainer>
-          <ToggleButton
-            isExpanded={toggles.isMerThumbnailExpanded}
-            onToggle={() => handleToggle("isMerThumbnailExpanded")}
-          />
+          <ToggleButton />
         </TitleContainer>
         {isMerThumbnailExpanded && (
           <InputContainer>
@@ -500,10 +494,7 @@ export default function Merchandise() {
           <NameContainer>
             배송비<span>*</span>
           </NameContainer>
-          <ToggleButton
-            isExpanded={toggles.isMerShipPriceExpanded}
-            onToggle={() => handleToggle("isMerShipPriceExpanded")}
-          />
+          <ToggleButton />
         </TitleContainer>
         {isMerShipPriceExpanded && (
           <InputContainer>
@@ -547,10 +538,7 @@ export default function Merchandise() {
           <NameContainer>
             유통기한<span>*</span>
           </NameContainer>
-          <ToggleButton
-            isExpanded={toggles.isExpDateExpanded}
-            onToggle={() => handleToggle("isExpDateExpanded")}
-          />
+          <ToggleButton />
         </TitleContainer>
         {isExpDateExpanded && (
           <InputContainer>
@@ -570,10 +558,7 @@ export default function Merchandise() {
           <NameContainer>
             상품 추가<span>*</span>
           </NameContainer>
-          <ToggleButton
-            isExpanded={toggles.isMerAddExpanded}
-            onToggle={() => handleToggle("isMerAddExpanded")}
-          />
+          <ToggleButton />
         </TitleContainer>
         {isMerAddExpanded && (
           <InputContainer>
