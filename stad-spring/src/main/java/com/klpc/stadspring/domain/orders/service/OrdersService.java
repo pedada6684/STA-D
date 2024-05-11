@@ -30,6 +30,7 @@ import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -55,6 +56,9 @@ public class OrdersService {
     private final OrdersRepository ordersRepository;
     private final OptionRepository optionRepository;
 //    private final LogService logService;
+
+    @Value("${spring.stad-stats.url}")
+    private String stadStatsUrl;
 
     /**
      * 주문 생성
@@ -198,7 +202,7 @@ public class OrdersService {
         HttpEntity<AddOrderLogCommand> entity = new HttpEntity<>(requestData, headers);
 
         // POST 요청 보내기
-        String url = "http://localhost:8082/stats/log/order-log";
+        String url = stadStatsUrl+"/log/order-log";
         String response = restTemplate.postForObject(url, entity, String.class);
 
         // 응답 출력
