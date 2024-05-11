@@ -168,12 +168,9 @@ export default function Advertisement() {
           <div className={`${styles.name}`}>
             광고명<span>*</span>
           </div>
-          <ToggleButton
-            isExpanded={toggles.isAdNameExpanded}
-            onToggle={() => handleToggle("isAdNameExpanded")}
-          />
+          <ToggleButton />
         </div>
-        {isAdNameExpanded && (
+        {!isAdNameExpanded && (
           <InputContainer>
             <div>
               <input
@@ -196,12 +193,9 @@ export default function Advertisement() {
           <div className={`${styles.name}`}>
             광고영상<span>*</span>
           </div>
-          <ToggleButton
-            isExpanded={toggles.isAdVideoExpanded}
-            onToggle={() => handleToggle("isAdVideoExpanded")}
-          />
+          <ToggleButton />
         </div>
-        {isAdVideoExpanded && (
+        {!isAdVideoExpanded && (
           <InputContainer>
             <div className={`${styles.advideoList}`}>
               <div className={`${styles.subTitle}`}>TV 광고 영상</div>
@@ -356,12 +350,9 @@ export default function Advertisement() {
           <div className={`${styles.name}`}>
             광고기간<span>*</span>
           </div>
-          <ToggleButton
-            isExpanded={toggles.isAdPeriodExpanded}
-            onToggle={() => handleToggle("isAdPeriodExpanded")}
-          />
+          <ToggleButton />
         </div>
-        {isAdPeriodExpanded && (
+        {!isAdPeriodExpanded && (
           <InputContainer>
             <div className={`${styles.calendar}`}>
               <DateRange
@@ -382,12 +373,9 @@ export default function Advertisement() {
           <div className={`${styles.name}`}>
             광고 카테고리<span>*</span>
           </div>
-          <ToggleButton
-            isExpanded={toggles.isAdCategoryExpanded}
-            onToggle={() => handleToggle("isAdCategoryExpanded")}
-          />
+          <ToggleButton />
         </div>
-        {isAdCategoryExpanded && (
+        {!isAdCategoryExpanded && (
           <InputContainer>
             <div className={`${styles.selectBox}`}>
               <SelectAdCategory setCategory={setCategory} />
@@ -401,12 +389,9 @@ export default function Advertisement() {
       <div className={`${styles.item}`}>
         <div className={`${styles.title}`}>
           <div className={`${styles.name}`}>노출 컨텐츠(선택)</div>
-          <ToggleButton
-            isExpanded={toggles.isAdContentExpanded}
-            onToggle={() => handleToggle("isAdContentExpanded")}
-          />
+          <ToggleButton />
         </div>
-        {isAdContentExpanded && (
+        {!isAdContentExpanded && (
           <InputContainer>
             <div>
               <button className={`${styles.contents}`} onClick={openModal}>

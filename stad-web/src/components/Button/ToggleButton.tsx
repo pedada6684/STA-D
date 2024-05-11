@@ -6,16 +6,13 @@ type ToggleButtonProps = {
   isExpanded: boolean;
   onToggle: () => void;
 };
-export default function ToggleButton({
-  isExpanded,
-  onToggle,
-}: ToggleButtonProps) {
-  const iconSrc = isExpanded ? top : bottom;
-  const altText = isExpanded ? "접기" : "펼치기";
+export default function ToggleButton() {
+  // const iconSrc = isExpanded ? top : bottom;
+  // const altText = isExpanded ? "접기" : "펼치기";
   return (
     <div>
-      <button className={styles.toggleBtn} onClick={onToggle}>
-        <img src={iconSrc} alt={altText} />
+      <button className={styles.toggleBtn}>
+        <img src={top} alt={"오픈"} />
       </button>
     </div>
   );
