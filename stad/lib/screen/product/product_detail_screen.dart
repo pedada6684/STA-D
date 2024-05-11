@@ -39,7 +39,7 @@ class ProductDetailScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      productInfo!.name,
                       style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w700,

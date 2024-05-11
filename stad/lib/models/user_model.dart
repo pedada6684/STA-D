@@ -28,6 +28,24 @@ class UserModel {
     );
   }
 
+  UserModel copyWith({
+    String? email,
+    String? phone,
+    String? nickname,
+    String? name,
+    String? profilePicture,
+    String? googleAccessToken,
+  }) {
+    return UserModel(
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      name: name ?? this.name,
+      nickname: nickname ?? this.nickname,
+      profilePicture: profilePicture ?? this.profilePicture,
+      googleAccessToken: googleAccessToken ?? this.googleAccessToken,
+    );
+  }
+
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       email: json['email'] as String?,
@@ -43,7 +61,7 @@ class UserModel {
     return {
       'email': email ?? '',
       'phone': phone ?? '',
-      'name' : name ?? '',
+      'name': name ?? '',
       'nickname': nickname ?? '',
       'profile': profilePicture ?? '',
       'googleAT': googleAccessToken ?? '',
