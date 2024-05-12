@@ -26,7 +26,7 @@ public class GetProductInfoCommand {
 
     public static GetProductInfoResponse ConvertProductInfoCommand(Product product){
         return GetProductInfoResponse.builder()
-                .id(product.getId())
+                .productId(product.getId())
                 .thumbnail(product.getThumbnail())
                 .cityDeliveryFee(product.getCityDeliveryFee())
                 .mtDeliveryFee(product.getMtDeliveryFee())
