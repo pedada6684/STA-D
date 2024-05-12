@@ -15,6 +15,7 @@ import lombok.Setter;
 public class GetCartProductInfoResponse {
     private Long cartProductId;
     private Long productId;
+    private String productName;
     private ProductType productType;
     private Long quantity;
     private Long advertId;
