@@ -1,9 +1,8 @@
-import Select, {MultiValue} from "react-select";
+import Select, { MultiValue } from "react-select";
 import styles from "./SelectBox.module.css";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { SelectAdMainCategory, SelectAdSubCategory } from "./AdCategory";
-import {getContentConcept} from "../../pages/AdEnroll/AdEnrollApi";
-
+import { getContentConcept } from "../../pages/AdEnroll/AdEnrollApi";
 
 export function SelectReviewGoodsBox() {
   const options = [
@@ -27,12 +26,23 @@ export function SelectReviewSortBox() {
   return <Select options={options} />;
 }
 
-interface SelectContentBox{
-  contentId : {value : number, label : string}[] | null;
-  setContentId: (value: { value: number; label: string; }[] | null) => void;
+interface SelectContentBox {
+  contentId: { value: number; label: string }[] | null;
+  setContentId: (value: { value: number; label: string }[] | null) => void;
+  existedData?: number[];
 }
-export function SelectContentsBox({ contentId, setContentId }: SelectContentBox) {
-  const [options, setOptions] = useState<{ value: number; label: string; }[]>([]);
+export function SelectContentsBox({
+  contentId,
+  setContentId,
+  existedData,
+}: SelectContentBox) {
+  const [options, setOptions] = useState<{ value: number; label: string }[]>(
+    []
+  );
+
+  useEffect(() => {
+    console.log(contentId);
+  }, [contentId]);
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -40,16 +50,28 @@ export function SelectContentsBox({ contentId, setContentId }: SelectContentBox)
         const data = await getContentConcept();
         setOptions(data);
       } catch (error) {
-        console.error('컨텐츠 가져오기 실패 : ', error);
+        console.error("컨텐츠 가져오기 실패 : ", error);
       }
     };
-
     fetchOptions();
   }, []);
 
-  const handleContentBox = (selectedOptions: MultiValue<{ value: number; label: string; }> | null) => {
+  useEffect(() => {
+    if (options.length > 0 && existedData && existedData.length > 0) {
+      // options 배열에서 existedData에 포함된 value값만 포함해서 selectedOptions만들기
+      const selectedOptions = options.filter((option) =>
+        existedData.includes(option.value)
+      );
+      setContentId(selectedOptions);
+    }
+  }, [existedData, options, setContentId]);
+
+  const handleContentBox = (
+    selectedOptions: MultiValue<{ value: number; label: string }> | null
+  ) => {
     if (selectedOptions) {
-      setContentId(selectedOptions.map(option => option));
+      setContentId(selectedOptions.map((option) => option));
+      console.log(contentId);
     } else {
       setContentId(null);
     }
@@ -63,25 +85,27 @@ export function SelectContentsBox({ contentId, setContentId }: SelectContentBox)
 
   // 데이터가 준비된 후에는 옵션을 렌더링합니다.
   return (
-      <Select
-          isMulti
-          value={contentId}
-          name="colors"
-          options={options}
-          onChange={handleContentBox}
-          className="basic-multi-select"
-          classNamePrefix="select"
-      />
+    <Select
+      isMulti
+      value={contentId}
+      name="colors"
+      options={options}
+      onChange={handleContentBox}
+      className="basic-multi-select"
+      classNamePrefix="select"
+    />
   );
 }
 
 interface CategoryProps {
   setCategory: (string: string | null) => void;
+  initialCategory?: string;
 }
 
 export function SelectAdCategory({
-  setCategory
-} : CategoryProps) {
+  setCategory,
+  initialCategory,
+}: CategoryProps) {
   type OptionType = { value: string; label: string };
   type SubCategoryOptions = {
     [key: string]: OptionType[];
@@ -99,12 +123,30 @@ export function SelectAdCategory({
     setSelectSubCategory(null); // 중분류 초기화
   };
 
+  useEffect(() => {
+    // 등록한 카테고리 값이 있는 경우
+    if (initialCategory) {
+      const mainCategoryValue = initialCategory.charAt(0); // 앞글자 추출해서 대분류 카테고리
+      const mainCategoryOption = SelectAdMainCategory.find(
+        (option) => option.value === mainCategoryValue
+      );
+      if (mainCategoryOption) {
+        setSelectMainCategory(mainCategoryOption);
+      }
+      const subCategoryOptions = SelectAdSubCategory[mainCategoryValue];
+      const subCategoryOption = subCategoryOptions.find(
+        (option) => option.value === initialCategory
+      );
+      if (subCategoryOption) setSelectSubCategory(subCategoryOption);
+    }
+  });
+
   // 중분류 변경 핸들러
   const handleSubcategoryChange = (selectedOption: OptionType | null) => {
     setSelectSubCategory(selectedOption);
-    if(selectedOption){
-      setCategory(selectedOption.value)
-    }else{
+    if (selectedOption) {
+      setCategory(selectedOption.value);
+    } else {
       setCategory(null);
     }
   };
