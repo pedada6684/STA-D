@@ -14,12 +14,12 @@ export default function Streaming() {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [advertUrls, setAdvertUrls] = useState<string[]>([]);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [conceptId, setConceptId] = useState(0);
 
   const videoRef = useRef<ReactPlayer | null>(null);
   const { videoId } = useParams<{ videoId: string }>();
   const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.token.accessToken);
+  // const userId = useSelector((state: RootState) => state.tvUser.userId);
   const userId = 1;
   const detailId = Number(videoId);
 

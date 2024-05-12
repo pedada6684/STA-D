@@ -184,7 +184,7 @@ public class DummyGenerator {
                 .nickname("Pawn")
                 .name("Pawn")
                 .email("Pawn@Pawn.com")
-                .profileImage("https://thechessworld.com/wp-content/uploads/2012/08/pawn1.jpg")
+                .profileImage("https://people.com/thmb/YIww0u4m8icR9vnhychZVxZecFs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(701x0:703x2)/freddie-mercury-3-f480f4ef58b145c7871f123c8b2d3aae.jpg")
                 .googleAT("")
                 .build();
         userService.joinMember(command1);
