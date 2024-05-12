@@ -11,6 +11,7 @@ import 'package:stad/screen/home/home_screen.dart';
 import 'package:stad/screen/home/onboarding_screen.dart';
 import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/myStad_screen.dart';
+import 'package:stad/screen/myStad/qr_screen.dart';
 import 'package:stad/screen/order/payment_result_screen.dart';
 import 'package:stad/services/user_service.dart';
 import 'package:stad/widget/bottom_bar.dart';
@@ -31,13 +32,15 @@ Future<void> main() async {
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   late final GoRouter _router;
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -45,7 +48,7 @@ class _MyAppState extends State<MyApp> {
     _router = GoRouter(
       debugLogDiagnostics: true,
       initialLocation: '/splash',
-      navigatorKey: navigatorKey,
+      navigatorKey: MyApp.navigatorKey,
       routes: [
         GoRoute(
           path: '/splash',
@@ -74,6 +77,7 @@ class _MyAppState extends State<MyApp> {
             );
           },
         ),
+        GoRoute(path: '/qr', builder: (context, state) => QRScreen())
       ],
     );
   }

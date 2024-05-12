@@ -175,7 +175,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                     final order = _orders![index];
                     return _buildOrderItem(
                       title:
-                          order.productTypeName[0], // 예시 코드, 실제 필드명에 맞게 조정 필요
+                          order.productTypeName[0],
                       description: order.orderDate,
                     );
                   },
