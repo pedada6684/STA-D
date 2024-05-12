@@ -45,7 +45,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
     String? imagePath = _imageFile?.path;
 
     bool success = await Provider.of<UserService>(context, listen: false)
-        .updateUserProfile(context, _nicknameController.text, _phoneController.text, imagePath);
+        .updateUserProfile(context, _nicknameController.text,
+            _phoneController.text, imagePath);
 
     if (success) {
       showDialog(
@@ -67,9 +68,13 @@ class _EditUserScreenState extends State<EditUserScreen> {
             actions: <Widget>[
               TextButton(
                 style: ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(mainNavy),
-                    shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0)))),
+                  backgroundColor: MaterialStatePropertyAll(mainNavy),
+                  shape: MaterialStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                ),
                 child: Text(
                   '확인',
                   style: TextStyle(color: mainWhite),
@@ -86,7 +91,6 @@ class _EditUserScreenState extends State<EditUserScreen> {
       print('에러');
     }
   }
-
 
   Future<void> _pickImage() async {
     final XFile? pickedFile =
@@ -148,10 +152,6 @@ class _EditUserScreenState extends State<EditUserScreen> {
               readOnly: true,
               decoration: InputDecoration(labelText: '이메일'),
             ),
-            // ElevatedButton(
-            //   onPressed: _updateProfile,
-            //   child: Text('정보 수정하기'),
-            // ),
           ],
         ),
       ),

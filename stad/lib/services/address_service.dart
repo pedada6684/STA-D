@@ -8,6 +8,7 @@ class AddressService {
   // final String apiUrl = 'http://192.168.31.202:8080/api/user/location';
   // final String apiUrl = 'http://192.168.0.9:8080/api/user/location';
   final String apiUrl = '$svApi/user/location';
+  // final String apiUrl = 'http://172.29.40.139:8080/api/user/location';
 
   // 배송지 목록 조회
   Future<List<DeliveryAddress>> fetchAddresses(int userId) async {
