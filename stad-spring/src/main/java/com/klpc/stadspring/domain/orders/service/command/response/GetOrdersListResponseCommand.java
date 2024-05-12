@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.orders.service.command.response;
 
+import com.klpc.stadspring.domain.orders.controller.response.GetOrdersListResponse;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,6 +13,7 @@ public class GetOrdersListResponseCommand {
     Long ordersId;
     String orderDate;
     String orderStatus;
+    List<GetOrdersListProductResponse> products;
     List<GetOrderListProductTypeResponseCommand> productTypes;
 
 }
