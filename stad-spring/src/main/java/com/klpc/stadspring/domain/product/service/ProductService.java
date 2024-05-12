@@ -7,6 +7,9 @@ import com.klpc.stadspring.domain.image.product_image.repository.ProductImageRep
 import com.klpc.stadspring.domain.option.entity.ProductOption;
 import com.klpc.stadspring.domain.option.repository.OptionRepository;
 import com.klpc.stadspring.domain.product.controller.request.*;
+import com.klpc.stadspring.domain.product.controller.response.GetProductInfoOptionResponse;
+import com.klpc.stadspring.domain.product.controller.response.GetProductInfoProductTypeResponse;
+import com.klpc.stadspring.domain.product.controller.response.GetProductInfoResponse;
 import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdvertResponse;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
@@ -71,14 +74,50 @@ public class ProductService {
     }
 
     // 상품 상세 정보
-    public Product getProductInfo(Long productId){
+    public GetProductInfoResponse getProductInfo(Long productId){
         Product product = productRepository.getProductInfo(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-        // 이미지를 초기화
-        if (product.getImages() != null) {
-            product.getImages().size();
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        List<String> images = new ArrayList<>();
+        for(ProductImage image : product.getImages()){
+            images.add(image.getImg());
         }
-        return product;
+
+        List<GetProductInfoProductTypeResponse> productTypeList = new ArrayList<>();
+        for(ProductType productType : product.getProductType()){
+            List<GetProductInfoOptionResponse> options = new ArrayList<>();
+            for(ProductOption option : productType.getProductOptions()){
+                GetProductInfoOptionResponse pto = GetProductInfoOptionResponse.builder()
+                        .optionId(option.getId())
+                        .optionName(option.getName())
+                        .optionValue(option.getValue())
+                        .build();
+                options.add(pto);
+            }
+
+            GetProductInfoProductTypeResponse pt = GetProductInfoProductTypeResponse.builder()
+                    .productTypeId(productType.getId())
+                    .productTypeName(productType.getName())
+                    .productTypePrice(productType.getPrice())
+                    .productTypeQuantity(productType.getQuantity())
+                    .options(options)
+                    .build();
+            productTypeList.add(pt);
+        }
+
+        GetProductInfoResponse response = GetProductInfoResponse.builder()
+                .productId(product.getId())
+                .name(product.getName())
+                .images(images)
+                .thumbnail(product.getThumbnail())
+                .cityDeliveryFee(product.getCityDeliveryFee())
+                .mtDeliveryFee(product.getMtDeliveryFee())
+                .expStart(product.getExpStart())
+                .expEnd(product.getExpEnd())
+                .productTypeList(productTypeList)
+                .build();
+
+        return response;
     }
 
     /**
@@ -235,15 +274,15 @@ public class ProductService {
     }
 
 
-    public Product updateProductInfo(UpdateProductInfoCommand command) {
-        log.info("UpdateUserInfoCommand: " + command);
-        log.info("id: "+command.getId());
-        Product product = getProductInfo(command.getId());
+//    public Product updateProductInfo(UpdateProductInfoCommand command) {
+//        log.info("UpdateUserInfoCommand: " + command);
+//        log.info("id: "+command.getId());
+//        Product product = getProductInfo(command.getId());
 //        product.update(command);
-
-        productRepository.save(product);
-        return product;
-    }
+//
+//        productRepository.save(product);
+//        return product;
+//    }
 //    @Override
 //    public Long registProduct(Long adverseId, Long OrderId, ProductPostDto productPostDto){
 //        Product product =
