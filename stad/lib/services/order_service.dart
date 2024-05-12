@@ -12,9 +12,7 @@ class OrderService {
   // final String orderUrl = 'http://192.168.0.9:8080/api/orders';
   // final String orderUrl = 'http://192.168.31.202:8080/orders';
   final String orderUrl = '$svApi/orders';
-
-  // final String orderUrl = 'http://172.29.40.139:8080/api/orders';
-
+  
   //내 주문목록 불러오기 => 백엔드 수정 필요
   Future<List<Order>> fetchOrders(int userId) async {
     try {
@@ -38,6 +36,8 @@ class OrderService {
       throw Exception('Error occurred while fetching orders: ${e.message}');
     }
   }
+
+  //주문 생성하기
 
   Future<void> createOrder({
     required int userId,
