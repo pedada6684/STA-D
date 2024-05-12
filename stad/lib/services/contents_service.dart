@@ -11,6 +11,7 @@ class ContentsService {
       final response = await dio.get('$svApi/contents-detail/4');
       // final response = await dio.get('http://192.168.31.202:8080/api/contents-detail/1');
       // final response = await dio.get('http://192.168.0.9:8080/api/contents-detail/1');
+      // final response = await dio.get('http://172.29.40.139:8080/apid.contents-detail/1');
       print('${response.data}');
 
 
@@ -29,8 +30,8 @@ class ContentsService {
   Future<List<Map<String, dynamic>>> fetchWatchedcontents(int userId) async {
     try {
       final response = await dio.get(
-          // '$svApi/contents-detail/collections/watching',
-          'http://192.168.0.9:8080/api/contents-detail/collections/watching',
+          '$svApi/contents-detail/collections/watching',
+          // 'http://192.168.0.9:8080/api/contents-detail/collections/watching',
           // 'http://192.168.31.202:8080/api/contents-detail/collections/watching',
           queryParameters: {'userId': userId});
 

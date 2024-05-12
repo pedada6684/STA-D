@@ -6,6 +6,7 @@ class AdService {
   final Dio dio = Dio();
 
   final url = Uri.parse('$svApi/advert');
+  // final url = Uri.parse('http://172.29.40.139:8080/api/advert');
   // final String url = ('http://192.168.31.202:8080/api/advert');
   // final String url = 'http://192.168.0.9:8080/api/advert';
 
@@ -60,7 +61,7 @@ class AdService {
   //TODO: contentId 수정
   Future<List<Advert>> getAdvertsByContentId(int contentId) async {
     try {
-      final response = await dio.get('$url/get-list-by-content?contentId=1');
+      final response = await dio.get('$url/get-list-by-content?contentId=4');
 
       if (response.statusCode == 200 && response.data != null) {
         print('콘텐츠 관련 광고 : ${response.data}'); // {data:[]}
