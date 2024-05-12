@@ -40,21 +40,6 @@ export async function getStreaming(accessToken: string | null, detailId: number)
   }
 }
 
-export async function getVideoDetail(accessToken: string | null, conceptId: number) {
-  // conceptId로 detail 조회
-  try {
-    console.log(conceptId);
-    const response = await axios.get(`/api/contents-detail/collections`, {
-      params: {
-        conceptId: conceptId,
-      },
-    });
-    console.log("디테일 조회 성공", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("디테일 조회 실패", error);
-  }
-}
 // 시청 영상 등록
 export async function postWatchAdd(accessToken: string | null, userId: number, detailId: number) {
   try {
@@ -69,6 +54,7 @@ export async function postWatchAdd(accessToken: string | null, userId: number, d
     console.error("시청 영상 생성 실패", error);
   }
 }
+
 // 광고 url 리스트 조회
 export async function getAdvertUrlList(accessToken: string | null, userId: number, detailId: number) {
   try {
@@ -82,5 +68,21 @@ export async function getAdvertUrlList(accessToken: string | null, userId: numbe
     return response.data;
   } catch (error) {
     console.error("광고 url 리스트 조회 실패", error);
+  }
+}
+
+// 북마크 검사
+export async function getIsBookmarked(accessToken: string | null, userId: number, conceptId: number) {
+  try {
+    console.log("userId", userId, "/conceptId", conceptId);
+    const response = await axios.get(`/api/contents-detail/check/${conceptId}`, {
+      params: {
+        userId: userId,
+      },
+    });
+    console.log("북마크 정보 조회 성공", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("북마크 정보 조회 실패", error);
   }
 }
