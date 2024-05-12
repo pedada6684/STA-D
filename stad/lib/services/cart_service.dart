@@ -12,6 +12,7 @@ class CartService {
   // final url = 'http://192.168.0.9:8080/api/cart';
   // final url = 'http://192.168.31.202:8080/api/cart';
   final url = 'https://www.mystad.com/api/cart';
+  // final url = 'http://172.29.40.139:8080/api/cart';
 
   //장바구니에 추가하기
   Future<void> addProductToCart(BuildContext context, int userId,

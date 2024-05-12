@@ -25,12 +25,17 @@ class _QRScreenState extends State<QRScreen> {
 
       final userId = Provider.of<UserProvider>(context, listen: false).userId;
       if (userId == null) {
-        _showDialog('오류', '사용자 인증 정보를 찾을 수 없습니다.',true);
+        _showDialog('오류', '사용자 인증 정보를 찾을 수 없습니다.', true);
         return;
       }
-      bool response = await AlertService().sendQrResponse(userId, scanData.code!);
+      bool response =
+          await AlertService().sendQrResponse(userId, scanData.code!);
       if (!response) {
-        _showDialog('연동 실패', 'TV와 연동에 실패하였습니다.\n다시 시도해주세요', true);
+        _showDialog(
+          '연동 실패',
+          'TV와 연동에 실패하였습니다.\n다시 시도해주세요',
+          true,
+        );
       } else {
         _showDialog('연동 성공', 'TV와의 연동이 완료되었습니다.', false);
       }
@@ -43,7 +48,8 @@ class _QRScreenState extends State<QRScreen> {
       barrierDismissible: false, // 대화상자 바깥을 터치해도 닫히지 않게
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             width: 300,
             height: 200,
@@ -68,12 +74,10 @@ class _QRScreenState extends State<QRScreen> {
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    if (retry) {
-                      controller.resumeCamera(); // 다시 QR 코드 스캔 시작
-                    }
+                    Navigator.of(context).pop(retry);
                   },
-                  child: Text('확인', style: TextStyle(fontSize: 16, color: mainWhite)),
+                  child: Text('확인',
+                      style: TextStyle(fontSize: 16, color: mainWhite)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: mainNavy,
                     fixedSize: Size(140, 50),
@@ -87,9 +91,15 @@ class _QRScreenState extends State<QRScreen> {
           ),
         );
       },
-    );
+    ).then((retry) {
+      if (retry) {
+        controller.resumeCamera();
+      } else {
+        Navigator.of(context).pop();
+      }
+    });
+    ;
   }
-
 
   @override
   Widget build(BuildContext context) {
