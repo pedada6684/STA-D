@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
@@ -15,201 +14,133 @@ class MyOrderScreen extends StatefulWidget {
 }
 
 class _MyOrderScreenState extends State<MyOrderScreen> {
-
-  List<Order>? _orders;
+  List<OrderDetails>? _orders;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-      () {
-        final userProvider = Provider.of<UserProvider>(context, listen: false);
-        if (userProvider.userId == null) {
-          userProvider.fetchUser().then((_) {
-            if (userProvider.userId != null) {
-              _fetchOrderData();
-            }
-          });
-        } else {
-          _fetchOrderData();
-        }
-      },
-    );
+    _fetchOrders();
   }
 
-  Future<void> _fetchOrderData() async {
+  Future<void> _fetchOrders() async {
     setState(() => _isLoading = true);
     try {
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      final orders = await OrderService().fetchOrders(userProvider.userId!);
-      setState(() {
-        _orders = orders;
-        _isLoading = false;
-      });
+      final userId = Provider.of<UserProvider>(context, listen: false).userId;
+      if (userId != null) {
+        final orders = await OrderService().fetchOrders(userId);
+        setState(() => _orders = orders);
+      }
     } catch (e) {
-      print('Error loading orders: $e');
-      setState(() {
-        _orders = []; // 빈 리스트 할당
-        _isLoading = false;
-      });
+      print('Failed to fetch orders: $e');
+    } finally {
+      setState(() => _isLoading = false);
     }
-  }
-
-  double _progress = 0.0;
-
-  void simulateLoading() async {
-    setState(() {
-      _isLoading = true;
-      _progress = 0.0;
-    });
-
-    int maxSteps = 100; // 예를 들어 100단계의 작업으로 설정
-    for (int i = 0; i <= maxSteps; i++) {
-      await Future.delayed(Duration(milliseconds: 5), () {
-        setState(() {
-          _progress = i / maxSteps;
-        });
-      });
-    }
-
-    setState(() {
-      _isLoading = false;
-      _progress = 0.0;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: mainWhite,
-      appBar: CustomAppBar(
-        title: '주문 내역',
-        showBackButton: true,
-        isLoading: _isLoading,
-        progressValue: _progress,
-      ),
-      // body: Stack(
-      //   children: [
-      //     Positioned(
-      //       top: 0,
-      //       bottom: 0,
-      //       left: 72,
-      //       child: Container(
-      //         width: 1,
-      //         color: mainNavy,
-      //       ),
-      //     ),
-      //     CustomScrollView(
-      //       slivers: [
-      //         SliverToBoxAdapter(
-      //             child: SizedBox(
-      //           height: 40.0,
-      //         )),
-      //         SliverList(
-      //           delegate: SliverChildBuilderDelegate(
-      //             (context, index) {
-      //               final order = _orders[index];
-      //               return Column(
-      //                 crossAxisAlignment: CrossAxisAlignment.start,
-      //                 children: [
-      //                   if (order['isNewDate'])
-      //                     Padding(
-      //                       padding: const EdgeInsets.symmetric(
-      //                           horizontal: 16.0, vertical: 24.0),
-      //                       child: Center(
-      //                         child: Text(order['date'],
-      //                             style: TextStyle(
-      //                                 fontSize: 18,
-      //                                 color: mainNavy,
-      //                                 fontWeight: FontWeight.w600)),
-      //                       ),
-      //                     ),
-      //                   _buildOrderItem(
-      //                     title: order['title'],
-      //                     description: order['description'],
-      //                   ),
-      //                 ],
-      //               );
-      //             },
-      //             childCount: _orders.length,
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //     Positioned(
-      //       top: 0,
-      //       child: Container(
-      //         width: MediaQuery.of(context).size.width,
-      //         decoration: BoxDecoration(color: mainWhite),
-      //         child: Padding(
-      //           padding: const EdgeInsets.all(8.0),
-      //           child: Row(
-      //             mainAxisAlignment: MainAxisAlignment.end,
-      //             children: [
-      //               Text(
-      //                 '최근 3개월',
-      //                 style: TextStyle(
-      //                   color: mainNavy,
-      //                   fontSize: 16.0,
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
+      backgroundColor: backGray,
+      appBar: CustomAppBar(title: '주문 내역', showBackButton: true),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : _orders == null || _orders!.isEmpty
               ? Center(
-                  child: Text(
-                  '주문 내역이 없습니다.',
-                  style: TextStyle(color: darkGray, fontSize: 18.0),
-                ))
+                  child: Text('주문 내역이 없습니다.',
+                      style: TextStyle(color: darkGray, fontSize: 18.0)))
               : ListView.builder(
                   itemCount: _orders!.length,
                   itemBuilder: (context, index) {
-                    final order = _orders![index];
-                    return _buildOrderItem(
-                      title:
-                          order.productTypeName[0], // 예시 코드, 실제 필드명에 맞게 조정 필요
-                      description: order.orderDate,
-                    );
+                    return _buildOrderCard(_orders![index]);
                   },
                 ),
     );
   }
 
-  Widget _buildOrderItem({required String title, required String description}) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 10.0),
-          child: Row(
-            children: [
-              Image.asset('assets/image/product.png',
-                  width: 80, height: 80, fit: BoxFit.cover),
-              // Placeholder image
-              SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                    SizedBox(height: 4),
-                    Text(description),
-                  ],
-                ),
-              ),
-            ],
+  Widget _buildOrderCard(OrderDetails order) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      color: mainWhite,
+      surfaceTintColor: mainWhite,
+      margin: EdgeInsets.all(10),
+      elevation: 0,
+      child: Column(
+        children: [
+          ListTile(
+            title: Text('${order.orderDate}',
+                style: TextStyle(fontWeight: FontWeight.bold)),
           ),
-        ),
-      ],
+          Divider(
+            height: 1,
+            color: mainGray,
+          ),
+          ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: order.productDetails.length,
+            itemBuilder: (context, index) {
+              final product = order.productDetails[index];
+              return ListTile(
+                // leading: Image.network(product.productImg,
+                //     width: 50, height: 50, fit: BoxFit.cover),
+                // title: Text(
+                //   product.productName,
+                //   style: TextStyle(fontWeight: FontWeight.bold),
+                // ),
+                subtitle: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('결제방법'),
+                          _gap(),
+                          // Text('수량'),
+                          // _gap(),
+                          Text('결제금액'),
+                          _gap(),
+                          Text('주문 상태')
+                        ],
+                      ),
+                      SizedBox(
+                        width: 40.0,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('신용카드'),
+                          _gap(),
+                          // Text('${product.productCnt}'),
+                          // _gap(),
+                          Text('${product.productPrice} 원'),
+                          _gap(),
+                          order.orderStatus == 'ORDER'
+                              ? Text('주문완료')
+                              : Text('취소완료'),
+                          _gap(),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _gap extends StatelessWidget {
+  const _gap();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      height: 4.0,
     );
   }
 }
