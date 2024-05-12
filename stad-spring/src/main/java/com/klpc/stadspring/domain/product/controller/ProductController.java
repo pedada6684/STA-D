@@ -39,8 +39,7 @@ public class ProductController {
     @Operation(summary = "상품 정보 요청", description = "상품 정보 요청")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetProductInfoResponse.class)))
     public ResponseEntity<GetProductInfoResponse> getProductInfo(@RequestParam("productId") Long productId) {
-        Product product = productService.getProductInfo(productId);
-        GetProductInfoResponse response = GetProductInfoResponse.from(product);
+        GetProductInfoResponse response = productService.getProductInfo(productId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
