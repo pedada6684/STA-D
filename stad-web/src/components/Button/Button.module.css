@@ -27,12 +27,23 @@
   background-color: #00127a;
   border-radius: 50px;
   color: white;
+  cursor: pointer;
+}
+
+.navigate {
+  width: 10rem;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 50px;
+  color: #00127a;
+  cursor: pointer;
 }
 .enCon {
   margin: 3rem;
   display: flex;
   justify-content: center;
 }
+
 .buttonWrapper {
   display: flex;
 }
