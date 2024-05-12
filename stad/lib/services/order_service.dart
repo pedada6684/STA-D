@@ -14,16 +14,16 @@ class OrderService {
   final String orderUrl = '$svApi/orders';
   
   //내 주문목록 불러오기 => 백엔드 수정 필요
-  Future<List<Order>> fetchOrders(int userId) async {
+  Future<List<OrderDetails>> fetchOrders(int userId) async {
     try {
       final response = await dio.get('${orderUrl}/list?userId=$userId');
       if (response.statusCode == 200) {
         // 'content' 필드가 null인지 확인
         print('내 주문 정보 : ${response.data}');
-        if (response.data['content'] != null) {
+        if (response.data['data'] != null) {
           List<dynamic> ordersJson = response.data['data'];
-          List<Order> orders =
-              ordersJson.map((json) => Order.fromJson(json)).toList();
+          List<OrderDetails> orders =
+              ordersJson.map((json) => OrderDetails.fromJson(json)).toList();
           return orders;
         } else {
           // 'content'가 null이면 빈 리스트 반환
