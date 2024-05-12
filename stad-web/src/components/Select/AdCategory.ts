@@ -11,8 +11,10 @@ export const SelectAdMainCategory = [
   { value: "J", label: "패션잡화" },
   { value: "K", label: "화장품/미용" },
 ];
-
-export const SelectAdSubCategory = {
+interface subCategoryType {
+  [key: string]: { value: string; label: string }[];
+}
+export const SelectAdSubCategory: subCategoryType = {
   A: [
     { value: "AA016", label: "DIY자재/용품" },
     { value: "AA015", label: "거실가구" },
