@@ -26,9 +26,6 @@ public class ContentDetail {
     private String summary;
 
     @OneToMany(mappedBy = "contentDetail")
-    private List<BookmarkedContent> bookmarkedContentList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "contentDetail")
     private List<WatchedContent> watchedContentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "contentDetail")

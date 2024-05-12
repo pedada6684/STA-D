@@ -2,23 +2,21 @@ package com.klpc.stadspring.domain.contents.detail.controller.response;
 
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Builder
-public class GetDetailIdAndThumbnailResponse {
+public class GetThumbnailResponse {
     String title;
     String thumbnailUrl;
-    Long detailId;
+    Long conceptId;
 
-    public static GetDetailIdAndThumbnailResponse from(ContentDetail detail, ContentConcept concept) {
-        return GetDetailIdAndThumbnailResponse.builder()
+    public static GetThumbnailResponse from(ContentConcept concept) {
+        return GetThumbnailResponse.builder()
                 .title(concept.getTitle())
                 .thumbnailUrl(concept.getThumbnailUrl())
-                .detailId(detail.getId())
+                .conceptId(concept.getId())
                 .build();
     }
 }

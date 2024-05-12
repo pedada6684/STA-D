@@ -7,5 +7,5 @@ import lombok.Data;
 @Builder
 public class AddBookmarkRequestCommand {
     private Long userId;
-    private Long detailId;
+    private Long conceptId;
 }
