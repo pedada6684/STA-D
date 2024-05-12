@@ -19,6 +19,7 @@ import com.klpc.stadspring.domain.orders.service.command.request.AddOrderLogComm
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequestCommand;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrdersProductTypeRequestCommand;
 import com.klpc.stadspring.domain.orders.service.command.response.GetOrderListProductTypeResponseCommand;
+import com.klpc.stadspring.domain.orders.service.command.response.GetOrdersListProductResponse;
 import com.klpc.stadspring.domain.orders.service.command.response.GetOrdersListResponseCommand;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
@@ -95,7 +96,7 @@ public class OrdersService {
 
             productType.modifyQuantity(-1* ptCommand.getProductCnt());
 
-            sendOrderLogRequest(addOrderLogCommand);
+//            sendOrderLogRequest(addOrderLogCommand);
         }
 
         return AddOrdersResponse.builder().result("success").build();
@@ -115,23 +116,47 @@ public class OrdersService {
             List<GetOrderListProductTypeResponseCommand> productTypeList = new ArrayList<>();
             for(OrderProduct orderProduct : orders.getOrderProducts()){
                 ProductType productType = orderProduct.getProductType();
-                ProductOption productOption = optionRepository.findById(orderProduct.getOptionId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-                GetOrderListProductTypeResponseCommand ptCommand = GetOrderListProductTypeResponseCommand.builder()
-                        .productTypeId(productType.getId())
-                        .productName(productType.getName())
-                        .productCnt(orderProduct.getCnt())
-                        .productPrice(productType.getPrice())
-                        .productImg(productType.getProduct().getThumbnail())
-                        .optionId(productOption.getId())
-                        .optionName(productOption.getName())
-                        .optionValue(productOption.getValue())
-                        .build();
+                GetOrderListProductTypeResponseCommand ptCommand = null;
+                if(orderProduct.getOptionId() == null){
+                    ptCommand = GetOrderListProductTypeResponseCommand.builder()
+                            .productTypeId(productType.getId())
+                            .productName(productType.getName())
+                            .productCnt(orderProduct.getCnt())
+                            .productPrice(productType.getPrice())
+                            .productImg(productType.getProduct().getThumbnail())
+                            .optionId(null)
+                            .optionName(null)
+                            .optionValue(null)
+                            .build();
+                }
+                else {
+                    ProductOption productOption = optionRepository.findById(orderProduct.getOptionId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+                    ptCommand = GetOrderListProductTypeResponseCommand.builder()
+                            .productTypeId(productType.getId())
+                            .productName(productType.getName())
+                            .productCnt(orderProduct.getCnt())
+                            .productPrice(productType.getPrice())
+                            .productImg(productType.getProduct().getThumbnail())
+                            .optionId(productOption.getId())
+                            .optionName(productOption.getName())
+                            .optionValue(productOption.getValue())
+                            .build();
+                }
                 productTypeList.add(ptCommand);
+            }
+            List<GetOrdersListProductResponse> products = new ArrayList<>();
+            for(OrderProduct orderProduct : orders.getOrderProducts()){
+                GetOrdersListProductResponse product = GetOrdersListProductResponse.builder()
+                        .productId(orderProduct.getProductType().getProduct().getId())
+                        .productName(orderProduct.getProductType().getProduct().getName())
+                        .build();
+                products.add(product);
             }
             GetOrdersListResponseCommand command = GetOrdersListResponseCommand.builder()
                     .ordersId(orders.getId())
                     .orderDate(orders.getOrderDate().toLocalDate().toString())
                     .orderStatus(orders.getStatus().name())
+                    .products(products)
                     .productTypes(productTypeList)
                     .build();
             response.add(command);
@@ -150,23 +175,47 @@ public class OrdersService {
         List<GetOrderListProductTypeResponseCommand> productTypeList = new ArrayList<>();
         for(OrderProduct orderProduct : orders.getOrderProducts()){
             ProductType productType = orderProduct.getProductType();
-            ProductOption productOption = optionRepository.findById(orderProduct.getOptionId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-            GetOrderListProductTypeResponseCommand ptCommand = GetOrderListProductTypeResponseCommand.builder()
-                    .productTypeId(productType.getId())
-                    .productName(productType.getName())
-                    .productCnt(orderProduct.getCnt())
-                    .productPrice(productType.getPrice())
-                    .productImg(productType.getProduct().getThumbnail())
-                    .optionId(productOption.getId())
-                    .optionName(productOption.getName())
-                    .optionValue(productOption.getValue())
-                    .build();
+            GetOrderListProductTypeResponseCommand ptCommand = null;
+            if(orderProduct.getOptionId() == null){
+                ptCommand = GetOrderListProductTypeResponseCommand.builder()
+                        .productTypeId(productType.getId())
+                        .productName(productType.getName())
+                        .productCnt(orderProduct.getCnt())
+                        .productPrice(productType.getPrice())
+                        .productImg(productType.getProduct().getThumbnail())
+                        .optionId(null)
+                        .optionName(null)
+                        .optionValue(null)
+                        .build();
+            }
+            else {
+                ProductOption productOption = optionRepository.findById(orderProduct.getOptionId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+                ptCommand = GetOrderListProductTypeResponseCommand.builder()
+                        .productTypeId(productType.getId())
+                        .productName(productType.getName())
+                        .productCnt(orderProduct.getCnt())
+                        .productPrice(productType.getPrice())
+                        .productImg(productType.getProduct().getThumbnail())
+                        .optionId(productOption.getId())
+                        .optionName(productOption.getName())
+                        .optionValue(productOption.getValue())
+                        .build();
+            }
             productTypeList.add(ptCommand);
+        }
+        List<GetOrdersListProductResponse> products = new ArrayList<>();
+        for(OrderProduct orderProduct : orders.getOrderProducts()){
+            GetOrdersListProductResponse product = GetOrdersListProductResponse.builder()
+                    .productId(orderProduct.getProductType().getProduct().getId())
+                    .productName(orderProduct.getProductType().getProduct().getName())
+                    .build();
+            products.add(product);
         }
         GetOrdersResponse response = GetOrdersResponse.builder()
                 .ordersId(orders.getId())
                 .orderDate(orders.getOrderDate().toLocalDate().toString())
                 .orderStatus(orders.getStatus().name())
+                .products(products)
                 .productTypes(productTypeList)
                 .build();
 
