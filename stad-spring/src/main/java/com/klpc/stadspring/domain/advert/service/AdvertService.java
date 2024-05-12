@@ -197,7 +197,7 @@ public class AdvertService {
         }
         List<Long> selectedContentList = new ArrayList<>();
         for(SelectedContent i : advert.getSelectedContents())
-            selectedContentList.add(i.getId());
+            selectedContentList.add(i.getFixedContentId());
 
         List<GetAdvertAdvertVideo> advertVideoUrlList = new ArrayList<>();
         for(AdvertVideo i : advert.getAdvertVideos()) {
@@ -234,7 +234,7 @@ public class AdvertService {
         for(Advert advert : listByUser){
             List<Long> selectedContentList = new ArrayList<>();
             for(SelectedContent i : advert.getSelectedContents())
-                selectedContentList.add(i.getId());
+                selectedContentList.add(i.getFixedContentId());
 
             List<GetAdvertAdvertVideo> advertVideoUrlList = new ArrayList<>();
             for(AdvertVideo i : advert.getAdvertVideos()) {
