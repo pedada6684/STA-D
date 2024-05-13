@@ -26,8 +26,8 @@ public class GetProductInfoResponse {
     private String thumbnail;
     private Long cityDeliveryFee;
     private Long mtDeliveryFee;
-    private LocalDateTime expStart;
-    private LocalDateTime expEnd;
+    private String expStart;
+    private String expEnd;
     private List<GetProductInfoProductTypeResponse> productTypeList;
 
 }
