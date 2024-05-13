@@ -1,6 +1,6 @@
-package com.klpc.stadstream.domain.detail.controller;
+package com.klpc.stadstream.domain.contents.detail.controller;
 
-import com.klpc.stadstream.domain.detail.service.ContentDetailService;
+import com.klpc.stadstream.domain.contents.detail.service.ContentDetailService;
 import com.klpc.stadstream.global.RedisService;
 import com.klpc.stadstream.global.event.ContentStartEvnet;
 import io.swagger.v3.oas.annotations.Operation;
