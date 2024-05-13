@@ -62,30 +62,38 @@ export default function AdDetail() {
         advertType: ad.type,
         bannerImgUrl: ad.bannerImgUrl,
         advertVideoUrlList: ad.advertVideoUrlList,
-        selectedContentList: ad.selectedContentList.map(
-          (content: any) => content.value
-        ),
+        selectedContentList: ad.selectedContentList,
       };
-
+      console.log(ad.selectedContentList);
+      setBannerImgPreview(ad.bannerImgUrl);
       setStartDate(new Date(ad.startDate));
       setEndDate(new Date(ad.endDate));
       setFormData(initialFormData);
-      console.log(formData);
     }
   }, [ad]);
 
   useEffect(() => {
+    console.log("formData updated:", formData);
+  }, [formData]);
+  useEffect(() => {
+    if (category) {
+      setFormData((prevState) => ({
+        ...prevState,
+        advertCategory: category,
+      }));
+    }
+  }, [category]);
+
+  useEffect(() => {
     const updatedFormData = { ...formData };
     // 카테고리 업데이트
-    if (category) updatedFormData.advertCategory = category;
     if (contentId) {
-      const newIds = contentId.map((option) => option.value);
-      updatedFormData.selectedContentList = [
-        ...new Set([...(formData?.selectedContentList || []), ...newIds]),
-      ];
+      setFormData((prevState) => ({
+        ...prevState,
+        selectedContentList: [...contentId.map((option) => option.value)],
+      }));
     }
-    setFormData(updatedFormData);
-  }, [category, contentId]);
+  }, [contentId]);
 
   useEffect(() => {
     if (startDate || endDate) {
@@ -116,7 +124,10 @@ export default function AdDetail() {
       ...prevState,
       advertVideoUrlList: [
         ...(prevState?.advertVideoUrlList ?? []),
-        ...videoUrls,
+        ...videoUrls.map((url: string) => ({
+          advertVideoId: -1,
+          advertVideoUrl: url,
+        })),
       ],
     }));
     setVideoUrlList(videoUrls);
@@ -162,7 +173,17 @@ export default function AdDetail() {
       bannerImgUrl: undefined,
     }));
   };
-
+  const handleAddVideoDelete = (index: number) => {
+    const filteredVideos = videoUrlList.filter((_, i) => i !== index);
+    setVideoUrlList(filteredVideos);
+    setFormData((prevState) => ({
+      ...prevState,
+      advertVideoUrlList: filteredVideos.map((url) => ({
+        advertVideoId: -1,
+        advertVideoUrl: url,
+      })),
+    }));
+  };
   return (
     <div>
       <Container>
@@ -204,13 +225,7 @@ export default function AdDetail() {
                 <div className={`${styles.advideoList}`}>
                   <div className={`${styles.subTitle}`}>TV 광고 영상</div>
                   <div className={`${styles.videoContainer}`}>
-                    <div
-                      className={
-                        ad?.advertVideoUrlList?.length > 0
-                          ? `${styles.afterUpload}`
-                          : `${styles.video}`
-                      }
-                    >
+                    <div className={`${styles.afterUpload}`}>
                       {videoUrlList.length > 0 ? (
                         <>
                           {videoUrlList.map((url, index) => (
@@ -224,28 +239,33 @@ export default function AdDetail() {
                                 src={url}
                                 style={{ width: "100%" }}
                               />
+                              <button
+                                onClick={() => handleAddVideoDelete(index)}
+                                className={`${styles.deleteVidButton}`}
+                              >
+                                <img src={close} alt="Delete" />
+                              </button>
                             </div>
                           ))}
-                          <button
-                            className={styles.videoOverlay}
-                            onClick={() =>
-                              videoInputRef.current &&
-                              videoInputRef.current.click()
-                            }
-                          >
-                            <img src={edit} alt="Edit videos" />
-                          </button>
-                          <input
-                            type="file"
-                            name="videoList"
-                            id="videoList"
-                            accept="video/*"
-                            ref={videoInputRef}
-                            multiple
-                            onChange={handleAdvertVideoList}
-                            className={`${styles.videoInput} ${styles.input}`}
-                            style={{ display: "none" }}
-                          />
+                          <div className={`${styles.video}`}>
+                            <input
+                              ref={videoInputRef}
+                              type="file"
+                              name="videoList"
+                              id="videoList"
+                              accept="video/*"
+                              multiple
+                              onChange={handleAdvertVideoList}
+                              className={`${styles.videoInput} ${styles.input}`}
+                              style={{ display: "none" }}
+                            />
+                            <label
+                              htmlFor="videoList"
+                              className={styles.btnUpload}
+                            >
+                              <img src={plus} alt="Upload" />
+                            </label>
+                          </div>
                         </>
                       ) : (
                         <>
@@ -316,9 +336,39 @@ export default function AdDetail() {
                     <div className={`${styles.bImage} ${styles.prev}`}>
                       {!bannerImgPreview ? (
                         <>
+                          <input
+                            type="file"
+                            name="file"
+                            id="fileInput" // 동일한 input ID를 유지
+                            accept="image/gif, image/jpeg, image/jpg, image/png"
+                            ref={imageInputRef}
+                            onChange={handleBannerImg}
+                            style={{ display: "none" }}
+                            required
+                          />
+                          <label
+                            htmlFor="fileInput"
+                            className={`${styles.btnUpload}`}
+                          >
+                            <img src={plus} alt="Upload" />
+                          </label>
+                        </>
+                      ) : (
+                        <>
+                          {/* <img
+                            src={bannerImgPreview}
+                            alt="Preview"
+                            className={styles.imgPrev}
+                          />
+                          <button
+                            onClick={() => imageInputRef.current?.click()} // 버튼 클릭시 input 트리거
+                            className={styles.overlayButton}
+                          >
+                            <img src={edit} alt="편집 버튼" />
+                          </button> */}
                           <button
                             onClick={handleBannerImgDelete}
-                            className={`${styles.deleteVidButton}`}
+                            className={`${styles.deleteImgButton}`}
                           >
                             <img src={close} alt="Delete" />
                           </button>
@@ -339,30 +389,6 @@ export default function AdDetail() {
                             id="fileInput" // 파일 input ID 설정
                             ref={imageInputRef}
                             accept="image/gif, image/jpeg, image/jpg, image/png"
-                            onChange={handleBannerImg}
-                            style={{ display: "none" }}
-                            required
-                          />
-                        </>
-                      ) : (
-                        <>
-                          <img
-                            src={bannerImgPreview}
-                            alt="Preview"
-                            className={styles.imgPrev}
-                          />
-                          <button
-                            onClick={() => imageInputRef.current?.click()} // 버튼 클릭시 input 트리거
-                            className={styles.overlayButton}
-                          >
-                            <img src={edit} alt="편집 버튼" />
-                          </button>
-                          <input
-                            type="file"
-                            name="file"
-                            id="fileInput" // 동일한 input ID를 유지
-                            accept="image/gif, image/jpeg, image/jpg, image/png"
-                            ref={imageInputRef}
                             onChange={handleBannerImg}
                             style={{ display: "none" }}
                             required
@@ -411,7 +437,10 @@ export default function AdDetail() {
               </div>
               <InputContainer>
                 <div className={`${styles.selectBox}`}>
-                  <SelectAdCategory setCategory={setCategory} />
+                  <SelectAdCategory
+                    initialCategory={ad?.category}
+                    setCategory={setCategory}
+                  />
                 </div>
                 <div className={`${styles.caution}`}>
                   *각 광고 카테고리에 맞는 영상을 매칭해드립니다.
