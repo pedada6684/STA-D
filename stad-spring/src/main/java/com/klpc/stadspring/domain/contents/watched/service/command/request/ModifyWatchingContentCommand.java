@@ -11,5 +11,5 @@ public class ModifyWatchingContentCommand {
     private Long userId;
     private Long detailId;
     private boolean status;
-    private String stopTime;
+    private Long stopTime;
 }
