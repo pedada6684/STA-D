@@ -28,6 +28,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import RequireAuth from "./pages/WebLogin/RequireAuth";
 import AdDetail from "./pages/AdEdit/AdDetail";
+import MerchandiseDetail from "./pages/AdEdit/MerchandiseDetail";
 export default function AnimatedRouter() {
   const location = useLocation();
   return (
@@ -73,7 +74,7 @@ export default function AnimatedRouter() {
             <Route path="review" element={<Review />} />
           </Route>
           <Route
-            path="/ads/:id"
+            path="/ads/:id/*"
             element={
               <RequireAuth>
                 <AdDetail />
@@ -104,6 +105,14 @@ export default function AnimatedRouter() {
               </RequireAuth>
             }
           />
+            <Route
+                path="/modify-merchandise"
+                element={
+                    <RequireAuth>
+                        <MerchandiseDetail />
+                    </RequireAuth>
+                }
+            />
           {/* ---------------- 스트리밍 서비스 관련 router ------------------ */}
           <Route path="/tv-login" element={<TvLogin />} />
           <Route path="/tv-landing" element={<TVLanding />} />
