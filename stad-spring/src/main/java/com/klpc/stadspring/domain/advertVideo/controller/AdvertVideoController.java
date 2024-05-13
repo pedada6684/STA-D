@@ -6,18 +6,18 @@ import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddBannerImgRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddVideoListRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVideoRequestCommand;
-import com.klpc.stadspring.domain.advertVideo.service.command.response.GetTotalLogResponse;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
 import com.klpc.stadspring.global.RedisService;
+import com.klpc.stadspring.global.event.AdvertsStartEvent;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +34,8 @@ public class AdvertVideoController {
     private final AdvertVideoService advertVideoService;
     private final ContentDetailService detailService;
     private final RedisService redisService;
+
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @PostMapping("/add-video-list")
     @Operation(summary = "광고 영상 업로드", description = "광고 영상 업로드")
@@ -97,6 +99,7 @@ public class AdvertVideoController {
 
         Long conceptId = detailService.getContentDetailById(detailId).getContentConceptId();
         GetFinalAdvertVideoListResponse response = advertVideoService.getFinalAdvertVideoList(userId, conceptId);
+        kafkaTemplate.send("adverts-start", new AdvertsStartEvent(userId, response.getAdvertIdList()));
         return ResponseEntity.ok(response);
     }
 
