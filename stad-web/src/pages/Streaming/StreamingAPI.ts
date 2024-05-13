@@ -106,9 +106,11 @@ export async function postBookmarkAdd(accessToken: string | null, userId: number
 export async function deleteBookmark(accessToken: string | null, userId: number, conceptId: number) {
   try {
     console.log("conceptId", conceptId, "/userId", userId);
-    const response = await axios.post(`/api/contents-bookmark/delete`, {
-      userId: userId,
-      conceptId: conceptId,
+    const response = await axios.delete(`/api/contents-bookmark/delete`, {
+      data: {
+        userId: userId,
+        conceptId: conceptId,
+      },
     });
     console.log("북마크 삭제 성공", response.data);
     return response.data;

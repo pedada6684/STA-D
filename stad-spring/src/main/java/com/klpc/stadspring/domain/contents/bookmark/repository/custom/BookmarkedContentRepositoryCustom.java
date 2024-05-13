@@ -8,5 +8,4 @@ import java.util.Optional;
 
 public interface BookmarkedContentRepositoryCustom {
     Optional<List<Long>> findConceptIdByUserId(Long userId);
-    Optional<BookmarkedContent> findByUserIdAndContentConceptId(Long userId, Long conceptId);
 }
