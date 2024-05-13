@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import styles from "./Merchandise.module.css";
+import styles from "../../components/Enroll/Merchandise.module.css";
 import ToggleButton from "../../components/Button/ToggleButton";
 import InputContainer from "../../components/Container/InputContainer";
 import plus from "../../assets/plus.png";
@@ -23,6 +23,7 @@ import {
 import { useLocation } from "react-router-dom";
 import edit from "../../assets/lucide_edit.png";
 import { getMerchandiseDetail } from "./MerchandiseDetailAPI";
+import MerchandiseModifyButton from "../../components/Button/MerchandiseModifyButton";
 interface formData {
   userId?: number;
   title?: string;
@@ -39,7 +40,7 @@ interface goodsForm {
   productId?: number;
   name?: string;
   imgs?: string[];
-  thumbnail?: String;
+  thumbnail?: string;
   cityDeliveryFee?: number;
   mtDeliveryFee?: number;
   expStart?: string;
@@ -50,6 +51,7 @@ interface goodsForm {
 // 상품 interface
 interface ProductType {
   id: number;
+  productTypeId: number
   productTypeName: string; // 상품명
   productTypePrice: number; // 상품 가격
   productTypeQuantity: number; // 재고 수량
@@ -59,6 +61,7 @@ interface ProductType {
 // 옵션 interface
 interface ProductOption {
   id: number;
+  optionId: number;
   optionName: string; // 옵션명
   optionValue: number; // 옵션값
 }
@@ -68,8 +71,8 @@ export default function Merchandise() {
   const productId: number = location.state;
   const [formData, setFormData] = useState<formData>();
   const [goodsFormData, setGoodsFormData] = useState<goodsForm>();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const thumbnailInputRef = useRef<HTMLInputElement>(null);
+  const detailImgInputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -86,8 +89,15 @@ export default function Merchandise() {
             expEnd: data.expEnd,
             productTypeList: data.productTypeList,
           });
-
-          setProducts(data.productTypeList);
+          setThumbnailImgUrl(data.thumbnail)
+          setThumbnailPreviewUrl(data.thumbnail)
+          setDetailImages(data.images)
+          setDetailImagePreviews(data.images)
+          setProducts(data.productTypeList)
+          console.log(data.expStart)
+          console.log(data.expEnd)
+          setStartDate(new Date(data.expStart))
+          setEndDate(new Date(data.expEnd))
         }
       } catch (error) {
         console.error("상품 조회 실패", error);
@@ -96,6 +106,7 @@ export default function Merchandise() {
 
     fetchData(); // fetchData 함수 호출
   }, [productId]);
+
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -106,7 +117,7 @@ export default function Merchandise() {
   };
 
   const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date("2024/12/31"));
+  const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [thumbnailImgUrl, setThumbnailImgUrl] = useState<string>("");
   const [thumbnailPreviewUrl, setThumbnailPreviewUrl] = useState<string | null>(
     null
@@ -139,7 +150,7 @@ export default function Merchandise() {
     const thumbnailImgUrl = e.target.files;
     const data = await productThumbnailUpload(thumbnailImgUrl);
     console.log("대표 이미지:", data);
-    setThumbnailImgUrl(data);
+    setThumbnailImgUrl(data.data);
     setGoodsFormData((prevState) => ({
       ...prevState,
       thumbnail: data.data,
@@ -151,16 +162,17 @@ export default function Merchandise() {
   const handleDetailImg = async (e: ChangeEvent<HTMLInputElement>) => {
     const imgList = e.target.files;
     const dataList = await productDetailImgUpload(imgList);
-    console.log("상품 상세 이미지:", dataList);
-    setDetailImages(dataList);
+    setDetailImages(prevImages => [...prevImages, ...dataList.data]);
+    console.log(dataList.data)
+    setDetailImagePreviews(prevImages => [...prevImages, ...dataList.data]);
+  };
+
+  useEffect(() => {
     setGoodsFormData((prevState) => ({
       ...prevState,
-      imgs: dataList.data,
+      imgs: detailImagePreviews
     }));
-    console.log("이미지 리스트 추가", dataList);
-    setDetailImagePreviews(dataList.data);
-    console.log(detailImagePreviews);
-  };
+  }, [detailImagePreviews]);
 
   // 상품 상태관리
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -174,6 +186,7 @@ export default function Merchandise() {
   const addProduct = () => {
     const newProduct = {
       id: Date.now(), // 고유 ID 생성
+      productTypeId : -1,
       productTypeName: "",
       productTypePrice: 0,
       productTypeQuantity: 0,
@@ -192,6 +205,7 @@ export default function Merchandise() {
     // 초기값 설정
     const newOption: ProductOption = {
       id: Date.now(),
+      optionId : -1,
       optionName: "",
       optionValue: 0,
     };
@@ -322,10 +336,9 @@ export default function Merchandise() {
                   <>
                     <input
                       type="file"
-                      ref={fileInputRef}
+                      ref={thumbnailInputRef}
                       name="thumbnail"
                       id="thumbnail"
-                      value={`${goodsFormData?.thumbnail}`}
                       accept="image/gif, image/jpeg, image/jpg, image/png"
                       onChange={handleThumbnailImg}
                       className={`${styles.imageInput}`}
@@ -346,7 +359,7 @@ export default function Merchandise() {
                       alt="Thumbnail Preview"
                     />
                     <button
-                      onClick={() => fileInputRef.current?.click()} // 버튼 클릭시 input 트리거
+                      onClick={() => thumbnailInputRef.current?.click()} // 버튼 클릭시 input 트리거
                       className={styles.overlayButton}
                     >
                       <img src={edit} alt="편집 버튼" />
@@ -359,11 +372,10 @@ export default function Merchandise() {
                     </button>
                     <input
                       type="file"
-                      ref={fileInputRef}
+                      ref={thumbnailInputRef}
                       name="thumbnail"
                       id="thumbnail"
                       accept="image/gif, image/jpeg, image/jpg, image/png"
-                      value={`${goodsFormData?.thumbnail}`}
                       onChange={handleThumbnailImg}
                       className={`${styles.imageInput}`}
                       required
@@ -442,17 +454,16 @@ export default function Merchandise() {
                     <button
                       className={styles.videoOverlay}
                       onClick={() =>
-                        fileInputRef.current && fileInputRef.current.click()
+                          detailImgInputRef.current && detailImgInputRef.current.click()
                       }
                     >
                       <img src={edit} alt="Edit image" />
                     </button>
                     <input
-                      ref={fileInputRef}
+                      ref={detailImgInputRef}
                       type="file"
                       name={`detailImage`}
                       id={`detailImage`}
-                      value={`${goodsFormData?.imgs}`}
                       multiple
                       required
                       accept="image/gif, image/jpeg, image/jpg, image/png"
@@ -466,7 +477,6 @@ export default function Merchandise() {
                       type="file"
                       name="detailImage-0"
                       id="detailImage-0"
-                      value={`${goodsFormData?.imgs}`}
                       multiple
                       required
                       accept="image/gif, image/jpeg, image/jpg, image/png"
@@ -672,10 +682,8 @@ export default function Merchandise() {
         </InputContainer>
       </ItemContainer>
 
-      <EnrollButton
+      <MerchandiseModifyButton
         goodsFormData={goodsFormData}
-        formData={formData}
-        from="merchandise"
       />
     </div>
   );
