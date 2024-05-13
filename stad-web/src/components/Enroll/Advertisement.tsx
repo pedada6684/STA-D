@@ -168,266 +168,239 @@ export default function Advertisement() {
           <div className={`${styles.name}`}>
             광고명<span>*</span>
           </div>
-          <ToggleButton
-            isExpanded={toggles.isAdNameExpanded}
-            onToggle={() => handleToggle("isAdNameExpanded")}
-          />
+          <ToggleButton />
         </div>
-        {isAdNameExpanded && (
-          <InputContainer>
-            <div>
-              <input
-                type="text"
-                name="title"
-                onChange={handleChange}
-                className={`${styles.input}`}
-                required
-              />
-            </div>
-            <div className={`${styles.caution}`}>
-              *가이드에 맞지않은 광고명 입력 시 별도 고지없이 제재될 수
-              있습니다.
-            </div>
-          </InputContainer>
-        )}
+        <InputContainer>
+          <div>
+            <input
+              type="text"
+              name="title"
+              onChange={handleChange}
+              className={`${styles.input}`}
+              required
+            />
+          </div>
+          <div className={`${styles.caution}`}>
+            *가이드에 맞지않은 광고명 입력 시 별도 고지없이 제재될 수 있습니다.
+          </div>
+        </InputContainer>
       </div>
       <div className={`${styles.item}`}>
         <div className={`${styles.title}`}>
           <div className={`${styles.name}`}>
             광고영상<span>*</span>
           </div>
-          <ToggleButton
-            isExpanded={toggles.isAdVideoExpanded}
-            onToggle={() => handleToggle("isAdVideoExpanded")}
-          />
+          <ToggleButton />
         </div>
-        {isAdVideoExpanded && (
-          <InputContainer>
-            <div className={`${styles.advideoList}`}>
-              <div className={`${styles.subTitle}`}>TV 광고 영상</div>
-              <div className={`${styles.videoContainer}`}>
-                <div
-                  className={
-                    videoUrlList.length > 0
-                      ? `${styles.afterUpload}`
-                      : `${styles.video}`
-                  }
-                >
-                  {videoUrlList.length > 0 ? (
-                    <>
-                      {videoUrlList.map((url, index) => (
-                        <div key={index} className={`${styles.videoPreview}`}>
-                          <video
-                            className={`${styles.videoPrev}`}
-                            controls
-                            src={url}
-                            style={{ width: "100%" }}
-                          />
-                          <button
-                            onClick={() => handleAdvertVideoDelete(index)}
-                            className={`${styles.deleteVidButton}`}
-                          >
-                            <img src={close} alt="Delete" />
-                          </button>
-                        </div>
-                      ))}
-                      <button
-                        className={styles.videoOverlay}
-                        onClick={() =>
-                          fileInputRef.current && fileInputRef.current.click()
-                        }
-                      >
-                        <img src={edit} alt="Edit videos" />
-                      </button>
-
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        name="videoList"
-                        id="videoList"
-                        accept="video/*"
-                        multiple
-                        onChange={handleAdvertVideoList}
-                        className={`${styles.videoInput} ${styles.input}`}
-                        style={{ display: "none" }}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        name="videoList"
-                        id="videoList"
-                        accept="video/*"
-                        multiple
-                        onChange={handleAdvertVideoList}
-                        className={`${styles.videoInput} ${styles.input}`}
-                        style={{ display: "none" }}
-                      />
-                      <label htmlFor="videoList" className={styles.btnUpload}>
-                        <img src={plus} alt="Upload" />
-                      </label>
-                    </>
-                  )}
-                </div>
-                <div className={`${styles.caution}`}>
-                  * 가이드에 맞지않은 영상 등록 시 별도 고지없이 제재 될 수
-                  있습니다.
-                </div>
-                <div className={`${styles.caution2}`}>
-                  TV 광고 영상은 15초, 30초, 45초, 60초 옵션으로 등록할 수
-                  있으며, 각각 다른 길이를 가진 광고 영상 여러개를 업로드할 수
-                  있습니다.
-                </div>
-              </div>
-            </div>
-            <div className={`${styles.adBanner}`}>
-              <div className={`${styles.subTitle}`}>앱 광고 배너 이미지</div>
+        <InputContainer>
+          <div className={`${styles.advideoList}`}>
+            <div className={`${styles.subTitle}`}>TV 광고 영상</div>
+            <div className={`${styles.videoContainer}`}>
               <div
-                className={`${styles.imageContainer} ${styles.inputContainer}`}
+                className={
+                  videoUrlList.length > 0
+                    ? `${styles.afterUpload}`
+                    : `${styles.video}`
+                }
               >
-                <div className={`${styles.bImage} ${styles.prev}`}>
-                  {!bannerImgPreview ? (
-                    <>
-                      <input
-                        type="file"
-                        name="file"
-                        id="fileInput" // 파일 input ID 설정
-                        ref={fileInputRef}
-                        accept="image/gif, image/jpeg, image/jpg, image/png"
-                        onChange={handleBannerImg}
-                        style={{ display: "none" }}
-                        required
-                      />
-                      <label
-                        htmlFor="fileInput" // htmlFor가 input의 ID를 참조
-                        className={styles.btnUpload}
-                      >
-                        <img src={plus} alt="Upload" />
-                      </label>
-                    </>
-                  ) : (
-                    <>
-                      <img
-                        src={bannerImgPreview}
-                        alt="Preview"
-                        className={styles.imgPrev}
-                      />
-                      <button
-                        onClick={() => fileInputRef.current?.click()} // 버튼 클릭시 input 트리거
-                        className={styles.overlayButton}
-                      >
-                        <img src={edit} alt="편집 버튼" />
-                      </button>
-                      <button
-                        onClick={handleBannerImgDelete}
-                        className={styles.deleteButton}
-                      >
-                        <img src={close} alt="Delete" />
-                      </button>
-                      <input
-                        type="file"
-                        name="file"
-                        id="fileInput" // 동일한 input ID를 유지
-                        accept="image/gif, image/jpeg, image/jpg, image/png"
-                        ref={fileInputRef}
-                        onChange={handleBannerImg}
-                        style={{ display: "none" }}
-                        required
-                      />
-                    </>
-                  )}
-                </div>
-                <div className={`${styles.caution}`}>
-                  * 가이드에 맞지않은 배너 이미지 등록 시 별도 고지없이 제재 될
-                  수 있습니다.
-                </div>
-                <div className={`${styles.caution2}`}>
-                  앱 광고용 영상은 풀 버전으로 업로드해 주세요.
-                </div>
+                {videoUrlList.length > 0 ? (
+                  <>
+                    {videoUrlList.map((url, index) => (
+                      <div key={index} className={`${styles.videoPreview}`}>
+                        <video
+                          className={`${styles.videoPrev}`}
+                          controls
+                          src={url}
+                          style={{ width: "100%" }}
+                        />
+                        <button
+                          onClick={() => handleAdvertVideoDelete(index)}
+                          className={`${styles.deleteVidButton}`}
+                        >
+                          <img src={close} alt="Delete" />
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      className={styles.videoOverlay}
+                      onClick={() =>
+                        fileInputRef.current && fileInputRef.current.click()
+                      }
+                    >
+                      <img src={edit} alt="Edit videos" />
+                    </button>
+
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      name="videoList"
+                      id="videoList"
+                      accept="video/*"
+                      multiple
+                      onChange={handleAdvertVideoList}
+                      className={`${styles.videoInput} ${styles.input}`}
+                      style={{ display: "none" }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      name="videoList"
+                      id="videoList"
+                      accept="video/*"
+                      multiple
+                      onChange={handleAdvertVideoList}
+                      className={`${styles.videoInput} ${styles.input}`}
+                      style={{ display: "none" }}
+                    />
+                    <label htmlFor="videoList" className={styles.btnUpload}>
+                      <img src={plus} alt="Upload" />
+                    </label>
+                  </>
+                )}
+              </div>
+              <div className={`${styles.caution}`}>
+                * 가이드에 맞지않은 영상 등록 시 별도 고지없이 제재 될 수
+                있습니다.
+              </div>
+              <div className={`${styles.caution2}`}>
+                TV 광고 영상은 15초, 30초, 45초, 60초 옵션으로 등록할 수 있으며,
+                각각 다른 길이를 가진 광고 영상 여러개를 업로드할 수 있습니다.
               </div>
             </div>
-          </InputContainer>
-        )}
+          </div>
+          <div className={`${styles.adBanner}`}>
+            <div className={`${styles.subTitle}`}>앱 광고 배너 이미지</div>
+            <div
+              className={`${styles.imageContainer} ${styles.inputContainer}`}
+            >
+              <div className={`${styles.bImage} ${styles.prev}`}>
+                {!bannerImgPreview ? (
+                  <>
+                    <input
+                      type="file"
+                      name="file"
+                      id="fileInput" // 파일 input ID 설정
+                      ref={fileInputRef}
+                      accept="image/gif, image/jpeg, image/jpg, image/png"
+                      onChange={handleBannerImg}
+                      style={{ display: "none" }}
+                      required
+                    />
+                    <label
+                      htmlFor="fileInput" // htmlFor가 input의 ID를 참조
+                      className={styles.btnUpload}
+                    >
+                      <img src={plus} alt="Upload" />
+                    </label>
+                  </>
+                ) : (
+                  <>
+                    <img
+                      src={bannerImgPreview}
+                      alt="Preview"
+                      className={styles.imgPrev}
+                    />
+                    <button
+                      onClick={() => fileInputRef.current?.click()} // 버튼 클릭시 input 트리거
+                      className={styles.overlayButton}
+                    >
+                      <img src={edit} alt="편집 버튼" />
+                    </button>
+                    <button
+                      onClick={handleBannerImgDelete}
+                      className={styles.deleteButton}
+                    >
+                      <img src={close} alt="Delete" />
+                    </button>
+                    <input
+                      type="file"
+                      name="file"
+                      id="fileInput" // 동일한 input ID를 유지
+                      accept="image/gif, image/jpeg, image/jpg, image/png"
+                      ref={fileInputRef}
+                      onChange={handleBannerImg}
+                      style={{ display: "none" }}
+                      required
+                    />
+                  </>
+                )}
+              </div>
+              <div className={`${styles.caution}`}>
+                * 가이드에 맞지않은 배너 이미지 등록 시 별도 고지없이 제재 될 수
+                있습니다.
+              </div>
+              <div className={`${styles.caution2}`}>
+                앱 광고용 영상은 풀 버전으로 업로드해 주세요.
+              </div>
+            </div>
+          </div>
+        </InputContainer>
       </div>
       <div className={`${styles.item}`}>
         <div className={`${styles.title}`}>
           <div className={`${styles.name}`}>
             광고기간<span>*</span>
           </div>
-          <ToggleButton
-            isExpanded={toggles.isAdPeriodExpanded}
-            onToggle={() => handleToggle("isAdPeriodExpanded")}
-          />
+          <ToggleButton />
         </div>
-        {isAdPeriodExpanded && (
-          <InputContainer>
-            <div className={`${styles.calendar}`}>
-              <DateRange
-                startDate={startDate}
-                endDate={endDate}
-                setStartDate={setStartDate}
-                setEndDate={setEndDate}
-              />
-            </div>
-            <div className={`${styles.caution}`}>
-              *계약 기간 만료시 광고는 자동으로 삭제됩니다.
-            </div>
-          </InputContainer>
-        )}
+        <InputContainer>
+          <div className={`${styles.calendar}`}>
+            <DateRange
+              startDate={startDate}
+              endDate={endDate}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+            />
+          </div>
+          <div className={`${styles.caution}`}>
+            *계약 기간 만료시 광고는 자동으로 삭제됩니다.
+          </div>
+        </InputContainer>
       </div>
       <div className={`${styles.item}`}>
         <div className={`${styles.title}`}>
           <div className={`${styles.name}`}>
             광고 카테고리<span>*</span>
           </div>
-          <ToggleButton
-            isExpanded={toggles.isAdCategoryExpanded}
-            onToggle={() => handleToggle("isAdCategoryExpanded")}
-          />
+          <ToggleButton />
         </div>
-        {isAdCategoryExpanded && (
-          <InputContainer>
-            <div className={`${styles.selectBox}`}>
-              <SelectAdCategory setCategory={setCategory} />
-            </div>
-            <div className={`${styles.caution}`}>
-              *각 광고 카테고리에 맞는 영상을 매칭해드립니다.
-            </div>
-          </InputContainer>
-        )}
+        <InputContainer>
+          <div className={`${styles.selectBox}`}>
+            <SelectAdCategory setCategory={setCategory} />
+          </div>
+          <div className={`${styles.caution}`}>
+            *각 광고 카테고리에 맞는 영상을 매칭해드립니다.
+          </div>
+        </InputContainer>
       </div>
       <div className={`${styles.item}`}>
         <div className={`${styles.title}`}>
           <div className={`${styles.name}`}>노출 컨텐츠(선택)</div>
-          <ToggleButton
-            isExpanded={toggles.isAdContentExpanded}
-            onToggle={() => handleToggle("isAdContentExpanded")}
-          />
+          <ToggleButton />
         </div>
-        {isAdContentExpanded && (
-          <InputContainer>
-            <div>
-              <button className={`${styles.contents}`} onClick={openModal}>
-                컨텐츠 선택하기
-              </button>
-              <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
-                <div className={`${styles.modalContent}`}>
-                  <div className={`${styles.modalTitle}`}>컨텐츠 선택하기</div>
-                  <SelectContentsBox
-                    contentId={contentId}
-                    setContentId={setContentId}
-                  />
-                </div>
-              </Modal>
-            </div>
-            <div className={`${styles.caution}`}>
-              광고를 삽입하고자 하는 컨텐츠를 선택할 수 있습니다. 회차 지정은
-              불가능하며, 선택한 컨텐츠에 자동으로 광고가 삽입됩니다.
-            </div>
-          </InputContainer>
-        )}
+        <InputContainer>
+          <div>
+            <button className={`${styles.contents}`} onClick={openModal}>
+              컨텐츠 선택하기
+            </button>
+            <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
+              <div className={`${styles.modalContent}`}>
+                <div className={`${styles.modalTitle}`}>컨텐츠 선택하기</div>
+                <SelectContentsBox
+                  contentId={contentId}
+                  setContentId={setContentId}
+                />
+              </div>
+            </Modal>
+          </div>
+          <div className={`${styles.caution}`}>
+            광고를 삽입하고자 하는 컨텐츠를 선택할 수 있습니다. 회차 지정은
+            불가능하며, 선택한 컨텐츠에 자동으로 광고가 삽입됩니다.
+          </div>
+        </InputContainer>
       </div>
       <div className={`${styles.buttonContainer}`}>
         <GoEnrollButton to="/ad-enroll/merchandise" formData={formData}>
