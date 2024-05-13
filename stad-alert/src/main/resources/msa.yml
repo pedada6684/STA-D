@@ -2,7 +2,7 @@ spring:
   config:
     activate:
       on-profile: dev
-  user-service:
+  stad-spring:
     url: http://localhost:8080/api
 server:
   port: 8081
@@ -11,5 +11,5 @@ spring:
   config:
     activate:
       on-profile: prod
-  user-service:
+  stad-spring:
     url: http://stad-spring:8080/api
