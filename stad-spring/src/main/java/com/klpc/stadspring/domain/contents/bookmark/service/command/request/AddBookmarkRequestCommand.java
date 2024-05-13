@@ -1,11 +1,11 @@
 package com.klpc.stadspring.domain.contents.bookmark.service.command.request;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public class AddBookmarkRequestCommand {
     private Long userId;
-    private Long detailId;
+    private Long conceptId;
 }
