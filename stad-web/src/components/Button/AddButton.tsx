@@ -6,6 +6,7 @@ export default function AddButton() {
       <button className={`${styles.addButton}`}>
         <img src={plus} alt="찜하기" />
       </button>
+      <p>찜하기</p>
     </div>
   );
 }
