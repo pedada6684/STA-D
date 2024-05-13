@@ -5,7 +5,7 @@ export async function getMerchandiseDetail(productId: number) {
   try {
     const response = await axios.get(`/api/product/info`, {
       params: {
-        id: productId,
+        productId: productId,
       },
     });
     console.log("상품 조회 성공", response.data);
@@ -27,16 +27,18 @@ export async function modifyMerchandiseDetail(data: any) {
     'mtDeliveryFee' : data.mtDeliveryFee,
     'expStart' : data.expStart + "T00:00:00",
     'expEnd' : data.expEnd + "T00:00:00",
-    'productTypeList' : data.bannerImgUrl,
+    'productTypeList' : data.productTypeList,
   }
+  console.log("######",data);
+  console.log("######",data.productId);
+  console.log(request);
   try {
-    const response = await axios.put(`/api/product/update`, {
-      method: 'PUT',
-      body: JSON.stringify(request),
-      headers: {
-        'Content-Type': 'application/json' // JSON 데이터를 전송한다고 명시
-      }
-    });
+    const response = await axios.put(`/api/product/update`,
+      JSON.stringify(request),
+        {headers: {
+            'Content-Type': 'application/json' // JSON 데이터를 전송한다고 명시
+          }}
+    );
     console.log("상품 수정 성공", response.data);
     return response.data;
   } catch (error) {
