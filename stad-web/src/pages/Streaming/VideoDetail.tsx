@@ -6,6 +6,7 @@ import BillboardContainer from "../../components/Container/BillboardContainer";
 import styles from "./VideoDetail.module.css";
 import PlayButton from "../../components/Button/PlayButton";
 import AddButton from "../../components/Button/AddButton";
+import CheckButton from "../../components/Button/CheckButton";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -28,11 +29,12 @@ export default function VideoDetail() {
   const [releaseYear, setReleaseYear] = useState("");
   const [playtime, setPlaytime] = useState("");
   const [audienceAge, setAudienceAge] = useState("");
-  const [movie, setMovie] = useState(false);
+  const [isMovie, setIsMovie] = useState(false);
   const [description, setDescription] = useState("");
   const [creator, setCreator] = useState("");
   const [cast, setCast] = useState("");
   const [videoConceptData, setVideoConceptData] = useState<SeriesDetailProps[]>([]);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   // URL 에서 videoId 가져오기
   // URL에서 videoId 가져오기 및 변환
@@ -52,7 +54,7 @@ export default function VideoDetail() {
       setReleaseYear(response.releaseYear);
       setPlaytime(response.playtime);
       setAudienceAge(response.audienceAge);
-      setMovie(response.movie);
+      setIsMovie(response.movie);
       setDescription(response.description);
       setCreator(response.creator);
       setCast(response.cast);
@@ -67,6 +69,7 @@ export default function VideoDetail() {
     try {
       const response = await getIsBookmarked(token, userId, conceptId);
       console.log("response : ", response);
+      setIsBookmarked(response.bookmarked);
       console.log("북마크 유무 조회 성공");
     } catch (error) {
       console.error("북마크 유무 조회 실패", error);
@@ -127,9 +130,17 @@ export default function VideoDetail() {
                     </div>
                     <div className={`${styles.bar}`}></div>
                     <div className={`${styles.buttonWrapper}`}>
-                      {movie && <PlayButton onClick={handlePlayClick} />}
+                      {isMovie && <PlayButton onClick={handlePlayClick} />}
                       {/* 찜 여부로 바꾸기 */}
-                      <AddButton />
+                      {isBookmarked ? (
+                        <>
+                          <CheckButton />
+                        </>
+                      ) : (
+                        <>
+                          <AddButton />
+                        </>
+                      )}
                     </div>
                     <div className={`${styles.description}`}>{description}</div>
                     <div className={`${styles.staff}`}>
@@ -149,7 +160,7 @@ export default function VideoDetail() {
                 {videoConceptData.map((data: SeriesDetailProps, index: number) => (
                   <>
                     {/* 객체 속성 직접 전달 */}
-                    {!movie && <VideoEpisode key={data.episode} {...data} thumbnailUrl={thumbnailUrl} />}
+                    {!isMovie && <VideoEpisode key={data.episode} {...data} thumbnailUrl={thumbnailUrl} />}
                   </>
                 ))}
               </>
