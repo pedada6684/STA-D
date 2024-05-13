@@ -22,13 +22,4 @@ public class BookmarkedContentRepositoryImpl implements BookmarkedContentReposit
                 .where(bookmarkedContent.user.id.eq(userId))
                 .fetch());
     }
-
-    @Override
-    public Optional<BookmarkedContent> findByUserIdAndContentConceptId(Long userId, Long conceptId) {
-        return Optional.ofNullable(query.select(bookmarkedContent)
-                .from(bookmarkedContent)
-                .where(bookmarkedContent.user.id.eq(userId)
-                        .and(bookmarkedContent.contentConcept.id.eq(conceptId)))
-                .fetchOne());
-    }
 }
