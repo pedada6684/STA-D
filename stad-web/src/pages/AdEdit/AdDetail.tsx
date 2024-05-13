@@ -53,6 +53,7 @@ export default function AdDetail() {
     if (ad) {
       // formData fetch한 데이터로 초기값 설정해주기
       const initialFormData = {
+        productId: ad.productId,
         advertId: advertId,
         title: ad.title,
         description: ad.description,
@@ -255,6 +256,7 @@ export default function AdDetail() {
                               id="videoList"
                               accept="video/*"
                               multiple
+                              required
                               onChange={handleAdvertVideoList}
                               className={`${styles.videoInput} ${styles.input}`}
                               style={{ display: "none" }}
@@ -301,6 +303,7 @@ export default function AdDetail() {
                               id="videoList"
                               accept="video/*"
                               multiple
+                              required
                               onChange={handleAdvertVideoList}
                               className={`${styles.videoInput} ${styles.input}`}
                               style={{ display: "none" }}
@@ -374,7 +377,7 @@ export default function AdDetail() {
                           </button>
                           <img
                             className={`${styles.bannerImg}`}
-                            src={ad?.bannerImgUrl}
+                            src={bannerImgPreview}
                             alt="기존이미지"
                           />
                           <button
@@ -479,7 +482,7 @@ export default function AdDetail() {
           </div>
           <div className={`${styles.buttons}`}>
             <EditButton formData={formData} />
-            <EditGoodsButton formData={formData} advertType={ad?.advertType} />
+            <EditGoodsButton formData={formData} advertType={ad?.advertType} productId={ad?.productId} />
           </div>
         </Content>
       </Container>

@@ -205,6 +205,7 @@ public class AdvertService {
         }
 
         GetAdvertResponse response = GetAdvertResponse.builder()
+                .productId(advert.getProducts().get(0).getId())
                 .title(advert.getTitle())
                 .description(advert.getDescription())
                 .startDate(advert.getStartDate().toLocalDate().toString())
