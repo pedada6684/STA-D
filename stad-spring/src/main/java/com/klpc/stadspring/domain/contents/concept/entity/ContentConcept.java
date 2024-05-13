@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.contents.concept.entity;
 
+import com.klpc.stadspring.domain.contents.bookmark.entity.BookmarkedContent;
 import com.klpc.stadspring.domain.contents.categoryRelationship.entity.ContentCategoryRelationship;
 import com.klpc.stadspring.domain.contents.labelRelationship.entity.ContentLabelRelationship;
 import jakarta.persistence.*;
@@ -26,6 +27,9 @@ public class ContentConcept {
     private String playtime;
     @Column(columnDefinition = "text")
     private String description;
+
+    @OneToMany(mappedBy = "contentConcept")
+    private List<BookmarkedContent> bookmarkedContentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "contentConcept")
     private List<ContentCategoryRelationship> contentCategoryRelationshipList = new ArrayList<>();
