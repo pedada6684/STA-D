@@ -6,10 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AdvertVideoRepository extends JpaRepository<AdvertVideo, Long> {
 
-    public List<AdvertVideo> findByVideoUrl(String videoUrl);
+    public Optional<AdvertVideo> findFirstByVideoUrl(String videoUrl);
 
     @Query("""
            select adv.advert from AdvertVideo adv
