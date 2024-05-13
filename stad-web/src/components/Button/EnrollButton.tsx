@@ -66,10 +66,23 @@ export default function EnrollButton({
         alert("필수 입력 값을 모두 입력해 주세요."); // 광고명이 비어있을 경우 경고창 표시
       }
     } else {
-      console.log("상품 추가");
-      addProduct(goodsFormData);
-      window.alert("광고, 상품이 정상적으로 등록되었습니다.");
-      navigate("/my-page/enroll-adList");
+      if(goodsFormData && goodsFormData.advertId != null && goodsFormData.advertId != undefined &&
+          goodsFormData.name!=null && goodsFormData.name!=undefined && goodsFormData.name!="" &&
+          goodsFormData.expStart!=null && goodsFormData.expStart!=undefined && goodsFormData.expStart!="" &&
+          goodsFormData.expEnd!=null && goodsFormData.expEnd!=undefined && goodsFormData.expEnd!="" &&
+          goodsFormData.imgs!=null && goodsFormData.imgs!=undefined &&
+          goodsFormData.cityDeliveryFee!=null && goodsFormData.cityDeliveryFee!=undefined &&
+          goodsFormData.mtDeliveryFee!=null && goodsFormData.mtDeliveryFee!=undefined &&
+          goodsFormData.thumbnail!=null && goodsFormData.thumbnail!=undefined && goodsFormData.thumbnail!="" &&
+          goodsFormData.productTypeList!=null && goodsFormData.productTypeList!=undefined && goodsFormData.productTypeList.length!=0) {
+        console.log("상품 추가");
+        addProduct(goodsFormData);
+        window.alert("광고, 상품이 정상적으로 등록되었습니다.");
+        navigate("/my-page/enroll-adList");
+      }
+      else{
+        window.alert("필수 값을 입력하여 주십시오.")
+      }
     }
   };
   const addAdvert = async (data: any) => {
