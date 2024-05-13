@@ -1,9 +1,9 @@
-package com.klpc.stadstream.domain.detail.service;
+package com.klpc.stadstream.domain.contents.detail.service;
 
+import com.klpc.stadstream.domain.contents.detail.entity.ContentDetail;
+import com.klpc.stadstream.domain.contents.detail.repository.ContentDetailRepository;
 import com.klpc.stadstream.global.response.ErrorCode;
 import com.klpc.stadstream.global.response.exception.CustomException;
-import com.klpc.stadstream.domain.detail.entity.ContentDetail;
-import com.klpc.stadstream.domain.detail.repository.ContentDetailRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.Cacheable;
