@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.advertVideo.service;
 
+import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.advertVideo.controller.response.*;
 import com.klpc.stadspring.domain.advertVideo.entity.AdvertVideo;
@@ -269,9 +270,9 @@ public class AdvertVideoService {
 
         List<Long> finalListId = new ArrayList<>();
         for (String url : finalList) {
-            AdvertVideo advertVideo = advertVideoRepository.findFirstByVideoUrl(url)
+            Advert advert = advertRepository.findByAdvertVideos_VideoUrl(url)
                     .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-            finalListId.add(advertVideo.getId());
+            finalListId.add(advert.getId());
         }
 
         // TODO: 은희 - 광고 데이터 넣고 수정하기
@@ -280,7 +281,7 @@ public class AdvertVideoService {
 
         return GetFinalAdvertVideoListResponse.builder()
                 .data(test)
-                .advertVideoIdList(finalListId)
+                .advertIdList(finalListId)
                 .build();
     }
 
