@@ -73,7 +73,7 @@ public class WatchedContentService {
                 user,
                 LocalDate.now(),
                 false,
-                "00:00:00");
+                0L);
         watchedContentRepository.save(newWatchedContent);
 
         return AddWatchingContentResponse.builder().result("시청 중인 컨텐츠가 성공적으로 생성되었습니다.").build();
