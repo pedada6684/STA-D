@@ -8,21 +8,37 @@ class AlertService {
   // final String url = 'http://192.168.0.9:8081/alert/connect';
   final String url = 'https://www.mystad.com/alert/connect';
   SseChannel? _sseChannel;
+  bool _isInitialConnectionEstablished = false;
 
 //sse
   void connectToSSE(String userId) {
     print('connectToSSE:$userId');
+    String fullUrl = '$url/app/$userId';
+    _sseChannel = SseChannel.connect(Uri.parse(fullUrl));
 
-    _sseChannel = SseChannel.connect(
-        Uri.parse('https://www.mystad.com/alert/connect/app/$userId'));
     print(_sseChannel.toString());
     print(_sseChannel.toString());
     print(_sseChannel.toString());
     print(_sseChannel.toString());
 
     _sseChannel!.stream.listen((event) {
-      print('히히히히');
-      print('SSE event:$event');
+      // "SSE connected" 메시지 수신 확인
+      if (!_isInitialConnectionEstablished && event == "SSE connected") {
+        _isInitialConnectionEstablished = true;
+        print("Connection established. Ready to receive data.");
+        // 이후 로직에서 데이터 수신 및 처리 시작
+      } else if (_isInitialConnectionEstablished) {
+        // 실제 이벤트 처리
+        print("Received event: $event");
+      }
+    }, onDone: () {
+      print('SSE stream closed.');
+      _isInitialConnectionEstablished = false;
+      //종료되면 다시 연결
+      connectToSSE(userId);
+    }, onError: (error) {
+      print('Error in SSE stream: $error');
+      _isInitialConnectionEstablished = false;
     });
   }
 
