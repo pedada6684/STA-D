@@ -1,4 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+
 import Content from "../../components/Container/Content";
 import TVContainer from "../../components/Container/TVContainer";
 import TVNav from "../../components/Nav/TVNav";
@@ -7,13 +10,9 @@ import styles from "./VideoDetail.module.css";
 import PlayButton from "../../components/Button/PlayButton";
 import AddButton from "../../components/Button/AddButton";
 import CheckButton from "../../components/Button/CheckButton";
-import { useQuery } from "react-query";
-import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { getVideoConcept, getIsBookmarked } from "./StreamingAPI";
-import Loading from "../../components/Loading";
 import VideoEpisode from "./VideoEpisode";
-import { useEffect, useState } from "react";
 
 export interface SeriesDetailProps {
   detailId: number;
@@ -134,11 +133,11 @@ export default function VideoDetail() {
                       {/* 찜 여부로 바꾸기 */}
                       {isBookmarked ? (
                         <>
-                          <CheckButton />
+                          <CheckButton conceptId={conceptId} />
                         </>
                       ) : (
                         <>
-                          <AddButton />
+                          <AddButton conceptId={conceptId} />
                         </>
                       )}
                     </div>
