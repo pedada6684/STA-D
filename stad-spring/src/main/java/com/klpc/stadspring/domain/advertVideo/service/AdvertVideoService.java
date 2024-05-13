@@ -270,7 +270,7 @@ public class AdvertVideoService {
 
         List<Long> finalListId = new ArrayList<>();
         for (String url : finalList) {
-            Advert advert = advertRepository.findByAdvertVideos_VideoUrl(url)
+            Advert advert = advertRepository.findFirstByAdvertVideos_VideoUrl(url)
                     .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
             finalListId.add(advert.getId());
         }
