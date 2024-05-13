@@ -22,7 +22,7 @@ import {
 } from "../AdEnroll/AdEnrollApi";
 import { useLocation } from "react-router-dom";
 import edit from "../../assets/lucide_edit.png";
-import {getMerchandiseDetail} from "./MerchandiseDetailAPI";
+import { getMerchandiseDetail } from "./MerchandiseDetailAPI";
 interface formData {
   userId?: number;
   title?: string;
@@ -76,18 +76,18 @@ export default function Merchandise() {
         const data = await getMerchandiseDetail(productId);
         if (data != null) {
           setGoodsFormData({
-            productId:data.productId,
-            name : data.name,
-            imgs : data.images,
+            productId: data.productId,
+            name: data.name,
+            imgs: data.images,
             thumbnail: data.thumbnail,
             cityDeliveryFee: data.cityDeliveryFee,
             mtDeliveryFee: data.mtDeliveryFee,
             expStart: data.expStart,
             expEnd: data.expEnd,
-            productTypeList: data.productTypeList
-          })
+            productTypeList: data.productTypeList,
+          });
 
-          setProducts(data.productTypeList)
+          setProducts(data.productTypeList);
         }
       } catch (error) {
         console.error("상품 조회 실패", error);
@@ -97,7 +97,6 @@ export default function Merchandise() {
     fetchData(); // fetchData 함수 호출
   }, [productId]);
 
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setGoodsFormData((prevState) => ({
@@ -105,28 +104,7 @@ export default function Merchandise() {
       [name]: value,
     }));
   };
-  // redux를 통한 토글 상태관리
-  const dispatch = useDispatch();
-  const toggles = useSelector((state: RootState) => state.toggle);
-  const handleToggle = (toggleKey: string) => {
-    dispatch(toggleActions.toggle(toggleKey));
-  };
-  // 토글 상태 갖고오기
-  const isMerTitleExpanded = useSelector(
-    (state: RootState) => state.toggle.isMerTitleExpanded
-  );
-  const isMerThumbnailExpanded = useSelector(
-    (state: RootState) => state.toggle.isMerThumbnailExpanded
-  );
-  const isMerShipPriceExpanded = useSelector(
-    (state: RootState) => state.toggle.isMerShipPriceExpanded
-  );
-  const isExpDateExpanded = useSelector(
-    (state: RootState) => state.toggle.isExpDateExpanded
-  );
-  const isMerAddExpanded = useSelector(
-    (state: RootState) => state.toggle.isMerAddExpanded
-  );
+
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date("2024/12/31"));
   const [thumbnailImgUrl, setThumbnailImgUrl] = useState<string>("");
@@ -307,111 +285,102 @@ export default function Merchandise() {
           <NameContainer>
             상품제목<span>*</span>
           </NameContainer>
-          <ToggleButton
-            isExpanded={toggles.isMerTitleExpanded}
-            onToggle={() => handleToggle("isMerTitleExpanded")}
-          />
+          <ToggleButton />
         </TitleContainer>
-        {isMerTitleExpanded && (
-          <InputContainer>
-            <div>
-              <input
-                type="text"
-                name="name"
-                value={`${goodsFormData?.name}`}
-                onChange={handleChange}
-                className={`${styles.input}`}
-                required
-              />
-            </div>
-            <div className={`${styles.caution}`}>
-              * 가이드에 맞지않은 상품제목 입력 시 별도 고지없이 제재 될 수
-              있습니다.
-            </div>
-          </InputContainer>
-        )}
+        <InputContainer>
+          <div>
+            <input
+              type="text"
+              name="name"
+              value={`${goodsFormData?.name}`}
+              onChange={handleChange}
+              className={`${styles.input}`}
+              required
+            />
+          </div>
+          <div className={`${styles.caution}`}>
+            * 가이드에 맞지않은 상품제목 입력 시 별도 고지없이 제재 될 수
+            있습니다.
+          </div>
+        </InputContainer>
       </ItemContainer>
       <ItemContainer>
         <TitleContainer>
           <NameContainer>
             상품 이미지 등록<span>*</span>
           </NameContainer>
-          <ToggleButton
-            isExpanded={toggles.isMerThumbnailExpanded}
-            onToggle={() => handleToggle("isMerThumbnailExpanded")}
-          />
+          <ToggleButton />
         </TitleContainer>
-        {isMerThumbnailExpanded && (
-          <InputContainer>
-            <div className={`${styles.merImage}`}>
-              <div className={`${styles.subTitle}`}>상품 대표 이미지</div>
-              <div
-                className={`${styles.imageContainer} ${styles.inputContainer}`}
-              >
-                <div className={`${styles.image} ${styles.prev}`}>
-                  {!thumbnailPreviewUrl ? (
-                    <>
-                      <input
-                        type="file"
-                        ref={fileInputRef}
-                        name="thumbnail"
-                        id="thumbnail"
-                        value={`${goodsFormData?.thumbnail}`}
-                        accept="image/gif, image/jpeg, image/jpg, image/png"
-                        onChange={handleThumbnailImg}
-                        className={`${styles.imageInput}`}
-                        required
-                      />
-                      <label
-                        htmlFor="thumbnail"
-                        className={`${styles.btnUpload}`}
-                      >
-                        <img src={plus} alt="업로드" />
-                      </label>
-                    </>
-                  ) : (
-                    <>
-                      <img
-                        className={`${styles.preview}`}
-                        src={thumbnailPreviewUrl}
-                        alt="Thumbnail Preview"
-                      />
-                      <button
-                        onClick={() => fileInputRef.current?.click()} // 버튼 클릭시 input 트리거
-                        className={styles.overlayButton}
-                      >
-                        <img src={edit} alt="편집 버튼" />
-                      </button>
-                      <button
-                        onClick={handleBannerImgDelete}
-                        className={styles.deleteButton}
-                      >
-                        <img src={close} alt="Delete" />
-                      </button>
-                      <input
-                        type="file"
-                        ref={fileInputRef}
-                        name="thumbnail"
-                        id="thumbnail"
-                        accept="image/gif, image/jpeg, image/jpg, image/png"
-                        value={`${goodsFormData?.thumbnail}`}
-                        onChange={handleThumbnailImg}
-                        className={`${styles.imageInput}`}
-                        required
-                      />
-                    </>
-                  )}
-                </div>
-                <div className={`${styles.caution}`}>
-                  * 가이드에 맞지않은 상품 이미지 등록 시 별도 고지없이 제재 될
-                  수 있습니다.
-                </div>
+        <InputContainer>
+          <div className={`${styles.merImage}`}>
+            <div className={`${styles.subTitle}`}>상품 대표 이미지</div>
+            <div
+              className={`${styles.imageContainer} ${styles.inputContainer}`}
+            >
+              <div className={`${styles.image} ${styles.prev}`}>
+                {!thumbnailPreviewUrl ? (
+                  <>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      name="thumbnail"
+                      id="thumbnail"
+                      value={`${goodsFormData?.thumbnail}`}
+                      accept="image/gif, image/jpeg, image/jpg, image/png"
+                      onChange={handleThumbnailImg}
+                      className={`${styles.imageInput}`}
+                      required
+                    />
+                    <label
+                      htmlFor="thumbnail"
+                      className={`${styles.btnUpload}`}
+                    >
+                      <img src={plus} alt="업로드" />
+                    </label>
+                  </>
+                ) : (
+                  <>
+                    <img
+                      className={`${styles.preview}`}
+                      src={thumbnailPreviewUrl}
+                      alt="Thumbnail Preview"
+                    />
+                    <button
+                      onClick={() => fileInputRef.current?.click()} // 버튼 클릭시 input 트리거
+                      className={styles.overlayButton}
+                    >
+                      <img src={edit} alt="편집 버튼" />
+                    </button>
+                    <button
+                      onClick={handleBannerImgDelete}
+                      className={styles.deleteButton}
+                    >
+                      <img src={close} alt="Delete" />
+                    </button>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      name="thumbnail"
+                      id="thumbnail"
+                      accept="image/gif, image/jpeg, image/jpg, image/png"
+                      value={`${goodsFormData?.thumbnail}`}
+                      onChange={handleThumbnailImg}
+                      className={`${styles.imageInput}`}
+                      required
+                    />
+                  </>
+                )}
+              </div>
+              <div className={`${styles.caution}`}>
+                * 가이드에 맞지않은 상품 이미지 등록 시 별도 고지없이 제재 될 수
+                있습니다.
               </div>
             </div>
-            <div className={`${styles.merDesImages}`}>
-              <div className={`${styles.subTitle}`}>상품 설명 내용 이미지</div>
-              <div className={`${styles.imageContainer}`}>
-                {/* {Array.from({ length: 1 }).map((_, index) => (
+          </div>
+          <div className={`${styles.merDesImages}`}>
+            <div className={`${styles.subTitle}`}>상품 설명 내용 이미지</div>
+            <div className={`${styles.imageContainer}`}>
+              {/* {Array.from({ length: 1 }).map((_, index) => (
                   <div key={index} className={`${styles.imageUploadContainer}`}>
                     {detailImagePreviews[index] ? (
                       <div className={`${styles.imagePreviewContainer}`}>
@@ -443,288 +412,264 @@ export default function Merchandise() {
                     )}
                   </div>
                 ))} */}
-                <div
-                  className={
-                    detailImagePreviews.length > 0
-                      ? `${styles.afterUpload}`
-                      : `${styles.image}`
-                  }
-                >
-                  {detailImagePreviews.length > 0 ? (
-                    <>
-                      {detailImagePreviews.map((url, index) => (
-                        <div key={index}>
-                          <div className={styles.imagePreviewContainer}>
-                            <img
-                              src={url}
-                              alt={`Detail ${index + 1}`}
-                              className={styles.preview}
-                            />
-                            {/* <button
+              <div
+                className={
+                  detailImagePreviews.length > 0
+                    ? `${styles.afterUpload}`
+                    : `${styles.image}`
+                }
+              >
+                {detailImagePreviews.length > 0 ? (
+                  <>
+                    {detailImagePreviews.map((url, index) => (
+                      <div key={index}>
+                        <div className={styles.imagePreviewContainer}>
+                          <img
+                            src={url}
+                            alt={`Detail ${index + 1}`}
+                            className={styles.preview}
+                          />
+                          {/* <button
                               onClick={() => handleGoodsImagesDelete(index)}
                               className={`${styles.deleteImgButton}`}
                             >
                               <img src={close} alt="Delete" />
                             </button> */}
-                          </div>
                         </div>
-                      ))}
+                      </div>
+                    ))}
 
-                      <button
-                        className={styles.videoOverlay}
-                        onClick={() =>
-                          fileInputRef.current && fileInputRef.current.click()
-                        }
-                      >
-                        <img src={edit} alt="Edit image" />
-                      </button>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        name={`detailImage`}
-                        id={`detailImage`}
-                        value={`${goodsFormData?.imgs}`}
-                        multiple
-                        required
-                        accept="image/gif, image/jpeg, image/jpg, image/png"
-                        onChange={(e) => handleDetailImg(e)}
-                        className={styles.imageInput}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <input
-                        type="file"
-                        name="detailImage-0"
-                        id="detailImage-0"
-                        value={`${goodsFormData?.imgs}`}
-                        multiple
-                        required
-                        accept="image/gif, image/jpeg, image/jpg, image/png"
-                        onChange={(e) => handleDetailImg(e)}
-                        className={styles.imageInput}
-                      />
-                      <label
-                        htmlFor="detailImage-0"
-                        className={styles.btnUpload}
-                      >
-                        <img src={plus} alt="Upload" />
-                      </label>
-                    </>
-                  )}
-                </div>
-                <div className={`${styles.caution}`}>
-                  * 가이드에 맞지않은 상품 이미지 등록 시 별도 고지없이 제재 될
-                  수 있습니다.
-                </div>
+                    <button
+                      className={styles.videoOverlay}
+                      onClick={() =>
+                        fileInputRef.current && fileInputRef.current.click()
+                      }
+                    >
+                      <img src={edit} alt="Edit image" />
+                    </button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      name={`detailImage`}
+                      id={`detailImage`}
+                      value={`${goodsFormData?.imgs}`}
+                      multiple
+                      required
+                      accept="image/gif, image/jpeg, image/jpg, image/png"
+                      onChange={(e) => handleDetailImg(e)}
+                      className={styles.imageInput}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <input
+                      type="file"
+                      name="detailImage-0"
+                      id="detailImage-0"
+                      value={`${goodsFormData?.imgs}`}
+                      multiple
+                      required
+                      accept="image/gif, image/jpeg, image/jpg, image/png"
+                      onChange={(e) => handleDetailImg(e)}
+                      className={styles.imageInput}
+                    />
+                    <label htmlFor="detailImage-0" className={styles.btnUpload}>
+                      <img src={plus} alt="Upload" />
+                    </label>
+                  </>
+                )}
+              </div>
+              <div className={`${styles.caution}`}>
+                * 가이드에 맞지않은 상품 이미지 등록 시 별도 고지없이 제재 될 수
+                있습니다.
               </div>
             </div>
-          </InputContainer>
-        )}
+          </div>
+        </InputContainer>
       </ItemContainer>
       <ItemContainer>
         <TitleContainer>
           <NameContainer>
             배송비<span>*</span>
           </NameContainer>
-          <ToggleButton
-            isExpanded={toggles.isMerShipPriceExpanded}
-            onToggle={() => handleToggle("isMerShipPriceExpanded")}
-          />
+          <ToggleButton />
         </TitleContainer>
-        {isMerShipPriceExpanded && (
-          <InputContainer>
-            <div className={`${styles.city}`}>
-              <div className={`${styles.subTitle}`}>
-                도심지역<span>*</span>
-              </div>
-              <div className={`${styles.priceContainer}`}>
-                <input
-                  type="number"
-                  name="cityDeliveryFee"
-                  value={`${goodsFormData?.cityDeliveryFee}`}
-                  onChange={handleChange}
-                  className={`${styles.input}`}
-                  required
-                  placeholder="숫자만 입력"
-                />
-                <div className={`${styles.letter}`}>원</div>
-              </div>
+        <InputContainer>
+          <div className={`${styles.city}`}>
+            <div className={`${styles.subTitle}`}>
+              도심지역<span>*</span>
             </div>
-            <div className={`${styles.jejuMountain}`}>
-              <div className={`${styles.subTitle}`}>
-                제주, 산간지역<span>*</span>
-              </div>
-              <div className={`${styles.priceContainer}`}>
-                <input
-                  type="number"
-                  name="mtDeliveryFee"
-                  value={`${goodsFormData?.mtDeliveryFee}`}
-                  onChange={handleChange}
-                  className={`${styles.input}`}
-                  required
-                  placeholder="숫자만 입력"
-                />
-                <div className={`${styles.letter}`}>원</div>
-              </div>
+            <div className={`${styles.priceContainer}`}>
+              <input
+                type="number"
+                name="cityDeliveryFee"
+                value={`${goodsFormData?.cityDeliveryFee}`}
+                onChange={handleChange}
+                className={`${styles.input}`}
+                required
+                placeholder="숫자만 입력"
+              />
+              <div className={`${styles.letter}`}>원</div>
             </div>
-          </InputContainer>
-        )}
+          </div>
+          <div className={`${styles.jejuMountain}`}>
+            <div className={`${styles.subTitle}`}>
+              제주, 산간지역<span>*</span>
+            </div>
+            <div className={`${styles.priceContainer}`}>
+              <input
+                type="number"
+                name="mtDeliveryFee"
+                value={`${goodsFormData?.mtDeliveryFee}`}
+                onChange={handleChange}
+                className={`${styles.input}`}
+                required
+                placeholder="숫자만 입력"
+              />
+              <div className={`${styles.letter}`}>원</div>
+            </div>
+          </div>
+        </InputContainer>
       </ItemContainer>
       <ItemContainer>
         <TitleContainer>
           <NameContainer>
             유통기한<span>*</span>
           </NameContainer>
-          <ToggleButton
-            isExpanded={toggles.isExpDateExpanded}
-            onToggle={() => handleToggle("isExpDateExpanded")}
-          />
+          <ToggleButton />
         </TitleContainer>
-        {isExpDateExpanded && (
-          <InputContainer>
-            <div className={`${styles.calendar}`}>
-              <DateRange
-                startDate={startDate}
-                endDate={endDate}
-                setStartDate={setStartDate}
-                setEndDate={setEndDate}
-              />
-            </div>
-          </InputContainer>
-        )}
+
+        <InputContainer>
+          <div className={`${styles.calendar}`}>
+            <DateRange
+              startDate={startDate}
+              endDate={endDate}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+            />
+          </div>
+        </InputContainer>
       </ItemContainer>
       <ItemContainer>
         <TitleContainer>
           <NameContainer>
             상품 추가<span>*</span>
           </NameContainer>
-          <ToggleButton
-            isExpanded={toggles.isMerAddExpanded}
-            onToggle={() => handleToggle("isMerAddExpanded")}
-          />
+          <ToggleButton />
         </TitleContainer>
-        {isMerAddExpanded && (
-          <InputContainer>
-            {products.map((product, index) => (
-              <div key={product.id} className={`${styles.productContainer}`}>
-                <div className={`${styles.productWrapper}`}>
-                  <div className={`${styles.productInput}`}>
-                    {/* 상품명 입력란 */}
-                    <input
-                      type="text"
-                      name="productTypeName"
-                      className={`${styles.input2}`}
-                      value={product.productTypeName}
-                      onChange={(e) => handleProductChange(e, product.id)}
-                    />
-                    <label>상품명</label>
-                    <span></span>
-                  </div>
-                  <div className={`${styles.productInput}`}>
-                    <input
-                      type="number"
-                      name="productTypePrice"
-                      className={`${styles.input2}`}
-                      value={product.productTypePrice}
-                      onChange={(e) => handleProductChange(e, product.id)}
-                    />
-                    <label>판매가(KRW)</label>
-                    <span></span>
-                  </div>
-                  {/* 재고 입력란 */}
-                  <div className={`${styles.productInput}`}>
-                    <input
-                      type="number"
-                      name="productTypeQuantity"
-                      className={`${styles.input2}`}
-                      value={product.productTypeQuantity}
-                      onChange={(e) => handleProductChange(e, product.id)}
-                    />
-                    <label>재고</label>
-                    <span></span>
-                  </div>
-                  {/* 상품 제거 버튼 */}
-                  <div>
-                    <button
-                      className={`${styles.closeBtn}`}
-                      onClick={() => removeProduct(product.id)}
-                    >
-                      <img
-                        className={styles.icon}
-                        src={close}
-                        alt="상품 제거"
-                      />
-                    </button>
-                  </div>
+
+        <InputContainer>
+          {products.map((product, index) => (
+            <div key={product.id} className={`${styles.productContainer}`}>
+              <div className={`${styles.productWrapper}`}>
+                <div className={`${styles.productInput}`}>
+                  {/* 상품명 입력란 */}
+                  <input
+                    type="text"
+                    name="productTypeName"
+                    className={`${styles.input2}`}
+                    value={product.productTypeName}
+                    onChange={(e) => handleProductChange(e, product.id)}
+                  />
+                  <label>상품명</label>
+                  <span></span>
                 </div>
-                {/* 옵션 추가 버튼 */}
-                <div className={`${styles.option}`}>
-                  <div>
-                    <button
-                      className={`${styles.optionAdd}`}
-                      onClick={() => addOption(product.id)}
-                    >
-                      <img src={whitep} alt="옵션 추가" /> 옵션 추가
-                    </button>
-                  </div>
-                  {/* 옵션 목록 */}
-                  <div className={`${styles.optionContainer}`}>
-                    {product.options.map((option) => (
-                      <div
-                        key={option.id}
-                        className={`${styles.optionWrapper}`}
-                      >
-                        <div className={`${styles.detailO} ${styles.borderR}`}>
-                          <div className={`${styles.tt}`}>옵션명</div>
-                          <div className={`${styles.optionInput}`}>
-                            <input
-                              type="text"
-                              name="optionName"
-                              className={`${styles.input3}`}
-                              value={option.optionName}
-                              onChange={(e) =>
-                                handleOptionChange(e, product.id, option.id)
-                              }
-                              placeholder="Name"
-                            />
-                          </div>
-                        </div>
-                        <div className={`${styles.detailO} `}>
-                          <div className={`${styles.tt} `}>옵션값</div>
-                          <div className={`${styles.optionInput}`}>
-                            <input
-                              type="text"
-                              name="optionValue"
-                              value={option.optionValue}
-                              className={`${styles.input3}`}
-                              onChange={(e) =>
-                                handleOptionChange(e, product.id, option.id)
-                              }
-                              placeholder="Value"
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <button
-                            className={`${styles.removeOptionBtn}`}
-                            onClick={() => removeOption(product.id, option.id)}
-                          >
-                            <img src={close} alt="옵션 제거" />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                <div className={`${styles.productInput}`}>
+                  <input
+                    type="number"
+                    name="productTypePrice"
+                    className={`${styles.input2}`}
+                    value={product.productTypePrice}
+                    onChange={(e) => handleProductChange(e, product.id)}
+                  />
+                  <label>판매가(KRW)</label>
+                  <span></span>
+                </div>
+                {/* 재고 입력란 */}
+                <div className={`${styles.productInput}`}>
+                  <input
+                    type="number"
+                    name="productTypeQuantity"
+                    className={`${styles.input2}`}
+                    value={product.productTypeQuantity}
+                    onChange={(e) => handleProductChange(e, product.id)}
+                  />
+                  <label>재고</label>
+                  <span></span>
+                </div>
+                {/* 상품 제거 버튼 */}
+                <div>
+                  <button
+                    className={`${styles.closeBtn}`}
+                    onClick={() => removeProduct(product.id)}
+                  >
+                    <img className={styles.icon} src={close} alt="상품 제거" />
+                  </button>
                 </div>
               </div>
-            ))}
-            {/* 상품 추가 버튼 */}
-            <button className={`${styles.addProductBtn}`} onClick={addProduct}>
-              상품 추가
-            </button>
-          </InputContainer>
-        )}
+              {/* 옵션 추가 버튼 */}
+              <div className={`${styles.option}`}>
+                <div>
+                  <button
+                    className={`${styles.optionAdd}`}
+                    onClick={() => addOption(product.id)}
+                  >
+                    <img src={whitep} alt="옵션 추가" /> 옵션 추가
+                  </button>
+                </div>
+                {/* 옵션 목록 */}
+                <div className={`${styles.optionContainer}`}>
+                  {product.options.map((option) => (
+                    <div key={option.id} className={`${styles.optionWrapper}`}>
+                      <div className={`${styles.detailO} ${styles.borderR}`}>
+                        <div className={`${styles.tt}`}>옵션명</div>
+                        <div className={`${styles.optionInput}`}>
+                          <input
+                            type="text"
+                            name="optionName"
+                            className={`${styles.input3}`}
+                            value={option.optionName}
+                            onChange={(e) =>
+                              handleOptionChange(e, product.id, option.id)
+                            }
+                            placeholder="Name"
+                          />
+                        </div>
+                      </div>
+                      <div className={`${styles.detailO} `}>
+                        <div className={`${styles.tt} `}>옵션값</div>
+                        <div className={`${styles.optionInput}`}>
+                          <input
+                            type="text"
+                            name="optionValue"
+                            value={option.optionValue}
+                            className={`${styles.input3}`}
+                            onChange={(e) =>
+                              handleOptionChange(e, product.id, option.id)
+                            }
+                            placeholder="Value"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <button
+                          className={`${styles.removeOptionBtn}`}
+                          onClick={() => removeOption(product.id, option.id)}
+                        >
+                          <img src={close} alt="옵션 제거" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+          {/* 상품 추가 버튼 */}
+          <button className={`${styles.addProductBtn}`} onClick={addProduct}>
+            상품 추가
+          </button>
+        </InputContainer>
       </ItemContainer>
 
       <EnrollButton
