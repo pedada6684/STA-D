@@ -133,11 +133,11 @@ export default function VideoDetail() {
                       {/* 찜 여부로 바꾸기 */}
                       {isBookmarked ? (
                         <>
-                          <CheckButton conceptId={conceptId} />
+                          <CheckButton conceptId={conceptId} onClick={() => setIsBookmarked(!isBookmarked)} />
                         </>
                       ) : (
                         <>
-                          <AddButton conceptId={conceptId} />
+                          <AddButton conceptId={conceptId} onClick={() => setIsBookmarked(!isBookmarked)} />
                         </>
                       )}
                     </div>
@@ -154,12 +154,14 @@ export default function VideoDetail() {
                 </div>
               </div>
             </BillboardContainer>
-            {videoConceptData && videoConceptData.length > 0 && (
+            {!isMovie && videoConceptData && videoConceptData.length > 0 && (
               <>
+                <h3 className={`${styles.epiTitle}`}>에피소드</h3>
+                <hr className={`${styles.epiTitle}`} />
                 {videoConceptData.map((data: SeriesDetailProps, index: number) => (
                   <>
-                    {/* 객체 속성 직접 전달 */}
-                    {!isMovie && <VideoEpisode key={data.episode} {...data} thumbnailUrl={thumbnailUrl} />}
+                    {/* 객체 속성 직접 전달 */}{" "}
+                    <VideoEpisode key={data.episode} {...data} thumbnailUrl={thumbnailUrl} />
                   </>
                 ))}
               </>

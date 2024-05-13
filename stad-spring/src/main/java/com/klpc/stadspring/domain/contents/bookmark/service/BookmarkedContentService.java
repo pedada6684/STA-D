@@ -79,12 +79,11 @@ public class BookmarkedContentService {
      * @param command
      * @return
      */
+    @Transactional(readOnly = false)
     public DeleteBookmarkResponse deleteBookmark(DeleteBookmarkRequsetCommand command) {
         log.info("DeleteBookmarkRequsetCommand: "+command);
-
-        repository.delete(repository.findByUserIdAndContentConceptId(command.getUserId(), command.getConceptId())
+        repository.delete(repository.findByImin(command.getUserId(), command.getConceptId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND)));
-
         return DeleteBookmarkResponse.builder().result("북마크한 컨텐츠가 성공적으로 삭제되었습니다.").build();
     }
 }
