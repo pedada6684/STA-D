@@ -21,12 +21,13 @@ export function EditButton(formData: any) {
     console.log(formData);
     const result = await modifyAdvert(formData);
     console.log(result);
+    window.alert("광고 수정이 완료되었습니다.");
   };
 
   return (
     <div className={`${styles.enCon}`}>
       <button className={`${styles.enroll}`} onClick={handleEditClick}>
-        수정
+        광고 수정완료
       </button>
     </div>
   );
