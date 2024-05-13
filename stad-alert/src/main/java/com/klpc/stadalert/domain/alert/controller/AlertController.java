@@ -1,8 +1,7 @@
 package com.klpc.stadalert.domain.alert.controller;
 
+import com.klpc.stadalert.domain.alert.controller.event.AdvertsStartEvent;
 import com.klpc.stadalert.domain.alert.controller.event.ContentStartEvent;
-import com.klpc.stadalert.domain.contents.entity.ContentDetail;
-import com.klpc.stadalert.domain.contents.service.ContentsService;
 import com.klpc.stadalert.global.response.ErrorCode;
 import com.klpc.stadalert.global.response.exception.CustomException;
 import com.klpc.stadalert.global.service.SseEmitters;
@@ -20,16 +19,28 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class AlertController {
 
 	final SseEmitters sseEmitters;
-	final ContentsService contentsService;
+
 
 	@KafkaListener(topics = "content-start", groupId = "contents-group", containerFactory = "ContentStartEventKafkaListenerContainerFactory")
 	public void onContentStartEvent(ContentStartEvent event) {
 		log.info("ContentStartEvent: " + event);
-		ContentDetail contentDetail = contentsService.findContentsDetail(event.getContentId());
 		SseEmitter emitter = sseEmitters.emit(
 				"app" + event.getUserId(),
-				contentDetail,
+				event,
 				"Content Start"
+		);
+		if (emitter == null){
+			throw new CustomException(ErrorCode.EMIT_NOT_FOUND);
+		}
+	}
+
+	@KafkaListener(topics = "adverts-start", groupId = "adverts-group", containerFactory = "AdvertsStartEventKafkaListenerContainerFactory")
+	public void onAdvertsStartEvent(AdvertsStartEvent event) {
+		log.info("AdvertsStartEvent: " + event);
+		SseEmitter emitter = sseEmitters.emit(
+				"app" + event.getUserId(),
+				event,
+				"Adverts Start"
 		);
 		if (emitter == null){
 			throw new CustomException(ErrorCode.EMIT_NOT_FOUND);
