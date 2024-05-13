@@ -345,6 +345,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  fixnum:
+    dependency: transitive
+    description:
+      name: fixnum
+      sha256: "25517a4deb0c03aa0f32fd12db525856438902d9c16536311e76cdc57b31d7d1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -358,14 +366,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
-  flutter_client_sse:
-    dependency: "direct main"
-    description:
-      name: flutter_client_sse
-      sha256: "2204f182dd22b859f98e30572fa8318176556eba4da8513c3bbc0632f2b79b8c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   flutter_dotenv:
     dependency: "direct main"
     description:
@@ -994,14 +994,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
+  sprintf:
+    dependency: transitive
+    description:
+      name: sprintf
+      sha256: "1fc9ffe69d4df602376b52949af107d8f5703b77cda567c4d7d86a0693120f23"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0"
   sse:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sse
       sha256: fdce3a4ac3ae1c01083d05ded0bcdb7e02857ca2323823548e9e76d2f61638f0
       url: "https://pub.dev"
     source: hosted
     version: "4.1.5"
+  sse_channel:
+    dependency: "direct main"
+    description:
+      name: sse_channel
+      sha256: "9aad5d4eef63faf6ecdefb636c0f857bd6f74146d2196087dcf4b17ab5b49b1b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
   stack_trace:
     dependency: transitive
     description:
@@ -1146,6 +1162,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  uuid:
+    dependency: transitive
+    description:
+      name: uuid
+      sha256: "814e9e88f21a176ae1359149021870e87f7cddaf633ab678a5d2b0bff7fd1ba8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.4.0"
   vector_graphics:
     dependency: transitive
     description:

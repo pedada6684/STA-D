@@ -7,6 +7,7 @@ import 'package:stad/models/contents_model.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/product/product_screen.dart';
 import 'package:stad/services/advert_service.dart';
+import 'package:stad/services/alert_service.dart';
 import 'package:stad/services/contents_service.dart';
 import 'package:stad/services/log_service.dart';
 import 'package:stad/widget/advertising_card.dart';
@@ -27,12 +28,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Content? featuredContent;
   List<Advert> adverts = [];
   List<Map<String, dynamic>> singleAdverts = [];
+  AlertService alertService = AlertService();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     fetchFeaturedContent();
+    int? userId = Provider.of<UserProvider>(context, listen: false).userId;
+    if (userId != null) {
+      print('나오나 userId :$userId');
+      alertService.connectToSSE(userId.toString());
+    }
     fetchAdverts();
     fetchSingleAdvert(1);
   }
@@ -48,9 +55,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           'title': advertData['title'],
           'description': advertData['description'],
         });
-      }
-
-      );
+      });
     } catch (e) {
       print('Failed to fetch single advert: $e');
     }
@@ -77,7 +82,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       setState(() {
         featuredContent = fetchedContent;
       });
-
     } catch (e) {
       print('Failed to fetch content: $e');
     }
@@ -102,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    alertService.dispose();
     super.dispose();
   }
 
