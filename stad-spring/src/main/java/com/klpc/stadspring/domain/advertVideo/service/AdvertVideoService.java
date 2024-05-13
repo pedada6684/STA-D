@@ -1,5 +1,6 @@
 package com.klpc.stadspring.domain.advertVideo.service;
 
+import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.advertVideo.controller.response.*;
 import com.klpc.stadspring.domain.advertVideo.entity.AdvertVideo;
@@ -20,12 +21,9 @@ import com.klpc.stadspring.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -270,12 +268,20 @@ public class AdvertVideoService {
             finalList.add(video.getVideoUrl());
         }
 
+        List<Long> finalListId = new ArrayList<>();
+        for (String url : finalList) {
+            Advert advert = advertRepository.findFirstByAdvertVideos_VideoUrl(url)
+                    .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+            finalListId.add(advert.getId());
+        }
+
         // TODO: 은희 - 광고 데이터 넣고 수정하기
         List<String> test = new ArrayList<>();
         test.add("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/%EC%9A%A9%EA%B0%80%EB%A6%AC.mp4");
 
         return GetFinalAdvertVideoListResponse.builder()
                 .data(test)
+                .advertIdList(finalListId)
                 .build();
     }
 

@@ -13,10 +13,8 @@ import com.klpc.stadspring.domain.advert.service.command.response.GetAdvertRespo
 import com.klpc.stadspring.domain.advertVideo.entity.AdvertVideo;
 import com.klpc.stadspring.domain.advertVideo.repository.AdvertVideoRepository;
 import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
-import com.klpc.stadspring.domain.advertVideo.service.command.response.GetTotalLogResponse;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
-import com.klpc.stadspring.domain.contents.concept.repository.impl.ContentConceptRepositoryImpl;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
 import com.klpc.stadspring.domain.productType.entity.ProductType;
@@ -30,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -135,7 +132,7 @@ public class AdvertService {
         //영상 등록 및 수정
         for(ModifyAdvertVideo av : command.getAdvertVideoUrlList()) {
             //등록
-            if (advertVideoRepository.findByVideoUrl(av.getAdvertVideoUrl()).isEmpty()) {
+            if (advertVideoRepository.findFirstByVideoUrl(av.getAdvertVideoUrl()).isEmpty()) {
                 Long len = 0L;
                 AdvertVideo advertVideo = AdvertVideo.createToAdvertVideo(len, av.getAdvertVideoUrl());
                 advertVideo.linkAdvert(advert);
