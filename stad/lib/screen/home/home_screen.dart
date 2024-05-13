@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     AdService adService = AdService();
     try {
       List<Advert> fetchedAdverts =
-          await adService.getAdvertsByContentId(4); // 컨텐츠 ID를 적절히 설정
+          await adService.getAdvertsByContentId(1); // 컨텐츠 ID를 적절히 설정
       setState(() {
         adverts = fetchedAdverts;
       });
@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     ContentsService contentsService = ContentsService();
     try {
       var fetchedContent = await contentsService
-          .fetchContentDetails(4); // assuming 1 is a valid ID
+          .fetchContentDetails(1); // assuming 1 is a valid ID
       setState(() {
         featuredContent = fetchedContent;
       });
