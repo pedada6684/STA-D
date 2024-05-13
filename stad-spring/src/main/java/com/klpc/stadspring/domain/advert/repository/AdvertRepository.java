@@ -2,7 +2,6 @@ package com.klpc.stadspring.domain.advert.repository;
 
 import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.user.entity.User;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -42,5 +41,5 @@ public interface AdvertRepository extends JpaRepository<Advert,Long> {
            """)
     public Long findRandomNotProductAdvertId();
 
-    public Optional<Advert> findByAdvertVideos_VideoUrl(String advertVideoUrl);
+    public Optional<Advert> findFirstByAdvertVideos_VideoUrl(String advertVideoUrl);
 }
