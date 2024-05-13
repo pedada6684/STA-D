@@ -31,47 +31,32 @@ export async function deleteAdvertVideo(advertVideoId: number) {
 
 export const modifyAdvert = async (data: any) => {
   if (!data || data.length == 0) return;
-  console.log(data);
   const request = {
-    advertId: data.advertId,
-    title: data.title,
+    advertId: data.formData.advertId,
+    title: data.formData.title,
     description: "",
-    startDate: data.startDate + "T00:00:00",
-    endDate: data.endDate + "T00:00:00",
-    advertType: data.advertType,
-    advertCategory: data.advertCategory,
-    directVideoUrl: data.directVideoUrl,
-    bannerImgUrl: data.bannerImgUrl,
-    selectedContentList: data.selectedContentList,
-    advertVideoUrlList: data.advertVideoUrlList,
+    startDate: data.formData.startDate + "T00:00:00",
+    endDate: data.formData.endDate + "T00:00:00",
+    advertType: data.formData.advertType,
+    advertCategory: data.formData.advertCategory,
+    directVideoUrl: "",
+    bannerImgUrl: data.formData.bannerImgUrl,
+    selectedContentList: data.formData.selectedContentList,
+    advertVideoUrlList: data.formData.advertVideoUrlList,
   };
-  console.log(request.advertVideoUrlList);
+  console.log(request);
   try {
     const response = await fetch(`/api/advert`, {
       method: "PUT",
       body: JSON.stringify(request),
+      headers: {
+        "Content-Type": "application/json", // JSON 데이터를 전송한다고 명시
+      },
     });
-    if (!response.ok) {
-      throw new Error("광고 수정 실패");
-    }
     const data = await response.json(); // JSON 형태로 응답 받음
-    const result = data.result;
-    console.log(result);
-    return result.data;
+    console.log("광고 영상 수정 성공", data);
+    return data;
   } catch (error) {
     console.error("광고 수정 실패 : ", error);
-    return null;
-  }
-};
-
-export const modifyVideo = async (videoId: number, video: string) => {
-  try {
-    const response = axios.post(`/api/advert-video/modify-video`, {
-      videoId: videoId,
-      video: video,
-    });
-    console.log("광고 영상 수정", response);
-  } catch (error) {
-    console.error("광고 영상 수정 실패", error);
   }
 };
