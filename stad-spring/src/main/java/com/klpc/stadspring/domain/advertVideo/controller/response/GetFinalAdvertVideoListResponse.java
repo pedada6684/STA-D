@@ -9,5 +9,5 @@ import java.util.List;
 @Builder
 public class GetFinalAdvertVideoListResponse {
     List<String> data;
-    List<Long> advertVideoIdList;
+    List<Long> advertIdList;
 }
