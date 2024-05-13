@@ -29,7 +29,8 @@
 .overlayButton img,
 .deleteButton img,
 .videoOverlay img,
-.deleteVidButton img {
+.deleteVidButton img,
+.deleteImgButton img {
   width: 2rem;
 }
 .input3 {
@@ -102,7 +103,8 @@
 .overlayButton,
 .videoOverlay,
 .deleteButton,
-.deleteVidButton {
+.deleteVidButton,
+.deleteImgButton {
   border: 0;
   background-color: transparent;
 }
@@ -209,6 +211,12 @@
   display: flex;
   padding-top: 1.3rem;
   padding-right: 1rem;
+}
+
+.deleteImgButton {
+  display: flex;
+  padding-right: 1rem;
+  z-index: 2;
 }
 .delte .videoInput,
 .imageInput {
