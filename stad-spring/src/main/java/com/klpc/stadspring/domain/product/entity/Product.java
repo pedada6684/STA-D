@@ -24,7 +24,6 @@ public class Product {
     @Column(name = "product_id")
     private Long id;
 
-    // 추후 제거하고 DTO 설정으로 교체할것
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "advert_id")
