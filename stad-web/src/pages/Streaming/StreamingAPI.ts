@@ -75,7 +75,7 @@ export async function getAdvertUrlList(accessToken: string | null, userId: numbe
 export async function getIsBookmarked(accessToken: string | null, userId: number, conceptId: number) {
   try {
     console.log("userId", userId, "/conceptId", conceptId);
-    const response = await axios.get(`/api/contents-detail/check/${conceptId}`, {
+    const response = await axios.get(`/api/contents-bookmark/check/${conceptId}`, {
       params: {
         userId: userId,
       },
@@ -84,5 +84,35 @@ export async function getIsBookmarked(accessToken: string | null, userId: number
     return response.data;
   } catch (error) {
     console.error("북마크 정보 조회 실패", error);
+  }
+}
+
+// 북마크 등록
+export async function postBookmarkAdd(accessToken: string | null, userId: number, conceptId: number) {
+  try {
+    console.log("conceptId", conceptId, "/userId", userId);
+    const response = await axios.post(`/api/contents-bookmark/add`, {
+      userId: userId,
+      conceptId: conceptId,
+    });
+    console.log("북마크 생성 성공", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("북마크 생성 실패", error);
+  }
+}
+
+// 북마크 삭제
+export async function deleteBookmark(accessToken: string | null, userId: number, conceptId: number) {
+  try {
+    console.log("conceptId", conceptId, "/userId", userId);
+    const response = await axios.post(`/api/contents-bookmark/delete`, {
+      userId: userId,
+      conceptId: conceptId,
+    });
+    console.log("북마크 삭제 성공", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("북마크 삭제 실패", error);
   }
 }
