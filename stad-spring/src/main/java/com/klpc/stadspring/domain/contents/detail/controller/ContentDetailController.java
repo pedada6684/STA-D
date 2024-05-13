@@ -36,25 +36,6 @@ public class ContentDetailController {
     private final ContentConceptService conceptService;
     private final WatchedContentService watchedContentService;
     private final BookmarkedContentService bookmarkedContentService;
-    private final RedisService redisService;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
-
-    @GetMapping("/streaming/{userId}/{detailId}")
-    @Operation(summary = "콘텐츠 스트리밍", description = "콘텐츠 스트리밍")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "콘텐츠 스트리밍 성공"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
-            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
-    })
-    ResponseEntity<ResourceRegion> streamingPublicVideo(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long userId, @PathVariable Long detailId){
-        ResponseEntity<ResourceRegion> resourceRegionResponseEntity = detailService.streamingPublicVideo(httpHeaders, detailId);
-        //알림서비스 연결
-        boolean isFirstRequest = redisService.isFirstStreamingRequest(userId, detailId);
-        if (isFirstRequest){
-            kafkaTemplate.send("content-start", new ContentStartEvnet(userId, detailId));
-        }
-        return resourceRegionResponseEntity;
-    }
 
     @GetMapping("/{conceptId}")
     @Operation(summary = "콘텐츠 상세 조회", description = "콘텐츠 상세 조회")
