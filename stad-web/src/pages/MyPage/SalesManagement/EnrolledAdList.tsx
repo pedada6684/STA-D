@@ -10,6 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { useNavigate } from "react-router";
+import { useQuery, useQueryClient } from "react-query";
 
 interface adType {
   advertId?: number;
@@ -29,18 +30,20 @@ export default function EnrolledAdList() {
   const [adsList, setAdsList] = useState<adType[]>([]); // 광고 목록
   const userId = useSelector((state: RootState) => state.user.userId);
   const navigate = useNavigate();
-  useEffect(() => {
-    const fetchAdsList = async () => {
-      try {
-        const data = await getAdvertList(userId);
-        setAdsList(data);
-      } catch (error) {
-        console.error("광고 목록 조회 실패 : ", error);
-      }
-    };
+  const queryClient = useQueryClient();
+  const { data: list, isLoading } = useQuery(
+    ["getAds", userId],
+    () => getAdvertList(userId),
+    {
+      onSuccess: (list) => {
+        setAdsList(list);
+      },
+    }
+  );
 
-    fetchAdsList();
-  }, [adsList]);
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: "getAds" });
+  }, [adsList.length, queryClient]);
 
   const editClick = (advert: adType) => {
     console.log(`Edit clicked for ad with ID:`, advert.advertId);
@@ -48,10 +51,17 @@ export default function EnrolledAdList() {
     // modifyAdvert(advert);
   };
 
-  const deleteClick = (advertId: number | undefined) => {
+  const deleteClick = async (advertId: number | undefined) => {
     console.log(`Delete clicked for ad with ID:` + advertId);
-    deleteAdvert(advertId);
-    // window.location.reload();
+    try {
+      await deleteAdvert(advertId); // 광고 삭제 API 호출
+      setAdsList((currentAds) =>
+        currentAds.filter((ad) => ad.advertId !== advertId)
+      );
+      // 삭제 성공 후 광고 목록에서 해당 광고 제거
+    } catch (error) {
+      console.error("Failed to delete ad:", error);
+    }
   };
 
   return (
