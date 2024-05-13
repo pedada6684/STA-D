@@ -110,6 +110,23 @@ export function SelectAdCategory({
   type SubCategoryOptions = {
     [key: string]: OptionType[];
   };
+  useEffect(() => {
+    // 등록한 카테고리 값이 있는 경우
+    if (initialCategory) {
+      const mainCategoryValue = initialCategory.charAt(0); // 앞글자 추출해서 대분류 카테고리
+      const mainCategoryOption = SelectAdMainCategory.find(
+          (option) => option.value === mainCategoryValue
+      );
+      if (mainCategoryOption) {
+        setSelectMainCategory(mainCategoryOption);
+      }
+      const subCategoryOptions = SelectAdSubCategory[mainCategoryValue];
+      const subCategoryOption = subCategoryOptions.find(
+          (option) => option.value === initialCategory
+      );
+      if (subCategoryOption) setSelectSubCategory(subCategoryOption);
+    }
+  },[initialCategory]);
 
   const [selectMainCategory, setSelectMainCategory] =
     useState<OptionType | null>(null);
@@ -123,29 +140,15 @@ export function SelectAdCategory({
     setSelectSubCategory(null); // 중분류 초기화
   };
 
-  useEffect(() => {
-    // 등록한 카테고리 값이 있는 경우
-    if (initialCategory) {
-      const mainCategoryValue = initialCategory.charAt(0); // 앞글자 추출해서 대분류 카테고리
-      const mainCategoryOption = SelectAdMainCategory.find(
-        (option) => option.value === mainCategoryValue
-      );
-      if (mainCategoryOption) {
-        setSelectMainCategory(mainCategoryOption);
-      }
-      const subCategoryOptions = SelectAdSubCategory[mainCategoryValue];
-      const subCategoryOption = subCategoryOptions.find(
-        (option) => option.value === initialCategory
-      );
-      if (subCategoryOption) setSelectSubCategory(subCategoryOption);
-    }
-  });
-
   // 중분류 변경 핸들러
   const handleSubcategoryChange = (selectedOption: OptionType | null) => {
     setSelectSubCategory(selectedOption);
     if (selectedOption) {
       setCategory(selectedOption.value);
+      setSelectSubCategory(selectedOption);
+     console.log(selectedOption.value);
+     console.log(selectedOption);
+     console.log(selectSubCategory);
     } else {
       setCategory(null);
     }

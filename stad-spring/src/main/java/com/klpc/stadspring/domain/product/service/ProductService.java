@@ -112,8 +112,8 @@ public class ProductService {
                 .thumbnail(product.getThumbnail())
                 .cityDeliveryFee(product.getCityDeliveryFee())
                 .mtDeliveryFee(product.getMtDeliveryFee())
-                .expStart(product.getExpStart())
-                .expEnd(product.getExpEnd())
+                .expStart(product.getExpStart().toLocalDate().toString())
+                .expEnd(product.getExpEnd().toLocalDate().toString())
                 .productTypeList(productTypeList)
                 .build();
 

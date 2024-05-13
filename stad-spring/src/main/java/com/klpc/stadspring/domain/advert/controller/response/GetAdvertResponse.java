@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 public class GetAdvertResponse {
 
+    Long productId;
     String title;
     String description;
     String startDate;

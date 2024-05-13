@@ -172,10 +172,12 @@ public class AdvertService {
     @Transactional(readOnly = false)
     public DeleteAdvertResponse deleteAdvert(Long id){
         Advert advert = advertRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        Product product = advert.getProducts().get(0);
-        product.deleteProduct(product);
-        for(ProductType productType : product.getProductType()){
-            productType.deleteProductType(productType);
+        if(!advert.getProducts().isEmpty()) {
+            Product product = advert.getProducts().get(0);
+            product.deleteProduct(product);
+            for (ProductType productType : product.getProductType()) {
+                productType.deleteProductType(productType);
+            }
         }
         advert.deleteAdvert();
 
@@ -203,6 +205,7 @@ public class AdvertService {
         }
 
         GetAdvertResponse response = GetAdvertResponse.builder()
+                .productId(advert.getProducts().get(0).getId())
                 .title(advert.getTitle())
                 .description(advert.getDescription())
                 .startDate(advert.getStartDate().toLocalDate().toString())
