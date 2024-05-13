@@ -50,6 +50,7 @@ interface goodsForm {
 // 상품 interface
 interface ProductType {
   id: number;
+  productTypeId: number
   productTypeName: string; // 상품명
   productTypePrice: number; // 상품 가격
   productTypeQuantity: number; // 재고 수량
@@ -59,6 +60,7 @@ interface ProductType {
 // 옵션 interface
 interface ProductOption {
   id: number;
+  optionId: number;
   optionName: string; // 옵션명
   optionValue: number; // 옵션값
 }
@@ -87,7 +89,7 @@ export default function Merchandise() {
             productTypeList: data.productTypeList,
           });
 
-          setProducts(data.productTypeList);
+          setProducts(data.productTypeList)
         }
       } catch (error) {
         console.error("상품 조회 실패", error);
@@ -96,6 +98,7 @@ export default function Merchandise() {
 
     fetchData(); // fetchData 함수 호출
   }, [productId]);
+
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -174,6 +177,7 @@ export default function Merchandise() {
   const addProduct = () => {
     const newProduct = {
       id: Date.now(), // 고유 ID 생성
+      productTypeId : -1,
       productTypeName: "",
       productTypePrice: 0,
       productTypeQuantity: 0,
@@ -192,6 +196,7 @@ export default function Merchandise() {
     // 초기값 설정
     const newOption: ProductOption = {
       id: Date.now(),
+      optionId : -1,
       optionName: "",
       optionValue: 0,
     };
