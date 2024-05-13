@@ -6,12 +6,12 @@ import lombok.Getter;
 @Getter
 public class DeleteBookmarkRequest {
     private Long userId;
-    private Long detailId;
+    private Long conceptId;
 
     public DeleteBookmarkRequsetCommand toCommand() {
         return DeleteBookmarkRequsetCommand.builder()
                 .userId(userId)
-                .detailId(detailId)
+                .conceptId(conceptId)
                 .build();
     }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 public class GetConceptAndDetailResponse {
     Long conceptId;
+    boolean isMovie;
     String title;
     String thumbnailUrl;
     String playtime;
@@ -24,6 +25,7 @@ public class GetConceptAndDetailResponse {
     public static GetConceptAndDetailResponse from(ContentConcept contentConcept, List<GetDetailListByConceptIdResponseCommand> commandList) {
         return GetConceptAndDetailResponse.builder()
                 .conceptId(contentConcept.getId())
+                .isMovie(contentConcept.isMovie())
                 .title(contentConcept.getTitle())
                 .thumbnailUrl(contentConcept.getThumbnailUrl())
                 .playtime(contentConcept.getPlaytime())

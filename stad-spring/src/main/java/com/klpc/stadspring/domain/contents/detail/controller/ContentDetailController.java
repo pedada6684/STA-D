@@ -4,8 +4,8 @@ import com.klpc.stadspring.domain.contents.bookmark.service.BookmarkedContentSer
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetConceptAndDetailResponse;
-import com.klpc.stadspring.domain.contents.detail.controller.response.GetDetailIdAndThumbnailListResponse;
-import com.klpc.stadspring.domain.contents.detail.controller.response.GetDetailIdAndThumbnailResponse;
+import com.klpc.stadspring.domain.contents.detail.controller.response.GetThumbnailListResponse;
+import com.klpc.stadspring.domain.contents.detail.controller.response.GetThumbnailResponse;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
 import com.klpc.stadspring.domain.contents.detail.service.command.response.GetDetailListByConceptIdResponseCommand;
@@ -81,18 +81,18 @@ public class ContentDetailController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<GetDetailIdAndThumbnailListResponse> getWatchingContent(@RequestParam("userId")  Long userId) {
+    ResponseEntity<GetThumbnailListResponse> getWatchingContent(@RequestParam("userId")  Long userId) {
         log.info("시청 중인 영상 목록 조회" + "\n" + "getWatchingContent : " + userId);
 
         List<Long> detailIdList = watchedContentService.getWatchingContentDetailIdByUserId(userId);
-        List<GetDetailIdAndThumbnailResponse> responseList = new ArrayList<>();
+        List<GetThumbnailResponse> responseList = new ArrayList<>();
         for (Long aLong : detailIdList) {
             ContentDetail detail = detailService.getContentDetailById(aLong);
             ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
 
-            responseList.add(GetDetailIdAndThumbnailResponse.from(detail, concept));
+            responseList.add(GetThumbnailResponse.from(concept));
         }
-        GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
+        GetThumbnailListResponse response = GetThumbnailListResponse.from(responseList);
         return ResponseEntity.ok(response);
     }
 
@@ -103,18 +103,18 @@ public class ContentDetailController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<GetDetailIdAndThumbnailListResponse> getWatchingAndWatchedContent(@RequestParam("userId")  Long userId) {
+    ResponseEntity<GetThumbnailListResponse> getWatchingAndWatchedContent(@RequestParam("userId")  Long userId) {
         log.info("시청한 영상 목록 조회" + "\n" + "getWatchingAndWatchedContent : " + userId);
 
         List<Long> detailIdList = watchedContentService.getWatchingAndWatchedContentDetailIdByUserId(userId);
-        List<GetDetailIdAndThumbnailResponse> responseList = new ArrayList<>();
+        List<GetThumbnailResponse> responseList = new ArrayList<>();
         for (Long aLong : detailIdList) {
             ContentDetail detail = detailService.getContentDetailById(aLong);
             ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
 
-            responseList.add(GetDetailIdAndThumbnailResponse.from(detail, concept));
+            responseList.add(GetThumbnailResponse.from(concept));
         }
-        GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
+        GetThumbnailListResponse response = GetThumbnailListResponse.from(responseList);
         return ResponseEntity.ok(response);
     }
 
@@ -125,18 +125,17 @@ public class ContentDetailController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<GetDetailIdAndThumbnailListResponse> getBookmarkedContent(@RequestParam("userId")  Long userId) {
+    ResponseEntity<GetThumbnailListResponse> getBookmarkedContent(@RequestParam("userId")  Long userId) {
         log.info("북마크 영상 목록 조회" + "\n" + "getBookmarkedContent : " + userId);
 
-        List<Long> detailIdList = bookmarkedContentService.getDetailIdByUserId(userId);
-        List<GetDetailIdAndThumbnailResponse> responseList = new ArrayList<>();
-        for (Long aLong : detailIdList) {
-            ContentDetail detail = detailService.getContentDetailById(aLong);
-            ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
+        List<Long> conceptIdList = bookmarkedContentService.getConceptIdByUserId(userId);
+        List<GetThumbnailResponse> responseList = new ArrayList<>();
+        for (Long aLong : conceptIdList) {
+            ContentConcept concept = conceptService.getContentConceptById(aLong);
 
-            responseList.add(GetDetailIdAndThumbnailResponse.from(detail, concept));
+            responseList.add(GetThumbnailResponse.from(concept));
         }
-        GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
+        GetThumbnailListResponse response = GetThumbnailListResponse.from(responseList);
         return ResponseEntity.ok(response);
     }
 
@@ -147,17 +146,17 @@ public class ContentDetailController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<GetDetailIdAndThumbnailListResponse> getPopularContent() {
+    ResponseEntity<GetThumbnailListResponse> getPopularContent() {
         log.info("인기 영상 목록 조회" + "\n" + "getPopularContent");
 
         List<ContentDetail> popularList = detailService.getPopularContent();
-        List<GetDetailIdAndThumbnailResponse> responseList = new ArrayList<>();
+        List<GetThumbnailResponse> responseList = new ArrayList<>();
         for (ContentDetail contentDetail : popularList) {
             ContentConcept concept = conceptService.getContentConceptById(contentDetail.getContentConceptId());
 
-            responseList.add(GetDetailIdAndThumbnailResponse.from(contentDetail, concept));
+            responseList.add(GetThumbnailResponse.from(concept));
         }
-        GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
+        GetThumbnailListResponse response = GetThumbnailListResponse.from(responseList);
         return ResponseEntity.ok(response);
     }
 
@@ -168,17 +167,17 @@ public class ContentDetailController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<GetDetailIdAndThumbnailListResponse> getUpdatedContent() {
+    ResponseEntity<GetThumbnailListResponse> getUpdatedContent() {
         log.info("최신 영상 목록 조회" + "\n" + "getUpdatedContent");
 
         List<ContentDetail> popularList = detailService.getUpdatedContent();
-        List<GetDetailIdAndThumbnailResponse> responseList = new ArrayList<>();
+        List<GetThumbnailResponse> responseList = new ArrayList<>();
         for (ContentDetail contentDetail : popularList) {
             ContentConcept concept = conceptService.getContentConceptById(contentDetail.getContentConceptId());
 
-            responseList.add(GetDetailIdAndThumbnailResponse.from(contentDetail, concept));
+            responseList.add(GetThumbnailResponse.from(concept));
         }
-        GetDetailIdAndThumbnailListResponse response = GetDetailIdAndThumbnailListResponse.from(responseList);
+        GetThumbnailListResponse response = GetThumbnailListResponse.from(responseList);
         return ResponseEntity.ok(response);
     }
 
