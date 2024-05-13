@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AdvertRepository extends JpaRepository<Advert,Long> {
 
@@ -40,4 +41,6 @@ public interface AdvertRepository extends JpaRepository<Advert,Long> {
            LIMIT 1
            """)
     public Long findRandomNotProductAdvertId();
+
+    public Optional<Advert> findByAdvertVideos_VideoUrl(String advertVideoUrl);
 }
