@@ -13,15 +13,15 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class UserService {
 
-	@Value("${spring.user-service.url}")
-	private String userServiceUrl;
+	@Value("${spring.stad-spring.url}")
+	private String stadSpringUrl;
 
 	public User findUser(Long userId) {
 		FindUserDto findUser = new RestTemplate().getForObject(
-			userServiceUrl + "/user?userId="+userId,
+			stadSpringUrl + "/user?userId="+userId,
 			FindUserDto.class
 		);
 		log.debug("findUser: " + findUser);
-		return User.createNewUser(findUser);
+		return User.from(findUser);
 	}
 }
