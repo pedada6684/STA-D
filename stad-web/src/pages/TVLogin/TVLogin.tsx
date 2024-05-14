@@ -16,8 +16,8 @@ export default function TVLogin() {
   const [sessionId, setSessionId] = useState("");
   const qrContainerRef = useRef<HTMLDivElement>(null); // QR코드 렌더링할 컨테이너 참조
   // 로컬로 테스트 진행하고 성공 시 서버 URL로 바꿔서 올리기
-  const URL = "https://www.mystad.com";
-  // const URL = "http://localhost:8081";
+  // const URL = "https://www.mystad.com";
+  const URL = "http://localhost:8081";
   // const EventSource = NativeEventSource || EventSourcePolyfill;
   const [userProfile, setUserProfile] = useState<appUserType>();
   const navigate = useNavigate();
@@ -77,6 +77,7 @@ export default function TVLogin() {
     if (userProfile) {
       dispatch(
         tvUserActions.loginUser({
+          isTvLoggedIn: true,
           userId: userProfile.userId,
           userNickname: userProfile.nickname,
           profile: userProfile.profile,
