@@ -8,6 +8,5 @@ import java.util.List;
 @Getter
 @Builder
 public class GetFinalAdvertVideoListResponse {
-    List<String> data;
     List<Long> advertIdList;
 }
