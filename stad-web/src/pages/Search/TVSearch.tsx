@@ -47,6 +47,13 @@ export default function TVSearch() {
     setSearchAttempted(true);
     const response = await GetSearch(searchValue);
     setSearchResults(response ? response : []);
+    if (response && response.length > 0) {
+      setShowKeyboard(false);
+    }
+  };
+
+  const handleInputClick = () => {
+    setShowKeyboard(true);
   };
 
   return (
@@ -59,7 +66,7 @@ export default function TVSearch() {
             onChange={(e) => setText(e.target.value)}
             onSearch={setSearchResults}
             onSearchAttempted={() => setSearchAttempted(true)} // 검색 시도 됨 여부 체크
-            onInputClick={toggleKeyboard}
+            onInputClick={handleInputClick}
           />
           {searchValue.length > 0 && searchAttempted && (
             <>
@@ -83,8 +90,7 @@ export default function TVSearch() {
               )}
             </>
           )}
-          {showKeyboard || (
-            // (!searchResults && (
+          {showKeyboard && (
             <CustomKeyboard
               text={searchValue}
               setText={setText}
