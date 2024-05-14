@@ -103,28 +103,28 @@ public class AdvertVideoController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/streaming/{videoUrl}")
+    @GetMapping("/streaming/{videoId}")
     @Operation(summary = "광고 스트리밍", description = "광고 스트리밍")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "광고 스트리밍 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<ResourceRegion> streamingPublicVideo(@RequestHeader HttpHeaders httpHeaders, @PathVariable String videoUrl){
-        log.info("광고 스트리밍" + "\n" + "streamingPublicVideo : "+videoUrl);
+    ResponseEntity<ResourceRegion> streamingPublicVideo(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long videoId){
+        log.info("광고 스트리밍" + "\n" + "streamingPublicVideo : "+videoId);
 
-        return advertVideoService.streamingAdvertVideo(httpHeaders, videoUrl);
+        return advertVideoService.streamingAdvertVideo(httpHeaders, videoId);
     }
 
     @GetMapping("/redis/test")
     ResponseEntity<?> test(){
-        ArrayList<String> list = new ArrayList<>();
-        list.add("redis1");
-        list.add("redis2");
-        list.add("redis3");
+        ArrayList<Long> list = new ArrayList<>();
+        list.add(1L);
+        list.add(2L);
+        list.add(3L);
         redisService.createUserAdQueue(1L, list);
-        List<String> strings = redisService.popUserAdQueue(1L);
-        for (String res : strings) {
+        List<Long> strings = redisService.popUserAdQueue(1L);
+        for (Long res : strings) {
             System.out.println("result: " + res);
         }
         return ResponseEntity.ok().build();
