@@ -5,11 +5,11 @@ export async function getAdvertDetail(advertId: number) {
   try {
     const response = await axios.get(`/api/advert/get`, {
       params: {
-        advertId: advertId,
+        advertIds: advertId,
       },
     });
-    console.log("상세 조회 성공", response);
-    return response.data;
+    console.log("상세 조회 성공", response.data.data[0]);
+    return response.data.data[0];
   } catch (error) {
     console.error("상세 조회 실패", error);
   }
@@ -39,7 +39,7 @@ export const modifyAdvert = async (data: any) => {
     endDate: data.formData.endDate + "T00:00:00",
     advertType: data.formData.advertType,
     advertCategory: data.formData.advertCategory,
-    directVideoUrl: "",
+    directVideoUrl: data.formData.directVideoUrl,
     bannerImgUrl: data.formData.bannerImgUrl,
     selectedContentList: data.formData.selectedContentList,
     advertVideoUrlList: data.formData.advertVideoUrlList,

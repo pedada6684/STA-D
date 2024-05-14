@@ -3,6 +3,7 @@ package com.klpc.stadspring.domain.advert.service;
 import com.klpc.stadspring.domain.advert.controller.request.ModifyAdvertVideo;
 import com.klpc.stadspring.domain.advert.controller.response.*;
 import com.klpc.stadspring.domain.advert.entity.Advert;
+import com.klpc.stadspring.domain.advert.entity.AdvertType;
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertRequestCommand;
 import com.klpc.stadspring.domain.advert.service.command.request.ModifyAdvertRequestCommand;
@@ -205,21 +206,39 @@ public class AdvertService {
                 GetAdvertAdvertVideo advertVideo = GetAdvertAdvertVideo.builder().advertVideoId(i.getId()).advertVideoUrl(i.getVideoUrl()).build();
                 advertVideoUrlList.add(advertVideo);
             }
-
-            GetAdvertResponseCommand response = GetAdvertResponseCommand.builder()
-                    .advertId(advert.getId())
-                    .productId(advert.getProducts().get(0).getId())
-                    .title(advert.getTitle())
-                    .description(advert.getDescription())
-                    .startDate(advert.getStartDate().toLocalDate().toString())
-                    .endDate(advert.getEndDate().toLocalDate().toString())
-                    .advertType(advert.getAdvertType().toString())
-                    .advertCategory(advert.getAdvertCategory())
-                    .directVideoUrl(advert.getDirectVideoUrl())
-                    .bannerImgUrl(advert.getBannerImgUrl())
-                    .selectedContentList(selectedContentList)
-                    .advertVideoUrlList(advertVideoUrlList)
-                    .build();
+            GetAdvertResponseCommand response = null;
+            if (advert.getAdvertType().equals(AdvertType.PRODUCT)) {
+                response = GetAdvertResponseCommand.builder()
+                        .advertId(advert.getId())
+                        .productId(advert.getProducts().get(0).getId())
+                        .title(advert.getTitle())
+                        .description(advert.getDescription())
+                        .startDate(advert.getStartDate().toLocalDate().toString())
+                        .endDate(advert.getEndDate().toLocalDate().toString())
+                        .advertType(advert.getAdvertType().toString())
+                        .advertCategory(advert.getAdvertCategory())
+                        .directVideoUrl(advert.getDirectVideoUrl())
+                        .bannerImgUrl(advert.getBannerImgUrl())
+                        .selectedContentList(selectedContentList)
+                        .advertVideoUrlList(advertVideoUrlList)
+                        .build();
+                responseList.add(response);
+            } else {
+                response = GetAdvertResponseCommand.builder()
+                        .advertId(advert.getId())
+                        .title(advert.getTitle())
+                        .description(advert.getDescription())
+                        .startDate(advert.getStartDate().toLocalDate().toString())
+                        .endDate(advert.getEndDate().toLocalDate().toString())
+                        .advertType(advert.getAdvertType().toString())
+                        .advertCategory(advert.getAdvertCategory())
+                        .directVideoUrl(advert.getDirectVideoUrl())
+                        .bannerImgUrl(advert.getBannerImgUrl())
+                        .selectedContentList(selectedContentList)
+                        .advertVideoUrlList(advertVideoUrlList)
+                        .build();
+                responseList.add(response);
+            }
         }
 
         GetAdvertResponse response = GetAdvertResponse.builder().data(responseList).build();
