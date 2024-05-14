@@ -9,7 +9,7 @@
 }
 .thumbnail img {
   border-radius: 5px;
-  height: 6rem;
+  height: 10rem;
   object-fit: cover;
   z-index: 10;
 }
@@ -23,8 +23,10 @@
 .episode {
   margin-bottom: 1rem;
   color: #fff;
+  font-size: 1.5rem;
 }
 .summary {
   color: #ccc;
   line-height: 1.5rem;
+  font-size: 1.2rem;
 }
