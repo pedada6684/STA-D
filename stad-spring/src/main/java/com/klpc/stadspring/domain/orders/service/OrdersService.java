@@ -117,7 +117,7 @@ public class OrdersService {
             for(OrderProduct orderProduct : orders.getOrderProducts()){
                 ProductType productType = orderProduct.getProductType();
                 GetOrderListProductTypeResponseCommand ptCommand = null;
-                if(orderProduct.getOptionId() == null){
+                if(orderProduct.getOptionId() == -1){
                     ptCommand = GetOrderListProductTypeResponseCommand.builder()
                             .productTypeId(productType.getId())
                             .productName(productType.getName())
