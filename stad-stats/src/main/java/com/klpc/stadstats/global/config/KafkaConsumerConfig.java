@@ -1,5 +1,7 @@
 package com.klpc.stadstats.global.config;
 
+import com.klpc.stadstats.domain.log.controller.event.AddOrderCancelLogEvent;
+import com.klpc.stadstats.domain.log.controller.event.AddOrderLogEvent;
 import com.klpc.stadstats.domain.tmp.entity.GetUserInfoResponse;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -24,9 +26,16 @@ public class KafkaConsumerConfig {
 	private String bootstrapServers;
 
 	@Bean
-	ConcurrentKafkaListenerContainerFactory<String, GetUserInfoResponse> testEventKafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, GetUserInfoResponse> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(consumerFactory(GetUserInfoResponse.class));
+	ConcurrentKafkaListenerContainerFactory<String, AddOrderLogEvent> addOrderLogEventConcurrentKafkaListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, AddOrderLogEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(consumerFactory(AddOrderLogEvent.class));
+		return factory;
+	}
+
+	@Bean
+	ConcurrentKafkaListenerContainerFactory<String, AddOrderCancelLogEvent> addOrderCancelLogEventConcurrentKafkaListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, AddOrderCancelLogEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(consumerFactory(AddOrderCancelLogEvent.class));
 		return factory;
 	}
 
