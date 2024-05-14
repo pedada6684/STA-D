@@ -287,6 +287,16 @@
   padding: 0.5rem;
   border-radius: 5px;
 }
+.deleteVidButton {
+  display: flex;
+  padding-top: 1.3rem;
+  padding-right: 1rem;
+  border: 0;
+  background-color: transparent;
+}
+.deleteVidButton img {
+  width: 2rem;
+}
 
 .addProductBtn {
   margin-top: 2rem;
