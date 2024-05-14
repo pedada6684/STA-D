@@ -1,5 +1,6 @@
 package com.klpc.stadstream.domain.advertVideo.service;
 
+import com.klpc.stadstream.domain.advertVideo.repository.AdvertVideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.UrlResource;
@@ -18,13 +19,15 @@ import java.util.concurrent.TimeUnit;
 @Transactional(readOnly = true)
 public class AdvertVideoService {
 
+    private final AdvertVideoRepository advertVideoRepository;
     /**
      * 영상 스트리밍
      * @param httpHeaders
-     * @param pathStr
      * @return
      */
-    public ResponseEntity<ResourceRegion> streamingAdvertVideo(HttpHeaders httpHeaders, String pathStr) {
+    public ResponseEntity<ResourceRegion> streamingAdvertVideo(HttpHeaders httpHeaders, Long videoId) {
+        String pathStr = advertVideoRepository.findById(videoId).get().getVideoUrl();
+
         // 파일 존재 확인
         try {
             UrlResource video = new UrlResource(pathStr);
