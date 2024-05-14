@@ -62,6 +62,7 @@ export default function AdDetail() {
         advertCategory: ad.category,
         advertType: ad.type,
         bannerImgUrl: ad.bannerImgUrl,
+        directVideoUrl: ad.directVideoUrl,
         advertVideoUrlList: ad.advertVideoUrlList,
         selectedContentList: ad.selectedContentList,
       };
