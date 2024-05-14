@@ -3,6 +3,7 @@ import ReactPlayer from "react-player";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import Loading from "../../components/Loading";
 import styles from "./Streaming.module.css";
 import backIcon from "../../assets/material-symbols_arrow-back.png";
 import { getStreaming, checkWatched, postWatchAdd, getAdvertUrlList, updateStopTime, putWatched } from "./StreamingAPI";
@@ -12,7 +13,7 @@ export default function Streaming() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [advertUrls, setAdvertUrls] = useState<string[]>([]);
+  const [advertIds, setAdvertIds] = useState<number[]>([]);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true); // 추가: 로딩 상태 추가
   const [timer, setTimer] = useState(60); // 1분 타이머
@@ -41,10 +42,7 @@ export default function Streaming() {
     }
   }, [timer]);
 
-  // const videoUrl = `http://localhost:8080/api/contents-detail/streaming/1/${detailId}`;
-  // const videoUrl = `http://localhost:8083/stream/contents/1/${detailId}`;
-  const videoUrl = `https://mystad.com/stream/contents/1/${detailId}`;
-  // const videoUrl = `https://mystad.com/api/contents-detail/streaming/${detailId}`;
+  const videoUrl = `https://mystad.com/stream/contents/1/${detailId}`; // 1을 userId로 바꿔야 함
 
   const fetchInitialData = async () => {
     try {
@@ -69,16 +67,9 @@ export default function Streaming() {
   const fetchAdvertList = async () => {
     try {
       const response = await getAdvertUrlList(token, userId, detailId);
-      console.log("response : " + typeof response.data);
-      const a = response.data;
-      const result = JSON.stringify(a);
-      console.log("result: " + result);
-      const advertUrlsArray = JSON.parse(result);
-      console.log(advertUrlsArray);
-      console.log(Object.values(advertUrlsArray));
-      console.log(typeof Object.values(advertUrlsArray));
-
-      setAdvertUrls(Object.values(advertUrlsArray));
+      console.log("response : " + typeof response);
+      console.log("result: " + response.advertIdList);
+      setAdvertIds(response.advertIdList);
       console.log("광고 URL 리스트 조회 완료");
     } catch (error) {
       console.error("광고 URL 리스트 조회 실패");
@@ -97,7 +88,7 @@ export default function Streaming() {
 
   // 광고가 끝났을 때 모달 닫기
   const handleAdvertEnded = () => {
-    if (currentVideoIndex < advertUrls.length - 1) {
+    if (currentVideoIndex < advertIds.length - 1) {
       // 다음 동영상 인덱스 증가
       setCurrentVideoIndex(currentVideoIndex + 1);
     } else {
@@ -146,11 +137,15 @@ export default function Streaming() {
   }, [isModalOpen]);
 
   // 현재 동영상 인덱스에 해당하는 URL 가져오기
-  const currentVideoUrl = advertUrls[currentVideoIndex];
+  const currentVideoUrl = `http://localhost:8080/api/advert-video/streaming/${advertIds[currentVideoIndex]}`; // 서버에 올린다음에 수정하기
 
   // 로딩 중이면 로딩 화면 표시
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
 
   return (
