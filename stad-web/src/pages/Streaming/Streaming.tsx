@@ -6,7 +6,15 @@ import { RootState } from "../../store";
 import Loading from "../../components/Loading";
 import styles from "./Streaming.module.css";
 import backIcon from "../../assets/material-symbols_arrow-back.png";
-import { getStreaming, checkWatched, postWatchAdd, getAdvertUrlList, updateStopTime, putWatched } from "./StreamingAPI";
+import {
+  getStreaming,
+  checkWatched,
+  postWatchAdd,
+  getAdvertUrlList,
+  updateStopTime,
+  putWatched,
+  getConceptId,
+} from "./StreamingAPI";
 
 export default function Streaming() {
   const [isHovered, setIsHovered] = useState(false);
@@ -17,6 +25,7 @@ export default function Streaming() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true); // 추가: 로딩 상태 추가
   const [timer, setTimer] = useState(60); // 1분 타이머
+  const [conceptId, setConceptId] = useState(0); // 1분 타이머
 
   const videoRef = useRef<ReactPlayer | null>(null);
   const { videoId } = useParams<{ videoId: string }>();
@@ -46,7 +55,7 @@ export default function Streaming() {
 
   const fetchInitialData = async () => {
     try {
-      await Promise.all([fetchCheckWatched(), fetchAdvertList(), addWatchVideo()]);
+      await Promise.all([fetchConceptId(), fetchCheckWatched(), fetchAdvertList(), addWatchVideo()]);
       setIsLoading(false); // 모든 비동기 작업 완료 후 로딩 상태 변경
     } catch (error) {
       console.error("Error fetching initial data:", error);
@@ -61,6 +70,13 @@ export default function Streaming() {
       // ReactPlayer 참조를 사용하여 특정 시점부터 동영상을 재생
       videoRef.current.seekTo(response.stopTime);
     }
+  };
+
+  const fetchConceptId = async () => {
+    const response = await getConceptId(token, detailId);
+    console.log("conceptId : ", response);
+
+    setConceptId(response);
   };
 
   // 광고 URL 리스트를 가져와 상태에 저장
@@ -137,7 +153,7 @@ export default function Streaming() {
   }, [isModalOpen]);
 
   // 현재 동영상 인덱스에 해당하는 URL 가져오기
-  const currentVideoUrl = `https://www.mystad.com/stream/advert-video/${advertIds[currentVideoIndex]}`;
+  const currentVideoUrl = `https://www.mystad.com/stream/advert-video/${userId}/${advertIds[currentVideoIndex]}/${detailId}`;
 
   // 로딩 중이면 로딩 화면 표시
   if (isLoading) {
