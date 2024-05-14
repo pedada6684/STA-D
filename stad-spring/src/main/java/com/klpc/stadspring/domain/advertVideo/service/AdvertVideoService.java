@@ -243,42 +243,37 @@ public class AdvertVideoService {
         // 유저 맞춤 광고 큐에서 2개 추출하지 못한 경우 랜덤으로 추출
         while (finalList.size() < 2) {
             AdvertVideo video = advertVideoRepository.findRandomTop();
-            finalList.add(video.getVideoUrl());
+            finalList.add(video.getId());
         }
 
         // 콘텐츠 고정 광고 1개 추출
         Long advertId = selectedContentRepository.findRandomTopByConceptId(conceptId);
         AdvertVideo video = advertVideoRepository.findTopByAdvert_Id(advertId);
         if (video != null) {
-            finalList.add(video.getVideoUrl());
+            finalList.add(video.getId());
         }
 
         // 랜덤 기업 광고 1개 추출
         advertId = advertRepository.findRandomNotProductAdvertId();
         video = advertVideoRepository.findTopByAdvert_Id(advertId);
         if (video != null) {
-            finalList.add(video.getVideoUrl());
+            finalList.add(video.getId());
         }
 
         // 최종 큐에 광고가 4개가 들어가야 함
         while (finalList.size() < 4) {
             video = advertVideoRepository.findRandomTop();
-            finalList.add(video.getVideoUrl());
+            finalList.add(video.getId());
         }
 
         List<Long> finalListId = new ArrayList<>();
-        for (String url : finalList) {
-            Advert advert = advertRepository.findFirstByAdvertVideos_VideoUrl(url)
+        for (Long id : finalList) {
+            Advert advert = advertRepository.findFirstByAdvertVideos_Id(id)
                     .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
             finalListId.add(advert.getId());
         }
 
-        // TODO: 은희 - 광고 데이터 넣고 수정하기
-        List<String> test = new ArrayList<>();
-        test.add("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/%EC%9A%A9%EA%B0%80%EB%A6%AC.mp4");
-
         return GetFinalAdvertVideoListResponse.builder()
-                .data(test)
                 .advertIdList(finalListId)
                 .build();
     }
