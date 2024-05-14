@@ -40,7 +40,7 @@
 }
 
 .category a {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   color: white;
   text-decoration: none;
   font-weight: lighter;
@@ -56,13 +56,23 @@
   align-items: center;
   margin-right: 1rem;
 }
-.search button {
+
+.goBack {
+  display: flex;
+  margin-left: 2rem;
+  margin-top: 2rem;
+}
+.search button,
+.goBack button {
   border: 0;
   background-color: transparent;
   cursor: pointer;
 }
 .search button img {
   width: 2rem;
+}
+.goBack button img {
+  width: 4rem;
 }
 .profile {
   display: flex;
