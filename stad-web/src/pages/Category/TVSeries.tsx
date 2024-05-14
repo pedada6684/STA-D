@@ -56,7 +56,7 @@ export default function TVSeries() {
         <TVNav />
         <Content>
           <div className={`${styles.top}`}>
-            <div className={`${styles.title}`}>방송</div>
+            <div className={`${styles.title}`}>시리즈</div>
             <div className={`${styles.category}`}>
               <TVCategorySelect onChange={handleCategoryChange} />
             </div>
