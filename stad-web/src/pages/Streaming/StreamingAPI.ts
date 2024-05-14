@@ -169,3 +169,15 @@ export async function deleteBookmark(accessToken: string | null, userId: number,
     console.error("북마크 삭제 실패", error);
   }
 }
+
+// detailId로 conceptId 조회
+export async function getConceptId(accessToken: string | null, detailId: number) {
+  try {
+    console.log("detailId", detailId);
+    const response = await axios.get(`/api/contents-detail/get-conceptId/${detailId}`);
+    console.log("conceptId 조회 성공", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("conceptId 조회 실패", error);
+  }
+}
