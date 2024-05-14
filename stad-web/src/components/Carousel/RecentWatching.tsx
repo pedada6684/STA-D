@@ -10,15 +10,14 @@ import { CarouselVideoProps } from "./MainCarousel";
 import { GetRecentWatching } from "./CarouselApI";
 import Content from "../Container/Content";
 export default function RecentWatching() {
-  const token = useSelector((state: RootState) => state.token.accessToken);
-  const userId = useSelector((state: RootState) => state.user.userId);
+  const userId = useSelector((state: RootState) => state.tvUser.userId);
   const navigate = useNavigate();
   const {
     data: WatchingData,
     isLoading,
     error,
-  } = useQuery<CarouselVideoProps[]>(["watching", token], () =>
-    GetRecentWatching(userId, token)
+  } = useQuery<CarouselVideoProps[]>("watching", () =>
+    GetRecentWatching(userId)
   );
   if (isLoading)
     return (
