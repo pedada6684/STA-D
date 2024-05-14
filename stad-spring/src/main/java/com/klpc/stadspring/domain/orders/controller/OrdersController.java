@@ -79,7 +79,7 @@ public class OrdersController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @GetMapping("/cancel")
+    @PostMapping("/cancel")
     @Operation(summary = "주문 취소", description = "주문 취소")
     @ApiResponse(responseCode = "200", description = "주문이 취소 되었습니다.")
     public ResponseEntity<CancelOrdersResponse> cancelOrders(@RequestParam("ordersId") Long ordersId){
