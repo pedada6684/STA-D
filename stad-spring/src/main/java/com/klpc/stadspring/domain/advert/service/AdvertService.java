@@ -13,11 +13,9 @@ import com.klpc.stadspring.domain.advert.service.command.response.GetAdvertListB
 import com.klpc.stadspring.domain.advert.service.command.response.GetAdvertResponseCommand;
 import com.klpc.stadspring.domain.advertVideo.entity.AdvertVideo;
 import com.klpc.stadspring.domain.advertVideo.repository.AdvertVideoRepository;
-import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
 import com.klpc.stadspring.domain.product.entity.Product;
-import com.klpc.stadspring.domain.product.repository.ProductRepository;
 import com.klpc.stadspring.domain.productType.entity.ProductType;
 import com.klpc.stadspring.domain.selectedContent.entity.SelectedContent;
 import com.klpc.stadspring.domain.selectedContent.repository.SelectedContentRepository;
@@ -44,9 +42,7 @@ public class AdvertService {
 
     private final AdvertRepository advertRepository;
     private final AdvertVideoRepository advertVideoRepository;
-    private final AdvertVideoService advertVideoService;
     private final UserRepository userRepository;
-    private final ProductRepository productRepository;
     private final SelectedContentRepository selectedContentRepository;
     private final ContentConceptRepository contentConceptRepository;
     private final RestTemplate restTemplate;

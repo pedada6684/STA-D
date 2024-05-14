@@ -37,6 +37,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -58,10 +59,7 @@ public class OrdersService {
     private final OrderProductRepository orderProductRepository;
     private final OrdersRepository ordersRepository;
     private final OptionRepository optionRepository;
-//    private final LogService logService;
-
-    @Value("${spring.stad-stats.url}")
-    private String stadStatsUrl;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     /**
      * 주문 생성
@@ -266,39 +264,13 @@ public class OrdersService {
     }
 
     public void sendOrderLogRequest(AddOrderLogCommand requestData) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        // HttpHeaders 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        // HttpEntity에 요청 데이터와 헤더 포함
-        HttpEntity<AddOrderLogCommand> entity = new HttpEntity<>(requestData, headers);
-
-        // POST 요청 보내기
-        String url = stadStatsUrl+"/log/order-log";
-        String response = restTemplate.postForObject(url, entity, String.class);
-
-        // 응답 출력
-        System.out.println("Response Body: " + response);
+        kafkaTemplate.send("order-log", requestData);
     }
 
     public void sendOrderCancelRequest(AddOrderCancelLogCommand requestData) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        // HttpHeaders 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        // HttpEntity에 요청 데이터와 헤더 포함
-        HttpEntity<AddOrderCancelLogCommand> entity = new HttpEntity<>(requestData, headers);
-
-        // POST 요청 보내기
-        String url = stadStatsUrl+"/log/cancel-log";
-        String response = restTemplate.postForObject(url, entity, String.class);
-
-        // 응답 출력
-        System.out.println("Response Body: " + response);
+        kafkaTemplate.send("order-cancel-log", requestData);
     }
+
+
 
 }

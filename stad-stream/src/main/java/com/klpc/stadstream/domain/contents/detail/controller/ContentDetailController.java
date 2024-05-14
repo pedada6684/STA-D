@@ -37,7 +37,7 @@ public class ContentDetailController {
         log.info("streamingPublicVideo: userId: "+userId + " contents: "+detailId);
         ResponseEntity<ResourceRegion> resourceRegionResponseEntity = detailService.streamingPublicVideo(httpHeaders, detailId);
         //알림서비스 연결
-        boolean isFirstRequest = redisService.isFirstStreamingRequest(userId, detailId);
+        boolean isFirstRequest = redisService.isFirstContentStreamingRequest(userId, detailId);
         if (isFirstRequest){
             kafkaTemplate.send("content-start", new ContentStartEvnet(userId, detailId));
         }
