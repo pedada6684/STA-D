@@ -46,7 +46,7 @@ export default function MerchandiseModifyButton({
             goodsFormData.name!=null && goodsFormData.name!=undefined && goodsFormData.name!="" &&
             goodsFormData.expStart!=null && goodsFormData.expStart!=undefined && goodsFormData.expStart!="" &&
             goodsFormData.expEnd!=null && goodsFormData.expEnd!=undefined && goodsFormData.expEnd!="" &&
-            goodsFormData.imgs!=null && goodsFormData.imgs!=undefined &&
+            goodsFormData.imgs!=null && goodsFormData.imgs!=undefined && goodsFormData.imgs.length!=0 &&
             goodsFormData.cityDeliveryFee!=null && goodsFormData.cityDeliveryFee!=undefined &&
             goodsFormData.mtDeliveryFee!=null && goodsFormData.mtDeliveryFee!=undefined &&
             goodsFormData.thumbnail!=null && goodsFormData.thumbnail!=undefined && goodsFormData.thumbnail!="" &&
