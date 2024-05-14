@@ -41,5 +41,5 @@ public interface AdvertRepository extends JpaRepository<Advert,Long> {
            """)
     public Long findRandomNotProductAdvertId();
 
-    public Optional<Advert> findFirstByAdvertVideos_VideoUrl(String advertVideoUrl);
+    public Optional<Advert> findFirstByAdvertVideos_Id(Long advertVideoId);
 }
