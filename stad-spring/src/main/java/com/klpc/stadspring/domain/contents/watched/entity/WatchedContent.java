@@ -32,16 +32,14 @@ public class WatchedContent {
     private LocalDate date;
 
     private boolean status;
-    // =========수정==========
-    private String stopTime;
-    // ======================
+    private Long stopTime;
 
     public static WatchedContent createWatchedContent (
             ContentDetail contentDetail,
             User user,
             LocalDate date,
             boolean status,
-            String stopTime
+            Long stopTime
     ) {
         WatchedContent watchedContent = new WatchedContent();
         watchedContent.contentDetail = contentDetail;
@@ -56,7 +54,7 @@ public class WatchedContent {
     public void modifyWatchedContent (
             LocalDate date,
             boolean status,
-            String stopTime
+            Long stopTime
     ) {
         this.date = date;
         this.status = status;
