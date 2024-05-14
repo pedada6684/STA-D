@@ -10,6 +10,7 @@ import java.util.List;
 public class GetAdvertResponseCommand {
 
     Long advertId;
+    Long productId;
     String title;
     String description;
     String startDate;
