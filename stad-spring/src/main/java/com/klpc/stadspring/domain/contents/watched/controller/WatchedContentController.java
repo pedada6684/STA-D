@@ -1,10 +1,13 @@
 package com.klpc.stadspring.domain.contents.watched.controller;
 
 import com.klpc.stadspring.domain.contents.watched.controller.request.AddWatchingContentRequest;
+import com.klpc.stadspring.domain.contents.watched.controller.request.CheckWatchingContentRequest;
 import com.klpc.stadspring.domain.contents.watched.controller.request.ModifyWatchingContentRequest;
 import com.klpc.stadspring.domain.contents.watched.controller.response.AddWatchingContentResponse;
+import com.klpc.stadspring.domain.contents.watched.controller.response.CheckWatchingContentResponse;
 import com.klpc.stadspring.domain.contents.watched.controller.response.ModifyWatchingContentResponse;
 import com.klpc.stadspring.domain.contents.watched.service.WatchedContentService;
+import com.klpc.stadspring.domain.contents.watched.service.command.request.CheckWatchingContentCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -52,6 +55,27 @@ public class WatchedContentController {
 
         try {
             ModifyWatchingContentResponse response = service.modifyWatchingContent(request.toCommand());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/check")
+    @Operation(summary = "시청 여부 조회", description = "Watched Content Check API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "시청 중인 영상 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    public ResponseEntity<CheckWatchingContentResponse> checkWatchingContent(@RequestParam("userId") Long userId, @RequestParam("detailId") Long detailId) {
+        log.info("시청 여부 조회"+ "\n" + "CheckWatchingContentRequest : userId = "+userId+", detailId = "+detailId+")");
+
+        try {
+            CheckWatchingContentResponse response = service.checkWatchingContent(CheckWatchingContentCommand.builder()
+                    .detailId(detailId)
+                    .userId(userId)
+                    .build());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();

@@ -3,10 +3,12 @@ package com.klpc.stadspring.domain.contents.watched.service;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailRepository;
 import com.klpc.stadspring.domain.contents.watched.controller.response.AddWatchingContentResponse;
+import com.klpc.stadspring.domain.contents.watched.controller.response.CheckWatchingContentResponse;
 import com.klpc.stadspring.domain.contents.watched.controller.response.ModifyWatchingContentResponse;
 import com.klpc.stadspring.domain.contents.watched.entity.WatchedContent;
 import com.klpc.stadspring.domain.contents.watched.repository.WatchedContentRepository;
 import com.klpc.stadspring.domain.contents.watched.service.command.request.AddWatchingContentCommand;
+import com.klpc.stadspring.domain.contents.watched.service.command.request.CheckWatchingContentCommand;
 import com.klpc.stadspring.domain.contents.watched.service.command.request.ModifyWatchingContentCommand;
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
@@ -105,5 +107,19 @@ public class WatchedContentService {
             return ModifyWatchingContentResponse.builder().result("시청 완료 콘텐츠가 성공적으로 생성되었습니다.").build();
         }
         return ModifyWatchingContentResponse.builder().result("컨텐츠 시청 시간이 성공적으로 저장되었습니다.").build();
+    }
+
+    public CheckWatchingContentResponse checkWatchingContent(CheckWatchingContentCommand command) {
+        log.info("CheckWatchingContentCommand : " + command);
+
+        if (watchedContentRepository.findByUserIdAndDetailId(command.getUserId(), command.getDetailId()).isPresent()) {
+            return CheckWatchingContentResponse.builder()
+                    .result(true)
+                    .stopTime(watchedContentRepository.findByUserIdAndDetailId(command.getUserId(), command.getDetailId())
+                            .get()
+                            .getStopTime())
+                    .build();
+        }
+        return CheckWatchingContentResponse.builder().result(false).build();
     }
 }
