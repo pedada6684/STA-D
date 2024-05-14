@@ -1,13 +1,14 @@
 package com.klpc.stadspring.domain.contents.watched.controller;
 
 import com.klpc.stadspring.domain.contents.watched.controller.request.AddWatchingContentRequest;
-import com.klpc.stadspring.domain.contents.watched.controller.request.CheckWatchingContentRequest;
 import com.klpc.stadspring.domain.contents.watched.controller.request.ModifyWatchingContentRequest;
 import com.klpc.stadspring.domain.contents.watched.controller.response.AddWatchingContentResponse;
 import com.klpc.stadspring.domain.contents.watched.controller.response.CheckWatchingContentResponse;
+import com.klpc.stadspring.domain.contents.watched.controller.response.FindCurrentWatchingContentResponse;
 import com.klpc.stadspring.domain.contents.watched.controller.response.ModifyWatchingContentResponse;
 import com.klpc.stadspring.domain.contents.watched.service.WatchedContentService;
 import com.klpc.stadspring.domain.contents.watched.service.command.request.CheckWatchingContentCommand;
+import com.klpc.stadspring.global.RedisService;
 import com.klpc.stadspring.global.event.ContentStopEvent;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,7 +26,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/contents-watch")
 public class WatchedContentController {
-    private final WatchedContentService service;
+    private final WatchedContentService watchedContentService;
+    private final RedisService redisService;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @PostMapping("/add")
@@ -39,7 +41,7 @@ public class WatchedContentController {
         log.info("시청 중인 영상 등록" + "\n" + "AddWatchingContentRequest : "+request);
 
         try {
-            AddWatchingContentResponse response = service.addWatchingContent(request.toCommand());
+            AddWatchingContentResponse response = watchedContentService.addWatchingContent(request.toCommand());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
@@ -57,7 +59,7 @@ public class WatchedContentController {
         log.info("시청 중인 영상 수정" + "\n" + "ModifyWatchingContentRequest : "+request);
 
         try {
-            ModifyWatchingContentResponse response = service.modifyWatchingContent(request.toCommand());
+            ModifyWatchingContentResponse response = watchedContentService.modifyWatchingContent(request.toCommand());
             kafkaTemplate.send("content-stop", new ContentStopEvent(request.getUserId(), request.getDetailId()));
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -76,7 +78,7 @@ public class WatchedContentController {
         log.info("시청 여부 조회"+ "\n" + "CheckWatchingContentRequest : userId = "+userId+", detailId = "+detailId+")");
 
         try {
-            CheckWatchingContentResponse response = service.checkWatchingContent(CheckWatchingContentCommand.builder()
+            CheckWatchingContentResponse response = watchedContentService.checkWatchingContent(CheckWatchingContentCommand.builder()
                     .detailId(detailId)
                     .userId(userId)
                     .build());
@@ -84,5 +86,23 @@ public class WatchedContentController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @GetMapping("/now")
+    @Operation(summary = "현재 시청 컨텐츠 조회", description = "current Watched Content Check API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "시청 중인 영상 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    public ResponseEntity<FindCurrentWatchingContentResponse> findCurrentWatchingContent(@RequestParam("userId") Long userId) {
+        log.info("현재 시청 컨텐츠 조회"+ "\n" + "findCurrentWatchingContent : userId = "+userId);
+        Long currentStreamingContent = redisService.findCurrentStreamingContent(userId);
+
+        return ResponseEntity.ok(
+                FindCurrentWatchingContentResponse.builder()
+                        .contentDetailId(currentStreamingContent)
+                        .build()
+        );
     }
 }
