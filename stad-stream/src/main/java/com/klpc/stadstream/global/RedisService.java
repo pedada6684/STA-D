@@ -23,21 +23,22 @@ public class RedisService {
     private final String TraceAdvertSteamingRequest = "TASR";
 
     public boolean isFirstContentStreamingRequest(Long userId, Long contentId){
-        String key = TraceContentSteamingRequest + "/" + userId + "/" + contentId;
-        Boolean isContained = setOperations.isMember(key, "T");
+        String key = TraceContentSteamingRequest + "/" + userId;
+        Boolean isContained = setOperations.isMember(key, contentId.toString());
         if (!isContained){ // is first
-            setOperations.add(key, "T");
+            setOperations.add(key, contentId.toString());
         }
         redisTemplateDefault.expire(key, 30, TimeUnit.SECONDS);
         return !isContained;
     }
+
     public boolean isFirstAdvertStreamingRequest(Long userId, Long videoId){
-        String key = TraceAdvertSteamingRequest + "/" + userId + "/" + videoId;
-        Boolean isContained = setOperations.isMember(key, "T");
+        String key = TraceAdvertSteamingRequest + "/" + userId;
+        Boolean isContained = setOperations.isMember(key, videoId.toString());
         if (!isContained){ // is first
-            setOperations.add(key, "T");
+            setOperations.add(key, videoId.toString());
         }
-        redisTemplateDefault.expire(key, 30, TimeUnit.SECONDS);
+        redisTemplateDefault.expire(key, 15, TimeUnit.SECONDS);
         return !isContained;
     }
 }
