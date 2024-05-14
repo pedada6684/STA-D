@@ -29,6 +29,7 @@ import { RootState } from "./store";
 import RequireAuth from "./pages/WebLogin/RequireAuth";
 import AdDetail from "./pages/AdEdit/AdDetail";
 import MerchandiseDetail from "./pages/AdEdit/MerchandiseDetail";
+import DigitalDetail from "./pages/AdEdit/DigitalDetail";
 export default function AnimatedRouter() {
   const location = useLocation();
   return (
@@ -113,6 +114,7 @@ export default function AnimatedRouter() {
                     </RequireAuth>
                 }
             />
+            <Route path="/modify-nonMerchandise" element={<RequireAuth><DigitalDetail/></RequireAuth>}/>
           {/* ---------------- 스트리밍 서비스 관련 router ------------------ */}
           <Route path="/tv-login" element={<TvLogin />} />
           <Route path="/tv-landing" element={<TVLanding />} />
