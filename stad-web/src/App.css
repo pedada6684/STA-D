@@ -1,6 +1,15 @@
 .App {
   min-height: 100vh;
 }
+
+/* 스크롤바 숨기기 */
+body.tv-scroll-container {
+  -ms-overflow-style: none; /* IE와 Edge에서 스크롤바 숨기기 */
+}
+
+body.tv-scroll-container::-webkit-scrollbar {
+  display: none; /* Webkit 브라우저에서 스크롤바 숨기기 */
+}
 .fade-enter {
   opacity: 0;
 }
