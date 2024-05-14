@@ -63,13 +63,9 @@ public class ProductController {
     }
 
 
-    // 상품 수정
-
-
-    // 상품 삭제
-
     /**
      *
+     * @param productId
      * @return
      */
     @DeleteMapping("/delete")
