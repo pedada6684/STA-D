@@ -54,7 +54,7 @@ export function EditGoodsButton(formData: any, advertType: string) {
         navigate("/modify-merchandise",{state:formData.formData.productId});
       }
       else{
-        navigate("/",{state:formData})
+        navigate("/modify-nonMerchandise",{state:formData})
       }
     }
     else{
