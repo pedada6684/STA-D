@@ -46,7 +46,7 @@ export default function Streaming() {
 
   const fetchInitialData = async () => {
     try {
-      await Promise.all([fetchAdvertList(), addWatchVideo()]);
+      await Promise.all([fetchCheckWatched(), fetchAdvertList(), addWatchVideo()]);
       setIsLoading(false); // 모든 비동기 작업 완료 후 로딩 상태 변경
     } catch (error) {
       console.error("Error fetching initial data:", error);
