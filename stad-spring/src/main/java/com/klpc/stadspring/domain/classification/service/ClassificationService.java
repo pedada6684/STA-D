@@ -4,6 +4,7 @@ import com.klpc.stadspring.domain.classification.dto.ClassificationRequest;
 import com.klpc.stadspring.domain.classification.dto.ClassificationResponse;
 import com.klpc.stadspring.domain.classification.dto.UserCategoryRequest;
 import com.klpc.stadspring.domain.classification.dto.UserCategoryResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -13,8 +14,11 @@ import java.util.List;
 public class ClassificationService {
     private final WebClient webClient;
 
+    @Value("${spring.stad-python.url}")
+    private String stadPythonUrl;
+
     public ClassificationService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8000").build(); // FastAPI 서버 URL
+        this.webClient = webClientBuilder.baseUrl(stadPythonUrl).build(); // FastAPI 서버 URL
     }
 
     public List<ClassificationResponse> getCategory(List<ClassificationRequest> ClassificationRequestList) {
