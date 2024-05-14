@@ -4,6 +4,8 @@ spring:
       on-profile: dev
   stad-stats:
     url: "http://localhost:8082/stats"
+  stad-python:
+    url: "http://localhost:8000"
 ---
 spring:
   config:
@@ -11,3 +13,5 @@ spring:
       on-profile: prod
   stad-stats:
     url: "http://stad-stats:8080/stats"
+  stad-python:
+    url: "http://stad-python:8000"
