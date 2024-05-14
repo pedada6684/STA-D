@@ -98,7 +98,7 @@ public class OrdersService {
 
             productType.modifyQuantity(-1* ptCommand.getProductCnt());
 
-//            sendOrderLogRequest(addOrderLogCommand);
+            sendOrderLogRequest(addOrderLogCommand);
         }
 
         return AddOrdersResponse.builder().result("success").build();
@@ -224,6 +224,7 @@ public class OrdersService {
         return response;
     }
 
+    @Transactional(readOnly = false)
     public CancelOrdersResponse cancelOrders(Long ordersId){
         Orders orders = ordersRepository.findById(ordersId).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
@@ -242,12 +243,12 @@ public class OrdersService {
                     .productId(productType.getId())
                     .price(productType.getPrice())
                     .status(false)
-                    .regDate(orders.getOrderDate())
+                    .regDate(LocalDateTime.now())
                     .updateDate(LocalDateTime.now())
                     .build();
-
+//
             productType.modifyQuantity(orderProduct.getCnt());
-
+//
             sendOrderCancelRequest(addOrderCancelLogCommand);
         }
 

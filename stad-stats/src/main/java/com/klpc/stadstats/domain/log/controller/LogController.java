@@ -74,7 +74,7 @@ public class LogController {
         log.info("AddOrderReturnLogRequest: " + request);
         try {
             OrderLog orderCancelLog = logService.addOrderCancelLog(request.toCommand());
-            kafkaTemplate.send("log-add-cancel", orderCancelLog);
+//            kafkaTemplate.send("log-add-cancel", orderCancLog);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
