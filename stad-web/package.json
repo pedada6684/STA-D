@@ -24,6 +24,7 @@
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.1.9",
+    "hangul-js": "^0.2.6",
     "javascript-qrcode": "^1.0.7",
     "jquery": "^3.7.1",
     "jwt-decode": "^4.0.0",
@@ -42,6 +43,7 @@
     "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
     "react-select": "^5.8.0",
+    "react-simple-keyboard": "^3.7.118",
     "react-slick": "^0.30.2",
     "react-spinners": "^0.13.8",
     "react-transition-group": "^4.4.5",
@@ -75,5 +77,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://www.mystad.com"
+  "proxy": "http://localhost:8080"
 }
