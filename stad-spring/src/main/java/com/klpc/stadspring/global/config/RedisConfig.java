@@ -34,8 +34,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, String> redisTemplateForAdQueue() {
-        RedisTemplate<String , String> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, Long> redisTemplateForAdQueue() {
+        RedisTemplate<String , Long> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
