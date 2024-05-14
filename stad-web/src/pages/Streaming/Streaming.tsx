@@ -60,7 +60,6 @@ export default function Streaming() {
     console.log("시청중인 영상일까요?", response.result);
 
     if (response.result && videoRef.current) {
-      console.log("==============반은 됐다.============");
       // ReactPlayer 참조를 사용하여 특정 시점부터 동영상을 재생
       videoRef.current.seekTo(response.stopTime);
     }
@@ -84,11 +83,6 @@ export default function Streaming() {
     } catch (error) {
       console.error("광고 URL 리스트 조회 실패");
     }
-    // setAdvertUrls([
-    //   "https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/ContentVideo/%EC%A7%80%EB%9D%BC%EA%B8%B0%EC%9B%94%EB%93%9C.mp4",
-    //   "https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/ContentVideo/%EC%98%81%EC%83%813+(1).mp4",
-    //   "https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/ContentVideo/%EC%8C%92%EB%A7%88%EC%9D%B4%EC%9B%A8%EC%9D%B4.mp4",
-    // ]);
   };
 
   // 시청 영상을 추가
