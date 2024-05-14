@@ -16,44 +16,33 @@ public class RedisService {
 
     @Autowired
     @Qualifier("redisTemplateForAdQueue")
-    private RedisTemplate<String, String> redisTemplateForAdQueue;
+    private RedisTemplate<String, Long> redisTemplateForAdQueue;
     @Autowired
     @Qualifier("redisTemplateDefault")
     private RedisTemplate<String, String> redisTemplateDefault;
 
     @Resource(name = "redisTemplateForAdQueue")
-    private ListOperations<String, String> listOperations;
+    private ListOperations<String, Long> listOperations;
     @Resource(name = "redisTemplateDefault")
     private SetOperations<String, String> setOperations;
 
     private final String adQueueKey = "ADQUEUE";
-    private final String TraceSteamingRequest = "TSR";
 
 
-    public void createUserAdQueue(Long userId, List<String> videoUrlListByUser){
+    public void createUserAdQueue(Long userId, List<Long> advertIdListByUser){
         String key = adQueueKey+userId;
-        for (String videoUrl : videoUrlListByUser) {
+        for (Long videoUrl : advertIdListByUser) {
             listOperations.rightPush(key, videoUrl);
         }
         redisTemplateForAdQueue.expire(key, 1, TimeUnit.DAYS);
         //test
-        for (String s : listOperations.range(key, 0, -1)) {
+        for (Long s : listOperations.range(key, 0, -1)) {
             System.out.println("url in redis: "+s);
         }
     }
 
-    public List<String> popUserAdQueue(Long userId){
+    public List<Long> popUserAdQueue(Long userId){
         String key = adQueueKey+userId;
         return listOperations.leftPop(key, 2);
-    }
-
-    public boolean isFirstStreamingRequest(Long userId, Long contentId){
-        String key = TraceSteamingRequest+ "/" + userId + "/" + contentId;
-        Boolean isContained = setOperations.isMember(key, "T");
-        if (!isContained){ // is first
-            setOperations.add(key, "T");
-        }
-        redisTemplateDefault.expire(key, 30, TimeUnit.SECONDS);
-        return !isContained;
     }
 }
