@@ -15,6 +15,7 @@ import com.klpc.stadspring.domain.orders.controller.response.GetOrdersListRespon
 import com.klpc.stadspring.domain.orders.controller.response.GetOrdersResponse;
 import com.klpc.stadspring.domain.orders.entity.Orders;
 import com.klpc.stadspring.domain.orders.repository.OrdersRepository;
+import com.klpc.stadspring.domain.orders.service.command.request.AddOrderCancelLogCommand;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderLogCommand;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequestCommand;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrdersProductTypeRequestCommand;
@@ -41,6 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -225,7 +227,29 @@ public class OrdersService {
     public CancelOrdersResponse cancelOrders(Long ordersId){
         Orders orders = ordersRepository.findById(ordersId).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
+        /** TODO -> status 가 안변함 수정 필요
+         */
         orders.cancelOrders();
+
+        for(OrderProduct orderProduct : orders.getOrderProducts()){
+            ProductType productType = productTypeRepository.findById(orderProduct.getProductType().getId()).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+            AddOrderCancelLogCommand addOrderCancelLogCommand = AddOrderCancelLogCommand.builder()
+                    .advertId(productType.getProduct().getAdvert().getId())
+                    .userId(orders.getUser().getId())
+                    .orderId(orders.getId())
+                    .contentId(productType.getProduct().getAdvert().getId())
+                    .productId(productType.getId())
+                    .price(productType.getPrice())
+                    .status(false)
+                    .regDate(orders.getOrderDate())
+                    .updateDate(LocalDateTime.now())
+                    .build();
+
+            productType.modifyQuantity(orderProduct.getCnt());
+
+            sendOrderCancelRequest(addOrderCancelLogCommand);
+        }
 
         return CancelOrdersResponse.builder().result("success").build();
     }
@@ -252,6 +276,24 @@ public class OrdersService {
 
         // POST 요청 보내기
         String url = stadStatsUrl+"/log/order-log";
+        String response = restTemplate.postForObject(url, entity, String.class);
+
+        // 응답 출력
+        System.out.println("Response Body: " + response);
+    }
+
+    public void sendOrderCancelRequest(AddOrderCancelLogCommand requestData) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        // HttpHeaders 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // HttpEntity에 요청 데이터와 헤더 포함
+        HttpEntity<AddOrderCancelLogCommand> entity = new HttpEntity<>(requestData, headers);
+
+        // POST 요청 보내기
+        String url = stadStatsUrl+"/log/cancel-log";
         String response = restTemplate.postForObject(url, entity, String.class);
 
         // 응답 출력
