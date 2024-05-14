@@ -142,8 +142,7 @@ public class AdvertVideoService {
      * @param userId
      * @return
      */
-    public List<String> getAdvertVideoByUser(Long userId){
-//    public List<Long> getAdvertVideoByUser(Long userId){
+    public List<Long> getAdvertVideoByUser(Long userId){
         log.info("유저 맞춤 광고 큐 조회 서비스" + "\n" + "userId : " + userId);
 
         List<String> userCategory = new ArrayList<>();
@@ -213,33 +212,16 @@ public class AdvertVideoService {
             }
         }
 
-        // TODO: 태경 - videoId로 바꾸고 아래 주석 해제하고 이건 삭제하기
-        List<String> videoUrlListByUser = new ArrayList<>();
+        List<Long> videoIdListByUser = new ArrayList<>();
         // 광고 id로 광고 video id 조회
         for (Long id: advertIdListByUser) {
             AdvertVideo video = advertVideoRepository.findTopByAdvert_Id(id);
             if (video != null) {
-                videoUrlListByUser.add(video.getVideoUrl());
+                videoIdListByUser.add(video.getId());
             }
         }
-
-        redisService.createUserAdQueue(userId, videoUrlListByUser);
-
-        return videoUrlListByUser;
-
-
-//        List<Long> videoIdListByUser = new ArrayList<>();
-//        // 광고 id로 광고 video id 조회
-//        for (Long id: advertIdListByUser) {
-//            AdvertVideo video = advertVideoRepository.findTopByAdvert_Id(id);
-//            if (video != null) {
-//                videoIdListByUser.add(video.getId());
-//            }
-//        }
-//
-//        redisService.createUserAdQueue(userId, videoIdListByUser);
-//
-//        return videoIdListByUser;
+        redisService.createUserAdQueue(userId, videoIdListByUser);
+        return videoIdListByUser;
     }
 
     /**
@@ -251,10 +233,10 @@ public class AdvertVideoService {
     public GetFinalAdvertVideoListResponse getFinalAdvertVideoList(Long userId, Long conceptId) {
         log.info("콘텐츠 시청할 때 만들 최종 광고 리스트 조회 서비스" +"\n" + "userId : " + userId + "\n" + "contentId : " + conceptId);
 
-        List<String> finalList = new ArrayList<>();
+        List<Long> finalList = new ArrayList<>();
 
-        List<String> videoUrlListByUser = redisService.popUserAdQueue(userId);
-        for (String tmp : videoUrlListByUser) {
+        List<Long> videoIdListByUser = redisService.popUserAdQueue(userId);
+        for (Long tmp : videoIdListByUser) {
             finalList.add(tmp);
         }
 
