@@ -70,8 +70,6 @@ public class BatchConfig {
 
             advertIdList = logService.listenAdvertIdList().getAdvertIdList();
 
-            log.info("advvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"+advertIdList.toString());
-
             List<AdvertStatistics> logList = new ArrayList<>();
 
             LocalDateTime oneHourAgo = LocalDateTime.now().minusHours(1);
@@ -134,6 +132,4 @@ public class BatchConfig {
             entityManager.persist(advertStatistics);
         }
     }
-
-
 }
