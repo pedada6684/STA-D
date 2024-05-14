@@ -32,7 +32,9 @@ export default function VideoDetail() {
   const [description, setDescription] = useState("");
   const [creator, setCreator] = useState("");
   const [cast, setCast] = useState("");
-  const [videoConceptData, setVideoConceptData] = useState<SeriesDetailProps[]>([]);
+  const [videoConceptData, setVideoConceptData] = useState<SeriesDetailProps[]>(
+    []
+  );
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   // URL 에서 videoId 가져오기
@@ -41,8 +43,7 @@ export default function VideoDetail() {
   const conceptId = Number(videoId);
 
   const token = useSelector((state: RootState) => state.token.accessToken);
-  // const userId = useSelector((state: RootState) => state.tvUser.userId);
-  const userId = 1;
+  const userId = useSelector((state: RootState) => state.tvUser.userId);
 
   const fetchVideoDetail = async () => {
     try {
@@ -105,7 +106,10 @@ export default function VideoDetail() {
             <BillboardContainer>
               <div>
                 <div className={`${styles.imgWrapper}`}>
-                  <div style={backgroundStyle} className={`${styles.coverImage}`}>
+                  <div
+                    style={backgroundStyle}
+                    className={`${styles.coverImage}`}
+                  >
                     <img
                       src={thumbnailUrl}
                       alt={title}
@@ -133,11 +137,17 @@ export default function VideoDetail() {
                       {/* 찜 여부로 바꾸기 */}
                       {isBookmarked ? (
                         <>
-                          <CheckButton conceptId={conceptId} onClick={() => setIsBookmarked(!isBookmarked)} />
+                          <CheckButton
+                            conceptId={conceptId}
+                            onClick={() => setIsBookmarked(!isBookmarked)}
+                          />
                         </>
                       ) : (
                         <>
-                          <AddButton conceptId={conceptId} onClick={() => setIsBookmarked(!isBookmarked)} />
+                          <AddButton
+                            conceptId={conceptId}
+                            onClick={() => setIsBookmarked(!isBookmarked)}
+                          />
                         </>
                       )}
                     </div>
@@ -158,12 +168,18 @@ export default function VideoDetail() {
               <>
                 <h3 className={`${styles.epiTitle}`}>에피소드</h3>
                 <hr className={`${styles.epiTitle}`} />
-                {videoConceptData.map((data: SeriesDetailProps, index: number) => (
-                  <>
-                    {/* 객체 속성 직접 전달 */}{" "}
-                    <VideoEpisode key={data.episode} {...data} thumbnailUrl={thumbnailUrl} />
-                  </>
-                ))}
+                {videoConceptData.map(
+                  (data: SeriesDetailProps, index: number) => (
+                    <>
+                      {/* 객체 속성 직접 전달 */}{" "}
+                      <VideoEpisode
+                        key={data.episode}
+                        {...data}
+                        thumbnailUrl={thumbnailUrl}
+                      />
+                    </>
+                  )
+                )}
               </>
             )}
           </Content>
