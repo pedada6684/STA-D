@@ -6,6 +6,7 @@ import com.klpc.stadalert.domain.connect.service.ConnectService;
 import com.klpc.stadalert.global.service.SseEmitters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -19,7 +20,7 @@ public class ConnectController {
 	final SseEmitters sseEmitters;
 	final ConnectService connectService;
 
-	@GetMapping("/{type}/{userId}")
+	@GetMapping(value = "/{type}/{userId}", produces= MediaType.TEXT_EVENT_STREAM_VALUE)
 	public ResponseEntity<SseEmitter> connect(@PathVariable String type, @PathVariable String userId) {
 		ConnectRequest request = new ConnectRequest(type, userId);
 		log.info("CreateConnectRequest: "+ request);

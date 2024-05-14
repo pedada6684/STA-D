@@ -2,6 +2,7 @@ package com.klpc.stadalert.domain.alert.controller;
 
 import com.klpc.stadalert.domain.alert.controller.event.AdvertsStartEvent;
 import com.klpc.stadalert.domain.alert.controller.event.ContentStartEvent;
+import com.klpc.stadalert.domain.alert.controller.event.ContentStopEvent;
 import com.klpc.stadalert.global.response.ErrorCode;
 import com.klpc.stadalert.global.response.exception.CustomException;
 import com.klpc.stadalert.global.service.SseEmitters;
@@ -34,6 +35,19 @@ public class AlertController {
 		}
 	}
 
+	@KafkaListener(topics = "content-stop", groupId = "contents-group", containerFactory = "ContentStopEventKafkaListenerContainerFactory")
+	public void onContentStopEvent(ContentStopEvent event) {
+		log.info("ContentStopEvent: " + event);
+		SseEmitter emitter = sseEmitters.emit(
+				"app" + event.getUserId(),
+				event,
+				"Content Stop"
+		);
+		if (emitter == null){
+			throw new CustomException(ErrorCode.EMIT_NOT_FOUND);
+		}
+	}
+
 	@KafkaListener(topics = "adverts-start", groupId = "adverts-group", containerFactory = "AdvertsStartEventKafkaListenerContainerFactory")
 	public void onAdvertsStartEvent(AdvertsStartEvent event) {
 		log.info("AdvertsStartEvent: " + event);
@@ -46,6 +60,4 @@ public class AlertController {
 			throw new CustomException(ErrorCode.EMIT_NOT_FOUND);
 		}
 	}
-
-
 }

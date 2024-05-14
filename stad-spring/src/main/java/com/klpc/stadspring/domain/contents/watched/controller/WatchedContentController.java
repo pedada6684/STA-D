@@ -8,6 +8,7 @@ import com.klpc.stadspring.domain.contents.watched.controller.response.CheckWatc
 import com.klpc.stadspring.domain.contents.watched.controller.response.ModifyWatchingContentResponse;
 import com.klpc.stadspring.domain.contents.watched.service.WatchedContentService;
 import com.klpc.stadspring.domain.contents.watched.service.command.request.CheckWatchingContentCommand;
+import com.klpc.stadspring.global.event.ContentStopEvent;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/contents-watch")
 public class WatchedContentController {
     private final WatchedContentService service;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @PostMapping("/add")
     @Operation(summary = "시청 중인 영상 등록", description = "Watched Content Add API")
@@ -55,6 +58,7 @@ public class WatchedContentController {
 
         try {
             ModifyWatchingContentResponse response = service.modifyWatchingContent(request.toCommand());
+            kafkaTemplate.send("content-stop", new ContentStopEvent(request.getUserId(), request.getDetailId()));
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
