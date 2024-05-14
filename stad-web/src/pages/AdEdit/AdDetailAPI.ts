@@ -39,7 +39,7 @@ export const modifyAdvert = async (data: any) => {
     endDate: data.formData.endDate + "T00:00:00",
     advertType: data.formData.advertType,
     advertCategory: data.formData.advertCategory,
-    directVideoUrl: "",
+    directVideoUrl: data.formData.directVideoUrl,
     bannerImgUrl: data.formData.bannerImgUrl,
     selectedContentList: data.formData.selectedContentList,
     advertVideoUrlList: data.formData.advertVideoUrlList,
