@@ -23,16 +23,16 @@ public class AdvertVideoController {
 
     private final AdvertVideoService advertVideoService;
 
-    @GetMapping("/{videoUrl}")
+    @GetMapping("/{videoId}")
     @Operation(summary = "광고 스트리밍", description = "광고 스트리밍")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "광고 스트리밍 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<ResourceRegion> streamingPublicVideo(@RequestHeader HttpHeaders httpHeaders, @PathVariable String videoUrl){
-        log.info("광고 스트리밍" + "\n" + "streamingPublicVideo : "+videoUrl);
+    ResponseEntity<ResourceRegion> streamingPublicVideo(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long videoId){
+        log.info("광고 스트리밍" + "\n" + "streamingPublicVideo : "+videoId);
 
-        return advertVideoService.streamingAdvertVideo(httpHeaders, videoUrl);
+        return advertVideoService.streamingAdvertVideo(httpHeaders, videoId);
     }
 }
