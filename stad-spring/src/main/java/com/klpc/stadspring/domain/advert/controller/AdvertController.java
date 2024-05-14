@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -83,9 +85,12 @@ public class AdvertController {
     @GetMapping("get")
     @Operation(summary = "광고 조회", description = "광고 조회")
     @ApiResponse(responseCode = "200", description = "광고가 조회 되었습니다.")
-    public ResponseEntity<GetAdvertResponse> getAdvert(@RequestParam("advertId") Long advertId){
-        log.info("광고 조회 Controller"+"\n"+"advertId : "+advertId);
-        GetAdvertResponse response = advertService.getAdvert(advertId);
+    public ResponseEntity<GetAdvertResponse> getAdvert(@RequestParam("advertIds") List<Long> advertIds){
+        log.info("광고 조회 Controller"+"\n"+"advertId : ");
+        for(Long advertId : advertIds) {
+            log.info(advertId+" ");
+        }
+        GetAdvertResponse response = advertService.getAdvert(advertIds);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -186,38 +186,43 @@ public class AdvertService {
 
     /**
      * 광고 정보 조회
-     * @param id : advertId
+     * @param ids : advertIds
      * @return
      */
-    public GetAdvertResponse getAdvert(Long id){
-        Advert advert = advertRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        if(!advert.getStatus()){
-            throw new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
+    public GetAdvertResponse getAdvert(List<Long> ids){
+        List<GetAdvertResponseCommand> responseList = new ArrayList<>();
+        for(Long id : ids) {
+            Advert advert = advertRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+            if (!advert.getStatus()) {
+                throw new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
+            }
+            List<Long> selectedContentList = new ArrayList<>();
+            for (SelectedContent i : advert.getSelectedContents())
+                selectedContentList.add(i.getFixedContentId());
+
+            List<GetAdvertAdvertVideo> advertVideoUrlList = new ArrayList<>();
+            for (AdvertVideo i : advert.getAdvertVideos()) {
+                GetAdvertAdvertVideo advertVideo = GetAdvertAdvertVideo.builder().advertVideoId(i.getId()).advertVideoUrl(i.getVideoUrl()).build();
+                advertVideoUrlList.add(advertVideo);
+            }
+
+            GetAdvertResponseCommand response = GetAdvertResponseCommand.builder()
+                    .advertId(advert.getId())
+                    .productId(advert.getProducts().get(0).getId())
+                    .title(advert.getTitle())
+                    .description(advert.getDescription())
+                    .startDate(advert.getStartDate().toLocalDate().toString())
+                    .endDate(advert.getEndDate().toLocalDate().toString())
+                    .advertType(advert.getAdvertType().toString())
+                    .advertCategory(advert.getAdvertCategory())
+                    .directVideoUrl(advert.getDirectVideoUrl())
+                    .bannerImgUrl(advert.getBannerImgUrl())
+                    .selectedContentList(selectedContentList)
+                    .advertVideoUrlList(advertVideoUrlList)
+                    .build();
         }
-        List<Long> selectedContentList = new ArrayList<>();
-        for(SelectedContent i : advert.getSelectedContents())
-            selectedContentList.add(i.getFixedContentId());
 
-        List<GetAdvertAdvertVideo> advertVideoUrlList = new ArrayList<>();
-        for(AdvertVideo i : advert.getAdvertVideos()) {
-            GetAdvertAdvertVideo advertVideo = GetAdvertAdvertVideo.builder().advertVideoId(i.getId()).advertVideoUrl(i.getVideoUrl()).build();
-            advertVideoUrlList.add(advertVideo);
-        }
-
-        GetAdvertResponse response = GetAdvertResponse.builder()
-                .productId(advert.getProducts().get(0).getId())
-                .title(advert.getTitle())
-                .description(advert.getDescription())
-                .startDate(advert.getStartDate().toLocalDate().toString())
-                .endDate(advert.getEndDate().toLocalDate().toString())
-                .type(advert.getAdvertType().toString())
-                .directVideoUrl(advert.getDirectVideoUrl())
-                .bannerImgUrl(advert.getBannerImgUrl())
-                .selectedContentList(selectedContentList)
-                .advertVideoUrlList(advertVideoUrlList)
-                .category(advert.getAdvertCategory())
-                .build();
-
+        GetAdvertResponse response = GetAdvertResponse.builder().data(responseList).build();
         return response;
     }
 
