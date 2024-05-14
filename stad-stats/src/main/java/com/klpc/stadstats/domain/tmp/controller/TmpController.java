@@ -31,9 +31,4 @@ public class TmpController {
 		TmpResponse response = TmpResponse.from(tmp);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-
-	@KafkaListener(topics = "kafka-test", groupId = "test-group", containerFactory = "testEventKafkaListenerContainerFactory")
-	public void onFollowEvent(GetUserInfoResponse event) {
-		log.info("kafka-test: {}", event);
-	}
 }
