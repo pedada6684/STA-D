@@ -155,10 +155,10 @@ public class UserService {
         Objects.requireNonNull(S3Url);
         newMember.updateProfileUrl(S3Url.toString());
         //유저 구독채널 저장
-//        String youtubeInfo = getUserYoutubeInfo(command.getGoogleAT());
-//        newMember.updateYoutubeInfo(youtubeInfo);
+        String youtubeInfo = getUserYoutubeInfo(command.getGoogleAT());
+        newMember.updateYoutubeInfo(youtubeInfo);
 
-//        log.info("youtubeInfo: "+youtubeInfo);
+        log.info("youtubeInfo: "+youtubeInfo);
         return newMember;
     }
 
