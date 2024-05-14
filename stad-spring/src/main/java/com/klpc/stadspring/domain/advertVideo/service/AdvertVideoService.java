@@ -143,6 +143,7 @@ public class AdvertVideoService {
      * @return
      */
     public List<String> getAdvertVideoByUser(Long userId){
+//    public List<Long> getAdvertVideoByUser(Long userId){
         log.info("유저 맞춤 광고 큐 조회 서비스" + "\n" + "userId : " + userId);
 
         List<String> userCategory = new ArrayList<>();
@@ -212,6 +213,7 @@ public class AdvertVideoService {
             }
         }
 
+        // TODO: 태경 - videoId로 바꾸고 아래 주석 해제하고 이건 삭제하기
         List<String> videoUrlListByUser = new ArrayList<>();
         // 광고 id로 광고 video id 조회
         for (Long id: advertIdListByUser) {
@@ -224,6 +226,20 @@ public class AdvertVideoService {
         redisService.createUserAdQueue(userId, videoUrlListByUser);
 
         return videoUrlListByUser;
+
+
+//        List<Long> videoIdListByUser = new ArrayList<>();
+//        // 광고 id로 광고 video id 조회
+//        for (Long id: advertIdListByUser) {
+//            AdvertVideo video = advertVideoRepository.findTopByAdvert_Id(id);
+//            if (video != null) {
+//                videoIdListByUser.add(video.getId());
+//            }
+//        }
+//
+//        redisService.createUserAdQueue(userId, videoIdListByUser);
+//
+//        return videoIdListByUser;
     }
 
     /**
@@ -288,10 +304,12 @@ public class AdvertVideoService {
     /**
      * 영상 스트리밍
      * @param httpHeaders
-     * @param pathStr
+     * @param videoId
      * @return
      */
-    public ResponseEntity<ResourceRegion> streamingAdvertVideo(HttpHeaders httpHeaders, String pathStr) {
+    public ResponseEntity<ResourceRegion> streamingAdvertVideo(HttpHeaders httpHeaders, Long videoId) {
+        String pathStr = advertVideoRepository.findById(videoId).get().getVideoUrl();
+
         // 파일 존재 확인
         try {
             UrlResource video = new UrlResource(pathStr);
