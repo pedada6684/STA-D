@@ -241,7 +241,7 @@ public class OrdersService {
                     .orderId(orders.getId())
                     .contentId(productType.getProduct().getAdvert().getId())
                     .productId(productType.getId())
-                    .price(productType.getPrice())
+                    .price(productType.getPrice() * orderProduct.getCnt())
                     .status(false)
                     .regDate(LocalDateTime.now())
                     .updateDate(LocalDateTime.now())
