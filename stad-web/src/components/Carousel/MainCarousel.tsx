@@ -16,15 +16,12 @@ export type CarouselVideoProps = {
   detailId: number;
 };
 export default function MainCarousel() {
-  const token = useSelector((state: RootState) => state.token.accessToken);
   const navigate = useNavigate();
   const {
     data: CarouselData,
     isLoading,
     error,
-  } = useQuery<CarouselVideoProps[]>(["mainCarousel", token], () =>
-    GetMainCarousel(token)
-  );
+  } = useQuery<CarouselVideoProps[]>(["mainCarousel"], () => GetMainCarousel());
   console.log(CarouselData);
   if (isLoading)
     return (
