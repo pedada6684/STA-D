@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function GetSearch(value: string, accessToken: string | null) {
+export async function GetSearch(value: string) {
   try {
     const response = await axios.get(
       `/api/contents-concept/search/${encodeURIComponent(value)}`

@@ -12,6 +12,7 @@ interface SearchInputProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void; // 검색키워드 입력
   onSearch: (results: searchProps[]) => void;
   onSearchAttempted: () => void; // 검색 시도 여부 체크
+  onInputClick: () => void;
 }
 
 export default function TVSearchInput({
@@ -19,14 +20,12 @@ export default function TVSearchInput({
   onChange,
   onSearch,
   onSearchAttempted,
+  onInputClick,
 }: SearchInputProps) {
-  const accessToken = useSelector(
-    (state: RootState) => state.token.accessToken
-  );
   const handleSearchClick = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     onSearchAttempted(); // 검색 시도 상태 업데이트
-    const response = await GetSearch(value, accessToken);
+    const response = await GetSearch(value);
     console.log(response);
     // 검색 결과가 있으면 그 결과를 사용하고, 없으면 null로 설정
     onSearch(response ? response : null);
@@ -40,7 +39,7 @@ export default function TVSearchInput({
 
   const executeSearch = async () => {
     onSearchAttempted();
-    const response = await GetSearch(value, accessToken);
+    const response = await GetSearch(value);
     onSearch(response ? response : []);
   };
 
@@ -52,6 +51,7 @@ export default function TVSearchInput({
         onKeyPress={handleKeyPress}
         onChange={onChange}
         placeholder="검색어를 입력하세요"
+        onClick={onInputClick}
       />
       <button onClick={handleSearchClick}>
         <img src={search} alt="검색창" />
