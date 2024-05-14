@@ -137,7 +137,7 @@ export default function Streaming() {
   }, [isModalOpen]);
 
   // 현재 동영상 인덱스에 해당하는 URL 가져오기
-  const currentVideoUrl = `http://localhost:8080/api/advert-video/streaming/${advertIds[currentVideoIndex]}`; // 서버에 올린다음에 수정하기
+  const currentVideoUrl = `https://www.mystad.com/stream/advert-video/${advertIds[currentVideoIndex]}`;
 
   // 로딩 중이면 로딩 화면 표시
   if (isLoading) {
