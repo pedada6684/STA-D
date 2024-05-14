@@ -229,7 +229,7 @@ export default function AdDetail() {
                     <div className={`${styles.afterUpload}`}>
                       {videoUrlList.length > 0 ? (
                         <>
-                          {videoUrlList.map((url, index) => (
+                          {formData?.advertVideoUrlList?.map((url, index) => (
                             <div
                               key={index}
                               className={`${styles.videoPreview}`}
@@ -237,7 +237,7 @@ export default function AdDetail() {
                               <video
                                 className={`${styles.videoPrev}`}
                                 controls
-                                src={url}
+                                src={url.advertVideoUrl}
                                 style={{ width: "100%" }}
                               />
                               <button
@@ -272,7 +272,7 @@ export default function AdDetail() {
                       ) : (
                         <>
                           {/* 기존 advertVideoUrlList 조회해서 보여주기 */}
-                          {ad?.advertVideoUrlList?.map(
+                          {formData?.advertVideoUrlList?.map(
                             (url: advertVideoUrlList, index: number) => (
                               <div
                                 key={url.advertVideoId}
