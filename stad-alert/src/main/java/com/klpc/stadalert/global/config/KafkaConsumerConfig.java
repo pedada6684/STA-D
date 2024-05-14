@@ -2,6 +2,7 @@ package com.klpc.stadalert.global.config;
 
 import com.klpc.stadalert.domain.alert.controller.event.AdvertsStartEvent;
 import com.klpc.stadalert.domain.alert.controller.event.ContentStartEvent;
+import com.klpc.stadalert.domain.alert.controller.event.ContentStopEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,13 @@ public class KafkaConsumerConfig {
 	ConcurrentKafkaListenerContainerFactory<String, ContentStartEvent> ContentStartEventKafkaListenerContainerFactory() {
 		ConcurrentKafkaListenerContainerFactory<String, ContentStartEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory(ContentStartEvent.class));
+		return factory;
+	}
+
+	@Bean
+	ConcurrentKafkaListenerContainerFactory<String, ContentStopEvent> ContentStopEventKafkaListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, ContentStopEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(consumerFactory(ContentStopEvent.class));
 		return factory;
 	}
 
