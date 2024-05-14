@@ -167,6 +167,13 @@ export default function Merchandise() {
     setDetailImagePreviews(prevImages => [...prevImages, ...dataList.data]);
   };
 
+  const handleDetailImgDelete = (index: number) => {
+    const filteredDetailImages = detailImages.filter((_, i) => i !== index);
+    setDetailImages(filteredDetailImages);
+    const filteredDetailImagePreviews = detailImagePreviews.filter((_,i)=> i!==index);
+    setDetailImagePreviews(filteredDetailImagePreviews);
+  };
+
   useEffect(() => {
     setGoodsFormData((prevState) => ({
       ...prevState,
@@ -196,12 +203,15 @@ export default function Merchandise() {
     setProducts([...products, newProduct]);
   };
   // 상품 삭제
-  const removeProduct = (productId: number) => {
-    setProducts(products.filter((product) => product.id !== productId)); // filter함수로 해당 ID랑 일치하지 않는 원소 추출해서 새로운 배열 만들기
+  const removeProduct = (ptId: number, productId: number) => {
+    setProducts(
+        products.filter((product)  => (product.id !== ptId && ptId!==undefined) || (product.productTypeId !== productId))
+    ); // filter함수로 해당 ID랑 일치하지 않는 원소 추출해서 새로운 배열 만들기
   };
 
   // 옵션 추가
-  const addOption = (productId: number) => {
+  const addOption = (ptId : number, productId: number) => {
+    console.log(ptId, productId)
     // 초기값 설정
     const newOption: ProductOption = {
       id: Date.now(),
@@ -212,23 +222,33 @@ export default function Merchandise() {
     setProducts(
       // 각 상품 확인해서 옵션 추가할 상품 Id랑 일치하는 경우 옵션 배열 추가
       products.map((product) =>
-        product.id === productId
+        product.id === ptId && ptId!==undefined
           ? // 스프레드 연산 사용해서 product 모든 요소 복사 해서 새 배열 생성
             // product 속성 중 하나인 options는 ...product.options + newOption로 새 값 설정
+            { ...product, options: [...product.options, newOption] }
+          : product.productTypeId === productId && productId!==undefined
+          ?
             { ...product, options: [...product.options, newOption] }
           : product
       )
     );
   };
   // 옵션 삭제
-  const removeOption = (productId: number, optionId: number) => {
+  const removeOption = (ptId: number, productTypeId : number, oId: number, optionId : number) => {
     setProducts(
       products.map((product) =>
-        product.id === productId
+        product.id === ptId && product.id !== null
           ? {
               ...product,
               options: product.options.filter(
-                (option) => option.id !== optionId
+                (option) => option.id !== oId
+              ),
+            }
+          : product.productTypeId === productTypeId
+          ? {
+              ...product,
+              option: product.options.filter(
+                  (option) => option.optionId !== optionId
               ),
             }
           : product
@@ -436,26 +456,32 @@ export default function Merchandise() {
                     {detailImagePreviews.map((url, index) => (
                       <div key={index}>
                         <div className={styles.imagePreviewContainer}>
-                          <img
-                            src={url}
-                            alt={`Detail ${index + 1}`}
-                            className={styles.preview}
-                          />
-                          {/* <button
-                              onClick={() => handleGoodsImagesDelete(index)}
-                              className={`${styles.deleteImgButton}`}
+                          <div>
+                            <button
+                                onClick={() => handleDetailImgDelete(index)}
+                                className={`${styles.deleteVidButton}`}
                             >
-                              <img src={close} alt="Delete" />
-                            </button> */}
+                              <img src={close} alt="Delete"/>
+                            </button>
+                          </div>
+                          <div>
+                            <img
+                                src={url}
+                                alt={`Detail ${index + 1}`}
+                                className={styles.preview}
+                            />
+                          </div>
+
+
                         </div>
                       </div>
                     ))}
 
                     <button
-                      className={styles.videoOverlay}
-                      onClick={() =>
-                          detailImgInputRef.current && detailImgInputRef.current.click()
-                      }
+                        className={styles.videoOverlay}
+                        onClick={() =>
+                        detailImgInputRef.current && detailImgInputRef.current.click()
+                        }
                     >
                       <img src={edit} alt="Edit image" />
                     </button>
@@ -611,7 +637,7 @@ export default function Merchandise() {
                 <div>
                   <button
                     className={`${styles.closeBtn}`}
-                    onClick={() => removeProduct(product.id)}
+                    onClick={() => removeProduct(product.id,product.productTypeId)}
                   >
                     <img className={styles.icon} src={close} alt="상품 제거" />
                   </button>
@@ -622,7 +648,7 @@ export default function Merchandise() {
                 <div>
                   <button
                     className={`${styles.optionAdd}`}
-                    onClick={() => addOption(product.id)}
+                    onClick={() => addOption(product.id, product.productTypeId)}
                   >
                     <img src={whitep} alt="옵션 추가" /> 옵션 추가
                   </button>
@@ -664,7 +690,7 @@ export default function Merchandise() {
                       <div>
                         <button
                           className={`${styles.removeOptionBtn}`}
-                          onClick={() => removeOption(product.id, option.id)}
+                          onClick={() => removeOption(product.id, product.productTypeId, option.id, option.optionId)}
                         >
                           <img src={close} alt="옵션 제거" />
                         </button>
