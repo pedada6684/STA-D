@@ -9,6 +9,7 @@
   font-size: 3rem;
   font-weight: lighter;
   color: #fff;
+  margin-bottom: 2rem;
 }
 .text div {
   margin: 1rem 0;
@@ -26,11 +27,12 @@
 .imgWrapper {
   width: 10vw; /* 예시 크기 */
   height: 10vw;
-  background-color: #fad5dc;
+  background-color: #141414;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 2px solid #eee;
 }
 .imgWrapper img {
   width: 100%;
