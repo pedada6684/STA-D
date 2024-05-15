@@ -8,6 +8,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -30,5 +32,15 @@ public class ContentConceptRepositoryImpl implements ContentConceptRepositoryCus
                 .where(contentConcept.isMovie.eq(isMovie)
                         .and(contentConcept.title.eq(title)))
                 .fetchOne());
+    }
+
+    @Override
+    public Optional<List<ContentConcept>> findPopularContent() {
+        return Optional.of(query.select(contentConcept)
+                .from(contentConcept)
+                .stream()
+                .unordered()
+                .limit(3)
+                .collect(Collectors.toList()));
     }
 }

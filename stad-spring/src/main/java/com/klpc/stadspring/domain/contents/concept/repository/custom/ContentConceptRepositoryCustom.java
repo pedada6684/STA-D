@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface ContentConceptRepositoryCustom {
     Optional<List<ContentConcept>> findByKeyword(String keyword);
     Optional<ContentConcept> findByIsMovieAndTitle(boolean isMovie, String title);
+    Optional<List<ContentConcept>> findPopularContent();
 }
