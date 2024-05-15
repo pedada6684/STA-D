@@ -48,10 +48,11 @@
   display: flex;
   flex-direction: column;
   color: white;
+  margin: 1rem 0;
 }
 .playButton {
   background-color: white;
-  margin-right: 1rem;
+  margin-right: 2rem;
 }
 .infoButton {
   background-color: #afb0b4;
@@ -71,6 +72,7 @@
 .addButton:hover {
   transition: all 0.5s;
   background-color: rgba(255, 255, 255, 0.75);
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
 }
 .mainButton img {
   width: 2rem;
@@ -94,6 +96,7 @@
   cursor: pointer;
 }
 .checkButton img {
-  filter: invert(100%) sepia(97%) saturate(0%) hue-rotate(44deg) brightness(103%) contrast(103%);
+  filter: invert(100%) sepia(97%) saturate(0%) hue-rotate(44deg)
+    brightness(103%) contrast(103%);
   width: 2rem;
 }

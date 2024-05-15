@@ -10,9 +10,9 @@
 .Input {
   border: 2px solid #bbb;
   width: 100%;
-  padding: 1.8vh 1vw;
+  padding: 1.8vh 2vw;
   border-radius: 50px;
-  font-size: 16px;
+  font-size: 1.3rem;
 }
 
 .inputContainer img {
@@ -35,17 +35,19 @@
   display: flex;
   flex-flow: wrap;
   margin-top: 2rem;
+  justify-content: center;
 }
 .thumbnail {
   padding: 1rem;
   border-radius: 10px;
 }
 .thumbnail img {
-  width: 17rem;
+  width: 20rem;
   border-radius: 10px;
 }
 .title {
   color: #dddddd;
+  font-size: 1.2rem;
 }
 .noContent {
   display: flex;

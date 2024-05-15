@@ -1,25 +1,66 @@
-import { createSlice } from "@reduxjs/toolkit";
-
-interface tvUserType {
-  userId: number;
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+// 유저 프로필 인터페이스
+interface Profile {
   userNickname: string;
   profile: string;
 }
+// 유저 아이디 + 프로필 인터페이스
+interface User {
+  userId: number;
+  profiles: Profile[];
+}
+
+interface tvUserType {
+  isTvLoggedIn: boolean;
+  users: User[]; // 여러 유저 관리
+  selectedProfile?: Profile; // 선택한 프로필 저장
+}
 
 const initialState: tvUserType = {
-  userId: 0,
-  userNickname: "",
-  profile: "",
+  isTvLoggedIn: false,
+  users: [],
 };
 
 const tvUserSlice = createSlice({
-  name: "tv-user",
+  name: "tvUser",
   initialState,
   reducers: {
-    loginUser: (state, action) => {
-      state.userId = action.payload.userId;
-      state.userNickname = action.payload.userNickname;
-      state.profile = action.payload.profile;
+    // 기존 유저 아니면 새로운 유저 추가
+    addUser: (
+      state,
+      action: PayloadAction<{ userId: number; profile: Profile }>
+    ) => {
+      state.isTvLoggedIn = true;
+      const existingUser = state.users.find(
+        (user) => user.userId === action.payload.userId
+      );
+      if (!existingUser) {
+        // 새로운 유저 추가
+        state.users.push({
+          userId: action.payload.userId,
+          profiles: [action.payload.profile],
+        });
+      }
+    },
+    logoutUser: (state) => {
+      state.isTvLoggedIn = false;
+      state.users = [];
+    },
+    // addProfile: (
+    //   state,
+    //   action: PayloadAction<{ userId: number; profile: Profile }>
+    // ) => {
+    //   const user = state.users.find(
+    //     (user) => user.userId === action.payload.userId
+    //   );
+    //   if (user) {
+    //     // 특정 유저의 프로필 목록에 새로운 프로필 추가
+    //     user.profiles.push(action.payload.profile);
+    //   }
+    // },
+    // 로그인 후 프로필 저장하기 위한 프로필 저장 슬라이스
+    setSelectedProfile: (state, action: PayloadAction<Profile>) => {
+      state.selectedProfile = action.payload; // 선택된 프로필 설정
     },
   },
 });

@@ -3,18 +3,26 @@ import styles from "./ProfilePick.module.css";
 import logo from "../../assets/tv_STA_D.png";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
-import { MouseEvent, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { tvUserActions } from "../../store/tvUser";
+import plus from "../../assets/ph_plus.png";
+
+interface Profile {
+  userNickname: string;
+  profile: string;
+}
+
 export default function ProfilePick() {
   const navigate = useNavigate();
-  const userId = useSelector((state: RootState) => state.tvUser.userId);
-  const userNickname = useSelector(
-    (state: RootState) => state.tvUser.userNickname
-  );
-  const profile = useSelector((state: RootState) => state.tvUser.profile);
-  const handleClickMain = (e: MouseEvent<HTMLLIElement>) => {
+  const dispatch = useDispatch();
+  const users = useSelector((state: RootState) => state.tvUser.users);
+  const handleProfileClick = (userId: number, profile: Profile) => {
+    dispatch(tvUserActions.setSelectedProfile(profile)); // 선택된 프로필을 Redux에 저장
     navigate("/tv-main");
+  };
+  const handleAddUser = () => {
+    navigate("/tv-login"); // QR 로그인 페이지로 이동하여 새로운 유저 등록
   };
   return (
     <div>
@@ -35,16 +43,37 @@ export default function ProfilePick() {
               </div>
             </div>
             <ul className={`${styles.chooseProfile}`}>
-              <li className={`${styles.profile}`} onClick={handleClickMain}>
-                <div className={`${styles.imgWrapper}`}>
-                  <img
-                    className={`${styles.profileImg}`}
-                    src={profile}
-                    alt="게스트 프로필"
-                  />
-                </div>
-                <div className={`${styles.name}`}>{userNickname}</div>
-              </li>
+              {users ? (
+                users.map((user) =>
+                  user.profiles.map((profile) => (
+                    <li
+                      key={`${user.userId}-${profile.userNickname}`}
+                      className={styles.profile}
+                      onClick={() => handleProfileClick(user.userId, profile)}
+                    >
+                      <div className={styles.imgWrapper}>
+                        <img
+                          className={styles.profileImg}
+                          src={profile.profile}
+                          alt={`${profile.userNickname} 프로필`}
+                        />
+                      </div>
+                      <div className={styles.name}>{profile.userNickname}</div>
+                    </li>
+                  ))
+                )
+              ) : (
+                <li className={styles.profile} onClick={handleAddUser}>
+                  <div className={styles.imgWrapper}>
+                    <img
+                      className={styles.addProfileImg}
+                      src={plus} // 추가 프로필 아이콘 이미지 URL
+                      alt="유저 추가"
+                    />
+                  </div>
+                  <div className={styles.name}>유저 추가</div>
+                </li>
+              )}
             </ul>
           </div>
         </TVContainer>

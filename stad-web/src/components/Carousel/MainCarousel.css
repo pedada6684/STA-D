@@ -19,10 +19,15 @@
   width: 100%;
   height: 30rem;
   object-fit: cover;
+  transition: transform 0.3s ease;
 }
 .slick-next:before,
 .slick-prev:before {
   color: #000;
+}
+.slick-next,
+.slick-prev {
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
 }
 .center .slick-center img {
   opacity: 1;

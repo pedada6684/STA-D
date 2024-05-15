@@ -9,12 +9,14 @@ import { RootState } from "../../store";
 
 export default function TVNav() {
   const navigate = useNavigate();
+  const selectedProfile = useSelector(
+    (state: RootState) => state.tvUser.selectedProfile
+  );
 
   const handleSearchIconClick = (e: MouseEvent<HTMLButtonElement>) => {
     navigate("/tv-search"); // 검색 입력창이 열릴 때 검색 페이지로 이동
   };
 
-  const profile = useSelector((state: RootState) => state.tvUser.profile);
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.left}`}>
@@ -40,7 +42,7 @@ export default function TVNav() {
         </div>
 
         <div className={`${styles.profile}`}>
-          <img src={profile} />
+          <img src={selectedProfile?.profile} />
         </div>
       </div>
     </div>
