@@ -72,6 +72,7 @@
 .addButton:hover {
   transition: all 0.5s;
   background-color: rgba(255, 255, 255, 0.75);
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
 }
 .mainButton img {
   width: 2rem;

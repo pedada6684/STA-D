@@ -10,7 +10,8 @@ import { CarouselVideoProps } from "./MainCarousel";
 import { GetRecentWatching } from "./CarouselApI";
 import Content from "../Container/Content";
 export default function RecentWatching() {
-  const userId = useSelector((state: RootState) => state.tvUser.userId);
+  // const userId = useSelector((state: RootState) => state.tvUser.userId);
+  const userId = 1;
   const navigate = useNavigate();
   const {
     data: WatchingData,
@@ -28,9 +29,9 @@ export default function RecentWatching() {
 
   let setting = {
     dots: true,
-    infinite: true,
+    infinite: false,
     slidesToShow: 4,
-    slidesToScroll: 4,
+    slidesToScroll: 1,
     speed: 500,
     appendDots: (dots: any) => (
       <div
