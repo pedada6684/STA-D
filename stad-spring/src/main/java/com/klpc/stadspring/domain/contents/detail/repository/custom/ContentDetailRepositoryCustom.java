@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface ContentDetailRepositoryCustom {
     Optional<String> findVideoUrlById(Long id);
     Optional<ContentDetail> findByConceptIdAndEpisode(Long conceptId, Integer episode);
-    Optional<List<ContentDetail>> findPopularContentDetail();
+    Optional<List<ContentDetail>> findUpdatedContentDetail();
     Optional<List<ContentDetail>> findByConceptId(Long conceptId);
 }
