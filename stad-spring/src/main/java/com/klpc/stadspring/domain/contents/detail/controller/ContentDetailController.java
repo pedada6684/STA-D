@@ -120,27 +120,6 @@ public class ContentDetailController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/collections/popular")
-    @Operation(summary = "인기 영상 목록", description = "인기 영상 목록")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "인기 영상 목록 조회 성공"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
-            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
-    })
-    ResponseEntity<GetThumbnailListResponse> getPopularContent() {
-        log.info("인기 영상 목록 조회" + "\n" + "getPopularContent");
-
-        List<ContentDetail> popularList = detailService.getPopularContent();
-        List<GetThumbnailResponse> responseList = new ArrayList<>();
-        for (ContentDetail contentDetail : popularList) {
-            ContentConcept concept = conceptService.getContentConceptById(contentDetail.getContentConceptId());
-
-            responseList.add(GetThumbnailResponse.from(concept));
-        }
-        GetThumbnailListResponse response = GetThumbnailListResponse.from(responseList);
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping("/collections/updated")
     @Operation(summary = "최신 영상 목록", description = "최신 영상 목록")
     @ApiResponses(value = {
