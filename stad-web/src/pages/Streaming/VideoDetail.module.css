@@ -61,6 +61,7 @@
 .buttonWrapper {
   display: flex;
   margin-bottom: 1rem;
+  align-items: center;
 }
 .buttonWrapper div {
   display: flex;
@@ -100,4 +101,5 @@
 
 .epiTitle {
   color: white;
+  margin-top: 1rem;
 }

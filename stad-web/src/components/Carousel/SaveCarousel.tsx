@@ -1,32 +1,27 @@
-import { SmallNextArrow, SmallPrevArrow } from "../Arrow/Arrow";
-import { smallThumbnail } from "../../pages/Category/SeriesDummy";
-import "./RecentWatching.css";
-import Slider from "react-slick";
-import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { CarouselVideoProps } from "./MainCarousel";
-import { GetRecentWatching } from "./CarouselApI";
-import Content from "../Container/Content";
-export default function RecentWatching() {
-  // const userId = useSelector((state: RootState) => state.tvUser.userId);
-  const userId = 1;
+import { GetSaveWatching } from "./CarouselApI";
+import Loading from "../Loading";
+import { SmallNextArrow, SmallPrevArrow } from "../Arrow/Arrow";
+import Slider from "react-slick";
+
+export default function SaveCarousel() {
+  // const tvUserId = useSelector((state: RootState) => state.tvUser.userId);
+  const tvUserId = 1;
   const navigate = useNavigate();
-  const {
-    data: WatchingData,
-    isLoading,
-    error,
-  } = useQuery<CarouselVideoProps[]>("watching", () =>
-    GetRecentWatching(userId)
+  const { data: saveData, isLoading } = useQuery<CarouselVideoProps[]>(
+    "saveList",
+    () => GetSaveWatching(tvUserId)
   );
   if (isLoading)
     return (
       <div>
-        <Content>Loading...</Content>
+        <Loading />
       </div>
     );
-
   let setting = {
     dots: true,
     infinite: false,
@@ -50,11 +45,11 @@ export default function RecentWatching() {
   };
   return (
     <div className="v-container">
-      <div className="v-title">최근 시청중인 컨텐츠</div>
+      <div className="v-title">내가 찜한 컨텐츠</div>
       <div className="thumbnail-container">
-        {WatchingData && WatchingData.length > 0 ? (
+        {saveData && saveData.length > 0 ? (
           <Slider {...setting}>
-            {WatchingData?.map((data, index) => (
+            {saveData?.map((data, index) => (
               <div
                 className="s-vid-container"
                 key={index}
@@ -67,7 +62,7 @@ export default function RecentWatching() {
             ))}
           </Slider>
         ) : (
-          <div className="no-content">현재 시청 중인 영상이 없습니다.</div>
+          <div className="no-content">찜한 영상이 없습니다.</div>
         )}
       </div>
     </div>

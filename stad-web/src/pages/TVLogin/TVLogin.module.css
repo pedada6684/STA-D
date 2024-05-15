@@ -18,7 +18,7 @@
   margin-bottom: 3rem;
 }
 .subText {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 600;
   color: #fff;
 }
@@ -34,6 +34,6 @@
   margin: 0 0.3rem;
 }
 .qr svg {
-  width: 10rem;
-  height: 10rem;
+  width: 20rem;
+  height: 20rem;
 }
