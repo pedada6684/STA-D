@@ -28,7 +28,13 @@
 .s-vid-container img {
   border-radius: 0.5vw;
   width: 25rem;
+  transition: transform 0.3s ease;
 }
+
+.s-vid-container img:hover {
+  transform: scale(1.03);
+}
+
 .vidTitle {
   margin-top: 0.5rem;
   font-size: 1.2rem;

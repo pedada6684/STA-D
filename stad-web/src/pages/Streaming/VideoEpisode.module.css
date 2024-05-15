@@ -4,14 +4,19 @@
 
 .episodeContainer {
   display: flex;
-  cursor: pointer;
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
   padding: 7px 0;
 }
+
 .thumbnail img {
   border-radius: 5px;
   height: 10rem;
   object-fit: cover;
   z-index: 10;
+  transition: transform 0.3s ease;
+}
+.episodeContainer:hover .thumbnail img {
+  transform: scale(1.05); /* 이미지를 살짝 확대 */
 }
 .metadata {
   flex: 1 1 80%;

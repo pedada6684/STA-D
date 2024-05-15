@@ -66,8 +66,9 @@
 .goBack button {
   border: 0;
   background-color: transparent;
-  cursor: pointer;
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
 }
+
 .search button img {
   width: 2rem;
 }

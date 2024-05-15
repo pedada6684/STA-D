@@ -1,5 +1,5 @@
 import Keyboard from "react-simple-keyboard";
-import "react-simple-keyboard/build/css/index.css";
+import "./index.css";
 import { koreanLayout } from "./koreanLayout";
 import { useEffect, useState } from "react";
 import hangul from "hangul-js";
