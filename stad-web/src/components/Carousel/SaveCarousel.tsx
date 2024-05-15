@@ -9,7 +9,8 @@ import { SmallNextArrow, SmallPrevArrow } from "../Arrow/Arrow";
 import Slider from "react-slick";
 
 export default function SaveCarousel() {
-  const tvUserId = useSelector((state: RootState) => state.tvUser.userId);
+  // const tvUserId = useSelector((state: RootState) => state.tvUser.userId);
+  const tvUserId = 1;
   const navigate = useNavigate();
   const { data: saveData, isLoading } = useQuery<CarouselVideoProps[]>(
     "saveList",
@@ -23,9 +24,9 @@ export default function SaveCarousel() {
     );
   let setting = {
     dots: true,
-    infinite: true,
+    infinite: false,
     slidesToShow: 4,
-    slidesToScroll: 4,
+    slidesToScroll: 1,
     speed: 500,
     appendDots: (dots: any) => (
       <div
@@ -44,7 +45,7 @@ export default function SaveCarousel() {
   };
   return (
     <div className="v-container">
-      <div className="v-title">최근 시청중인 컨텐츠</div>
+      <div className="v-title">내가 찜한 컨텐츠</div>
       <div className="thumbnail-container">
         {saveData && saveData.length > 0 ? (
           <Slider {...setting}>
@@ -61,7 +62,7 @@ export default function SaveCarousel() {
             ))}
           </Slider>
         ) : (
-          <div className="no-content">현재 시청 중인 영상이 없습니다.</div>
+          <div className="no-content">찜한 영상이 없습니다.</div>
         )}
       </div>
     </div>

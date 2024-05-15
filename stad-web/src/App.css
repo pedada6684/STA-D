@@ -7,6 +7,14 @@ body.tv-scroll-container {
   -ms-overflow-style: none; /* IE와 Edge에서 스크롤바 숨기기 */
 }
 
+body.tv-scroll-container {
+  cursor: url("https://i.ibb.co/hCDKtY4/teardrop.png"), auto;
+}
+
+body.tv-scroll-container a:hover {
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
+}
+
 body.tv-scroll-container::-webkit-scrollbar {
   display: none; /* Webkit 브라우저에서 스크롤바 숨기기 */
 }
