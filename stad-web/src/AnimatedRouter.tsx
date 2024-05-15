@@ -30,12 +30,22 @@ import RequireAuth from "./pages/WebLogin/RequireAuth";
 import AdDetail from "./pages/AdEdit/AdDetail";
 import MerchandiseDetail from "./pages/AdEdit/MerchandiseDetail";
 import DigitalDetail from "./pages/AdEdit/DigitalDetail";
+import { useEffect } from "react";
 export default function AnimatedRouter() {
   const location = useLocation();
+  const isTvRouter = location.pathname.includes("tv");
+
+  useEffect(() => {
+    if (isTvRouter) {
+      document.body.classList.add("tv-scroll-container");
+    } else {
+      document.body.classList.remove("tv-scroll-container");
+    }
+  }, [isTvRouter]);
   return (
     <TransitionGroup>
       <CSSTransition key="fixed" timeout={300} classNames="fade">
-        <Routes>
+        <Routes location={location}>
           <Route path="/web-login" element={<WebLogin />} />
           <Route path="/web-signUp" element={<SignUp />} />
           <Route path="/loading" element={<LandingPage />} />

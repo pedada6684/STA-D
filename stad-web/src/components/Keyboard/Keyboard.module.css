@@ -18,7 +18,7 @@
 }
 
 .nonActive {
-  animation: fadeOut 1s;
+  animation: fadeInUp 1s;
 }
 
 @keyframes fadeOut {

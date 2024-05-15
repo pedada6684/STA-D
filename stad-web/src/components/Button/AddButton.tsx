@@ -26,7 +26,6 @@ const AddButton: React.FC<AddButtonProps> = ({ conceptId, onClick }) => {
       <button className={`${styles.addButton}`} onClick={handleAddMark}>
         <img src={plus} alt="찜하기" />
       </button>
-      <p>찜하기</p>
     </div>
   );
 };

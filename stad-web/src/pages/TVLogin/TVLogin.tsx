@@ -76,15 +76,17 @@ export default function TVLogin() {
     console.log("Updated userProfile:", userProfile);
     if (userProfile) {
       dispatch(
-        tvUserActions.loginUser({
+        tvUserActions.addUser({
           userId: userProfile.userId,
-          userNickname: userProfile.nickname,
-          profile: userProfile.profile,
+          profile: {
+            userNickname: userProfile.nickname,
+            profile: userProfile.profile,
+          },
         })
       );
       navigate("/tv-profile");
     }
-  }, [userProfile]); // userProfile 상태가 변경될 때마다 실행
+  }, [userProfile, dispatch, navigate]); // userProfile 상태가 변경될 때마다 실행
 
   return (
     <div>

@@ -5,7 +5,7 @@
   position: absolute;
   transform: translate(0, -50%);
   display: block;
-  cursor: pointer;
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
   z-index: 2;
 }
 
@@ -16,7 +16,7 @@
   z-index: 2;
   height: 88%;
   align-items: center;
-  cursor: pointer;
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
   padding: 0 15px;
   background: rgba(0, 0, 0, 0.5);
 }
