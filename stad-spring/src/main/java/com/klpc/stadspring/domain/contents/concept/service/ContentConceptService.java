@@ -110,4 +110,15 @@ public class ContentConceptService {
 
         return GetAllConceptListResponse.builder().data(responseList).build();
     }
+
+    /**
+     * 인기 영상 목록 조회
+     * @return
+     */
+    // TODO: 태경 - 레디스에서 인기 영상 조회
+    public List<ContentConcept> getPopularContent() {
+        List<ContentConcept> list = repository.findPopularContent()
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        return list;
+    }
 }
