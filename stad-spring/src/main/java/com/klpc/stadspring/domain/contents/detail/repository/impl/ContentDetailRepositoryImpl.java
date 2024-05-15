@@ -33,9 +33,9 @@ public class ContentDetailRepositoryImpl implements ContentDetailRepositoryCusto
                 .fetchOne());
     }
 
-    // TODO: 태경 - 레디스에서 인기 영상 추출
+    // TODO: 태경 - 레디스에서 최신 영상 추출
     @Override
-    public Optional<List<ContentDetail>> findPopularContentDetail() {
+    public Optional<List<ContentDetail>> findUpdatedContentDetail() {
         return Optional.of(query.select(contentDetail)
                 .from(contentDetail)
                 .stream()
