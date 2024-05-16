@@ -33,14 +33,4 @@ public class ContentConceptRepositoryImpl implements ContentConceptRepositoryCus
                         .and(contentConcept.title.eq(title)))
                 .fetchOne());
     }
-
-    @Override
-    public Optional<List<ContentConcept>> findPopularContent() {
-        return Optional.of(query.select(contentConcept)
-                .from(contentConcept)
-                .stream()
-                .unordered()
-                .limit(3)
-                .collect(Collectors.toList()));
-    }
 }
