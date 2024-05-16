@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Builder
 public class AddOrderLogCommand {
     private Long advertId;
-    private Long advertVideoId;
     private Long userId;
     private Long orderId;
     private Long contentId;
