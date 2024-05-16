@@ -27,6 +27,7 @@ public class AddOrderCancelLogEvent {
         return AddCancelOrderLogCommand.builder().
                 advertId(advertId).
                 userId(userId).
+                orderId(orderId).
                 contentId(contentId).
                 productId(productId).
                 price(price * -1).
