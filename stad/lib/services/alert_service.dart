@@ -1,17 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:eventflux/eventflux.dart';
 import 'package:eventflux/models/reconnect.dart';
-import 'package:stad/constant/api.dart';
+import 'package:stad/providers/contents_provider.dart';
 import 'package:stad/services/contents_service.dart';
 
 class AlertService {
   StreamSubscription? _streamSubscription;
   final Dio dio = Dio();
-
-  bool _isInitialConnectionEstablished = false;
   final String url = 'https://www.mystad.com/alert/connect';
 
   final StreamController<Map<String, dynamic>> _sseController =
@@ -19,57 +16,38 @@ class AlertService {
 
   Stream<Map<String, dynamic>> get sseStream => _sseController.stream;
 
-  void connectToSSE(String userId) {
-    String fullUrl = '$url/app/$userId';
+  void connectToSSE(String userId, ContentProvider contentProvider) {
+    String fullUrl = '$url/app/1';
+    // String fullUrl = '$url/app/$userId';
 
     EventFlux.instance.connect(
       EventFluxConnectionType.get,
       fullUrl,
       onSuccessCallback: (EventFluxResponse? response) {
         if (response != null && response.status == EventFluxStatus.connected) {
-          print('이거는 뭘까: $response');
-
           _streamSubscription?.cancel();
           _streamSubscription = response.stream?.listen(
             (event) async {
-              var eventData = event.data;
-              if (eventData is String) {
-                print('connect? : ${eventData}');
-                if (eventData.startsWith('SSE connect')) {
-                  print('성공성공');
-                }
-              } else if (eventData is Map<String, dynamic>) {
-                print('Ids : $eventData');
-                Map<String, dynamic> eventDataJson =
-                    eventData as Map<String, dynamic>;
-
-                if (!eventDataJson.containsKey('contentId')) {
-                  List<Map<String, dynamic>> popularContent =
-                      await fetchPopularContent();
-                  eventDataJson['popularContent'] = popularContent;
-                  _sseController.add(eventDataJson);
-                } else {
-                  _sseController.add(eventDataJson);
+              if (_isJson(event.data)) {
+                var eventData = jsonDecode(event.data);
+                print('eventData : ${eventData}');
+                if (event.event == 'Content Start' &&
+                    eventData is Map<String, dynamic>) {
+                  int contentId = _parseContentId(eventData['contentId']);
+                  if (contentId != -1) {
+                    contentProvider.fetchFeaturedContent(contentId);
+                  }
+                } else if (event.event == 'Content Stop') {
+                  contentProvider.fetchPopularContent();
                 }
               } else {
-                try {
-                  Map<String, dynamic> eventDataJson = json.decode(eventData);
-                  print('Json으로 파싱:$eventDataJson');
-
-                  if (!eventDataJson.containsKey('contentId')) {
-                    List<Map<String, dynamic>> popularContent =
-                        await fetchPopularContent();
-                    eventDataJson['popularContent'] = popularContent;
-                  }
-                  _sseController.add(eventDataJson);
-                } catch (e) {
-                  print('이벤트 데이터 json으로 파싱하다가 에러 : $e');
-                }
+                contentProvider.fetchPopularContent();
+                print('Non-JSON event data: ${event.data}');
               }
             },
             onError: (error) {
               print('Error in stream: $error');
-              _reconnect(userId);
+              _reconnect(userId, contentProvider);
             },
             onDone: () {
               print('Stream closed');
@@ -92,13 +70,32 @@ class AlertService {
           onReconnect: () => print('reconnecting')),
       onError: (error) {
         print('Error connecting to SSE: ${error.message}');
-        _reconnect(userId);
+        _reconnect(userId, contentProvider);
       },
       onConnectionClose: () {
         print('Connection Closed');
-        _reconnect(userId);
+        _reconnect(userId, contentProvider);
       },
     );
+  }
+
+  bool _isJson(String str) {
+    try {
+      jsonDecode(str);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  int _parseContentId(dynamic contentId) {
+    if (contentId is int) {
+      return contentId;
+    } else if (contentId is String) {
+      return int.tryParse(contentId) ?? -1;
+    } else {
+      return -1;
+    }
   }
 
   Future<List<Map<String, dynamic>>> fetchPopularContent() async {
@@ -106,12 +103,12 @@ class AlertService {
     return await contentsService.fetchPopularContent();
   }
 
-  void _reconnect(String userId) {
+  void _reconnect(String userId, ContentProvider contentProvider) {
     if (_streamSubscription != null) {
       _streamSubscription!.cancel();
       _streamSubscription = null;
     }
-    connectToSSE(userId);
+    connectToSSE(userId, contentProvider);
   }
 
   void disconnect() {

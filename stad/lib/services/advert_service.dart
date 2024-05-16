@@ -6,6 +6,7 @@ class AdService {
   final Dio dio = Dio();
 
   final url = Uri.parse('$svApi/advert');
+
   // final url = Uri.parse('http://172.29.40.139:8080/api/advert');
   // final String url = ('http://192.168.31.202:8080/api/advert');
   // final String url = 'http://192.168.0.9:8080/api/advert';
@@ -15,15 +16,10 @@ class AdService {
   Future<Map<String, dynamic>> getAdInfo(int advertId) async {
     try {
       final response = await dio.get('$url/get?advertId=3');
+      // final response = await dio.get('$url/advert-info?advertId=$advertId');
 
       print(response.data);
-      // print(response.data);
-      // print(response.data);
-      // print(response.data);
-      // print(response.data);
-      // print(response.data);
-      // print(response.data);
-      // final response = await dio.get('$url/advert-info?advertId=$advertId');
+
       if (response.statusCode == 200) {
         // 응답이 성공적이라면 JSON 데이터를 반환
         return response.data;
@@ -34,6 +30,21 @@ class AdService {
       }
     } on DioException catch (e) {
       throw Exception('Error fetching advert: ${e.message}');
+    }
+  }
+
+  //인기 광고
+  Future<List<Map<String, dynamic>>> getPopularAdInfo() async {
+    try {
+      final response = await dio.get('$url/get-list-by-click');
+
+      print('get popular ad info : ${response.data}');
+      if (response.statusCode == 200 && response.data != null) {
+        return List<Map<String, dynamic>>.from(response.data['data']);
+      } else
+        throw Exception('인기 광고 정보 불러오기 실패 : ${response.statusCode}');
+    } on DioException catch (e) {
+      throw Exception('Error fetching popular advert : ${e.response}');
     }
   }
 
@@ -65,11 +76,6 @@ class AdService {
 
       if (response.statusCode == 200 && response.data != null) {
         print('콘텐츠 관련 광고 : ${response.data}'); // {data:[]}
-        // print(response.data);
-        // print(response.data);
-        // print(response.data);
-        // print(response.data);
-        // print(response.data);
 
         List<dynamic> advertsData = response.data['data'] as List<dynamic>;
         List<Advert> adverts =
