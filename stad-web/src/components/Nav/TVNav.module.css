@@ -75,7 +75,7 @@
 .goBack button img {
   width: 4rem;
 }
-.profile {
+.profileDropdownButton {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,10 +85,52 @@
   height: 3rem;
   border-radius: 50%;
   border: 2px solid #b3b3b3;
+  position: relative; /* 드롭다운 메뉴 위치 조정 */
 }
-.profile img {
+.profileDropdownButton img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   border-radius: 50%;
+}
+.dropDown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 10rem;
+  opacity: 1;
+  background-color: #141414;
+  transition-duration: 150ms;
+}
+.profileDropdownButton:hover .dropDown {
+  display: block; /* 호버 시 표시 */
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
+}
+.menuList {
+  list-style-type: none;
+  padding: 10px 0 5px;
+  margin: 0;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
+  padding: 5px 10px;
+  border-bottom: 1px solid #b3b3b3;
+  color: #eee;
+}
+
+.menuItem:hover {
+  text-decoration: underline;
+}
+
+.menuItem:last-child {
+  border-bottom: none;
+}
+.menuItem div img {
+  width: 2rem;
+  padding-top: 0.3rem;
 }
