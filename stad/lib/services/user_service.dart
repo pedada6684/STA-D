@@ -62,8 +62,8 @@ class UserService {
     try {
       final response = await dio.post(
         // 'http://172.29.40.139:8080/api/v1/auth/applogin',
-        'https://www.mystad.com/api/v1/auth/applogin',
-        // 'http://192.168.31.190:8080/api/v1/auth/applogin',
+        // 'https://www.mystad.com/api/v1/auth/applogin',
+        'http://192.168.0.10:8080/api/v1/auth/applogin',
         // 'http://192.168.0.9:8080/api/v1/auth/applogin',
         // 'http://192.168.0.129:8080/api/v1/auth/applogin',
         data: json.encode(userProfile),
@@ -104,8 +104,14 @@ class UserService {
 
     Map<String, dynamic> updateData = {
       "userId": userProvider.userId,
+      "name":currentUser.name,
       "nickname": finalNickname,
       "phone": finalPhone,
+      "company":null,
+      "comNo":null,
+      "department":null,
+      "password":null,
+      "profile":null
     };
 
     if (profileImagePath != null && profileImagePath.isNotEmpty) {
@@ -116,11 +122,12 @@ class UserService {
 
     FormData formData = FormData.fromMap(updateData);
 
+    print(formData);
     //TODO 수정합시다 잘 안되요ㅗㅇ
     try {
       final response = await dio.post(
-        'https://www.mystad.com/api/user/update',
-        // 'http://192.168.31.190:8080/api/user/update',
+        // 'https://www.mystad.com/api/user/update',
+        'http://192.168.0.10:8080/api/user/update',
         // 'http://172.29.40.139:8080/api/user/update',
         data: formData,
         options: Options(
@@ -156,9 +163,9 @@ class UserService {
 
     try {
       final response = await dio.post(
-        // 'http://192.168.31.190:8080/api/user/profile',
+        'http://192.168.0.10:8080/api/user/profile',
         // 'http://172.29.40.139:8080/api/user/profile',
-        'https://www.mystad.com/api/user/profile',
+        // 'https://www.mystad.com/api/user/profile',
         data: formData,
         options: Options(
           headers: {
