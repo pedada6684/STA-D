@@ -6,6 +6,7 @@ import { getClickCount } from "./DashboardAPI";
 import { ApexOptions } from "apexcharts";
 import styles from "./ChartData.module.css";
 import ReactApexChart from "react-apexcharts";
+import Loading from "../Loading";
 
 export default function GetClick({ advertId }: AdvertIdProps) {
   const accessToken = useSelector(
@@ -14,20 +15,25 @@ export default function GetClick({ advertId }: AdvertIdProps) {
   const [seriesData, setSeriesData] = useState([
     { name: "광고클릭수", data: [] }, // 초기 데이터 빈 배열로 설정
   ]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (advertId && accessToken) {
-      getClickCount(advertId, accessToken).then((apiData) => {
-        if (apiData && apiData.list) {
-          const chartData = apiData.list.map(
-            (item: { date: string; value: number }) => ({
+      setLoading(true);
+      getClickCount(advertId, accessToken)
+        .then((apiData) => {
+          const chartData =
+            apiData?.list?.map((item: { date: string; value: number }) => ({
               x: item.date,
               y: item.value,
-            })
-          );
+            })) ?? [];
           setSeriesData([{ name: "광고클릭수", data: chartData }]);
-        }
-      });
+          setLoading(false);
+        })
+        .catch((error) => {
+          setSeriesData([{ name: "광고클릭수", data: [] }]);
+          setLoading(false);
+        });
     }
   }, [advertId, accessToken]);
   const [chartOptions, setChartOptions] = useState<ApexOptions>({
@@ -47,18 +53,22 @@ export default function GetClick({ advertId }: AdvertIdProps) {
         opacity: 0.06,
       },
     },
-    colors: ["#00127A"], // 그래프 색상 설정
+    colors: ["#ECEDFF"], // 그래프 채우기 색상 설정
+    fill: {
+      type: "solid", // 그라데이션 없이 단색으로 채우기
+    },
     dataLabels: {
       enabled: false,
     },
     stroke: {
       curve: "straight",
+      colors: ["#ADB2FF"], // 그래프 경계선 색상 설정
     },
     title: {
       text: "광고 클릭 수",
       align: "left",
       style: {
-        fontFamily: "NotoSans KR",
+        fontFamily: "Noto Sans KR",
         fontSize: "1.5rem",
         fontWeight: "800",
       },
@@ -83,8 +93,25 @@ export default function GetClick({ advertId }: AdvertIdProps) {
     legend: {
       horizontalAlign: "left",
     },
+    grid: {
+      show: false, // 배경 그리드 라인 제거
+    },
   });
 
+  if (loading) {
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  }
+  if (!seriesData || seriesData[0].data.length === 0) {
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
+  }
   return (
     <div className={`${styles.mainChart}`}>
       <div id="chart">
@@ -92,7 +119,7 @@ export default function GetClick({ advertId }: AdvertIdProps) {
           options={chartOptions}
           series={seriesData}
           type="area"
-          height={300}
+          height={280}
         />
       </div>
       <div id="html-dist"></div>
