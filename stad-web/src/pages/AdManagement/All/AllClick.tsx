@@ -7,17 +7,25 @@ import Frame from "../../../components/AdManagement/Frame";
 export default function AllClick({ advertId }: AdvertIdProps) {
   return (
     <div className={`${styles.etcContainer}`}>
-      <GetClick advertId={advertId} />
-      <Frame advertId={advertId} />
       <div className={`${styles.chartWrapper}`}>
-        <PieChart
-          title="30일 동안 광고 클릭 비율"
-          dataType="totalAdvertClick"
-        />
-        <BarChart
-          title="30일 동안 광고 클릭 건수"
-          dataType="totalAdvertClick"
-        />
+        <div>
+          <GetClick advertId={advertId} />
+        </div>
+        <div>
+          <Frame advertId={advertId} />
+        </div>
+        <div>
+          <BarChart
+            title="30일 동안 광고 클릭 건수"
+            dataType="totalAdvertClick"
+          />
+        </div>
+        <div>
+          <PieChart
+            title="30일 동안 광고 클릭 비율"
+            dataType="totalAdvertClick"
+          />
+        </div>
       </div>
     </div>
   );
