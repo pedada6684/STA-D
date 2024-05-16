@@ -7,4 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface ContentLabelRepository extends JpaRepository<ContentLabel, Long> {
     @Query("SELECT cl.name FROM ContentLabel cl WHERE cl.id = :id")
     String findNameById(Long id);
+
+    @Query("SELECT cl.id FROM ContentLabel cl WHERE cl.name = :name")
+    Long findIdByName(String name);
 }
