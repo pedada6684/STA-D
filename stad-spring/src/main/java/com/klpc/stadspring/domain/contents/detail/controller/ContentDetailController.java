@@ -36,6 +36,7 @@ public class ContentDetailController {
     private final ContentConceptService conceptService;
     private final WatchedContentService watchedContentService;
     private final BookmarkedContentService bookmarkedContentService;
+    private final RedisService redisService;
 
     @GetMapping("/{conceptId}")
     @Operation(summary = "콘텐츠 상세 조회", description = "콘텐츠 상세 조회")
@@ -120,6 +121,29 @@ public class ContentDetailController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/collections/popular")
+    @Operation(summary = "인기 영상 목록", description = "인기 영상 목록")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "인기 영상 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<GetThumbnailListResponse> getPopularContent() {
+        log.info("인기 영상 목록 조회" + "\n" + "getPopularContent");
+        List<ContentDetail> popularList = redisService.findPopularContents(10);
+        // 인기 영상이 없을 수 있으니 참고(서버 초기에는 재생된 영상이 10개 미만으로 인기순위 10위가 안채워질 수 있음)
+
+        List<GetThumbnailResponse> responseList = new ArrayList<>();
+        for (ContentDetail contentDetail : popularList) {
+            ContentConcept concept = conceptService.getContentConceptById(contentDetail.getContentConceptId());
+
+            responseList.add(GetThumbnailResponse.from(concept));
+        }
+        GetThumbnailListResponse response = GetThumbnailListResponse.from(responseList);
+        return ResponseEntity.ok(response);
+    }
+
+    //TODO: 은희 최신 업데이트 영상 표출 (우리가 찍은 컨텐츠 위주로)
     @GetMapping("/collections/updated")
     @Operation(summary = "최신 영상 목록", description = "최신 영상 목록")
     @ApiResponses(value = {
@@ -129,16 +153,17 @@ public class ContentDetailController {
     })
     ResponseEntity<GetThumbnailListResponse> getUpdatedContent() {
         log.info("최신 영상 목록 조회" + "\n" + "getUpdatedContent");
-
-        List<ContentDetail> popularList = detailService.getUpdatedContent();
-        List<GetThumbnailResponse> responseList = new ArrayList<>();
-        for (ContentDetail contentDetail : popularList) {
-            ContentConcept concept = conceptService.getContentConceptById(contentDetail.getContentConceptId());
-
-            responseList.add(GetThumbnailResponse.from(concept));
-        }
-        GetThumbnailListResponse response = GetThumbnailListResponse.from(responseList);
-        return ResponseEntity.ok(response);
+//
+//        List<ContentDetail> popularList = detailService.getUpdatedContent();
+//        List<GetThumbnailResponse> responseList = new ArrayList<>();
+//        for (ContentDetail contentDetail : popularList) {
+//            ContentConcept concept = conceptService.getContentConceptById(contentDetail.getContentConceptId());
+//
+//            responseList.add(GetThumbnailResponse.from(concept));
+//        }
+//        GetThumbnailListResponse response = GetThumbnailListResponse.from(responseList);
+//        return ResponseEntity.ok(response);
+        return null;
     }
 
     @GetMapping("/get-conceptId/{detailId}")

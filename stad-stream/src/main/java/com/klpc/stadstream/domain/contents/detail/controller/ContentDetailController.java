@@ -40,6 +40,7 @@ public class ContentDetailController {
         boolean isFirstRequest = redisService.isFirstContentStreamingRequest(userId, detailId);
         if (isFirstRequest){
             kafkaTemplate.send("content-start", new ContentStartEvnet(userId, detailId));
+            redisService.increaseContentPlayCount(detailId);
         }
         return resourceRegionResponseEntity;
     }
