@@ -1,19 +1,16 @@
 .Wrapper {
-  display: flex;
-  margin-top: -0.5rem;
-  margin-bottom: 0.2rem;
+  display: grid;
+  height: 100%;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
 }
 .container {
   display: flex;
-  width: 25%;
-  height: 6rem;
-  justify-content: center;
-  align-items: center;
+  padding-top: 2rem;
+  padding-left: 1rem;
   border-radius: 10px;
-  box-shadow: 0 10px 10px -10px;
-}
-.yellow {
-  background-color: #f9ecaf;
+  background-color: #ffffff;
 }
 
 .iconWrapper {
@@ -25,18 +22,16 @@
 .w {
   background-color: white;
 }
-.y {
-  background-color: #f9ecaf;
-}
 .icon {
   width: 2rem;
 }
 .title {
-  color: #807f7f;
-  font-weight: 700;
-  font-size: 1.1rem;
+  color: #bdbdbd;
+  font-weight: 500;
+  font-size: 1rem;
 }
 .value {
+  margin-top: 1rem;
   font-weight: bold;
   font-size: 1.8rem;
 }

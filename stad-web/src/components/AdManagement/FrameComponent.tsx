@@ -36,9 +36,9 @@ export default function FrameComponent({
     );
   return (
     <div className={stylesContainer}>
-      <div className={iconWrapper}>
+      {/* <div className={iconWrapper}>
         <img src={icon} alt="아이콘" className={`${styles.icon}`} />
-      </div>
+      </div> */}
       <div className={`${styles.textWrapper}`}>
         <div className={`${styles.title}`}>{title}</div>
         <div className={`${styles.value}`}>{valueDisplay}</div>
