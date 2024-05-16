@@ -16,21 +16,23 @@ public class WatchedContentRepositoryImpl implements WatchedContentRepositoryCus
 
     @Override
     public Optional<List<Long>> findWatchingContentDetailIdByUserId(Long userId) {
-        return Optional.ofNullable(query.select(watchedContent.contentDetail.id)
-                .from(watchedContent)
-                .where(watchedContent.user.id.eq(userId)
-                        .and(watchedContent.status.isFalse()))
-                .orderBy(watchedContent.date.desc())
-                .fetch());
+//        return Optional.ofNullable(query.select(watchedContent.contentDetail.id)
+//                .from(watchedContent)
+//                .where(watchedContent.user.id.eq(userId)
+//                        .and(watchedContent.status.isFalse()))
+//                .orderBy(watchedContent.dateTime.desc())
+//                .fetch());
+        return Optional.empty();
     }
 
     @Override
     public Optional<List<Long>> findWatchingAndWatchedContentDetailIdByUserId(Long userId) {
-        return Optional.ofNullable(query.select(watchedContent.contentDetail.id)
-                .from(watchedContent)
-                .where(watchedContent.user.id.eq(userId))
-                .orderBy(watchedContent.date.desc())
-                .fetch());
+//        return Optional.ofNullable(query.select(watchedContent.contentDetail.id)
+//                .from(watchedContent)
+//                .where(watchedContent.user.id.eq(userId))
+//                .orderBy(watchedContent.dateTime.desc())
+//                .fetch());
+        return Optional.empty();
     }
 
     @Override
@@ -45,7 +47,7 @@ public class WatchedContentRepositoryImpl implements WatchedContentRepositoryCus
     @Override
     public Long updateWatchedContent(WatchedContent updatedWatchedContent) {
         return query.update(watchedContent)
-                .set(watchedContent.date, updatedWatchedContent.getDate())
+                .set(watchedContent.dateTime, updatedWatchedContent.getDateTime())
                 .set(watchedContent.status, updatedWatchedContent.isStatus())
                 .set(watchedContent.stopTime, updatedWatchedContent.getStopTime())
                 .where(watchedContent.id.eq(updatedWatchedContent.getId()))
