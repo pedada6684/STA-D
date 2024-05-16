@@ -17,6 +17,7 @@ export default function ProfilePick() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const users = useSelector((state: RootState) => state.tvUser.users);
+  console.log(users);
   const handleProfileClick = (userId: number, profile: Profile) => {
     dispatch(tvUserActions.setSelectedProfile(profile)); // 선택된 프로필을 Redux에 저장
     navigate("/tv-main");
@@ -42,8 +43,9 @@ export default function ProfilePick() {
                 를 시청할 프로필을 선택하세요.
               </div>
             </div>
-            <ul className={`${styles.chooseProfile}`}>
-              {users ? (
+            <ul className={styles.chooseProfile}>
+              {users &&
+                users.length > 0 &&
                 users.map((user) =>
                   user.profiles.map((profile) => (
                     <li
@@ -61,19 +63,17 @@ export default function ProfilePick() {
                       <div className={styles.name}>{profile.userNickname}</div>
                     </li>
                   ))
-                )
-              ) : (
-                <li className={styles.profile} onClick={handleAddUser}>
-                  <div className={styles.imgWrapper}>
-                    <img
-                      className={styles.addProfileImg}
-                      src={plus} // 추가 프로필 아이콘 이미지 URL
-                      alt="유저 추가"
-                    />
-                  </div>
-                  <div className={styles.name}>유저 추가</div>
-                </li>
-              )}
+                )}
+              <li className={styles.profile} onClick={handleAddUser}>
+                <div className={styles.imgWrapper}>
+                  <img
+                    className={styles.addProfileImg}
+                    src={plus} // 추가 프로필 아이콘 이미지 URL
+                    alt="유저 추가"
+                  />
+                </div>
+                <div className={styles.name}>유저 추가</div>
+              </li>
             </ul>
           </div>
         </TVContainer>

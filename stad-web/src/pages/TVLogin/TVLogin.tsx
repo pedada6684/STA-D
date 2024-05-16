@@ -5,8 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import qrcode from "qrcode-generator";
 import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { tvUserActions } from "../../store/tvUser";
+import { RootState } from "../../store";
 interface appUserType {
   userId: number;
   nickname: string;
@@ -22,7 +23,7 @@ export default function TVLogin() {
   const [userProfile, setUserProfile] = useState<appUserType>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const users = useSelector((state: RootState) => state.tvUser.users);
   useEffect(() => {
     // 세션 ID 생성
     const newSessionId = uuidv4();
@@ -84,9 +85,14 @@ export default function TVLogin() {
           },
         })
       );
+      console.log("Dispatched addUser with: ", userProfile);
       navigate("/tv-profile");
     }
   }, [userProfile, dispatch, navigate]); // userProfile 상태가 변경될 때마다 실행
+
+  useEffect(() => {
+    console.log("Updated users in TVLogin:", users);
+  }, [users]);
 
   return (
     <div>
