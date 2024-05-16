@@ -3,14 +3,12 @@ package com.klpc.stadspring.domain.contents.detail.controller;
 import com.klpc.stadspring.domain.contents.bookmark.service.BookmarkedContentService;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
-import com.klpc.stadspring.domain.contents.detail.controller.response.GetConceptAndDetailResponse;
-import com.klpc.stadspring.domain.contents.detail.controller.response.GetPopularContentResponse;
-import com.klpc.stadspring.domain.contents.detail.controller.response.GetThumbnailListResponse;
-import com.klpc.stadspring.domain.contents.detail.controller.response.GetThumbnailResponse;
+import com.klpc.stadspring.domain.contents.detail.controller.response.*;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
 import com.klpc.stadspring.domain.contents.detail.service.command.response.GetDetailListByConceptIdResponseCommand;
 import com.klpc.stadspring.domain.contents.detail.service.command.response.GetPopularContentResponseCommand;
+import com.klpc.stadspring.domain.contents.detail.service.command.response.GetWatchingContentResponseCommand;
 import com.klpc.stadspring.domain.contents.watched.service.WatchedContentService;
 import com.klpc.stadspring.global.RedisService;
 import com.klpc.stadspring.global.event.ContentStartEvnet;
@@ -65,18 +63,18 @@ public class ContentDetailController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<GetThumbnailListResponse> getWatchingContent(@RequestParam("userId")  Long userId) {
-        log.info("시청 중인 영상 목록 조회" + "\n" + "getWatchingContent : " + userId);
+    ResponseEntity<GetWatchingContentResponse> getWatchingContent(@RequestParam("userId")  Long userId) {
+        log.info("시청 중인 영상 목록 조회" + "\n" + "getWatchingContent : userId = " + userId);
 
         List<Long> detailIdList = watchedContentService.getWatchingContentDetailIdByUserId(userId);
-        List<GetThumbnailResponse> responseList = new ArrayList<>();
+        List<GetWatchingContentResponseCommand> responseList = new ArrayList<>();
         for (Long aLong : detailIdList) {
             ContentDetail detail = detailService.getContentDetailById(aLong);
             ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
 
-            responseList.add(GetThumbnailResponse.from(concept));
+            responseList.add(GetWatchingContentResponseCommand.from(concept, detail));
         }
-        GetThumbnailListResponse response = GetThumbnailListResponse.from(responseList);
+        GetWatchingContentResponse response = GetWatchingContentResponse.from(responseList);
         return ResponseEntity.ok(response);
     }
 
