@@ -62,8 +62,8 @@ class UserService {
     try {
       final response = await dio.post(
         // 'http://172.29.40.139:8080/api/v1/auth/applogin',
-        'https://www.mystad.com/api/v1/auth/applogin',
-        // 'http://192.168.31.202:8080/api/v1/auth/applogin',
+        // 'https://www.mystad.com/api/v1/auth/applogin',
+        'http://192.168.31.190:8080/api/v1/auth/applogin',
         // 'http://192.168.0.9:8080/api/v1/auth/applogin',
         // 'http://192.168.0.129:8080/api/v1/auth/applogin',
         data: json.encode(userProfile),
@@ -109,16 +109,18 @@ class UserService {
     };
 
     if (profileImagePath != null && profileImagePath.isNotEmpty) {
-      updateData['profileImage'] = await MultipartFile.fromFile(
+      updateData['profile'] = await MultipartFile.fromFile(
           profileImagePath,
           filename: "profile_pic.png");
     }
 
     FormData formData = FormData.fromMap(updateData);
 
+    //TODO 수정합시다 잘 안되요ㅗㅇ
     try {
       final response = await dio.post(
-        'https://www.mystad.com/api/user/update',
+        // 'https://www.mystad.com/api/user/update',
+        'http://192.168.31.190:8080/api/user/update',
         // 'http://172.29.40.139:8080/api/user/update',
         data: formData,
         options: Options(
@@ -154,8 +156,9 @@ class UserService {
 
     try {
       final response = await dio.post(
+        'http://192.168.31.190:8080/api/user/profile',
         // 'http://172.29.40.139:8080/api/user/profile',
-        'https://www.mystad.com/api/user/profile',
+        // 'https://www.mystad.com/api/user/profile',
         data: formData,
         options: Options(
           headers: {
