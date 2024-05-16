@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface OrdersRepository extends JpaRepository<Orders,Long> {
 
+    @Query("SELECT o FROM Orders o WHERE o.user = :user AND o.status = 'ORDER'")
+
     public List<Orders> findAllByUser(User user);
 
     @Query("""
