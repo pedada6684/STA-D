@@ -85,7 +85,23 @@ export default function PieChart({ title, dataType }: PieChartProps) {
     );
   }
   const chartOptions: ApexCharts.ApexOptions = {
-    chart: { type: "donut", height: 300 },
+    chart: {
+      type: "donut",
+      height: 300,
+      animations: {
+        enabled: true,
+        easing: "easeinout",
+        speed: 800,
+        animateGradually: {
+          enabled: true,
+          delay: 150,
+        },
+        dynamicAnimation: {
+          enabled: true,
+          speed: 350,
+        },
+      },
+    },
     colors: ["#3552F2", "#6D81F2", "#A0ACF2", "#C9D3F2", "#C9CCD8"],
     dataLabels: {
       enabled: false,
@@ -93,11 +109,12 @@ export default function PieChart({ title, dataType }: PieChartProps) {
     stroke: {
       width: 0, // 테두리 제거
     },
+
     labels: labels,
     plotOptions: {
       pie: {
         donut: {
-          size: "40%", // 내부 반경 크기 조절
+          size: "60%", // 내부 반경 크기 조절
           labels: {
             show: true,
             name: {
