@@ -4,7 +4,7 @@ export async function getViewCount(
   accessToken: string | null
 ) {
   try {
-    const response = await axios.get(`${URL}/stats/log/daily/advert-video`, {
+    const response = await axios.get(`/stats/log/daily/advert-video`, {
       params: {
         advertId: advertId,
       },
@@ -25,7 +25,7 @@ export async function getClickCount(
   accessToken: string | null
 ) {
   try {
-    const response = await axios.get(`${URL}/stats/log/daily/click`, {
+    const response = await axios.get(`/stats/log/daily/click`, {
       params: {
         advertId: advertId,
       },
@@ -46,7 +46,7 @@ export async function getOrderCount(
   accessToken: string | null
 ) {
   try {
-    const response = await axios.get(`${URL}/stats/log/daily/order`, {
+    const response = await axios.get(`/stats/log/daily/order`, {
       params: {
         advertId: advertId,
       },
@@ -67,7 +67,7 @@ export async function getRevenue(
   accessToken: string | null
 ) {
   try {
-    const response = await axios.get(`${URL}/stats/log/daily/revenue`, {
+    const response = await axios.get(`/stats/log/daily/revenue`, {
       params: {
         advertId: advertId,
       },
@@ -88,7 +88,7 @@ export async function getTotal(
   accessToken: string | null
 ) {
   try {
-    const response = await axios.get(`${URL}/stats/log/total`, {
+    const response = await axios.get(`/stats/log/total`, {
       params: {
         advertId: advertId,
       },
