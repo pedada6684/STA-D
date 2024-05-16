@@ -172,7 +172,7 @@ public class AdvertVideoService {
 
             // 구독 채널 기반 관심사 추가 추출
             String userYoutubeInfo = userRepository.findYoutubeInfoByUserId(userId);
-            String[] userArray = userYoutubeInfo.split("\\s+");
+            String[] userArray = userYoutubeInfo.split(" ");
 
             for (int i = 0; i < 3; i++) {
                 int tmp = contentLabelRepository.findIdByName(userArray[i]).intValue();
