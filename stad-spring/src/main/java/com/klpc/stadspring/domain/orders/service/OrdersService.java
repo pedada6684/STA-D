@@ -84,7 +84,7 @@ public class OrdersService {
                 orderProduct.linkedProductType(productType);
                 orderProductRepository.save(orderProduct);
             }
-// TODO : 이 부분 카프카로 바꿀 것
+
             AddOrderLogCommand addOrderLogCommand = AddOrderLogCommand.builder()
                     .advertId(ptCommand.getAdvertId())
                     .userId(command.getUserId())
