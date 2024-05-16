@@ -250,15 +250,15 @@ public class AdvertVideoService {
             finalList.add(video.getId());
         }
 
-        // 콘텐츠 고정 광고 1개 추출
-        Long advertId = selectedContentRepository.findRandomTopByConceptId(conceptId);
+        // 랜덤 기업 광고 1개 추출
+        Long advertId = advertRepository.findRandomNotProductAdvertId();
         AdvertVideo video = advertVideoRepository.findTopByAdvert_Id(advertId);
         if (video != null) {
             finalList.add(video.getId());
         }
 
-        // 랜덤 기업 광고 1개 추출
-        advertId = advertRepository.findRandomNotProductAdvertId();
+        // 콘텐츠 고정 광고 1개 추출
+        advertId = selectedContentRepository.findRandomTopByConceptId(conceptId);
         video = advertVideoRepository.findTopByAdvert_Id(advertId);
         if (video != null) {
             finalList.add(video.getId());
