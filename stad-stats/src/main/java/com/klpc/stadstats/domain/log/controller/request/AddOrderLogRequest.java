@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Builder
 public class AddOrderLogRequest {
     private Long advertId;
-    private Long advertVideoId;
     private Long userId;
     private Long contentId;
     private Long productId;
@@ -25,8 +24,8 @@ public class AddOrderLogRequest {
     public AddOrderLogCommand toCommand() {
         return AddOrderLogCommand.builder().
                 advertId(advertId).
-                advertVideoId(advertVideoId).
                 userId(userId).
+                orderId(contentId).
                 contentId(contentId).
                 productId(productId).
                 price(price).
