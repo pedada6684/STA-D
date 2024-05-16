@@ -16,6 +16,7 @@ import com.klpc.stadspring.domain.contents.labelRelationship.repository.ContentL
 import com.klpc.stadspring.domain.contents.watched.repository.WatchedContentRepository;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderCancelLogCommand;
 import com.klpc.stadspring.domain.selectedContent.repository.SelectedContentRepository;
+import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.global.RedisService;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
@@ -51,6 +52,7 @@ public class AdvertVideoService {
     private final WatchedContentRepository watchedContentRepository;
     private final ContentLabelRepository contentLabelRepository;
     private final ContentLabelRelationshipRepository contentLabelRelationshipRepository;
+    private final UserRepository userRepository;
     private final RedisService redisService;
     private final RestTemplate restTemplate;
     private final KafkaTemplate<String, Object> kafkaTemplate;
@@ -151,13 +153,31 @@ public class AdvertVideoService {
 
         List<String> userCategory = new ArrayList<>();
 
-        // 최근 시청한 영상 20개
+        // 최근 시청한 영상 20개로 관심사 추출
         List<Long> watchedContentDetailIdList = watchedContentRepository.findWatchingAndWatchedContentDetailIdByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         Long[] totalLabel = new Long[232];
-        for (int i = 0; i < watchedContentDetailIdList.size(); i++) {
-            int tmp = contentLabelRelationshipRepository.findContentLabel_IdByContentDetail_Id(watchedContentDetailIdList.get(i)).intValue();
-            totalLabel[tmp]++;
+
+        // 최근 시청 영상이 20개가 넘는다면
+        if (watchedContentDetailIdList.size() >= 20) {
+            for (int i = 0; i < 20; i++) {
+                int tmp = contentLabelRelationshipRepository.findContentLabel_IdByContentDetail_Id(watchedContentDetailIdList.get(i)).intValue();
+                totalLabel[tmp]++;
+            }
+        } else { // 최근 시청 영상이 20개가 넘지 않는다면
+            for (int i = 0; i < watchedContentDetailIdList.size(); i++) {
+                int tmp = contentLabelRelationshipRepository.findContentLabel_IdByContentDetail_Id(watchedContentDetailIdList.get(i)).intValue();
+                totalLabel[tmp]++;
+            }
+
+            // 구독 채널 기반 관심사 추가 추출
+            String userYoutubeInfo = userRepository.findYoutubeInfoByUserId(userId);
+            String[] userArray = userYoutubeInfo.split(" ");
+
+            for (int i = 0; i < 3; i++) {
+                int tmp = contentLabelRepository.findIdByName(userArray[i]).intValue();
+                totalLabel[tmp]++;
+            }
         }
         Arrays.sort(totalLabel);
 
