@@ -6,7 +6,6 @@ import com.klpc.stadspring.domain.contents.categoryRelationship.service.ContentC
 import com.klpc.stadspring.domain.contents.concept.controller.response.*;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
-import com.klpc.stadspring.domain.contents.concept.service.command.response.GetPopularContentResponseCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -157,26 +156,6 @@ public class ContentConceptController {
 
         GetAllConceptListResponse response = conceptService.getAllContentList();
 
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/popular")
-    @Operation(summary = "인기 영상 목록", description = "인기 영상 목록")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "인기 영상 목록 조회 성공"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
-            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
-    })
-    ResponseEntity<GetPopularContentResponse> getPopularContent() {
-        log.info("인기 영상 목록 조회" + "\n" + "getPopularContent");
-
-        List<ContentConcept> popularList = conceptService.getPopularContent();
-        List<GetPopularContentResponseCommand> responseList = new ArrayList<>();
-        for (ContentConcept contentConcept : popularList) {
-            responseList.add(GetPopularContentResponseCommand.from(contentConcept));
-        }
-
-        GetPopularContentResponse response = GetPopularContentResponse.from(responseList);
         return ResponseEntity.ok(response);
     }
 }

@@ -4,11 +4,13 @@ import com.klpc.stadspring.domain.contents.bookmark.service.BookmarkedContentSer
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetConceptAndDetailResponse;
+import com.klpc.stadspring.domain.contents.detail.controller.response.GetPopularContentResponse;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetThumbnailListResponse;
 import com.klpc.stadspring.domain.contents.detail.controller.response.GetThumbnailResponse;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
 import com.klpc.stadspring.domain.contents.detail.service.command.response.GetDetailListByConceptIdResponseCommand;
+import com.klpc.stadspring.domain.contents.detail.service.command.response.GetPopularContentResponseCommand;
 import com.klpc.stadspring.domain.contents.watched.service.WatchedContentService;
 import com.klpc.stadspring.global.RedisService;
 import com.klpc.stadspring.global.event.ContentStartEvnet;
@@ -128,18 +130,18 @@ public class ContentDetailController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<GetThumbnailListResponse> getPopularContent() {
+    ResponseEntity<GetPopularContentResponse> getPopularContent() {
         log.info("인기 영상 목록 조회" + "\n" + "getPopularContent");
         List<ContentDetail> popularList = redisService.findPopularContents(10);
         // 인기 영상이 없을 수 있으니 참고(서버 초기에는 재생된 영상이 10개 미만으로 인기순위 10위가 안채워질 수 있음)
 
-        List<GetThumbnailResponse> responseList = new ArrayList<>();
+        List<GetPopularContentResponseCommand> responseList = new ArrayList<>();
         for (ContentDetail contentDetail : popularList) {
             ContentConcept concept = conceptService.getContentConceptById(contentDetail.getContentConceptId());
 
-            responseList.add(GetThumbnailResponse.from(concept));
+            responseList.add(GetPopularContentResponseCommand.from(contentDetail, concept));
         }
-        GetThumbnailListResponse response = GetThumbnailListResponse.from(responseList);
+        GetPopularContentResponse response = GetPopularContentResponse.from(responseList);
         return ResponseEntity.ok(response);
     }
 
@@ -152,7 +154,7 @@ public class ContentDetailController {
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
     ResponseEntity<GetThumbnailListResponse> getUpdatedContent() {
-        log.info("최신 영상 목록 조회" + "\n" + "getUpdatedContent");
+//        log.info("최신 영상 목록 조회" + "\n" + "getUpdatedContent");
 //
 //        List<ContentDetail> popularList = detailService.getUpdatedContent();
 //        List<GetThumbnailResponse> responseList = new ArrayList<>();
