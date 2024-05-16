@@ -1,7 +1,6 @@
-package com.klpc.stadspring.domain.contents.concept.controller.response;
+package com.klpc.stadspring.domain.contents.detail.controller.response;
 
-import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
-import com.klpc.stadspring.domain.contents.concept.service.command.response.GetPopularContentResponseCommand;
+import com.klpc.stadspring.domain.contents.detail.service.command.response.GetPopularContentResponseCommand;
 import lombok.Builder;
 import lombok.Getter;
 
