@@ -13,7 +13,14 @@ import { useNavigate } from "react-router-dom";
 export type CarouselVideoProps = {
   title: string;
   thumbnailUrl: string;
-  detailId: number;
+  conceptId: number;
+};
+
+export type CarouselWatchedProps = {
+  title: string;
+  thumbnailUrl: string;
+  conceptId: number;
+  episode: number;
 };
 export default function MainCarousel() {
   const navigate = useNavigate();
@@ -53,7 +60,7 @@ export default function MainCarousel() {
                 className="videoContainer"
                 key={`${data.title}-${index}`}
                 style={{ position: "relative", transition: "all 0.3s" }}
-                onClick={() => navigate(`/tv/${data.detailId}`)}
+                onClick={() => navigate(`/tv/${data.conceptId}`)}
               >
                 <img src={data.thumbnailUrl}></img>
               </div>
