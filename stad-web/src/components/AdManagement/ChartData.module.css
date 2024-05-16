@@ -5,7 +5,8 @@
 }
 .pieContainer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  margin-top: 2rem;
   align-items: center;
 }
 .pie,
@@ -18,7 +19,7 @@
 .pie {
   display: flex;
   flex-direction: column;
-  height: 94%;
+  height: 96%;
 }
 
 .title {
