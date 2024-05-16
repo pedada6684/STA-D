@@ -37,13 +37,11 @@ public class ProductService {
     private final ProductTypeRepository productTypeRepository;
     private final OptionRepository optionRepository;
 
-    // 상품 리스트
-//    @Override
-//    public Optional<GetProductListByAdverseResponse> getAllProductByAdverseId(GetProductListByAdverseResponse command) {
-//        log.info("getAllProductByAdverseId: " + command);
-//        return productRepository.getAllProductByAdverseId(command.getList());
-//    }
-
+    /**
+     *
+     * @param advertId
+     * @return
+     */
     public GetProductListByAdvertResponse getProductListByAdvertId(Long advertId) {
 
         List<Product> productList = productRepository.getProductListByAdvertId(advertId)
@@ -73,7 +71,11 @@ public class ProductService {
         return GetProductListByAdvertResponse.builder().productList(responseList).build();
     }
 
-    // 상품 상세 정보
+    /**
+     *
+     * @param productId
+     * @return
+     */
     public GetProductInfoResponse getProductInfo(Long productId){
         Product product = productRepository.getProductInfo(productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
@@ -168,6 +170,11 @@ public class ProductService {
         return "success";
     }
 
+    /**
+     *
+     * @param request
+     * @return
+     */
     @Transactional(readOnly = false)
     public String modifyProduct(ModifyProductRequest request) {
         log.info("상품 수정 Service"+"\n"+"ProductPostRequest-productId: "+request.getProductId());
@@ -264,6 +271,10 @@ public class ProductService {
         return "success";
     }
 
+    /**
+     *
+     * @param productId
+     */
     public void deleteProduct(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
@@ -272,26 +283,4 @@ public class ProductService {
 
         productRepository.save(product);
     }
-
-
-//    public Product updateProductInfo(UpdateProductInfoCommand command) {
-//        log.info("UpdateUserInfoCommand: " + command);
-//        log.info("id: "+command.getId());
-//        Product product = getProductInfo(command.getId());
-//        product.update(command);
-//
-//        productRepository.save(product);
-//        return product;
-//    }
-//    @Override
-//    public Long registProduct(Long adverseId, Long OrderId, ProductPostDto productPostDto){
-//        Product product =
-//
-//        /**
-//        *  밑에 잘 넣음시다  광고 아이디로 광고 찾아서
-//        **/
-//
-//        product = productRepository.save(product);
-//        return product.getId();
-//    }
 }

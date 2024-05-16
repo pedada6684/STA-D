@@ -163,7 +163,6 @@ public class UserService {
     }
 
     private String getUserYoutubeInfo(String googleAT) {
-        //TODO: 유튜브에 api통신을 통해 채널을 가져오고 pasing해 하나의 스트링으로 만드는 코드를 만들어주길 부탁
         String concern = "축산물";
         BufferedReader in = null;
         try {
@@ -177,6 +176,7 @@ public class UserService {
             if (responseCode == HttpURLConnection.HTTP_OK) { //성공
                 in = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 String inputLine;
+
                 StringBuffer response = new StringBuffer();
 
                 while ((inputLine = in.readLine()) != null) {
@@ -272,7 +272,7 @@ public class UserService {
     public void deleteUserLocation(DeleteUserLocationCommand command) {
         log.info("DeleteUserLocationCommand: "+command);
         long cnt = userLocationRepository.deleteByIdAndUser_Id(command.getLocationId(), command.getUserId());
-        if (cnt == 0){ //삭제할 수 있는 내주소지 없음
+        if (cnt == 0){ //삭제할 수 있는 내 주소지 없음
             throw new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
         }
     }
