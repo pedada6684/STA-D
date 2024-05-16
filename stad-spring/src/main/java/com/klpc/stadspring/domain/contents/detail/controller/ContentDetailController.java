@@ -6,21 +6,16 @@ import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService
 import com.klpc.stadspring.domain.contents.detail.controller.response.*;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
-import com.klpc.stadspring.domain.contents.detail.service.command.response.GetDetailListByConceptIdResponseCommand;
-import com.klpc.stadspring.domain.contents.detail.service.command.response.GetPopularContentResponseCommand;
-import com.klpc.stadspring.domain.contents.detail.service.command.response.GetWatchingContentResponseCommand;
+import com.klpc.stadspring.domain.contents.detail.service.command.response.*;
 import com.klpc.stadspring.domain.contents.watched.service.WatchedContentService;
 import com.klpc.stadspring.global.RedisService;
-import com.klpc.stadspring.global.event.ContentStartEvnet;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -85,18 +80,18 @@ public class ContentDetailController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<GetThumbnailListResponse> getWatchingAndWatchedContent(@RequestParam("userId")  Long userId) {
+    ResponseEntity<GetWatchingAndWatchedContentResponse> getWatchingAndWatchedContent(@RequestParam("userId")  Long userId) {
         log.info("시청한 영상 목록 조회" + "\n" + "getWatchingAndWatchedContent : " + userId);
 
         List<Long> detailIdList = watchedContentService.getWatchingAndWatchedContentDetailIdByUserId(userId);
-        List<GetThumbnailResponse> responseList = new ArrayList<>();
+        List<GetWatchingAndWatchedContentResponseCommand> responseList = new ArrayList<>();
         for (Long aLong : detailIdList) {
             ContentDetail detail = detailService.getContentDetailById(aLong);
             ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
 
-            responseList.add(GetThumbnailResponse.from(concept));
+            responseList.add(GetWatchingAndWatchedContentResponseCommand.from(concept));
         }
-        GetThumbnailListResponse response = GetThumbnailListResponse.from(responseList);
+        GetWatchingAndWatchedContentResponse response = GetWatchingAndWatchedContentResponse.from(responseList);
         return ResponseEntity.ok(response);
     }
 
@@ -107,17 +102,17 @@ public class ContentDetailController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<GetThumbnailListResponse> getBookmarkedContent(@RequestParam("userId")  Long userId) {
+    ResponseEntity<GetBookmarkedContentResponse> getBookmarkedContent(@RequestParam("userId")  Long userId) {
         log.info("북마크 영상 목록 조회" + "\n" + "getBookmarkedContent : " + userId);
 
         List<Long> conceptIdList = bookmarkedContentService.getConceptIdByUserId(userId);
-        List<GetThumbnailResponse> responseList = new ArrayList<>();
+        List<GetBookmarkedContentResponseCommand> responseList = new ArrayList<>();
         for (Long aLong : conceptIdList) {
             ContentConcept concept = conceptService.getContentConceptById(aLong);
 
-            responseList.add(GetThumbnailResponse.from(concept));
+            responseList.add(GetBookmarkedContentResponseCommand.from(concept));
         }
-        GetThumbnailListResponse response = GetThumbnailListResponse.from(responseList);
+        GetBookmarkedContentResponse response = GetBookmarkedContentResponse.from(responseList);
         return ResponseEntity.ok(response);
     }
 

@@ -7,7 +7,6 @@ import com.klpc.stadspring.domain.contents.concept.controller.response.*;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
 import com.klpc.stadspring.domain.contents.concept.service.command.response.GetUpdatedContentResponseCommand;
-import com.klpc.stadspring.domain.contents.detail.controller.response.GetThumbnailListResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
