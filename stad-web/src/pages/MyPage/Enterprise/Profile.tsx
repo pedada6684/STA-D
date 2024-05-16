@@ -30,6 +30,8 @@ export default function Profile({
     if (data?.profile instanceof File) {
       const url = URL.createObjectURL(data.profile);
       setImage(url);
+      // 이전 객체 URL을 해제
+      return () => URL.revokeObjectURL(url);
     } else if (typeof data?.profile === "string") {
       setImage(data.profile);
     } else {
@@ -38,16 +40,23 @@ export default function Profile({
   }, [data]);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
+    if (e.target.files && e.target.files.length > 0) {
       let profileImg = e.target.files[0]; // FileList에서 첫 번째 File 선택
       setSelectedFile(profileImg);
       const imgUrl = URL.createObjectURL(profileImg);
+      // 이전 객체 URL을 해제
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+
       setPreviewUrl(imgUrl);
+      setImage(imgUrl); // 이미지 상태를 최신으로 업데이트
       onFileSelect(profileImg);
     } else {
       // 파일 선택이 취소되었거나 파일이 선택되지 않았을 때 처리
       setSelectedFile(null);
       setPreviewUrl(""); // 미리보기 URL을 비워줌
+      setImage(company); // 기본 이미지로 설정
     }
   };
 
