@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AddOrderLogEvent {
     private Long advertId;
-    private Long advertVideoId;
     private Long userId;
     private Long orderId;
     private Long contentId;
@@ -25,8 +24,8 @@ public class AddOrderLogEvent {
     public AddOrderLogCommand toCommand() {
         return AddOrderLogCommand.builder().
                 advertId(advertId).
-                advertVideoId(advertVideoId).
                 userId(userId).
+                orderId(orderId).
                 contentId(contentId).
                 productId(productId).
                 price(price).
