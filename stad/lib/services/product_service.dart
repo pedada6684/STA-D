@@ -47,17 +47,13 @@ class ProductService {
         var productList = responseData['productList'] as List; // List로 명시적 형 변환
 
         print(productList);
-        print(productList);
-        print(productList);
+
 
         if (productList.isNotEmpty) {
           var firstProduct = productList[0]
               as Map<String, dynamic>; // Map<String, dynamic>로 명시적 형 변환
           print(firstProduct);
-          print(firstProduct);
-          print(firstProduct);
-          print(firstProduct);
-          print(firstProduct);
+  
 
           return ProductInfo.fromJson(firstProduct);
         } else {

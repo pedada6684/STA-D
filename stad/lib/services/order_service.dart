@@ -12,16 +12,18 @@ class OrderService {
   // final String orderUrl = 'http://192.168.0.9:8080/api/orders';
   // final String orderUrl = 'http://192.168.31.202:8080/orders';
   final String orderUrl = '$svApi/orders';
-  
+
   //내 주문목록 불러오기 => 백엔드 수정 필요
   Future<List<OrderDetails>> fetchOrders(int userId) async {
+    print('order하는 user : $userId');
     try {
-      final response = await dio.get('${orderUrl}/list?userId=$userId');
+      final response = await dio.get('$orderUrl/list',
+          queryParameters: {'userId': userId});
       if (response.statusCode == 200) {
         // 'content' 필드가 null인지 확인
         print('내 주문 정보 : ${response.data}');
-        if (response.data['data'] != null) {
-          List<dynamic> ordersJson = response.data['data'];
+        if (response.data['content'] != null) {
+          List<dynamic> ordersJson = response.data['content'];
           List<OrderDetails> orders =
               ordersJson.map((json) => OrderDetails.fromJson(json)).toList();
           return orders;
@@ -33,12 +35,12 @@ class OrderService {
         throw Exception('Failed to load orders: ${response.statusCode}');
       }
     } on DioError catch (e) {
-      throw Exception('Error occurred while fetching orders: ${e.message}');
+      throw Exception(
+          'Error occurred while fetching orders: ${e.response!.data}');
     }
   }
 
   //주문 생성하기
-
   Future<void> createOrder({
     required int userId,
     required List<Map<String, dynamic>> products,

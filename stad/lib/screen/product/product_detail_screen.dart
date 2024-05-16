@@ -18,10 +18,6 @@ class ProductDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(productInfo);
-    print(productInfo);
-    print(productInfo);
-    print(productInfo);
     return SingleChildScrollView(
       child: Container(
         color: mainGray,
@@ -45,12 +41,12 @@ class ProductDetailScreen extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    Text(
-                      description,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                      ),
-                    ),
+                    // Text(
+                    //   description,
+                    //   style: TextStyle(
+                    //     fontSize: 14.0,
+                    //   ),
+                    // ),
                     SizedBox(
                       height: 32.0,
                     ),
