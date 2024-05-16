@@ -23,6 +23,7 @@
 
 .chooseProfile {
   margin: 2em 0;
+  display: flex;
 }
 .imgWrapper {
   width: 10vw; /* 예시 크기 */
@@ -46,7 +47,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  cursor: pointer;
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
+  margin-right: 5rem;
 }
 .name {
   display: flex;

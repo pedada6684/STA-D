@@ -31,12 +31,19 @@ const tvUserSlice = createSlice({
       action: PayloadAction<{ userId: number; profile: Profile }>
     ) => {
       state.isTvLoggedIn = true;
-      const existingUser = state.users.find(
-        (user) => user.userId === action.payload.userId
+      const existingUser = state.users?.find(
+        (user) => user?.userId === action.payload.userId
       );
-      if (!existingUser) {
+      if (existingUser) {
+        // 기존 유저의 프로필 목록에 새로운 프로필 추가
+        existingUser?.profiles.push(action.payload.profile);
+        // 프로필이 4개를 초과하면 가장 오래된 프로필 삭제
+        if (existingUser.profiles.length > 4) {
+          existingUser.profiles.shift(); // 가장 오래된 프로필 제거
+        }
+      } else {
         // 새로운 유저 추가
-        state.users.push({
+        state.users?.push({
           userId: action.payload.userId,
           profiles: [action.payload.profile],
         });
