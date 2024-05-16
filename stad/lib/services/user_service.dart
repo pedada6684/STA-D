@@ -187,8 +187,8 @@ class UserService {
         userProvider.setUser(updatedUser);
         return true;
       }
-    } catch (e) {
-      print('Error updating profile image: $e');
+    } on DioException catch (e) {
+      print('Error updating profile image: ${e.response}');
       return false;
     }
     return false;

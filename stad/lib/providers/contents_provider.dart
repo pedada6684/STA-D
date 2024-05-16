@@ -7,7 +7,6 @@ class ContentProvider with ChangeNotifier {
   List<Map<String, dynamic>> _popularContents = [];
 
   Content? get featuredContent => _featuredContent;
-
   List<Map<String, dynamic>> get popularContents => _popularContents;
 
   void setFeaturedContent(Content content) {
@@ -21,8 +20,8 @@ class ContentProvider with ChangeNotifier {
   }
 
   Future<void> fetchFeaturedContent(int contentId) async {
-    ContentsService contentsService = ContentsService();
     try {
+      ContentsService contentsService = ContentsService();
       var content = await contentsService.fetchContentDetails(contentId);
       setFeaturedContent(content);
     } catch (e) {
@@ -31,8 +30,8 @@ class ContentProvider with ChangeNotifier {
   }
 
   Future<void> fetchPopularContent() async {
-    ContentsService contentsService = ContentsService();
     try {
+      ContentsService contentsService = ContentsService();
       var contents = await contentsService.fetchPopularContent();
       setPopularContents(contents);
     } catch (e) {
