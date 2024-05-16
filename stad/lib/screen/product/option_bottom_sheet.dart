@@ -181,7 +181,7 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
             productInfo: widget.productInfo,
             productTypes: selectedProducts,
             quantities: quantities,
-            deliveryFee: 2500,
+            deliveryFee: widget.productInfo!.cityDeliveryFee,
             title: widget.title,
             optionIds: optionIds,
             advertId: widget.advertId,

@@ -185,6 +185,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.17"
+  eventflux:
+    dependency: "direct main"
+    description:
+      name: eventflux
+      sha256: "2fa48f592ad748cb6448ef2bb3a702665b5db7a9686859ac6a3c958a24e9ce67"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   fading_edge_scrollview:
     dependency: transitive
     description:
@@ -366,6 +374,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  flutter_client_sse:
+    dependency: "direct main"
+    description:
+      name: flutter_client_sse
+      sha256: "2204f182dd22b859f98e30572fa8318176556eba4da8513c3bbc0632f2b79b8c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   flutter_dotenv:
     dependency: "direct main"
     description:

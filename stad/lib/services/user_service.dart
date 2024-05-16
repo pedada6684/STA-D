@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:stad/main.dart';
 import 'package:stad/models/user_model.dart';
 import 'package:stad/providers/user_provider.dart';
+import 'package:stad/services/alert_service.dart';
 import 'package:stad/services/user_secure_storage.dart';
 
 class UserService {
@@ -17,6 +18,7 @@ class UserService {
     scopes: ['email', 'https://www.googleapis.com/auth/youtube.readonly'],
   );
   final Dio dio = Dio();
+  final AlertService alertService = AlertService();
   final EmUrl = Uri.parse('http://192.168.31.202:8080/api/v1/auth/applogin');
   final locUrl = Uri.parse('http://10.0.2.2:8080/api/v1/auth/applogin');
 
@@ -193,9 +195,37 @@ class UserService {
   }
 
   Future<void> signOut(BuildContext context) async {
-    await _googleSignIn.signOut();
-    await _firebaseAuth.signOut();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final userId = userProvider.userId;
 
-    Provider.of<UserProvider>(context, listen: false).clearUser();
+    try {
+      await _googleSignIn.signOut();
+      await _firebaseAuth.signOut();
+
+      // 서버 로그아웃 요청 보내기
+      await dio.post(
+        'https://www.mystad.com/api/user/logout?userId=$userId',
+        options: Options(
+          headers: {
+            'Cookie': userProvider.cookie,
+            'Authorization': 'Bearer ${userProvider.token}',
+          },
+        ),
+      );
+
+      // SSE 연결 해제
+      alertService.disconnect();
+
+      // 사용자 정보 삭제
+      userProvider.clearUser();
+
+      // Secure Storage 정보 삭제
+      await AuthService().deleteToken();
+
+      // 로그인 페이지로 이동
+      GoRouter.of(context).go('/login');
+    } catch (error) {
+      print('로그아웃 실패: $error');
+    }
   }
 }
