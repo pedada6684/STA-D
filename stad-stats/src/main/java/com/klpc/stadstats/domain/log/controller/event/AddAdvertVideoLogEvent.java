@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddAdvertVideoLogEvent {
     private Long advertVideoId;
     private Long advertId;
