@@ -2,6 +2,7 @@
   height: 100vh; /* 뷰포트의 전체 높이 */
   overflow-y: scroll; /* 세로 스크롤 활성화 */
   scroll-snap-type: y mandatory; /* 세로 방향 스냅 강제 */
+  background-color: #f6f8fa;
 }
 
 .title {
@@ -16,12 +17,34 @@
 }
 
 .chartWrapper {
-  display: flex;
+  display: grid;
+  grid-template-columns: 3fr 2fr; /* 기본은 첫 번째 줄의 가로 비율 6:4 */
+  grid-template-rows: auto auto; /* 두 줄 */
+  gap: 10px;
   width: 100%;
+  grid-template-areas:
+    "getExposure frame"
+    "pieChart barChart"; /* 두 번째 줄의 비율을 설정 */
+}
+
+.chartWrapper > :nth-child(1) {
+  grid-area: getExposure;
+}
+
+.chartWrapper > :nth-child(2) {
+  grid-area: frame;
+}
+.chartWrapper > :nth-child(4) {
+  grid-area: barChart;
+}
+
+.chartWrapper > :nth-child(3) {
+  grid-template-columns: repeat(1fr, 2fr); /* 두 번째 줄의 가로 비율 4:6 */
+  grid-area: pieChart;
 }
 
 .firstWrapper {
-  padding-top: 5rem;
+  padding-top: 4.5rem;
 }
 .etcContainer {
   margin-top: 7rem;

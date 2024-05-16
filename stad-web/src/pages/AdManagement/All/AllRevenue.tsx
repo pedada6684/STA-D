@@ -7,11 +7,19 @@ import { AdvertIdProps } from "./AllExposure";
 export default function AllRevenue({ advertId }: AdvertIdProps) {
   return (
     <div className={`${styles.etcContainer}`}>
-      <GetRevenue advertId={advertId} />
-      <Frame advertId={advertId} />
       <div className={`${styles.chartWrapper}`}>
-        <PieChart title="30일 동안 수익 비율" dataType="totalRevenue" />
-        <BarChart title="30일 동안 수익" dataType="totalRevenue" />
+        <div>
+          <GetRevenue advertId={advertId} />
+        </div>
+        <div>
+          <Frame advertId={advertId} />
+        </div>
+        <div>
+          <BarChart title="30일 동안 수익" dataType="totalRevenue" />
+        </div>
+        <div>
+          <PieChart title="30일 동안 수익 비율" dataType="totalRevenue" />
+        </div>
       </div>
     </div>
   );
