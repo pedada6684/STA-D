@@ -31,7 +31,7 @@ public class LogController {
         logService.addAdvertClickLog(request.toCommand());
         return ResponseEntity.ok().build();
     }
-    @KafkaListener(topics = "advert-watch-log", groupId = "log-group", containerFactory = "addOrderLogEventConcurrentKafkaListenerContainerFactory")
+    @KafkaListener(topics = "advert-watch-log", groupId = "log-group", containerFactory = "addAdvertVideoLogEventConcurrentKafkaListenerContainerFactory")
     public void onAddAdvertWatchLogEvent(AddAdvertVideoLogEvent event) {
         log.info("AddAdvertVideoLogEvent: " + event);
         logService.addAdvertVideoLog(event.toCommand());
