@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useQuery } from "react-query";
-import { CarouselVideoProps } from "./MainCarousel";
+import { CarouselWatchedProps } from "./MainCarousel";
 import { GetRecentWatching } from "./CarouselApI";
 import Content from "../Container/Content";
 export default function RecentWatching() {
@@ -17,9 +17,7 @@ export default function RecentWatching() {
     data: WatchingData,
     isLoading,
     error,
-  } = useQuery<CarouselVideoProps[]>("watching", () =>
-    GetRecentWatching(userId)
-  );
+  } = useQuery<CarouselWatchedProps[]>("watching", () => GetRecentWatching(userId));
   if (isLoading)
     return (
       <div>
@@ -59,10 +57,16 @@ export default function RecentWatching() {
                 className="s-vid-container"
                 key={index}
                 style={{ position: "relative", transition: "all 0.3s" }}
-                onClick={() => navigate(`/tv/${data.detailId}`)}
+                onClick={() => navigate(`/tv/stream/${data.detailId}`)}
               >
-                <img src={data.thumbnailUrl} alt="비디오 썸네일" />
-                <div className="vidTitle">{data.title}</div>
+                <img src={data.thumbnailUrl} alt="콘텐츠 썸네일" />
+                {data.episode ? (
+                  <div className="vidTitle">
+                    {data.title} - {data.episode}화
+                  </div>
+                ) : (
+                  <div className="vidTitle">{data.title}</div>
+                )}
               </div>
             ))}
           </Slider>
