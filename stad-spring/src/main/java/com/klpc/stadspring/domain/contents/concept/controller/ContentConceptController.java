@@ -6,6 +6,8 @@ import com.klpc.stadspring.domain.contents.categoryRelationship.service.ContentC
 import com.klpc.stadspring.domain.contents.concept.controller.response.*;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
+import com.klpc.stadspring.domain.contents.concept.service.command.response.GetUpdatedContentResponseCommand;
+import com.klpc.stadspring.domain.contents.detail.controller.response.GetThumbnailListResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -156,6 +158,21 @@ public class ContentConceptController {
 
         GetAllConceptListResponse response = conceptService.getAllContentList();
 
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/updated")
+    @Operation(summary = "최신 영상 목록", description = "최신 영상 목록")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "최신 영상 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<GetUpdatedContentResponse> getUpdatedContent() {
+        log.info("최신 영상 목록 조회" + "\n" + "getUpdatedContent");
+
+        List<GetUpdatedContentResponseCommand> responseList = conceptService.getUpdatedContent();
+        GetUpdatedContentResponse response = GetUpdatedContentResponse.from(responseList);
         return ResponseEntity.ok(response);
     }
 }

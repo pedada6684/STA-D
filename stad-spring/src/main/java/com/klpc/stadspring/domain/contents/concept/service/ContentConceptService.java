@@ -9,6 +9,7 @@ import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
 import com.klpc.stadspring.domain.contents.concept.service.command.request.AddConceptRequestCommand;
 import com.klpc.stadspring.domain.contents.concept.service.command.response.GetAllConceptResponseCommand;
+import com.klpc.stadspring.domain.contents.concept.service.command.response.GetUpdatedContentResponseCommand;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -109,5 +110,32 @@ public class ContentConceptService {
         }
 
         return GetAllConceptListResponse.builder().data(responseList).build();
+    }
+
+    /**
+     * 최신 콘텐츠 목록 조회
+     * @return
+     */
+    public List<GetUpdatedContentResponseCommand> getUpdatedContent() {
+        List<GetUpdatedContentResponseCommand> responseList = new ArrayList<>();
+
+        ContentConcept Jurassic = repository.findById(295L)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        ContentConcept avengers = repository.findById(296L)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        ContentConcept tajja = repository.findById(297L)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        ContentConcept wolf = repository.findById(298L)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        ContentConcept ssam = repository.findById(136L)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        responseList.add(GetUpdatedContentResponseCommand.toCommand(wolf));
+        responseList.add(GetUpdatedContentResponseCommand.toCommand(tajja));
+        responseList.add(GetUpdatedContentResponseCommand.toCommand(avengers));
+        responseList.add(GetUpdatedContentResponseCommand.toCommand(Jurassic));
+        responseList.add(GetUpdatedContentResponseCommand.toCommand(ssam));
+
+        return responseList;
     }
 }
