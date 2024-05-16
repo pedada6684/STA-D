@@ -1,19 +1,18 @@
-package com.klpc.stadspring.domain.contents.detail.controller.response;
+package com.klpc.stadspring.domain.contents.detail.service.command.response;
 
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
-import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class GetThumbnailResponse {
+public class GetBookmarkedContentResponseCommand {
     String title;
     String thumbnailUrl;
     Long conceptId;
 
-    public static GetThumbnailResponse from(ContentConcept concept) {
-        return GetThumbnailResponse.builder()
+    public static GetBookmarkedContentResponseCommand from(ContentConcept concept) {
+        return GetBookmarkedContentResponseCommand.builder()
                 .title(concept.getTitle())
                 .thumbnailUrl(concept.getThumbnailUrl())
                 .conceptId(concept.getId())
