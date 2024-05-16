@@ -57,7 +57,7 @@ export default function RecentWatching() {
                 className="s-vid-container"
                 key={index}
                 style={{ position: "relative", transition: "all 0.3s" }}
-                onClick={() => navigate(`/tv/${data.conceptId}`)}
+                onClick={() => navigate(`/tv/stream/${data.detailId}`)}
               >
                 <img src={data.thumbnailUrl} alt="콘텐츠 썸네일" />
                 {data.episode ? (

@@ -11,6 +11,7 @@ public class GetWatchingContentResponseCommand {
     String title;
     String thumbnailUrl;
     Integer episode;
+    Long detailId;
     Long conceptId;
 
     public static GetWatchingContentResponseCommand from(ContentConcept concept, ContentDetail detail) {
@@ -18,6 +19,7 @@ public class GetWatchingContentResponseCommand {
                 .title(concept.getTitle())
                 .thumbnailUrl(concept.getThumbnailUrl())
                 .episode(detail.getEpisode())
+                .detailId(detail.getId())
                 .conceptId(concept.getId())
                 .build();
     }
