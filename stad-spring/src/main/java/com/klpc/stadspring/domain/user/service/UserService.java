@@ -163,7 +163,6 @@ public class UserService {
     }
 
     private String getUserYoutubeInfo(String googleAT) {
-        //TODO: 유튜브에 api통신을 통해 채널을 가져오고 pasing해 하나의 스트링으로 만드는 코드를 만들어주길 부탁
         String concern = "축산물";
         BufferedReader in = null;
         try {

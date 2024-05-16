@@ -226,8 +226,6 @@ public class OrdersService {
     public CancelOrdersResponse cancelOrders(Long ordersId){
         Orders orders = ordersRepository.findById(ordersId).orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
-        /** TODO -> status 가 안변함 수정 필요
-         */
         orders.cancelOrders();
 
         for(OrderProduct orderProduct : orders.getOrderProducts()){
@@ -244,9 +242,9 @@ public class OrdersService {
                     .regDate(LocalDateTime.now())
                     .updateDate(LocalDateTime.now())
                     .build();
-//
+
             productType.modifyQuantity(orderProduct.getCnt());
-//
+
             sendOrderCancelRequest(addOrderCancelLogCommand);
         }
 
@@ -270,7 +268,4 @@ public class OrdersService {
     public void sendOrderCancelRequest(AddOrderCancelLogCommand requestData) {
         kafkaTemplate.send("order-cancel-log", requestData);
     }
-
-
-
 }
