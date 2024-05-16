@@ -17,15 +17,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 3rem;
-  height: 3rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
+  overflow: hidden;
   padding: 1rem;
   border: 2px solid #a8a8a8;
 }
 
-.icon,
-.preview img {
+.icon {
   display: flex;
   padding: 0.2rem;
   justify-content: center;
@@ -34,6 +34,9 @@
 }
 
 .preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   z-index: 2;
 }
 .name {
