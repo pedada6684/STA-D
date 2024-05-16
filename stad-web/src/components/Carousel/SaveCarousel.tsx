@@ -12,10 +12,7 @@ export default function SaveCarousel() {
   // const tvUserId = useSelector((state: RootState) => state.tvUser.userId);
   const tvUserId = 1;
   const navigate = useNavigate();
-  const { data: saveData, isLoading } = useQuery<CarouselVideoProps[]>(
-    "saveList",
-    () => GetSaveWatching(tvUserId)
-  );
+  const { data: saveData, isLoading } = useQuery<CarouselVideoProps[]>("saveList", () => GetSaveWatching(tvUserId));
   if (isLoading)
     return (
       <div>
@@ -54,7 +51,7 @@ export default function SaveCarousel() {
                 className="s-vid-container"
                 key={index}
                 style={{ position: "relative", transition: "all 0.3s" }}
-                onClick={() => navigate(`/tv/${data.detailId}`)}
+                onClick={() => navigate(`/tv/${data.conceptId}`)}
               >
                 <img src={data.thumbnailUrl} alt="비디오 썸네일" />
                 <div className="vidTitle">{data.title}</div>
