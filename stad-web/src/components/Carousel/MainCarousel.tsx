@@ -21,6 +21,7 @@ export type CarouselWatchedProps = {
   thumbnailUrl: string;
   conceptId: number;
   episode: number;
+  detailId: number;
 };
 export default function MainCarousel() {
   const navigate = useNavigate();
