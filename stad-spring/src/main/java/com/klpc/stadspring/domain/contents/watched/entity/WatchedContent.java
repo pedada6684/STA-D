@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -29,22 +30,23 @@ public class WatchedContent {
 
     @CreationTimestamp
     @Column(nullable = false)
-    private LocalDate date;
+    private LocalDateTime dateTime;
 
     private boolean status;
+    @Column(nullable = false)
     private Long stopTime;
 
     public static WatchedContent createWatchedContent (
             ContentDetail contentDetail,
             User user,
-            LocalDate date,
+            LocalDateTime dateTime,
             boolean status,
             Long stopTime
     ) {
         WatchedContent watchedContent = new WatchedContent();
         watchedContent.contentDetail = contentDetail;
         watchedContent.user = user;
-        watchedContent.date = date;
+        watchedContent.dateTime = dateTime;
         watchedContent.status = status;
         watchedContent.stopTime = stopTime;
 
@@ -52,11 +54,11 @@ public class WatchedContent {
     }
 
     public void modifyWatchedContent (
-            LocalDate date,
+            LocalDateTime dateTime,
             boolean status,
             Long stopTime
     ) {
-        this.date = date;
+        this.dateTime = dateTime;
         this.status = status;
         this.stopTime = stopTime;
     }
