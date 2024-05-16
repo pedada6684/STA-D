@@ -7,11 +7,19 @@ import Frame from "../../../components/AdManagement/Frame";
 export default function AllOrder({ advertId }: AdvertIdProps) {
   return (
     <div className={`${styles.etcContainer}`}>
-      <GetOrder advertId={advertId} />
-      <Frame advertId={advertId} />
       <div className={`${styles.chartWrapper}`}>
-        <PieChart title="30일 동안 주문 비율" dataType="totalOrder" />
-        <BarChart title="30일 동안 주문 건수" dataType="totalOrder" />
+        <div>
+          <GetOrder advertId={advertId} />
+        </div>
+        <div>
+          <Frame advertId={advertId} />
+        </div>
+        <div>
+          <BarChart title="30일 동안 주문 건수" dataType="totalOrder" />
+        </div>
+        <div>
+          <PieChart title="30일 동안 주문 비율" dataType="totalOrder" />
+        </div>
       </div>
     </div>
   );

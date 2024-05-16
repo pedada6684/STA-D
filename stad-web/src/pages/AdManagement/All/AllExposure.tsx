@@ -9,17 +9,25 @@ export interface AdvertIdProps {
 export default function AllExposure({ advertId }: AdvertIdProps) {
   return (
     <div>
-      <GetExposure advertId={advertId} />
-      <Frame advertId={advertId} />
       <div className={`${styles.chartWrapper}`}>
-        <PieChart
-          title="30일 동안 광고 시청 비율"
-          dataType="totalAdvertVideo"
-        />
-        <BarChart
-          title="30일 동안 광고 시청 건수"
-          dataType="totalAdvertVideo"
-        />
+        <div>
+          <GetExposure advertId={advertId} />
+        </div>
+        <div>
+          <Frame advertId={advertId} />
+        </div>
+        <div>
+          <BarChart
+            title="30일 동안 광고 시청 건수"
+            dataType="totalAdvertVideo"
+          />
+        </div>
+        <div>
+          <PieChart
+            title="30일 동안 광고 시청 비율"
+            dataType="totalAdvertVideo"
+          />
+        </div>
       </div>
     </div>
   );
