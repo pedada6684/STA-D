@@ -33,7 +33,7 @@ class ContentsService {
 
       print('내가 본 콘텐츠 목록 불러오기:${response.data}');
       if (response.statusCode == 200 && response.data != null) {
-        List<dynamic> contentsData = response.data['content'] ?? [];
+        List<dynamic> contentsData = response.data['data'] ?? [];
 
         return contentsData
             .map((data) => {
@@ -55,7 +55,8 @@ class ContentsService {
   Future getCurrViewContent(int userId) async {
     try {
       final response = await dio.get('$svApi/contents-watch/now',
-          queryParameters: {'userId': userId});
+          // queryParameters: {'userId': userId});
+          queryParameters: {'userId': 1});
       print('getCurrViewContent : ${response.data}');
       if (response.statusCode == 200 && response.data != null) {
         return response.data['contentDetailId'];
@@ -72,14 +73,15 @@ class ContentsService {
 
   Future<List<Map<String, dynamic>>> fetchPopularContent() async {
     try {
-      final response = await dio.get('$svApi/contents-concept/popular');
+      final response =
+          await dio.get('$svApi/contents-detail/collections/popular');
       if (response.statusCode == 200 && response.data != null) {
         if (response.data is List) {
           print(response.data);
           return List<Map<String, dynamic>>.from(response.data);
         } else if (response.data is Map) {
           List<dynamic> popularContentData = response.data['data'] ?? [];
-          print(response.data);
+          print(response.data['data']);
           return popularContentData
               .map((data) => Map<String, dynamic>.from(data))
               .toList();
