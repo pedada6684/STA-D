@@ -52,6 +52,19 @@ export default function BarChart({ title, dataType }: PieChartProps) {
     chart: {
       type: "bar",
       height: 200,
+      animations: {
+        enabled: true,
+        easing: "easeinout",
+        speed: 800,
+        animateGradually: {
+          enabled: true,
+          delay: 150,
+        },
+        dynamicAnimation: {
+          enabled: true,
+          speed: 350,
+        },
+      },
     },
     colors: ["#3552F2", "#6D81F2", "#A0ACF2", "#C9D3F2", "#C9CCD8"],
     plotOptions: {
@@ -59,7 +72,7 @@ export default function BarChart({ title, dataType }: PieChartProps) {
         horizontal: true, // 가로 바 차트
         borderRadius: 10, // 바 모양에 border-radius 추가
         distributed: true, // 바마다 다른 색상
-        barHeight: "50%", // 바 사이에 간격 추가
+        barHeight: "15%", // 바 사이에 간격 추가
       },
     },
     dataLabels: {
