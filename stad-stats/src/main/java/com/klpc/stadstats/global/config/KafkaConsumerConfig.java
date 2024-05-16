@@ -1,5 +1,6 @@
 package com.klpc.stadstats.global.config;
 
+import com.klpc.stadstats.domain.log.controller.event.AddAdvertVideoLogEvent;
 import com.klpc.stadstats.domain.log.controller.event.AddOrderCancelLogEvent;
 import com.klpc.stadstats.domain.log.controller.event.AddOrderLogEvent;
 import com.klpc.stadstats.domain.tmp.entity.GetUserInfoResponse;
@@ -25,6 +26,13 @@ public class KafkaConsumerConfig {
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapServers;
 
+
+	@Bean
+	ConcurrentKafkaListenerContainerFactory<String, AddAdvertVideoLogEvent> addAdvertVideoLogEventConcurrentKafkaListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, AddAdvertVideoLogEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(consumerFactory(AddAdvertVideoLogEvent.class));
+		return factory;
+	}
 	@Bean
 	ConcurrentKafkaListenerContainerFactory<String, AddOrderLogEvent> addOrderLogEventConcurrentKafkaListenerContainerFactory() {
 		ConcurrentKafkaListenerContainerFactory<String, AddOrderLogEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();

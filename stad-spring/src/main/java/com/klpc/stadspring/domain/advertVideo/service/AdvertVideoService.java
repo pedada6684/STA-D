@@ -8,11 +8,13 @@ import com.klpc.stadspring.domain.advertVideo.repository.AdvertVideoRepository;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddBannerImgRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddVideoListRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVideoRequestCommand;
+import com.klpc.stadspring.domain.advertVideo.service.command.response.AddAdvertVideoLogCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.response.AddVideoListResponseCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.response.GetTotalLogResponse;
 import com.klpc.stadspring.domain.contents.label.repository.ContentLabelRepository;
 import com.klpc.stadspring.domain.contents.labelRelationship.repository.ContentLabelRelationshipRepository;
 import com.klpc.stadspring.domain.contents.watched.repository.WatchedContentRepository;
+import com.klpc.stadspring.domain.orders.service.command.request.AddOrderCancelLogCommand;
 import com.klpc.stadspring.domain.selectedContent.repository.SelectedContentRepository;
 import com.klpc.stadspring.global.RedisService;
 import com.klpc.stadspring.global.response.ErrorCode;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -50,6 +53,7 @@ public class AdvertVideoService {
     private final ContentLabelRelationshipRepository contentLabelRelationshipRepository;
     private final RedisService redisService;
     private final RestTemplate restTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
     private final S3Util s3Util;
 
     @Value("${spring.stad-stats.url}")
@@ -287,6 +291,18 @@ public class AdvertVideoService {
     public ResponseEntity<ResourceRegion> streamingAdvertVideo(HttpHeaders httpHeaders, Long videoId) {
         String pathStr = advertVideoRepository.findById(videoId).get().getVideoUrl();
 
+        AdvertVideo advertVideo = advertVideoRepository.findById(videoId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        AddAdvertVideoLogCommand addAdvertVideoLogCommand = AddAdvertVideoLogCommand.builder()
+                .advertVideoId(videoId)
+                .advertId(advertVideo.getAdvert().getId())
+                .userId(advertVideo.getAdvert().getUser().getId())
+                .contentId(advertVideo.getAdvert().getId())
+                .build();
+
+        sendAdvertWatchRequest(addAdvertVideoLogCommand);
+
         // 파일 존재 확인
         try {
             UrlResource video = new UrlResource(pathStr);
@@ -338,5 +354,8 @@ public class AdvertVideoService {
         log.info("GetTotalLogResponse: " + response);
 
         return response;
+    }
+    public void sendAdvertWatchRequest(AddAdvertVideoLogCommand requestData) {
+        kafkaTemplate.send("advert-watch-log", requestData);
     }
 }
