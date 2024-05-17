@@ -51,6 +51,7 @@ export function EditGoodsButton(formData: any, advertType: string) {
         && formData.formData.startDate != undefined && formData.formData.startDate != "" && formData.formData.endDate != undefined && formData.formData.endDate != ""
         && formData.formData.bannerImgUrl != undefined && formData.formData.bannerImgUrl != "" && formData.formData.advertVideoUrlList != undefined && formData.formData.advertVideoUrlList != null && formData.formData.advertVideoUrlList.length != 0) {
       if(formData.formData.advertType==="PRODUCT"){
+        modifyAdvert(formData)
         navigate("/modify-merchandise",{state:formData.formData.productId});
       }
       else{
