@@ -67,7 +67,11 @@ export default function Merchandise() {
   const advertId: number = location.state;
   const [formData, setFormData] = useState<formData>();
   const [goodsFormData, setGoodsFormData] = useState<goodsForm>();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileThumbnailInputRef = useRef<HTMLInputElement>(null);
+  const fileImagesInputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   useEffect(() => {
     console.log(advertId);
     setGoodsFormData((prevState) => ({
@@ -152,7 +156,7 @@ export default function Merchandise() {
     const imgList = e.target.files;
     const dataList = await productDetailImgUpload(imgList);
     console.log("상품 상세 이미지:", dataList);
-    setDetailImages(dataList);
+    setDetailImages(dataList.data);
     setGoodsFormData((prevState) => ({
       ...prevState,
       imgs: dataList.data,
@@ -264,20 +268,20 @@ export default function Merchandise() {
     }));
   };
 
-  // const handleGoodsImagesDelete = (index: number) => {
-  //   // 상세 이미지 파일 배열에서 삭제
-  //   const newDetailImages = detailImagePreviews.filter((_, i: number) => i !== index);
-  //   setDetailImages(newDetailImages);
+  // 이미지 삭제 핸들러
+  const handleDetailImgDelete = (index: number) => {
+    const filteredDetailImages = detailImages.filter((_, i) => i !== index);
+    setDetailImages(filteredDetailImages);
+    const filteredDetailImagePreviews = detailImagePreviews.filter(
+      (_, i) => i !== index
+    );
+    setDetailImagePreviews(filteredDetailImagePreviews);
+    setGoodsFormData((prevState) => ({
+      ...prevState,
+      imgs: filteredDetailImagePreviews,
+    }));
+  };
 
-  //   // URL 배열에서 삭제
-  //   if (goodsFormData && goodsFormData.imgs) {
-  //     const newImgs = goodsFormData.imgs.filter((_, i) => i !== index);
-  //     setGoodsFormData((prevState) => ({
-  //       ...prevState,
-  //       imgs: newImgs,
-  //     }));
-  //   }
-  // };
   return (
     <div className={`${styles.container}`}>
       <ItemContainer>
@@ -324,7 +328,7 @@ export default function Merchandise() {
                     <>
                       <input
                         type="file"
-                        ref={fileInputRef}
+                        ref={fileThumbnailInputRef}
                         name="thumbnail"
                         id="thumbnail"
                         accept="image/gif, image/jpeg, image/jpg, image/png"
@@ -347,7 +351,7 @@ export default function Merchandise() {
                         alt="Thumbnail Preview"
                       />
                       <button
-                        onClick={() => fileInputRef.current?.click()} // 버튼 클릭시 input 트리거
+                        onClick={() => fileThumbnailInputRef.current?.click()} // 버튼 클릭시 input 트리거
                         className={styles.overlayButton}
                       >
                         <img src={edit} alt="편집 버튼" />
@@ -360,7 +364,7 @@ export default function Merchandise() {
                       </button>
                       <input
                         type="file"
-                        ref={fileInputRef}
+                        ref={fileThumbnailInputRef}
                         name="thumbnail"
                         id="thumbnail"
                         accept="image/gif, image/jpeg, image/jpg, image/png"
@@ -424,17 +428,17 @@ export default function Merchandise() {
                       {detailImagePreviews.map((url, index) => (
                         <div key={index}>
                           <div className={styles.imagePreviewContainer}>
+                            <button
+                              onClick={() => handleDetailImgDelete(index)}
+                              className={`${styles.deleteImgButton}`}
+                            >
+                              <img src={close} alt="Delete" />
+                            </button>
                             <img
                               src={url}
                               alt={`Detail ${index + 1}`}
                               className={styles.preview}
                             />
-                            {/* <button
-                              onClick={() => handleGoodsImagesDelete(index)}
-                              className={`${styles.deleteImgButton}`}
-                            >
-                              <img src={close} alt="Delete" />
-                            </button> */}
                           </div>
                         </div>
                       ))}
@@ -442,13 +446,14 @@ export default function Merchandise() {
                       <button
                         className={styles.videoOverlay}
                         onClick={() =>
-                          fileInputRef.current && fileInputRef.current.click()
+                          fileImagesInputRef.current &&
+                          fileImagesInputRef.current.click()
                         }
                       >
                         <img src={edit} alt="Edit image" />
                       </button>
                       <input
-                        ref={fileInputRef}
+                        ref={fileImagesInputRef}
                         type="file"
                         name={`detailImage`}
                         id={`detailImage`}
@@ -647,7 +652,7 @@ export default function Merchandise() {
                           </div>
                         </div>
                         <div className={`${styles.detailO} `}>
-                          <div className={`${styles.tt} `}>옵션값</div>
+                          <div className={`${styles.tt} `}>옵션 추가 금액</div>
                           <div className={`${styles.optionInput}`}>
                             <input
                               type="text"
