@@ -115,18 +115,4 @@ public class AdvertVideoController {
 
         return advertVideoService.streamingAdvertVideo(httpHeaders, videoId);
     }
-
-    @GetMapping("/redis/test")
-    ResponseEntity<?> test(){
-        ArrayList<Long> list = new ArrayList<>();
-        list.add(1L);
-        list.add(2L);
-        list.add(3L);
-        redisService.createUserAdQueue(1L, list);
-        List<Long> strings = redisService.popUserAdQueue(1L);
-        for (Long res : strings) {
-            System.out.println("result: " + res);
-        }
-        return ResponseEntity.ok().build();
-    }
 }
