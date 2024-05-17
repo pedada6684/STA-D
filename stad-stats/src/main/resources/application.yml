@@ -12,3 +12,4 @@ spring:
       - classpath:/db.yml
       - classpath:/kafka.yml
       - classpath:/msa.yml
+      - classpath:/redis.yml
