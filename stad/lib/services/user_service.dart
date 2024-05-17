@@ -1,12 +1,12 @@
 import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
-import 'package:stad/main.dart';
 import 'package:stad/models/user_model.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/services/alert_service.dart';
