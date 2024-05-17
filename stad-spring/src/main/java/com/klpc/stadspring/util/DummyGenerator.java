@@ -73,7 +73,7 @@ public class DummyGenerator {
             }
         }
 
-//        createContent();
+        createContent();
         User normalUser = createDummyUsers();
         createDummyCompanyUsers();
         User companyUser1 = userRepository.findByEmail("ssafyCompany@ssafy.com").get();
