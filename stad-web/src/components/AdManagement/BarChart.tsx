@@ -7,10 +7,12 @@ import styles from "./ChartData.module.css";
 import { getAdList } from "../Select/userAdvertAPI";
 import { adList } from "../Select/SelectAdListBox";
 import { getTotal } from "./DashboardAPI";
+import { useQuery } from "react-query";
 interface SeriesType {
   name?: string;
   data: number[];
 }
+
 export default function BarChart({ title, dataType }: PieChartProps) {
   const accessToken = useSelector(
     (state: RootState) => state.token.accessToken
@@ -21,30 +23,78 @@ export default function BarChart({ title, dataType }: PieChartProps) {
     { name: `${title}`, data: [] },
   ]);
   const [labels, setLabels] = useState<string[]>([]);
+
+  const { data: ads, isLoading } = useQuery(
+    ["adsListData", userId, accessToken],
+    () => getAdList(userId, accessToken),
+    {
+      enabled: !!userId,
+    }
+  );
+  console.log("유저 광고(바)", ads);
+  const exampleAd: adList = {
+    advertId: 1,
+    title: "예시데이터",
+  };
   useEffect(() => {
     async function fetchData() {
       try {
-        const adListData = await getAdList(userId, accessToken); // 유저 광고 리스트 조회
-        const advertIds = adListData.data.map((ad: adList) => ad.advertId); // map 사용해서 advertId 담아주기
-        const promise = advertIds.map((id: number) =>
-          getTotal(id, accessToken)
-        );
-        const results = await Promise.all(promise); // 데이터 병렬을 위해 동기화
-        const sortedResults = results
-          .map((res, index) => ({
-            value: res[dataType],
-            label: adListData.data[index].title,
-          }))
-          .sort((a, b) => b.value - a.value) // 값에 따라 내림차순으로 정렬
-          .slice(0, 3); // 상위 5개 항목만 선택
-        setSeries([
-          { name: title, data: sortedResults.map((res) => res.value) },
-        ]);
-        setLabels(sortedResults.map((res) => res.label));
+        if (ads && ads.data) {
+          const combinedAds = [exampleAd, ...ads.data];
+          // advertId와 title 추출
+          const advertIds = combinedAds.map((ad: adList) => ad.advertId);
+          const titles = combinedAds.map((ad: adList) => ad.title);
+          // getTotal API 호출
+          const promise = advertIds.map((id: number) => {
+            console.log(id);
+            return getTotal(id, accessToken);
+          });
+          const results = await Promise.all(promise);
+
+          // 결과 정렬 및 상위 5개 항목 선택
+          const sortedResults = results
+            .map((res, index) => ({
+              value: res[dataType],
+              label: titles[index],
+            }))
+            .sort((a, b) => b.value - a.value) // 값에 따라 내림차순으로 정렬
+            .slice(0, 5); // 상위 5개 항목만 선택
+
+          setSeries([
+            { name: title, data: sortedResults.map((res) => res.value) },
+          ]);
+          setLabels(sortedResults.map((res) => res.label));
+        }
       } catch (error) {
         console.error("데이터 로드 실패", error);
       }
     }
+    // const advertIds = adListData.data.map((ad: adList) => ad.advertId); // map 사용해서 advertId 담아주기
+    // advertId와 title 추출
+    // const advertIds = combinedAds.map((ad: adList) => ad.advertId);
+    // const titles = combinedAds.map((ad: adList) => ad.title);
+    // console.log(advertIds);
+    // const promise = advertIds.map((id: number) =>
+    //   getTotal(id, accessToken)
+    // );
+    // const results = await Promise.all(promise); // 데이터 병렬을 위해 동기화
+    // console.log(results);
+    // const sortedResults = results
+    //   .map((res, index) => ({
+    //     value: res[dataType],
+    //     // label: adListData.data[index].title,
+    //     label: titles[index],
+    //   }))
+    //   .sort((a, b) => b.value - a.value) // 값에 따라 내림차순으로 정렬
+    //   .slice(0, 3); // 상위 5개 항목만 선택
+    // setSeries([
+    //   { name: title, data: sortedResults.map((res) => res.value) },
+    // ]);
+    // setLabels(sortedResults.map((res) => res.label));
+    // } catch (error) {
+    //   console.error("데이터 로드 실패", error);
+    // }
+    // }
     fetchData();
   }, [accessToken, dataType]);
 
