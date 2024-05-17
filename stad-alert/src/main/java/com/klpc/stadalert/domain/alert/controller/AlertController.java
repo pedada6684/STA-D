@@ -4,8 +4,6 @@ import com.klpc.stadalert.domain.alert.controller.event.AdvertsStartEvent;
 import com.klpc.stadalert.domain.alert.controller.event.ContentPlayEvent;
 import com.klpc.stadalert.domain.alert.controller.event.ContentStartEvent;
 import com.klpc.stadalert.domain.alert.controller.event.ContentStopEvent;
-import com.klpc.stadalert.global.response.ErrorCode;
-import com.klpc.stadalert.global.response.exception.CustomException;
 import com.klpc.stadalert.global.service.SseEmitters;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,12 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,9 +34,6 @@ public class AlertController {
 				event,
 				"Content Start"
 		);
-		if (emitter == null){
-			throw new CustomException(ErrorCode.EMIT_NOT_FOUND);
-		}
 	}
 
 	@KafkaListener(topics = "content-stop", groupId = "contents-group", containerFactory = "ContentStopEventKafkaListenerContainerFactory")
@@ -52,9 +44,6 @@ public class AlertController {
 				event,
 				"Content Stop"
 		);
-		if (emitter == null){
-			throw new CustomException(ErrorCode.EMIT_NOT_FOUND);
-		}
 	}
 
 	@KafkaListener(topics = "adverts-start", groupId = "adverts-group", containerFactory = "AdvertsStartEventKafkaListenerContainerFactory")
@@ -65,9 +54,6 @@ public class AlertController {
 				event,
 				"Adverts Start"
 		);
-		if (emitter == null){
-			throw new CustomException(ErrorCode.EMIT_NOT_FOUND);
-		}
 	}
 
 	@GetMapping("/play-content/{userId}/{detailId}")
