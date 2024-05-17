@@ -10,3 +10,4 @@ spring:
       - classpath:/db.yml
       - classpath:/msa.yml
       - classpath:/kafka.yml
+      - classpath:/jpa.yml
