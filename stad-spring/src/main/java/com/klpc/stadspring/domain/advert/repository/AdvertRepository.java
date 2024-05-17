@@ -36,6 +36,7 @@ public interface AdvertRepository extends JpaRepository<Advert,Long> {
     @Query("""
            SELECT a.id FROM Advert a
            WHERE a.advertType = 'NOTPRODUCT'
+           AND a.status = true
            ORDER BY FUNCTION('RAND')
            LIMIT 1
            """)

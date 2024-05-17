@@ -10,6 +10,7 @@ import { CarouselWatchedProps } from "./MainCarousel";
 import { GetRecentWatching } from "./CarouselApI";
 import Content from "../Container/Content";
 export default function RecentWatching() {
+  // TODO: 서윤
   // const userId = useSelector((state: RootState) => state.tvUser.userId);
   const userId = 1;
   const navigate = useNavigate();
