@@ -18,6 +18,7 @@ public class GetPopularContentResponseCommand {
     private String releaseYear;
     private String thumbnailUrl;
     private Long conceptId;
+    private Long detailId;
 
     public static GetPopularContentResponseCommand from(ContentDetail contentDetail, ContentConcept contentConcept) {
         return GetPopularContentResponseCommand.builder()
@@ -31,6 +32,7 @@ public class GetPopularContentResponseCommand {
                 .releaseYear(contentConcept.getReleaseYear())
                 .thumbnailUrl(contentConcept.getThumbnailUrl())
                 .conceptId(contentConcept.getId())
+                .detailId(contentDetail.getId())
                 .build();
     }
 }
