@@ -52,7 +52,12 @@ const tvUserSlice = createSlice({
           profiles: [action.payload.profile],
         });
       }
+      // 유저가 4명을 초과하면 가장 오래된 유저 삭제
+      if (state.users.length > 4) {
+        state.users.shift();
+      }
     },
+
     logoutUser: (state) => {
       state.isTvLoggedIn = false;
       state.users = [];
