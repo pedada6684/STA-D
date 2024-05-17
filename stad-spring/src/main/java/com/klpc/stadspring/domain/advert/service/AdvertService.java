@@ -21,6 +21,7 @@ import com.klpc.stadspring.domain.selectedContent.entity.SelectedContent;
 import com.klpc.stadspring.domain.selectedContent.repository.SelectedContentRepository;
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
+import com.klpc.stadspring.global.RedisService;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,7 @@ public class AdvertService {
     private final SelectedContentRepository selectedContentRepository;
     private final ContentConceptRepository contentConceptRepository;
     private final RestTemplate restTemplate;
+    private final RedisService redisService;
 
     @Value("${spring.stad-stats.url}")
     private String stadStatsUrl;
@@ -289,12 +291,7 @@ public class AdvertService {
      * @return
      */
     public GetAdvertListByClickResponse getAdvertListByClick(){
-        List<Advert> listOrderClick = new ArrayList<>();
-        try {
-            listOrderClick = advertVideoRepository.findAllOrderClick();
-        }catch (CustomException e){
-            throw new CustomException(ErrorCode.ORDERBYDESC_ERROR);
-        }
+        List<Advert> listOrderClick = redisService.findPopularAdvert(3);
 
         List<GetAdvertListByClickResponseCommand> responseList = new ArrayList<>();
         for(Advert advert : listOrderClick){
