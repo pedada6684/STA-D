@@ -156,13 +156,15 @@ export default function Merchandise() {
     const imgList = e.target.files;
     const dataList = await productDetailImgUpload(imgList);
     console.log("상품 상세 이미지:", dataList);
-    setDetailImages(dataList.data);
+    // setDetailImages(dataList.data);
+    setDetailImages(prevImages => [...prevImages, ...dataList.data]);
     setGoodsFormData((prevState) => ({
       ...prevState,
       imgs: dataList.data,
     }));
     console.log("이미지 리스트 추가", dataList);
-    setDetailImagePreviews(dataList.data);
+    // setDetailImagePreviews(dataList.data);
+    setDetailImagePreviews(prevImages => [...prevImages, ...dataList.data]);
     console.log(detailImagePreviews);
   };
 
@@ -281,6 +283,13 @@ export default function Merchandise() {
       imgs: filteredDetailImagePreviews,
     }));
   };
+
+  useEffect(() => {
+    setGoodsFormData((prevState) => ({
+      ...prevState,
+      imgs: detailImagePreviews
+    }));
+  }, [detailImagePreviews]);
 
   return (
     <div className={`${styles.container}`}>
