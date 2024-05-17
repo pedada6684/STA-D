@@ -48,6 +48,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
         .updateUserProfile(context, _nicknameController.text,
             _phoneController.text, imagePath);
 
+    print("이건 이미지야"+imagePath.toString());
+
     if (success) {
       showDialog(
         context: context,
@@ -134,7 +136,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
               decoration: InputDecoration(labelText: '이름'),
             ),
             TextFormField(
-              initialValue: user?.nickname,
+              controller: _nicknameController,
               readOnly: false,
               decoration: InputDecoration(labelText: '닉네임'),
             ),
@@ -143,7 +145,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
               decoration: InputDecoration(labelText: '전화번호'),
               keyboardType: TextInputType.number, // 키보드 타입을 숫자로 설정
               inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly // 숫자만 입력 허용
+                FilteringTextInputFormatter.digitsOnly, // 숫자만 입력 허용
+                LengthLimitingTextInputFormatter(10), // 글자수 제한
               ],
             ),
             // 기타 정보들을 읽기 전용 필드로 표시
