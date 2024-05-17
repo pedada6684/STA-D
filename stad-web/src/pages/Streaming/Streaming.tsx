@@ -31,6 +31,7 @@ export default function Streaming() {
   const { videoId } = useParams<{ videoId: string }>();
   const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.token.accessToken);
+  // TODO: 서윤
   // const userId = useSelector((state: RootState) => state.tvUser.userId);
   const userId = 1;
   const detailId = Number(videoId);

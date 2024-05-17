@@ -13,6 +13,7 @@ export interface AddButtonProps {
 
 const AddButton: React.FC<AddButtonProps> = ({ conceptId, onClick }) => {
   const token = useSelector((state: RootState) => state.token.accessToken);
+  // TODO: 서윤
   // const userId = useSelector((state: RootState) => state.tvUser.userId);
   const userId = 1;
 

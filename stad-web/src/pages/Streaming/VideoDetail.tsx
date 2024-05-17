@@ -33,9 +33,7 @@ export default function VideoDetail() {
   const [description, setDescription] = useState("");
   const [creator, setCreator] = useState("");
   const [cast, setCast] = useState("");
-  const [videoConceptData, setVideoConceptData] = useState<SeriesDetailProps[]>(
-    []
-  );
+  const [videoConceptData, setVideoConceptData] = useState<SeriesDetailProps[]>([]);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   // URL 에서 videoId 가져오기
@@ -44,15 +42,13 @@ export default function VideoDetail() {
   const conceptId = Number(videoId);
 
   const token = useSelector((state: RootState) => state.token.accessToken);
+  // TODO: 서윤
   // const userId = useSelector((state: RootState) => state.tvUser.userId);
   const userId = 1;
 
   //스크롤 위한 useRef
   const scrollRef = useRef<HTMLDivElement>(null);
-  const sectionRefs = [
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-  ];
+  const sectionRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
   const [currentSection, setCurrentSection] = useState(0);
   const fetchVideoDetail = async () => {
     try {
@@ -111,10 +107,7 @@ export default function VideoDetail() {
 
     const handleKeyDown = (event: unknown) => {
       const keyEvent = event as KeyboardEvent;
-      if (
-        keyEvent.key === "ArrowDown" &&
-        currentSection < sectionRefs.length - 1
-      ) {
+      if (keyEvent.key === "ArrowDown" && currentSection < sectionRefs.length - 1) {
         keyEvent.preventDefault();
         smoothScrollToSection(currentSection + 1);
       } else if (keyEvent.key === "ArrowUp" && currentSection > 0) {
@@ -127,10 +120,7 @@ export default function VideoDetail() {
     window.addEventListener("keydown", handleKeyDown as EventListener);
 
     return () => {
-      window.removeEventListener(
-        "wheel",
-        handleWheel as unknown as EventListener
-      );
+      window.removeEventListener("wheel", handleWheel as unknown as EventListener);
       window.removeEventListener("keydown", handleKeyDown as EventListener);
     };
   }, [currentSection]);
@@ -159,10 +149,7 @@ export default function VideoDetail() {
             <BillboardContainer>
               <div>
                 <div className={`${styles.imgWrapper}`}>
-                  <div
-                    style={backgroundStyle}
-                    className={`${styles.coverImage}`}
-                  >
+                  <div style={backgroundStyle} className={`${styles.coverImage}`}>
                     <img
                       src={thumbnailUrl}
                       alt={title}
@@ -188,15 +175,9 @@ export default function VideoDetail() {
                     <div className={`${styles.buttonWrapper}`}>
                       {isMovie && <PlayButton onClick={handlePlayClick} />}
                       {isBookmarked ? (
-                        <CheckButton
-                          conceptId={conceptId}
-                          onClick={() => setIsBookmarked(!isBookmarked)}
-                        />
+                        <CheckButton conceptId={conceptId} onClick={() => setIsBookmarked(!isBookmarked)} />
                       ) : (
-                        <AddButton
-                          conceptId={conceptId}
-                          onClick={() => setIsBookmarked(!isBookmarked)}
-                        />
+                        <AddButton conceptId={conceptId} onClick={() => setIsBookmarked(!isBookmarked)} />
                       )}
                     </div>
                     <div className={`${styles.description}`}>{description}</div>
@@ -213,23 +194,14 @@ export default function VideoDetail() {
               </div>
             </BillboardContainer>
             {!isMovie && videoConceptData && videoConceptData.length > 0 && (
-              <div
-                className={`${styles.episodeContainer}`}
-                ref={sectionRefs[1]}
-              >
+              <div className={`${styles.episodeContainer}`} ref={sectionRefs[1]}>
                 <div>
                   <h3 className={`${styles.epiTitle}`}>에피소드</h3>
                   <hr className={`${styles.epiTitle}`} />
                 </div>
-                {videoConceptData.map(
-                  (data: SeriesDetailProps, index: number) => (
-                    <VideoEpisode
-                      key={data.episode}
-                      {...data}
-                      thumbnailUrl={thumbnailUrl}
-                    />
-                  )
-                )}
+                {videoConceptData.map((data: SeriesDetailProps, index: number) => (
+                  <VideoEpisode key={data.episode} {...data} thumbnailUrl={thumbnailUrl} />
+                ))}
               </div>
             )}
           </Content>
