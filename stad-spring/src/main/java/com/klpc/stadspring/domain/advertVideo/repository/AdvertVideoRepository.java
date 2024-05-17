@@ -35,6 +35,7 @@ public interface AdvertVideoRepository extends JpaRepository<AdvertVideo, Long> 
 
     @Query("""
            SELECT adv FROM AdvertVideo adv
+           WHERE adv.advert.status = true
            ORDER BY FUNCTION('RAND')
            LIMIT 1
            """)
