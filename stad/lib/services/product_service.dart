@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:stad/constant/api.dart';
 import 'package:stad/models/product_model.dart';
 
 class ProductService {
