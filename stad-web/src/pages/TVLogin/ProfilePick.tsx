@@ -19,7 +19,7 @@ export default function ProfilePick() {
   const users = useSelector((state: RootState) => state.tvUser.users);
   console.log(users);
   const handleProfileClick = (userId: number, profile: Profile) => {
-    dispatch(tvUserActions.setSelectedProfile(profile)); // 선택된 프로필을 Redux에 저장
+    dispatch(tvUserActions.setSelectedProfile({ userId, profile })); // 선택된 프로필을 Redux에 저장
     navigate("/tv-main");
   };
   const handleAddUser = () => {
