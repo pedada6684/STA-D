@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { tvUserActions } from "../../store/tvUser";
 import plus from "../../assets/ph_plus.png";
+import { useEffect } from "react";
 
 interface Profile {
   userNickname: string;
@@ -16,8 +17,6 @@ interface Profile {
 export default function ProfilePick() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const users = useSelector((state: RootState) => state.tvUser.users);
-  console.log(users);
   const handleProfileClick = (userId: number, profile: Profile) => {
     dispatch(tvUserActions.setSelectedProfile({ userId, profile })); // 선택된 프로필을 Redux에 저장
     navigate("/tv-main");
@@ -25,6 +24,8 @@ export default function ProfilePick() {
   const handleAddUser = () => {
     navigate("/tv-login"); // QR 로그인 페이지로 이동하여 새로운 유저 등록
   };
+  const users = useSelector((state: RootState) => state.tvUser.users);
+  useEffect(() => {}, [users]);
   return (
     <div>
       <motion.div
