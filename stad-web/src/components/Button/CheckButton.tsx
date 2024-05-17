@@ -13,18 +13,23 @@ export interface CheckButtonProps {
 
 const CheckButton: React.FC<CheckButtonProps> = ({ conceptId, onClick }) => {
   const token = useSelector((state: RootState) => state.token.accessToken);
-  // TODO: 서윤
-  // const userId = useSelector((state: RootState) => state.tvUser.userId);
-  const userId = 1;
+  const userId = useSelector(
+    (state: RootState) => state.tvUser.selectedProfile?.userId
+  );
 
   const handleDeleteBookmark = (e: MouseEvent<HTMLButtonElement>) => {
-    deleteBookmark(token, userId, conceptId);
+    if (userId) {
+      deleteBookmark(token, userId, conceptId);
+    }
     if (onClick) onClick(); // onClick 함수가 존재하면 호출
   };
 
   return (
     <div className={`${styles.buttonWrapper}`}>
-      <button className={`${styles.checkButton}`} onClick={handleDeleteBookmark}>
+      <button
+        className={`${styles.checkButton}`}
+        onClick={handleDeleteBookmark}
+      >
         <img src={check} alt="찜한 콘텐츠" />
       </button>
       <p>찜한 콘텐츠</p>
