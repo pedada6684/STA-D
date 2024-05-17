@@ -59,8 +59,8 @@ export default function AdDetail() {
         description: ad.description,
         startDate: ad.startDate,
         endDate: ad.endDate,
-        advertCategory: ad.category,
-        advertType: ad.type,
+        advertCategory: ad.advertCategory,
+        advertType: ad.advertType,
         bannerImgUrl: ad.bannerImgUrl,
         directVideoUrl: ad.directVideoUrl,
         advertVideoUrlList: ad.advertVideoUrlList,
@@ -442,7 +442,7 @@ export default function AdDetail() {
               <InputContainer>
                 <div className={`${styles.selectBox}`}>
                   <SelectAdCategory
-                    initialCategory={ad?.category}
+                    initialCategory={ad?.advertCategory}
                     setCategory={setCategory}
                   />
                 </div>

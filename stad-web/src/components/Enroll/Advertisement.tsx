@@ -93,10 +93,12 @@ export default function Advertisement() {
     if (contentId) {
       setFormData((prevState) => ({
         ...prevState,
-        selectedContentList: [
-          ...(prevState?.selectedContentList ?? []),
-          ...contentId.map((option) => option.value),
-        ],
+        // selectedContentList: [
+        //   ...(prevState?.selectedContentList ?? []),
+        //   ...contentId.map((option) => option.value),
+        // ],
+        ...prevState,
+        selectedContentList: [...contentId.map((option) => option.value)],
       }));
     }
   }, [contentId]);
