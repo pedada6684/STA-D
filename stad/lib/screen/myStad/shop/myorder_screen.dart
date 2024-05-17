@@ -62,7 +62,6 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       color: mainWhite,
-      surfaceTintColor: mainWhite,
       margin: EdgeInsets.all(10),
       elevation: 0,
       child: Column(
@@ -82,12 +81,6 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
             itemBuilder: (context, index) {
               final product = order.productDetails[index];
               return ListTile(
-                // leading: Image.network(product.productImg,
-                //     width: 50, height: 50, fit: BoxFit.cover),
-                // title: Text(
-                //   product.productName,
-                //   style: TextStyle(fontWeight: FontWeight.bold),
-                // ),
                 subtitle: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Row(
@@ -97,8 +90,6 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                         children: [
                           Text('결제방법'),
                           _gap(),
-                          // Text('수량'),
-                          // _gap(),
                           Text('결제금액'),
                           _gap(),
                           Text('주문 상태')
@@ -112,8 +103,6 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                         children: [
                           Text('신용카드'),
                           _gap(),
-                          // Text('${product.productCnt}'),
-                          // _gap(),
                           Text('${product.productPrice} 원'),
                           _gap(),
                           order.orderStatus == 'ORDER'
