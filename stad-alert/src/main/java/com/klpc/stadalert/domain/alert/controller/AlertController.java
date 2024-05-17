@@ -26,7 +26,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/alert")
 public class AlertController {
 
 	final SseEmitters sseEmitters;
