@@ -31,9 +31,9 @@ export default function Streaming() {
   const { videoId } = useParams<{ videoId: string }>();
   const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.token.accessToken);
-  // TODO: 서윤
-  // const userId = useSelector((state: RootState) => state.tvUser.userId);
-  const userId = 1;
+  const userId = useSelector(
+    (state: RootState) => state.tvUser.selectedProfile?.userId
+  );
   const detailId = Number(videoId);
 
   useEffect(() => {
@@ -56,7 +56,12 @@ export default function Streaming() {
 
   const fetchInitialData = async () => {
     try {
-      await Promise.all([fetchConceptId(), fetchCheckWatched(), fetchAdvertList(), addWatchVideo()]);
+      await Promise.all([
+        fetchConceptId(),
+        fetchCheckWatched(),
+        fetchAdvertList(),
+        addWatchVideo(),
+      ]);
       setIsLoading(false); // 모든 비동기 작업 완료 후 로딩 상태 변경
     } catch (error) {
       console.error("Error fetching initial data:", error);
@@ -64,12 +69,13 @@ export default function Streaming() {
   };
 
   const fetchCheckWatched = async () => {
-    const response = await checkWatched(token, userId, detailId);
-    console.log("시청중인 영상일까요?", response.result);
-
-    if (response.result && videoRef.current) {
-      // ReactPlayer 참조를 사용하여 특정 시점부터 동영상을 재생
-      videoRef.current.seekTo(response.stopTime);
+    if (userId) {
+      const response = await checkWatched(token, userId, detailId);
+      console.log("시청중인 영상일까요?", response.result);
+      if (response.result && videoRef.current) {
+        // ReactPlayer 참조를 사용하여 특정 시점부터 동영상을 재생
+        videoRef.current.seekTo(response.stopTime);
+      }
     }
   };
 
@@ -83,11 +89,13 @@ export default function Streaming() {
   // 광고 URL 리스트를 가져와 상태에 저장
   const fetchAdvertList = async () => {
     try {
-      const response = await getAdvertUrlList(token, userId, detailId);
-      console.log("response : " + typeof response);
-      console.log("result: " + response.advertIdList);
-      setAdvertIds(response.advertIdList);
-      console.log("광고 URL 리스트 조회 완료");
+      if (userId) {
+        const response = await getAdvertUrlList(token, userId, detailId);
+        console.log("response : " + typeof response);
+        console.log("result: " + response.advertIdList);
+        setAdvertIds(response.advertIdList);
+        console.log("광고 URL 리스트 조회 완료");
+      }
     } catch (error) {
       console.error("광고 URL 리스트 조회 실패");
     }
@@ -96,8 +104,10 @@ export default function Streaming() {
   // 시청 영상을 추가
   const addWatchVideo = async () => {
     try {
-      await postWatchAdd(token, userId, detailId);
-      console.log("시청 영상 생성 완료");
+      if (userId) {
+        await postWatchAdd(token, userId, detailId);
+        console.log("시청 영상 생성 완료");
+      }
     } catch (error) {
       console.error("시청 영상 생성 실패");
     }
@@ -126,8 +136,10 @@ export default function Streaming() {
   const handlePause = () => {
     navigate(-1);
     try {
-      updateStopTime(token, userId, detailId, playedSeconds);
-      console.log("시청 종료 시점 저장 완료");
+      if (userId) {
+        updateStopTime(token, userId, detailId, playedSeconds);
+        console.log("시청 종료 시점 저장 완료");
+      }
     } catch (error) {
       console.error("시청 종료 시점 저장 실패", error);
     }
@@ -136,8 +148,10 @@ export default function Streaming() {
   const handleContentEnded = () => {
     navigate(-1);
     try {
-      putWatched(token, userId, detailId);
-      console.log("시청 완료 영상 저장 완료");
+      if (userId) {
+        putWatched(token, userId, detailId);
+        console.log("시청 완료 영상 저장 완료");
+      }
     } catch (error) {
       console.error("시청 완료 영상 저장 실패", error);
     }
@@ -208,7 +222,9 @@ export default function Streaming() {
             height="100vh"
             onEnded={handleAdvertEnded} // 동영상이 끝났을 때 handleAdvertEnded 함수 호출
           />
-          <div className={styles.timer}>{timer - 1}초 뒤에 콘텐츠가 재생됩니다.</div>
+          <div className={styles.timer}>
+            {timer - 1}초 뒤에 콘텐츠가 재생됩니다.
+          </div>
           <button className={styles.skip} onClick={() => setIsModalOpen(false)}>
             skip
           </button>
