@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin-top: 2rem;
+  margin: 2rem 4rem 0 4rem;
 }
 
 .input {
@@ -130,7 +130,8 @@
 }
 
 .afterUpload {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .letter {
@@ -257,12 +258,12 @@
 .optionWrapper {
   display: flex;
   flex-wrap: wrap;
+  margin-left: 1rem;
+  margin-bottom: 1rem;
 }
 
-.optionContainer > div {
-  flex: 1;
-}
 .optionContainer {
+  display: grid;
   margin-left: 1rem;
 }
 .detailO {

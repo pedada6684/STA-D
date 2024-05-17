@@ -48,7 +48,6 @@ export default function Advertisement() {
   const handleToggle = (toggleKey: string) => {
     dispatch(toggleActions.toggle(toggleKey));
   };
-
   const isAdNameExpanded = useSelector(
     (state: RootState) => state.toggle.isAdNameExpanded
   );
@@ -115,6 +114,17 @@ export default function Advertisement() {
 
   const handleAdvertVideoList = async (e: ChangeEvent<HTMLInputElement>) => {
     const videoList = e.target.files;
+    const maxSize = 100 * 1024 * 1024; //100MB
+    if (videoList) {
+      const oversizedFiles = Array.from(videoList).filter(
+        (file) => file.size > maxSize
+      );
+
+      if (oversizedFiles.length > 0) {
+        alert("100MB 미만의 영상만 업로드 가능합니다.");
+        return;
+      }
+    }
     const responseData = await advertVideoUpload(videoList);
     const videoUrls = responseData.map((video: any) => video.videoUrl);
     setFormData((prevState) => ({
@@ -264,10 +274,7 @@ export default function Advertisement() {
               <div className={`${styles.caution}`}>
                 * 가이드에 맞지않은 영상 등록 시 별도 고지없이 제재 될 수
                 있습니다.
-              </div>
-              <div className={`${styles.caution2}`}>
-                TV 광고 영상은 15초, 30초, 45초, 60초 옵션으로 등록할 수 있으며,
-                각각 다른 길이를 가진 광고 영상 여러개를 업로드할 수 있습니다.
+                <p />* 100MB 미만의 영상만 업로드 가능합니다.
               </div>
             </div>
           </div>
@@ -403,12 +410,22 @@ export default function Advertisement() {
         </InputContainer>
       </div>
       <div className={`${styles.buttonContainer}`}>
-        <GoEnrollButton to="/ad-enroll/merchandise" formData={formData}>
-          상품 등록하러가기
-        </GoEnrollButton>
-        <GoEnrollButton to="/ad-enroll/digital" formData={formData}>
-          직접 광고 등록하러가기
-        </GoEnrollButton>
+        <div className={`${styles.enrollButtonContainer}`}>
+          <div className={`${styles.tooltip} ${styles.adTool}`}>
+            STAD에서 바로 판매할 상품을 등록할 수 있어요.
+          </div>
+          <GoEnrollButton to="/ad-enroll/merchandise" formData={formData}>
+            상품 등록
+          </GoEnrollButton>
+        </div>
+        <div className={`${styles.directAdButtonContainer}`}>
+          <div className={`${styles.tooltip} ${styles.merTool}`}>
+            광고 클릭시 이동되는 URL을 등록할 수 있어요.
+          </div>
+          <GoEnrollButton to="/ad-enroll/digital" formData={formData}>
+            외부 URL 등록
+          </GoEnrollButton>
+        </div>
       </div>
     </div>
   );

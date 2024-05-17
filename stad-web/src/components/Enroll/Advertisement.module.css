@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin-top: 2rem;
+  margin: 2rem 4rem 0 4rem;
 }
 .item {
   border: 1px solid #565656;
@@ -236,8 +236,38 @@
 
 .buttonContainer {
   display: flex;
-  justify-content: space-around;
-  margin: 5rem;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative; /* 툴팁을 위한 상대 위치 */
+}
+.buttonContainer div {
+  display: flex;
+  margin-bottom: 1rem;
+  justify-content: flex-end;
+  position: relative; /* 툴팁을 위한 상대 위치 */
+}
+
+.tooltip {
+  position: absolute;
+  right: 0;
+  color: #00127a;
+  padding: 0.8rem;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap; /* 문구가 길 경우 한 줄로 표시 */
+}
+
+.enrollButtonContainer:hover .adTool {
+  visibility: visible;
+  opacity: 1;
+}
+
+.directAdButtonContainer:hover .merTool {
+  visibility: visible;
+  opacity: 1;
 }
 .bond {
   display: flex;
