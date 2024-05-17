@@ -104,17 +104,27 @@ class UserService {
 
     Map<String, dynamic> updateData = {
       "userId": userProvider.userId,
+      "name":currentUser.name,
       "nickname": finalNickname,
       "phone": finalPhone,
+      "company":null,
+      "comNo":null,
+      "department":null,
+      "password":null,
     };
 
+    FormData formData = FormData.fromMap(updateData);
+
     if (profileImagePath != null && profileImagePath.isNotEmpty) {
-      updateData['profile'] = await MultipartFile.fromFile(
-          profileImagePath,
-          filename: "profile_pic.png");
+      formData.files.add(
+        MapEntry(
+            "profile",
+            await MultipartFile.fromFile(profileImagePath, filename: "profile_pic.png")
+        ),
+      );
     }
 
-    FormData formData = FormData.fromMap(updateData);
+    print(formData);
 
     //TODO 수정합시다 잘 안되요ㅗㅇ
     try {

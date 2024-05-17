@@ -85,7 +85,9 @@ public class UserService {
         ){
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
         }
-        updateProfileImg(command.convertToUPICommand());
+        if(command.getProfile() != null && !command.getProfile().isEmpty()) {
+            updateProfileImg(command.convertToUPICommand());
+        }
         user.update(command);
         return user;
     }
