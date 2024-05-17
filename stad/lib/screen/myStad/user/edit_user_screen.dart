@@ -48,6 +48,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
         .updateUserProfile(context, _nicknameController.text,
             _phoneController.text, imagePath);
 
+    print("이건 이미지야"+imagePath.toString());
+
     if (success) {
       showDialog(
         context: context,
