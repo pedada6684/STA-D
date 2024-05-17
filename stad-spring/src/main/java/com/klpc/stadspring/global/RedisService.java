@@ -1,10 +1,13 @@
 package com.klpc.stadspring.global;
 
+import com.klpc.stadspring.domain.advert.entity.Advert;
+import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.ListOperations;
@@ -21,10 +24,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class RedisService {
 
     @Autowired
     private ContentDetailRepository contentDetailRepository;
+    @Autowired
+    private AdvertRepository advertRepository;
     @Autowired
     @Qualifier("redisTemplateForAdQueue")
     private RedisTemplate<String, Long> redisTemplateForAdQueue;
@@ -42,6 +48,7 @@ public class RedisService {
     private final String AD_QUEUE_KEY = "adQueue";
     private final String NOW_CONTENT_KEY = "nowContent";
     private final String CONTENTS_ZSET_KEY_PREFIX = "contentDetail:playCount:";
+    private final String ADVERT_ZSET_KEY_PREFIX = "advert:clickCount:";
 
 
     public void createUserAdQueue(Long userId, List<Long> advertIdListByUser){
@@ -72,10 +79,25 @@ public class RedisService {
         int currentMinute = LocalTime.now().getHour() * 60 + LocalTime.now().getMinute();
         int totalQuarters = 96; // 하루를 96개의 쿼터로 표현
         int currentQuarter = currentMinute / (24 * 60 / totalQuarters); // 현재 시간에 해당하는 쿼터 계산
-
+        Set<String> hotchart = zSetOperations.reverseRange(CONTENTS_ZSET_KEY_PREFIX + currentQuarter, 0, limit - 1);
+        for (String hot : hotchart) {
+            log.info("findPopularContents: "+ hot);
+        }
         Set<String> contentIds = zSetOperations.reverseRange(CONTENTS_ZSET_KEY_PREFIX+currentQuarter, 0, limit - 1);
         return contentIds.stream()
                 .map(contentId -> contentDetailRepository.findById(Long.parseLong(contentId))
+                        .orElseThrow(()-> new CustomException(ErrorCode.ENTITIY_NOT_FOUND))
+                ).filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    public List<Advert> findPopularAdvert(int limit) {
+        int currentMinute = LocalTime.now().getHour() * 60 + LocalTime.now().getMinute();
+        int totalQuarters = 96; // 하루를 96개의 쿼터로 표현
+        int currentQuarter = currentMinute / (24 * 60 / totalQuarters); // 현재 시간에 해당하는 쿼터 계산
+        Set<String> advertIds = zSetOperations.reverseRange(ADVERT_ZSET_KEY_PREFIX+currentQuarter, 0, limit - 1);
+        return advertIds.stream()
+                .map(advertId -> advertRepository.findById(Long.parseLong(advertId))
                         .orElseThrow(()-> new CustomException(ErrorCode.ENTITIY_NOT_FOUND))
                 ).filter(Objects::nonNull)
                 .collect(Collectors.toList());
