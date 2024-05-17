@@ -259,27 +259,51 @@ public class AdvertVideoService {
 
         List<Long> finalList = new ArrayList<>();
 
-        List<Long> videoIdListByUser = redisService.popUserAdQueue(userId);
-        for (Long tmp : videoIdListByUser) {
-            finalList.add(tmp);
+        Long advertId;
+        AdvertVideo video;
+
+        // 콘텐츠 맞춤 광고
+        Long tmp;
+        if (detailId < 247) {
+            tmp = detailId % 5;
+        } else if (detailId > 256) {
+            tmp = (detailId - 256) % 5;
+        } else {
+            tmp = 0L;
         }
 
-        // 유저 맞춤 광고 큐에서 2개 추출하지 못한 경우 랜덤으로 추출
-        while (finalList.size() < 2) {
-            AdvertVideo video = advertVideoRepository.findRandomTop();
-            finalList.add(video.getId());
+        if (tmp == 1L) {
+            advertId = 7L;
+        } else if (tmp == 2L) {
+            advertId = 5L;
+        } else if (tmp == 3L) {
+            advertId = 9L;
+        } else if (tmp == 4L) {
+            advertId = 2L;
+        } else {
+            advertId = 12L;
         }
 
-        // 랜덤 기업 광고 1개 추출
-        Long advertId = advertRepository.findRandomNotProductAdvertId();
-        AdvertVideo video = advertVideoRepository.findTopByAdvert_Id(advertId);
+        video = advertVideoRepository.findTopByAdvert_Id(advertId);
         if (video != null) {
             finalList.add(video.getId());
         }
 
-        // 고정 광고 전에 광고큐 사이즈는 3
-        while (finalList.size() < 3) {
+        List<Long> videoIdListByUser = redisService.popUserAdQueue(userId);
+        for (Long aLong : videoIdListByUser) {
+            finalList.add(aLong);
+        }
+
+        // 유저 맞춤 광고 큐에서 2개 추출하지 못한 경우 랜덤으로 추출
+        while (finalList.size() < 2) {
             video = advertVideoRepository.findRandomTop();
+            finalList.add(video.getId());
+        }
+
+        // 랜덤 기업 광고 1개 추출
+        advertId = advertRepository.findRandomNotProductAdvertId();
+        video = advertVideoRepository.findTopByAdvert_Id(advertId);
+        if (video != null) {
             finalList.add(video.getId());
         }
 
@@ -289,25 +313,6 @@ public class AdvertVideoService {
 //        if (video != null) {
 //            finalList.add(video.getId());
 //        }
-        if (detailId < 247) {
-            advertId = detailId % 5;
-            video = advertVideoRepository.findTopByAdvert_Id(advertId);
-            if (video != null) {
-                finalList.add(video.getId());
-            }
-        } else if (detailId > 256) {
-            advertId = (detailId - 256) % 5;
-            video = advertVideoRepository.findTopByAdvert_Id(advertId);
-            if (video != null) {
-                finalList.add(video.getId());
-            }
-        } else {
-            advertId = 5L;
-            video = advertVideoRepository.findTopByAdvert_Id(advertId);
-            if (video != null) {
-                finalList.add(video.getId());
-            }
-        }
 
         // 최종 큐에 광고가 4개가 들어가야 함
         while (finalList.size() < 4) {
