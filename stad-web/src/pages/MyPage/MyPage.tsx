@@ -33,8 +33,6 @@ export default function MyPage() {
         return <EnrolledAdList />;
       case "enroll-list":
         return <EnrolledGoodsList />;
-      case "review":
-        return <Review />;
     }
   }
   return (

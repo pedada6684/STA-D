@@ -25,16 +25,6 @@ export default function DropDownMenu({ activeTab, onClickTab }: SideBarProps) {
         >
           등록 상품 목록 조회
         </li>
-        <li
-          className={
-            activeTab === "review"
-              ? `${styles.tabButton} ${styles.tabButtonActive}`
-              : styles.tabButton
-          }
-          onClick={onClickTab("review")}
-        >
-          리뷰 관리
-        </li>
       </ul>
     </>
   );
