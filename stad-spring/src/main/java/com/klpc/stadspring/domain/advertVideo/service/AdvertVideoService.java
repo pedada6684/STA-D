@@ -254,8 +254,8 @@ public class AdvertVideoService {
      * @param conceptId
      * @return
      */
-    public GetFinalAdvertVideoListResponse getFinalAdvertVideoList(Long userId, Long conceptId) {
-        log.info("콘텐츠 시청할 때 만들 최종 광고 리스트 조회 서비스" +"\n" + "userId : " + userId + "\n" + "contentId : " + conceptId);
+    public GetFinalAdvertVideoListResponse getFinalAdvertVideoList(Long userId, Long conceptId, Long detailId) {
+        log.info("콘텐츠 시청할 때 만들 최종 광고 리스트 조회 서비스" +"\n" + "userId : " + userId + "\n" + "contentId : " + conceptId + "\n" + "detailId : " + detailId);
 
         List<Long> finalList = new ArrayList<>();
 
@@ -277,11 +277,36 @@ public class AdvertVideoService {
             finalList.add(video.getId());
         }
 
-        // 콘텐츠 고정 광고 1개 추출
-        advertId = selectedContentRepository.findRandomTopByConceptId(conceptId);
-        video = advertVideoRepository.findTopByAdvert_Id(advertId);
-        if (video != null) {
+        // 고정 광고 전에 광고큐 사이즈는 3
+        while (finalList.size() < 3) {
+            video = advertVideoRepository.findRandomTop();
             finalList.add(video.getId());
+        }
+
+        // 콘텐츠 고정 광고 1개 추출
+//        advertId = selectedContentRepository.findRandomTopByConceptId(conceptId);
+//        video = advertVideoRepository.findTopByAdvert_Id(advertId);
+//        if (video != null) {
+//            finalList.add(video.getId());
+//        }
+        if (detailId < 247) {
+            advertId = detailId % 5;
+            video = advertVideoRepository.findTopByAdvert_Id(advertId);
+            if (video != null) {
+                finalList.add(video.getId());
+            }
+        } else if (detailId > 256) {
+            advertId = (detailId - 256) % 5;
+            video = advertVideoRepository.findTopByAdvert_Id(advertId);
+            if (video != null) {
+                finalList.add(video.getId());
+            }
+        } else {
+            advertId = 5L;
+            video = advertVideoRepository.findTopByAdvert_Id(advertId);
+            if (video != null) {
+                finalList.add(video.getId());
+            }
         }
 
         // 최종 큐에 광고가 4개가 들어가야 함
