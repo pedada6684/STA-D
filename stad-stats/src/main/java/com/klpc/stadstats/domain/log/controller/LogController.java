@@ -8,6 +8,7 @@ import com.klpc.stadstats.domain.log.controller.response.GetAdvertIdListResponse
 import com.klpc.stadstats.domain.log.controller.response.GetDailyCountResponse;
 import com.klpc.stadstats.domain.log.controller.response.GetTotalLogResponse;
 import com.klpc.stadstats.domain.log.service.LogService;
+import com.klpc.stadstats.global.RedisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +24,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/log")
 public class LogController {
     private final LogService logService;
+    private final RedisService redisService;
 
     @PostMapping(value = "/click")
     @Operation(summary = "광고 클릭 로그 추가", description = "광고 클릭 로그 추가")
     public ResponseEntity<?> AddAdvertClickLog(@RequestBody AddAdvertClickLogRequest request) {
         log.info("AddAdvertClickLogRequest: " + request);
         logService.addAdvertClickLog(request.toCommand());
+        redisService.increaseAdvertClickCount(request.getAdvertId());
         return ResponseEntity.ok().build();
     }
     @KafkaListener(topics = "advert-watch-log", groupId = "log-group", containerFactory = "addAdvertVideoLogEventConcurrentKafkaListenerContainerFactory")
