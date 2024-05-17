@@ -10,15 +10,22 @@ import { CarouselWatchedProps } from "./MainCarousel";
 import { GetRecentWatching } from "./CarouselApI";
 import Content from "../Container/Content";
 export default function RecentWatching() {
-  // TODO: 서윤
-  // const userId = useSelector((state: RootState) => state.tvUser.userId);
-  const userId = 1;
+  const userId = useSelector(
+    (state: RootState) => state.tvUser.selectedProfile?.userId
+  );
+
   const navigate = useNavigate();
   const {
     data: WatchingData,
     isLoading,
     error,
-  } = useQuery<CarouselWatchedProps[]>("watching", () => GetRecentWatching(userId));
+  } = useQuery<CarouselWatchedProps[]>(
+    "watching",
+    () => GetRecentWatching(userId!), // userId가 undefined가 아님을 보장
+    {
+      enabled: !!userId,
+    }
+  );
   if (isLoading)
     return (
       <div>
