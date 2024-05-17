@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:eventflux/eventflux.dart';
 import 'package:eventflux/models/reconnect.dart';
 import 'package:stad/providers/contents_provider.dart';
+import 'package:stad/services/advert_service.dart';
 import 'package:stad/services/contents_service.dart';
 
 class AlertService {
@@ -12,13 +14,13 @@ class AlertService {
   final String url = 'https://www.mystad.com/alert/connect';
 
   final StreamController<Map<String, dynamic>> _sseController =
-      StreamController.broadcast();
+  StreamController.broadcast();
 
   Stream<Map<String, dynamic>> get sseStream => _sseController.stream;
 
   void connectToSSE(String userId, ContentProvider contentProvider) {
-    String fullUrl = '$url/app/1';
     // String fullUrl = '$url/app/$userId';
+    String fullUrl = '$url/app/1';
 
     EventFlux.instance.connect(
       EventFluxConnectionType.get,
@@ -27,10 +29,11 @@ class AlertService {
         if (response != null && response.status == EventFluxStatus.connected) {
           _streamSubscription?.cancel();
           _streamSubscription = response.stream?.listen(
-            (event) async {
+                (event) async {
               if (_isJson(event.data)) {
                 var eventData = jsonDecode(event.data);
                 print('eventData : ${eventData}');
+                print('event.event : ${event.event}');
                 if (event.event == 'Content Start' &&
                     eventData is Map<String, dynamic>) {
                   int contentId = _parseContentId(eventData['contentId']);
@@ -39,9 +42,17 @@ class AlertService {
                   }
                 } else if (event.event == 'Content Stop') {
                   contentProvider.fetchPopularContent();
+                } else if (event.event == 'Adverts Start' &&
+                    eventData is Map<String, dynamic>) {
+                  List<int> advertIds =
+                  List<int>.from(eventData['advertIdList']);
+                  AdService adService = AdService();
+                  var adverts = await adService.getAdsInfo(advertIds);
+                  // adverts -> contentProvider 전달하여 화면에 반영
+                  contentProvider.setAdverts(adverts.cast<Map<String, dynamic>>());
                 }
               } else {
-                contentProvider.fetchPopularContent();
+                // contentProvider.fetchPopularContent();
                 print('Non-JSON event data: ${event.data}');
               }
             },

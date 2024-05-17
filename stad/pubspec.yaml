@@ -64,6 +64,7 @@ dependencies:
   iamport_flutter: ^0.10.18
   onboarding_animation: ^0.0.3
   confetti: ^0.7.0
+  webview_flutter: ^2.8.0
 
 dev_dependencies:
   flutter_test:

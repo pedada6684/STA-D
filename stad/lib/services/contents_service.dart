@@ -51,12 +51,12 @@ class ContentsService {
     }
   }
 
-  // 처음 HomeScreen 들어올 때
+  // 처음 HomeScreen 들어올 때, 내가 보고 있는 콘텐츠
   Future getCurrViewContent(int userId) async {
     try {
       final response = await dio.get('$svApi/contents-watch/now',
           // queryParameters: {'userId': userId});
-          queryParameters: {'userId': 1});
+          queryParameters: {'userId': userId});
       print('getCurrViewContent : ${response.data}');
       if (response.statusCode == 200 && response.data != null) {
         return response.data['contentDetailId'];
@@ -65,8 +65,8 @@ class ContentsService {
       } else {
         throw Exception('Failed to get current content');
       }
-    } catch (e) {
-      print('Error getting current view content: $e');
+    } on DioError catch (e) {
+      print('Error getting current view content: ${e.response!.data}');
       throw Exception('Error occurred while getting current view content');
     }
   }
