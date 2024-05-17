@@ -3,6 +3,8 @@ import ReactPlayer from "react-player";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import play from "../../assets/mdi_play.png";
+
 import Loading from "../../components/Loading";
 import styles from "./Streaming.module.css";
 import backIcon from "../../assets/material-symbols_arrow-back.png";
@@ -31,9 +33,7 @@ export default function Streaming() {
   const { videoId } = useParams<{ videoId: string }>();
   const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.token.accessToken);
-  const userId = useSelector(
-    (state: RootState) => state.tvUser.selectedProfile?.userId
-  );
+  const userId = useSelector((state: RootState) => state.tvUser.selectedProfile?.userId);
   const detailId = Number(videoId);
 
   useEffect(() => {
@@ -56,12 +56,7 @@ export default function Streaming() {
 
   const fetchInitialData = async () => {
     try {
-      await Promise.all([
-        fetchConceptId(),
-        fetchCheckWatched(),
-        fetchAdvertList(),
-        addWatchVideo(),
-      ]);
+      await Promise.all([fetchConceptId(), fetchCheckWatched(), fetchAdvertList(), addWatchVideo()]);
       setIsLoading(false); // 모든 비동기 작업 완료 후 로딩 상태 변경
     } catch (error) {
       console.error("Error fetching initial data:", error);
@@ -214,6 +209,13 @@ export default function Streaming() {
       {/* ReactPlayer에서 현재 동영상 URL로 재생 */}
       {isModalOpen && (
         <div className={styles.modal}>
+          {!isPlaying && (
+            <div className={`${styles.centerControls}`}>
+              <button>
+                <img src={play} alt={"play"} className={`${styles.play}`} />
+              </button>
+            </div>
+          )}
           <ReactPlayer
             className={styles.modalContent}
             url={currentVideoUrl}
@@ -222,9 +224,7 @@ export default function Streaming() {
             height="100vh"
             onEnded={handleAdvertEnded} // 동영상이 끝났을 때 handleAdvertEnded 함수 호출
           />
-          <div className={styles.timer}>
-            {timer - 1}초 뒤에 콘텐츠가 재생됩니다.
-          </div>
+          <div className={styles.timer}>{timer - 1}초 뒤에 콘텐츠가 재생됩니다.</div>
           <button className={styles.skip} onClick={() => setIsModalOpen(false)}>
             skip
           </button>
