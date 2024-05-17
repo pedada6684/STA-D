@@ -64,60 +64,18 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
       color: mainWhite,
       margin: EdgeInsets.all(10),
       elevation: 0,
-      child: Column(
-        children: [
-          ListTile(
-            title: Text('${order.orderDate}',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-          ),
-          Divider(
-            height: 1,
-            color: mainGray,
-          ),
-          ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: order.productDetails.length,
-            itemBuilder: (context, index) {
-              final product = order.productDetails[index];
-              return ListTile(
-                subtitle: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('결제방법'),
-                          _gap(),
-                          Text('결제금액'),
-                          _gap(),
-                          Text('주문 상태')
-                        ],
-                      ),
-                      SizedBox(
-                        width: 40.0,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('신용카드'),
-                          _gap(),
-                          Text('${product.productPrice} 원'),
-                          _gap(),
-                          order.orderStatus == 'ORDER'
-                              ? Text('주문완료')
-                              : Text('취소완료'),
-                          _gap(),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              );
+      child: ListTile(
+        title: Text('${order.orderDate}',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        onTap: () {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              return OrderReceiptModal(order: order);
             },
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -130,6 +88,89 @@ class _gap extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SizedBox(
       height: 4.0,
+    );
+  }
+}
+
+class OrderReceiptModal extends StatelessWidget {
+  final OrderDetails order;
+
+  const OrderReceiptModal({required this.order});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Text(
+              'e-Receipt / History',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Center(
+            child: Text(
+              'STARBUCKS',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Center(
+            child: Text(
+              '사이렌오더',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Divider(),
+          Text('구역삼사거리점'),
+          Text('서울 강남구 논현로 401'),
+          Text('대표: 송데이비드호섭'),
+          Text('[매장#9447, POS 01]'),
+          Divider(),
+          Center(
+            child: Text(
+              '(A-${order.orderId})',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Divider(),
+          ...order.productDetails.map((product) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('T) ${product.productName} ${product.productPrice}원'),
+                Text(
+                    'L-${product.optionName ?? ''} ${product.optionValue ?? ''}'),
+                Divider(),
+              ],
+            );
+          }).toList(),
+          Text('결제금액 (부가세포함)'),
+          Text(
+              '${order.productDetails.fold(0, (sum, item) => sum + item.productPrice)}원'),
+          Divider(),
+          Text('결제 주문번호'),
+          Text('${order.orderId}'),
+          Divider(),
+          Text('신용카드'),
+          Divider(),
+          Center(
+            child: Text(
+              '결제수단 변경은 구입하신 매장에서 가능하며, 반드시 구매 영수증과 원거래 결제수단을 지참하셔야 합니다.',
+              style: TextStyle(fontSize: 12),
+            ),
+          ),
+          Center(
+            child: Text(
+              '(변경 가능 기간: ${order.orderDate})',
+              style: TextStyle(fontSize: 12),
+            ),
+          ),
+          SizedBox(height: 20),
+        ],
+      ),
     );
   }
 }

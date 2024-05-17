@@ -38,7 +38,6 @@ class CartItem {
       'thumbnail': thumbnail,
       'title': title,
       'price': price,
-      'quantity': quantity,
     };
   }
 

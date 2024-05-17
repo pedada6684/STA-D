@@ -7,7 +7,7 @@ import 'package:stad/constant/colors.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/myStad/qr_screen.dart';
 import 'package:stad/screen/myStad/shop/myaddress_screen.dart';
-import 'package:stad/screen/myStad/shop/myorder_scren.dart';
+import 'package:stad/screen/myStad/shop/myorder_screen.dart';
 import 'package:stad/screen/myStad/shop/myreview_screen.dart';
 import 'package:stad/screen/myStad/stad/mycommercial_screen.dart';
 import 'package:stad/screen/myStad/user/edit_user_screen.dart';
