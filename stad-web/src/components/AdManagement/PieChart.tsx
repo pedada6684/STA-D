@@ -7,6 +7,7 @@ import { adList } from "../Select/SelectAdListBox";
 import ReactApexChart from "react-apexcharts";
 import styles from "./ChartData.module.css";
 import Loading from "../Loading";
+import { useQuery } from "react-query";
 export interface TotalResponse {
   totalAdvertVideo: number;
   totalAdvertClick: number;
@@ -27,9 +28,23 @@ export default function PieChart({ title, dataType }: PieChartProps) {
   const [series, setSeries] = useState<number[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const { data: ads, isLoading } = useQuery(
+    ["adsListData", userId, accessToken],
+    () => getAdList(userId, accessToken),
+    {
+      enabled: !!userId,
+    }
+  );
+  const exampleAd: adList = {
+    advertId: 1,
+    title: "예시데이터",
+  };
   useEffect(() => {
     async function fetchData() {
       try {
+        if (ads && ads.data) {
+          const combinedAds = [exampleAd, ...ads.data];
+        }
         setLoading(true);
         const adListData = await getAdList(userId, accessToken); // 유저 광고 리스트 조회
         console.log("광고 리스트 조회 성공 파이", adListData);
