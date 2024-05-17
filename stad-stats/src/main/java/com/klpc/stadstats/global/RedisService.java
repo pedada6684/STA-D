@@ -20,7 +20,7 @@ public class RedisService {
     @Resource(name = "redisTemplateDefault")
     private ZSetOperations<String, String> zSetOperations;
 
-    private final String CONTENTS_ZSET_KEY_PREFIX = "contentDetail:playCount:";
+    private final String ADVERT_ZSET_KEY_PREFIX = "advert:clickCount:";
 
     public void increaseAdvertClickCount(Long advertId) {
         int currentMinute = LocalTime.now().getHour() * 60 + LocalTime.now().getMinute();
@@ -29,8 +29,8 @@ public class RedisService {
 
         for (int i = 0; i < 3 * 4; i++) {
             int quarter = (currentQuarter + i) % totalQuarters;
-            zSetOperations.incrementScore(CONTENTS_ZSET_KEY_PREFIX+quarter, advertId.toString(), 12-i);
-            redisTemplateDefault.expire(CONTENTS_ZSET_KEY_PREFIX+quarter, 6, TimeUnit.HOURS);
+            zSetOperations.incrementScore(ADVERT_ZSET_KEY_PREFIX +quarter, advertId.toString(), 12-i);
+            redisTemplateDefault.expire(ADVERT_ZSET_KEY_PREFIX +quarter, 6, TimeUnit.HOURS);
         }
     }
 }
