@@ -65,9 +65,9 @@ class ProductDetails {
   final int productCnt;
   final int productPrice;
   final String productImg;
-  final int optionId;
-  final String optionName;
-  final int optionValue;
+  final int? optionId;
+  final String? optionName;
+  final int? optionValue;
 
   ProductDetails({
     required this.productTypeId,
@@ -75,9 +75,9 @@ class ProductDetails {
     required this.productCnt,
     required this.productPrice,
     required this.productImg,
-    required this.optionId,
-    required this.optionName,
-    required this.optionValue,
+    this.optionId,
+    this.optionName,
+    this.optionValue,
   });
 
   factory ProductDetails.fromJson(Map<String, dynamic> json) {
@@ -87,9 +87,9 @@ class ProductDetails {
       productCnt: json['productCnt'] as int,
       productPrice: (json['productPrice'] as int),
       productImg: json['productImg'] as String,
-      optionId: json['optionId'] as int,
-      optionName: json['optionName'] as String,
-      optionValue: json['optionValue'] as int,
+      optionId: json['optionId'] as int?,
+      optionName: json['optionName'] as String?,
+      optionValue: json['optionValue'] as int?,
     );
   }
 }
