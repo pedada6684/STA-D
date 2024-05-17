@@ -10,10 +10,14 @@ interface User {
   profiles: Profile[];
 }
 
+interface SelectedProfile extends Profile {
+  userId: number;
+}
+
 interface tvUserType {
   isTvLoggedIn: boolean;
   users: User[]; // 여러 유저 관리
-  selectedProfile?: Profile; // 선택한 프로필 저장
+  selectedProfile?: SelectedProfile; // 선택한 프로필 저장
 }
 
 const initialState: tvUserType = {
@@ -53,21 +57,15 @@ const tvUserSlice = createSlice({
       state.isTvLoggedIn = false;
       state.users = [];
     },
-    // addProfile: (
-    //   state,
-    //   action: PayloadAction<{ userId: number; profile: Profile }>
-    // ) => {
-    //   const user = state.users.find(
-    //     (user) => user.userId === action.payload.userId
-    //   );
-    //   if (user) {
-    //     // 특정 유저의 프로필 목록에 새로운 프로필 추가
-    //     user.profiles.push(action.payload.profile);
-    //   }
-    // },
     // 로그인 후 프로필 저장하기 위한 프로필 저장 슬라이스
-    setSelectedProfile: (state, action: PayloadAction<Profile>) => {
-      state.selectedProfile = action.payload; // 선택된 프로필 설정
+    setSelectedProfile: (
+      state,
+      action: PayloadAction<{ userId: number; profile: Profile }>
+    ) => {
+      state.selectedProfile = {
+        ...action.payload.profile,
+        userId: action.payload.userId,
+      }; // 선택된 프로필 설정
     },
   },
 });

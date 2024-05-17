@@ -7,14 +7,15 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 export default function TVLanding() {
   const navigate = useNavigate();
-  const isLogin = useSelector((state: RootState) => state.tvUser.isTvLoggedIn);
+  const isUser = useSelector((state: RootState) => state.tvUser.users);
+  console.log(isUser);
   useEffect(() => {
-    if (isLogin) {
-      navigate("/tv-login");
-    } else {
+    if (isUser.length > 0) {
       navigate("/tv-profile");
+    } else {
+      navigate("/tv-login");
     }
-  }, [isLogin, navigate]);
+  }, [isUser, navigate]);
   return (
     <div>
       <TVContainer>
