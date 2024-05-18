@@ -20,6 +20,7 @@ public class ConnectService {
 
     final SseEmitters sseEmitters;
     final UserService userService;
+    @Transactional(readOnly = false)
     public void qrLogin(QrLoginCommand command) {
         log.info("QrLoginCommand: "+command);
         User user = userService.findUser(command.getUserId());
