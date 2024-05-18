@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:eventflux/eventflux.dart';
 import 'package:eventflux/models/reconnect.dart';
@@ -151,6 +150,21 @@ class AlertService {
     } on DioError catch (e) {
       print('qr로그인 요청 보내다가 실패 : $e');
       return false;
+    }
+  }
+
+  // 콘텐츠 재생 요청 메소드 추가
+  Future<void> playContent(int userId, int detailId) async {
+    final String playContentUrl = 'http://mystad.com:8081/alert/play-content/$userId/$detailId';
+    try {
+      final response = await dio.get(playContentUrl);
+      if (response.statusCode == 200) {
+        print('콘텐츠 재생 요청 성공');
+      } else {
+        print('콘텐츠 재생 요청 실패: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('콘텐츠 재생 요청 에러: $e');
     }
   }
 }
