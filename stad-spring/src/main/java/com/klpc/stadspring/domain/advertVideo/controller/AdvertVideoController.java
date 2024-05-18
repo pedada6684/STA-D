@@ -99,7 +99,7 @@ public class AdvertVideoController {
 
         Long conceptId = detailService.getContentDetailById(detailId).getContentConceptId();
         GetFinalAdvertVideoListResponse response = advertVideoService.getFinalAdvertVideoList(userId, conceptId, detailId);
-        kafkaTemplate.send("adverts-start", new AdvertsStartEvent(userId, response.getAdvertIdList()));
+        kafkaTemplate.send("adverts-start", new AdvertsStartEvent(userId, detailId, response.getAdvertIdList()));
         return ResponseEntity.ok(response);
     }
 
