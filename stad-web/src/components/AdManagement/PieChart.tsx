@@ -7,6 +7,7 @@ import { adList } from "../Select/SelectAdListBox";
 import ReactApexChart from "react-apexcharts";
 import styles from "./ChartData.module.css";
 import Loading from "../Loading";
+import { useQuery } from "react-query";
 export interface TotalResponse {
   totalAdvertVideo: number;
   totalAdvertClick: number;
@@ -27,40 +28,61 @@ export default function PieChart({ title, dataType }: PieChartProps) {
   const [series, setSeries] = useState<number[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const { data: ads, isLoading } = useQuery(
+    ["adsListData", userId, accessToken],
+    () => getAdList(userId, accessToken),
+    {
+      enabled: !!userId,
+    }
+  );
+  const exampleAd: adList = {
+    advertId: 1,
+    title: "예시데이터",
+  };
   useEffect(() => {
     async function fetchData() {
       try {
-        setLoading(true);
-        const adListData = await getAdList(userId, accessToken); // 유저 광고 리스트 조회
-        console.log("광고 리스트 조회 성공 파이", adListData);
-        const advertIds = adListData?.data?.map((ad: adList) => ad.advertId); // map 사용해서 advertId 담아주기
-        const promise = advertIds.map((id: number) =>
-          getTotal(id, accessToken)
-        );
-        const results = await Promise.all(promise); // 데이터 병렬을 위해 동기
-        console.log("각 광고의 총합 데이터 조회 성공", results);
+        if (ads && ads.data) {
+          setLoading(true);
+          let combinedAds = ads.data;
+          if (userId !== 1) {
+            combinedAds = [exampleAd, ...ads.data];
+          }
+          // const adListData = await getAdList(userId, accessToken); // 유저 광고 리스트 조회
+          // console.log("광고 리스트 조회 성공 파이", adListData);
+          const advertIds = combinedAds.map((ad: adList) => ad.advertId); // map 사용해서 advertId 담아주기
+          const titles = combinedAds.map((ad: adList) => ad.title);
+          // const promise = advertIds.map((id: number) => {
+          //   console.log(id);
+          //   getTotal(id, accessToken);
+          // });
+          const promises = advertIds.map((id: number) => {
+            console.log("Fetching total for advertId:", id);
+            return getTotal(id, accessToken);
+          });
+          const results = await Promise.all(promises); // 데이터 병렬을 위해 동기
+          console.log("------------------");
+          console.log("각 광고의 총합 데이터 조회 성공", results);
 
-        //데이터 pie chart 형식에 맞게 변환
+          //데이터 pie chart 형식에 맞게 변환
 
-        const sortedResults = results
-          .map((res, index) => ({
-            value: res[dataType],
-            label: adListData.data[index].title,
-          }))
-          .sort((a, b) => b.value - a.value) // 값에 따라 내림차순으로 정렬
-          .slice(0, 5); // 상위 5개 항목만 선택
-        console.log("sortedResults?", sortedResults);
-        if (sortedResults.length > 0) {
-          setSeries(sortedResults.map((res) => res.value));
-          setLabels(sortedResults.map((res) => res.label));
-          console.log("시리즈값:", series, "+", "라벨값: ", labels);
-          setLoading(false);
-        } else {
-          setSeries([0]);
-          setLabels(["No Data"]);
+          const sortedResults = results
+            .map((res, index) => ({
+              value: res[dataType],
+              label: titles[index],
+            }))
+            .sort((a, b) => b.value - a.value) // 값에 따라 내림차순으로 정렬
+            .slice(0, 5); // 상위 5개 항목만 선택
+          console.log("sortedResults?", sortedResults);
+          if (sortedResults.length > 0) {
+            setSeries(sortedResults.map((res) => res.value));
+            setLabels(sortedResults.map((res) => res.label));
+            setLoading(false);
+          } else {
+            setSeries([0]);
+            setLabels(["No Data"]);
+          }
         }
-        console.log("시리즈값: ", series);
-        console.log("라벨 값: ", labels);
       } catch (error) {
         console.error("데이터 로드 실패", error);
         setSeries([0]);
@@ -70,14 +92,9 @@ export default function PieChart({ title, dataType }: PieChartProps) {
       }
     }
     fetchData();
-  }, [accessToken, dataType]);
+  }, [ads, accessToken, dataType]);
 
-  useEffect(() => {
-    console.log("시리즈값:", series);
-    console.log("라벨값:", labels);
-  }, [series, labels]);
-
-  if (loading) {
+  if (loading || isLoading) {
     return (
       <>
         <Loading />
@@ -114,7 +131,7 @@ export default function PieChart({ title, dataType }: PieChartProps) {
     plotOptions: {
       pie: {
         donut: {
-          size: "60%", // 내부 반경 크기 조절
+          size: "70%", // 내부 반경 크기 조절
           labels: {
             show: true,
             name: {
