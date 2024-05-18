@@ -89,6 +89,7 @@ export async function getTotal(
   accessToken: string | null
 ) {
   try {
+    console.log(advertId);
     const response = await axios.get(`${URL}/stats/log/total`, {
       params: {
         advertId: advertId,
