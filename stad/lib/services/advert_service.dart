@@ -12,7 +12,6 @@ class AdService {
       final response = await dio.get(
         '$url/get?advertIds=${advertIds.join('&advertIds=')}',
       );
-
       print('광고 정보 받아오기: ${response.data}');
       if (response.statusCode == 200) {
         // 응답이 성공적이라면 JSON 데이터를 반환
