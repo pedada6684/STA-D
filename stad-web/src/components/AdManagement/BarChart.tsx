@@ -31,7 +31,6 @@ export default function BarChart({ title, dataType }: PieChartProps) {
       enabled: !!userId,
     }
   );
-  console.log("유저 광고(바)", ads);
   const exampleAd: adList = {
     advertId: 1,
     title: "예시데이터",
@@ -40,17 +39,21 @@ export default function BarChart({ title, dataType }: PieChartProps) {
     async function fetchData() {
       try {
         if (ads && ads.data) {
-          const combinedAds = [exampleAd, ...ads.data];
+          let combinedAds = ads.data;
+          if (userId !== 1) {
+            combinedAds = [exampleAd, ...ads.data];
+          }
+          // const combinedAds = [exampleAd, ...ads.data];
           // advertId와 title 추출
+
           const advertIds = combinedAds.map((ad: adList) => ad.advertId);
           const titles = combinedAds.map((ad: adList) => ad.title);
           // getTotal API 호출
-          const promise = advertIds.map((id: number) => {
-            console.log(id);
-            return getTotal(id, accessToken);
-          });
+          const promise = advertIds.map((id: number) =>
+            getTotal(id, accessToken)
+          );
           const results = await Promise.all(promise);
-
+          console.log("results", results);
           // 결과 정렬 및 상위 5개 항목 선택
           const sortedResults = results
             .map((res, index) => ({
@@ -63,6 +66,7 @@ export default function BarChart({ title, dataType }: PieChartProps) {
           setSeries([
             { name: title, data: sortedResults.map((res) => res.value) },
           ]);
+          console.log("series", series);
           setLabels(sortedResults.map((res) => res.label));
         }
       } catch (error) {
@@ -96,12 +100,12 @@ export default function BarChart({ title, dataType }: PieChartProps) {
     // }
     // }
     fetchData();
-  }, [accessToken, dataType]);
+  }, [ads, accessToken, dataType]);
 
   const options: ApexCharts.ApexOptions = {
     chart: {
       type: "bar",
-      height: 200,
+      height: 300,
       animations: {
         enabled: true,
         easing: "easeinout",
@@ -120,9 +124,9 @@ export default function BarChart({ title, dataType }: PieChartProps) {
     plotOptions: {
       bar: {
         horizontal: true, // 가로 바 차트
-        borderRadius: 10, // 바 모양에 border-radius 추가
+        borderRadius: 3, // 바 모양에 border-radius 추가
         distributed: true, // 바마다 다른 색상
-        barHeight: "15%", // 바 사이에 간격 추가
+        barHeight: "20%", // 바 사이에 간격 추가
       },
     },
     dataLabels: {
