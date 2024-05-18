@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:eventflux/eventflux.dart';
 import 'package:eventflux/models/reconnect.dart';
+import 'package:stad/models/advert_model.dart';
 import 'package:stad/providers/contents_provider.dart';
 import 'package:stad/services/advert_service.dart';
 import 'package:stad/services/contents_service.dart';
@@ -18,8 +19,7 @@ class AlertService {
   Stream<Map<String, dynamic>> get sseStream => _sseController.stream;
 
   void connectToSSE(String userId, ContentProvider contentProvider) {
-    // String fullUrl = '$url/app/$userId';
-    String fullUrl = '$url/app/1';
+    String fullUrl = '$url/app/$userId';
 
     EventFlux.instance.connect(
       EventFluxConnectionType.get,
@@ -43,15 +43,15 @@ class AlertService {
                   contentProvider.fetchPopularContent();
                 } else if (event.event == 'Adverts Start' &&
                     eventData is Map<String, dynamic>) {
+                  int contentId = _parseContentId(eventData['contentDetailId']);
                   List<int> advertIds =
                   List<int>.from(eventData['advertIdList']);
                   AdService adService = AdService();
                   var adverts = await adService.getAdsInfo(advertIds);
-                  // adverts -> contentProvider 전달하여 화면에 반영
                   contentProvider.setAdverts(adverts.cast<Map<String, dynamic>>());
+                  contentProvider.fetchContentRelatedAds(contentId);
                 }
               } else {
-                // contentProvider.fetchPopularContent();
                 print('Non-JSON event data: ${event.data}');
               }
             },
@@ -149,13 +149,15 @@ class AlertService {
       }
     } on DioError catch (e) {
       print('qr로그인 요청 보내다가 실패 : $e');
+      print('qr로그인 요청 보내다가 실패 : ${e.response!.data}');
       return false;
     }
   }
 
   // 콘텐츠 재생 요청 메소드 추가
   Future<void> playContent(int userId, int detailId) async {
-    final String playContentUrl = 'http://mystad.com:8081/alert/play-content/$userId/$detailId';
+    final String playContentUrl =
+        'http://mystad.com/alert/play-content/$userId/$detailId';
     try {
       final response = await dio.get(playContentUrl);
       if (response.statusCode == 200) {

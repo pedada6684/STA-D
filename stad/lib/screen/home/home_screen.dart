@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final CarouselController _controller = CarouselController();
   List<Advert> adverts = [];
   List<Advert> popularAds = [];
+  List<Advert> contentRelatedAds = [];
   AlertService alertService = AlertService();
 
   @override
@@ -44,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         alertService.connectToSSE(userId.toString(), contentProvider);
         if (contentDetailId != null) {
           fetchAdverts(contentDetailId);
+          fetchContentRelatedAds(contentDetailId);
         } else {
           fetchPopularAds();
         }
@@ -61,6 +63,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       });
     } catch (e) {
       print('Failed to fetch adverts: $e');
+    }
+  }
+
+  Future<void> fetchContentRelatedAds(int contentId) async {
+    AdService adService = AdService();
+    try {
+      List<Advert> fetchedContentRelatedAds =
+          await adService.getAdvertsByContentId(contentId);
+      setState(() {
+        contentRelatedAds = fetchedContentRelatedAds;
+      });
+    } catch (e) {
+      print('Failed to fetch content related ads: $e');
     }
   }
 
@@ -121,6 +136,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           .then((contentDetailId) {
         if (contentDetailId != null) {
           fetchAdverts(contentDetailId);
+          fetchContentRelatedAds(contentDetailId);
         } else {
           fetchPopularAds();
         }
@@ -130,6 +146,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    int? userId = Provider.of<UserProvider>(context, listen: false).userId;
+
     return Scaffold(
       backgroundColor: mainWhite,
       appBar: PreferredSize(
@@ -138,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           scrolledUnderElevation: 0,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          title: Text(
+          title: const Text(
             'STA:D',
             style: TextStyle(
               color: mainWhite,
@@ -165,6 +183,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             final featuredContent = contentProvider.featuredContent;
             final popularContents = contentProvider.popularContents;
             final adverts = contentProvider.adverts;
+            final contentRelatedAdverts = contentProvider.contentRelatedAdverts;
+            final currentContentId = contentProvider.currentContentId ?? -1;
 
             return SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -186,6 +206,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   '${featuredContent.releaseYear} | ${featuredContent.audienceAge} | ${featuredContent.playtime}',
                               additionalText:
                                   '크리에이터 : ${featuredContent.creator}\n출연 : ${featuredContent.cast}',
+                              detailId: currentContentId,
                             ),
                           );
                         }
@@ -197,23 +218,34 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     buildPopularContentCarousel(popularContents)
                   else
                     Center(child: CircularProgressIndicator()),
-                  SizedBox(height: 20.0),
+                  // SizedBox(height: 20.0),
                   Column(
                     children: [
                       if (adverts.isNotEmpty)
-                        buildCarouselSlider(context, adverts.cast<Advert>())
+                        buildCarouselSlider(context, adverts.cast<Advert>(),
+                            currentContentId, userId!, '지금 보고 있는 광고가 궁금하다면?')
                       else if (popularAds.isNotEmpty)
-                        buildPopularAdsCarousel(context)
+                        buildPopularAdsCarousel(context, userId!)
                       else
-                        const Center(
-                          child: Text(
-                            '관련된 광고가 없습니다.',
-                            style: TextStyle(fontSize: 16.0, color: midGray),
+                        Container(
+                          height: 100.0,
+                          child: const Center(
+                            child: Text(
+                              '관련된 광고가 없습니다.',
+                              style: TextStyle(fontSize: 16.0, color: midGray),
+                            ),
                           ),
                         ),
+                      if (contentRelatedAdverts.isNotEmpty)
+                        buildCarouselSlider(
+                            context,
+                            contentRelatedAdverts.cast<Advert>(),
+                            currentContentId,
+                            userId!,
+                            '컨텐츠 관련 광고')
                     ],
                   ),
-                  SizedBox(height: 20.0),
+                  // SizedBox(height: 20.0),
                 ],
               ),
             );
@@ -223,26 +255,28 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
-  CarouselSlider buildCarouselSlider(
-      BuildContext context, List<Advert> adverts) {
+  CarouselSlider buildCarouselSlider(BuildContext context, List<Advert> adverts,
+      int currentContentId, int userId, String title) {
     return CarouselSlider(
       items: adverts
           .map((advert) => AdvertisingCard(
                 bannerImgUrl: advert.bannerImgUrl,
-                buttonText: '지금 보고 있는 광고가 궁금하다면?',
+                buttonText: title,
                 subText: advert.title,
                 onPressed: () {
-                  if (advert.directVideoUrl.isNotEmpty) {
+                  print('지금 보는 광고의 id :$currentContentId');
+                  advertClickLog(advert.advertId, 0, currentContentId, userId);
+                  if (advert.directVideoUrl != 'No URL') {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => WebViewScreen(
                               title: advert.title,
-                              url: advert.directVideoUrl,
+                              url: advert.directVideoUrl!,
                             )));
                   } else {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ProductScreen(
                               advertId: advert.advertId,
-                              contentId: 1,
+                              contentId: currentContentId,
                               title: advert.title,
                               description: advert.description,
                             )));
@@ -251,6 +285,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               ))
           .toList(),
       options: CarouselOptions(
+        // height: MediaQuery.of(context).size.height * 0.6,
         autoPlay: true,
         autoPlayInterval: Duration(seconds: 3),
         autoPlayAnimationDuration: Duration(milliseconds: 800),
@@ -269,22 +304,23 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
-  Widget buildPopularAdsCarousel(BuildContext context) {
+  Widget buildPopularAdsCarousel(BuildContext context, int userId) {
     return CarouselSlider(
       items: popularAds.map((ad) {
         return GestureDetector(
           onTap: () {
-            if (ad.directVideoUrl.isNotEmpty) {
+            advertClickLog(ad.advertId, 0, 0, userId);
+            if (ad.directVideoUrl != 'No URL') {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => WebViewScreen(
                         title: ad.title,
-                        url: ad.directVideoUrl,
+                        url: ad.directVideoUrl!,
                       )));
             } else {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProductScreen(
                   advertId: ad.advertId,
-                  contentId: -1,
+                  contentId: 0,
                   title: ad.title,
                   description: ad.description,
                 ),
@@ -296,13 +332,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             buttonText: '인기 광고 보러가기',
             subText: ad.title,
             onPressed: () {
-              if (ad.directVideoUrl.isNotEmpty) {
+              advertClickLog(ad.advertId, 0, 0, userId);
+              if (ad.directVideoUrl != 'No URL') {
+                print(ad.directVideoUrl);
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => WebViewScreen(
                           title: ad.title,
-                          url: ad.directVideoUrl,
+                          url: ad.directVideoUrl!,
                         )));
               } else {
+                print(ad.directVideoUrl);
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ProductScreen(
                     advertId: ad.advertId,
@@ -317,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         );
       }).toList(),
       options: CarouselOptions(
-        height: 420.0,
+        // height: MediaQuery.of(context).size.height * 0.6,
         autoPlay: true,
         autoPlayInterval: Duration(seconds: 3),
         autoPlayAnimationDuration: Duration(milliseconds: 800),
@@ -353,6 +392,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     '${content['releaseYear']} | ${content['audienceAge']} | ${content['playtime']}',
                 additionalText:
                     '크리에이터 : ${content['creator']}\n출연 : ${content['cast']}',
+                detailId: content['detailId'],
               ),
             );
           },
@@ -360,7 +400,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         );
       }).toList(),
       options: CarouselOptions(
-        height: 450.0,
+        height: MediaQuery.of(context).size.height * 0.7,
         autoPlay: true,
         autoPlayInterval: Duration(seconds: 3),
         autoPlayAnimationDuration: Duration(milliseconds: 800),
@@ -389,8 +429,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           blendMode: BlendMode.dstIn,
           child: Image.network(
             content['thumbnailUrl'],
-            // height: MediaQuery.of(context).size.height * 0.55,
-            height: 450.0,
+            height: MediaQuery.of(context).size.height * 0.7,
+            // height: 450.0,
             width: double.infinity,
             fit: BoxFit.fill,
           ),
@@ -460,11 +500,16 @@ class buildTopThumbnail extends StatelessWidget {
           child: featuredContent == null
               ? Container(
                   color: mainWhite,
-                  height: 450.0,
-                  child: Center(child: CircularProgressIndicator()))
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: mainNavy,
+                    ),
+                  ),
+                )
               : Image.network(
                   featuredContent!.thumbnailUrl,
-                  height: 450,
+                  height: MediaQuery.of(context).size.height * 0.5,
                   width: double.infinity,
                   fit: BoxFit.fill,
                 ),

@@ -151,8 +151,18 @@ class ProductDetailScreen extends StatelessWidget {
                     const SizedBox(
                       height: 16.0,
                     ),
-                    Image.asset('assets/image/detail1.png'),
-                    Image.asset('assets/image/detail2.png'),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: productInfo!.images.map((image) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Image.network(
+                            image.imageUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ],
                 ),
               ),

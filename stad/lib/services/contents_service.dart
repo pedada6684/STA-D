@@ -33,7 +33,7 @@ class ContentsService {
 
       print('내가 본 콘텐츠 목록 불러오기:${response.data}');
       if (response.statusCode == 200 && response.data != null) {
-        List<dynamic> contentsData = response.data['data'] ?? [];
+        List<dynamic> contentsData = response.data['detailList'] ?? [];
 
         return contentsData
             .map((data) => {
