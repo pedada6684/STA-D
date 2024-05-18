@@ -16,8 +16,9 @@ interface appUserType {
 export default function TVLogin() {
   const [sessionId, setSessionId] = useState("");
   const qrContainerRef = useRef<HTMLDivElement>(null); // QR코드 렌더링할 컨테이너 참조
-  // 로컬로 테스트 진행하고 성공 시 서버 URL로 바꿔서 올리기
+  const [eventSource, setEventSource] = useState<EventSource | null>(null);
   const URL = "https://www.mystad.com";
+  const [switchConnection, setSwitchConnection] = useState(false); // tmp -> tv연결전환을 위한 트리거
   const [userProfile, setUserProfile] = useState<appUserType>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -39,48 +40,96 @@ export default function TVLogin() {
     }
 
     // api 연결 부분 (header에 jwt 토큰 요청시 event-source-polyfill 필요)
-    const eventSource = new EventSource(
-      `${URL}/alert/connect/${"tmp"}/${sessionId}`
-    );
+    const connectEventSource = (path: string) => {
+      const source = new EventSource(
+        `${URL}/alert/connect/${path}/${sessionId}`
+      );
 
-    // 연결 성공
-    eventSource.onopen = (event) => {
-      console.log("연결 성공", event);
+      // 연결 성공
+      source.onopen = (event) => {
+        console.log(`연결 성공 (${path})`, event);
+      };
+
+      // 이벤트 리스너
+      // connect 연결 시도 부분
+      source.addEventListener("connect", (e) => {
+        const { data: receivedData } = e;
+        console.log("connect", receivedData);
+      });
+      // qr 로그인으로 App유저 프로필 받아오기
+      source.addEventListener("Qr login", (e) => {
+        const { data: receivedData } = e;
+        const data = JSON.parse(e.data);
+        console.log(data);
+        setUserProfile(data);
+        console.log(userProfile);
+        console.log("QRLogin", receivedData);
+        setSwitchConnection(true); //연결 전환 트리거
+      });
+      // 연결 실패
+      source.onerror = (e) => {
+        console.log("연결 실패", e);
+        source.close(); // 연결 끊기
+      };
+
+      return source;
     };
 
-    // 이벤트 리스너
-    // connect 연결 시도 부분
-    eventSource.addEventListener("connect", (e) => {
-      const { data: receivedData } = e;
-      console.log("connect", receivedData);
-    });
-    // qr 로그인으로 App유저 프로필 받아오기
-    eventSource.addEventListener("Qr login", (e) => {
-      const { data: receivedData } = e;
-      const data = JSON.parse(e.data);
-      console.log(data);
-      setUserProfile(data);
-      console.log(userProfile);
-      console.log("QRLogin", receivedData);
-    });
+    const initialEventSource = connectEventSource("tmp");
+    setEventSource(initialEventSource);
 
-    eventSource.addEventListener("Content Play Request", (e) => {
-      console.log(e);
-      const data = JSON.parse(e.data);
-      console.log("앱에서 넘어온 데이터", data);
-      // navigate("/tv/stream/:")
-    });
-
-    // 연결 실패
-    eventSource.onerror = (e) => {
-      console.log("연결 실패", e);
-      eventSource.close(); // 연결 끊기
+    return () => {
+      if (initialEventSource) {
+        initialEventSource.close(); // 컴포넌트 언마운트 시 이벤트 소스 정리
+      }
     };
-  }, [sessionId]); // sessionId 변경될 때마다 QR 코드 갱신
+  }, [sessionId]);
 
   useEffect(() => {
     console.log("Updated userProfile:", userProfile);
     if (userProfile) {
+      console.log("tmp -> tv");
+      if (eventSource) {
+        eventSource.close(); // 기존 연결 해제
+        console.log("tmp 연결 닫기");
+      }
+      const connectTvEventSource = (userId: number) => {
+        const source = new EventSource(`${URL}/alert/connect/tv/${userId}`);
+
+        source.onopen = (event) => {
+          console.log("연결 성공 (tv)", event);
+        };
+
+        source.addEventListener("connect", (e) => {
+          const { data: receivedData } = e;
+          console.log("SSE tv 연결", receivedData);
+        });
+
+        source.addEventListener("Content Play Request", (e) => {
+          console.log("Content Play Request event received:", e);
+          const data = JSON.parse(e.data);
+          console.log("앱에서 넘어온 데이터", data);
+          const { userId, contentDetailId } = data;
+          console.log("컨텐츠 데이터", contentDetailId);
+          navigate(`/tv/stream/${contentDetailId}`);
+        });
+
+        source.onerror = (e) => {
+          console.log(`연결 실패 (tv)`, e);
+          source.close();
+          console.log("연결 종료(tv)");
+          setTimeout(() => {
+            const newSource = connectTvEventSource(userId);
+            setEventSource(newSource);
+          }, 5000);
+        };
+
+        return source;
+      };
+
+      const tvEventSource = connectTvEventSource(userProfile.userId);
+      setEventSource(tvEventSource);
+
       dispatch(
         tvUserActions.addUser({
           userId: userProfile.userId,
