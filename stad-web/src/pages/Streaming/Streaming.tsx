@@ -30,11 +30,13 @@ export default function Streaming() {
   const [conceptId, setConceptId] = useState(0); // 1분 타이머
 
   const videoRef = useRef<ReactPlayer | null>(null);
+  const hiddenPlayerRef = useRef<ReactPlayer | null>(null); // 숨겨진 ReactPlayer의 참조
   const { videoId } = useParams<{ videoId: string }>();
   const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.token.accessToken);
   const userId = useSelector((state: RootState) => state.tvUser.selectedProfile?.userId);
   const detailId = Number(videoId);
+  const [isMainVideoLoaded, setIsMainVideoLoaded] = useState(false); // 메인 비디오 로드 상태
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -52,7 +54,7 @@ export default function Streaming() {
     }
   }, [timer]);
 
-  const videoUrl = `https://mystad.com/stream/contents/1/${detailId}`; // 1을 userId로 바꿔야 함
+  const videoUrl = `https://mystad.com/stream/contents/${userId}/${detailId}`;
 
   const fetchInitialData = async () => {
     try {
@@ -162,6 +164,14 @@ export default function Streaming() {
     }
   }, [isModalOpen]);
 
+  // 광고 재생 중 메인 비디오 미리 로드
+  useEffect(() => {
+    if (isModalOpen && !isMainVideoLoaded) {
+      hiddenPlayerRef.current?.getInternalPlayer()?.load();
+      setIsMainVideoLoaded(true);
+    }
+  }, [isModalOpen, isMainVideoLoaded]);
+
   // 현재 동영상 인덱스에 해당하는 URL 가져오기
   const currentVideoUrl = `https://www.mystad.com/stream/advert-video/${userId}/${advertIds[currentVideoIndex]}/${detailId}`;
 
@@ -229,6 +239,16 @@ export default function Streaming() {
             skip
           </button>
         </div>
+      )}
+
+      {isModalOpen && ( //광고 시간동안 메인 컨텐츠 로딩
+        <ReactPlayer 
+          url={videoUrl}
+          playing={false}
+          width="0"
+          height="0"
+          ref={hiddenPlayerRef}
+        />
       )}
     </div>
   );
