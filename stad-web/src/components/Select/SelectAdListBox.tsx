@@ -31,6 +31,11 @@ export default function SelectAdListBox({ onAdSelect }: SelectAdListBoxProps) {
   const accessToken = useSelector(
     (state: RootState) => state.token.accessToken
   );
+  // 예시 광고 데이터
+  const exampleAd: adList = {
+    advertId: 1,
+    title: "맘스터치",
+  };
   // useQuery로 데이터 가져오기
   const { data: ads, isLoading } = useQuery(
     ["adsList", userId, accessToken], // 첫 번째 인자는 쿼리 키
@@ -41,14 +46,20 @@ export default function SelectAdListBox({ onAdSelect }: SelectAdListBoxProps) {
   );
   useEffect(() => {
     if (ads && ads.data) {
-      const newOptions = ads.data.map((ad: adList) => ({
+      let userAdsOptions = ads.data.map((ad: adList) => ({
         value: ad.advertId,
         label: ad.title,
       }));
-      setOptions(newOptions);
-      if (newOptions.length > 0) {
-        setSelectedOption(newOptions[0]); // 첫 번째 옵션을 초기 선택으로 설정
-        onAdSelect(newOptions[0].value); // 부모 컴포넌트에 초기 선택값 전달
+      if (userId !== 1) {
+        userAdsOptions = [
+          { value: exampleAd.advertId, label: exampleAd.title },
+          ...userAdsOptions,
+        ];
+      }
+      setOptions(userAdsOptions);
+      if (userAdsOptions.length > 0) {
+        setSelectedOption(userAdsOptions[0]); // 첫 번째 옵션을 초기 선택으로 설정
+        onAdSelect(userAdsOptions[0].value); // 부모 컴포넌트에 초기 선택값 전달
       }
     }
   }, [ads]);

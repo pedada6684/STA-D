@@ -6,7 +6,7 @@
 .pieContainer {
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 5rem;
   align-items: center;
 }
 .pie,
