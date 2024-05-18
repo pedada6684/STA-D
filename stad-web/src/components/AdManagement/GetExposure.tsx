@@ -36,13 +36,12 @@ export default function GetExposure({ advertId }: AdvertIdProps) {
           setLoading(false);
         })
         .catch((error) => {
-          console.error("여기야?", error);
           setSeriesData([{ name: "광고시청수", data: [] }]);
           setLoading(false);
         });
     }
   }, [advertId, accessToken]);
-  const [chartOptions, setChartOptions] = useState<ApexOptions>({
+  const chartOptions: ApexOptions = {
     chart: {
       id: "area-datetime",
       type: "area",
@@ -102,7 +101,7 @@ export default function GetExposure({ advertId }: AdvertIdProps) {
     grid: {
       show: false, // 배경 그리드 라인 제거
     },
-  });
+  };
 
   if (loading) {
     return (
