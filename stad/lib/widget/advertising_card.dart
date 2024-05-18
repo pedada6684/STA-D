@@ -52,7 +52,7 @@ class AdvertisingCard extends StatelessWidget {
                               buttonText,
                               style: TextStyle(
                                 color: mainWhite,
-                                fontSize: 18.0,
+                                fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
                                 shadows: <Shadow>[
                                   Shadow(
@@ -67,7 +67,7 @@ class AdvertisingCard extends StatelessWidget {
                               subText,
                               style: TextStyle(
                                 color: mainWhite,
-                                fontSize: 14.0,
+                                fontSize: 12.0,
 
                                 shadows: <Shadow>[
                                   Shadow(
