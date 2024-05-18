@@ -9,10 +9,12 @@ import java.util.List;
 @NoArgsConstructor
 public class AdvertsStartEvent {
     private Long userId;
+    private Long contentDetailId;
     private List<Long> advertIdList;
 
-    public AdvertsStartEvent(Long userId, List<Long> advertIdList) {
+    public AdvertsStartEvent(Long userId, Long contentDetailId, List<Long> advertIdList) {
         this.userId = userId;
+        this.contentDetailId = contentDetailId;
         this.advertIdList = advertIdList;
     }
 }
