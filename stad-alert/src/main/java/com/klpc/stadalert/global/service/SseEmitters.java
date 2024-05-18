@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class SseEmitters {
 		return emit(emitId, "SSE connected", "connect");
 	}
 
-	//emit
+	@Transactional(readOnly = false)
 	public SseEmitter emit(String id, Object eventPayload, String eventType) {
 		SseEmitter emitter = emitterMap.get(id);
 		Notification notifcation = Notification.createNewNotifcation(id);
