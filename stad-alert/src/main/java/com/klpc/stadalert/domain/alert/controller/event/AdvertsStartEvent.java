@@ -9,5 +9,6 @@ import java.util.List;
 @NoArgsConstructor
 public class AdvertsStartEvent {
     private Long userId;
+    private Long contentDetailId;
     private List<Long> advertIdList;
 }
