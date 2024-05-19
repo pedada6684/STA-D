@@ -55,18 +55,30 @@ public class ContentDetailService {
         }
     }
 
-    public ResponseEntity<ResourceRegion> testStreamingPublicVideo(HttpHeaders httpHeaders, Long id) {
+    public ResponseEntity<ResourceRegion> testStreamingPublicVideo(Long id) {
         try {
             String streamVideoUrl = getTestStreamVideoUrl(id);
             UrlResource video = new UrlResource(streamVideoUrl);
 
-            HttpRange httpRange = httpHeaders.getRange().stream().findFirst()
-                    .orElseThrow(()-> new CustomException(ErrorCode.REQUEST_NOT_FOUND));
-            long start = httpRange.getRangeStart(video.contentLength());
-            long end = httpRange.getRangeEnd(video.contentLength());
-            Long rangeLength = Long.min(chunkSize, end - start + 1);
+            ResourceRegion resourceRegion = new ResourceRegion(video, 0, 1L);
+            return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+                    .cacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES)) // 스트리밍을 위해 다운로드 받는 영상 캐시의 지속시간은 10분
+                    .contentType(MediaTypeFactory.getMediaType(video).orElse(MediaType.APPLICATION_OCTET_STREAM))
+                    // header에 담긴 range 범위만큼 return
+                    .header(HttpHeaders.ACCEPT_RANGES, "bytes") // 데이터 타입은 bytes라고 헤더에 입력
+                    .body(resourceRegion); // body에 가공한 데이터를 담아서 리턴
+            // 영상이 재생됨에 따라 해당 url로 다시 request를 요청하여 영상정보를 받아와서 재생
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-            ResourceRegion resourceRegion = new ResourceRegion(video, start, rangeLength);
+    public ResponseEntity<ResourceRegion> test0StreamingPublicVideo(Long id) {
+        try {
+            String streamVideoUrl = getStreamVideoUrl(id);
+            UrlResource video = new UrlResource(streamVideoUrl);
+
+            ResourceRegion resourceRegion = new ResourceRegion(video, 0, 1L);
             return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
                     .cacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES)) // 스트리밍을 위해 다운로드 받는 영상 캐시의 지속시간은 10분
                     .contentType(MediaTypeFactory.getMediaType(video).orElse(MediaType.APPLICATION_OCTET_STREAM))

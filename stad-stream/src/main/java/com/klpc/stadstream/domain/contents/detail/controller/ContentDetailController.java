@@ -52,9 +52,28 @@ public class ContentDetailController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    ResponseEntity<ResourceRegion> testStreamingPublicVideo(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long userId, @PathVariable Long detailId){
+    ResponseEntity<ResourceRegion> testStreamingPublicVideo(@PathVariable Long userId, @PathVariable Long detailId){
         log.info("TestStreamingPublicVideo: userId: "+userId + " contents: "+detailId);
-        ResponseEntity<ResourceRegion> resourceRegionResponseEntity = detailService.testStreamingPublicVideo(httpHeaders, detailId);
+        ResponseEntity<ResourceRegion> resourceRegionResponseEntity = detailService.testStreamingPublicVideo(detailId);
+        //알림서비스 연결
+        boolean isFirstRequest = redisService.isFirstContentStreamingRequest(userId, detailId);
+        if (isFirstRequest){
+            kafkaTemplate.send("content-start", new ContentStartEvnet(userId, detailId));
+            redisService.increaseContentPlayCount(detailId);
+        }
+        return resourceRegionResponseEntity;
+    }
+
+    @GetMapping("test-o/{userId}/{detailId}")
+    @Operation(summary = "콘텐츠 스트리밍", description = "콘텐츠 스트리밍")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "콘텐츠 스트리밍 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<ResourceRegion> testoStreamingPublicVideo(@PathVariable Long userId, @PathVariable Long detailId){
+        log.info("TestStreamingPublicVideo: userId: "+userId + " contents: "+detailId);
+        ResponseEntity<ResourceRegion> resourceRegionResponseEntity = detailService.test0StreamingPublicVideo(detailId);
         //알림서비스 연결
         boolean isFirstRequest = redisService.isFirstContentStreamingRequest(userId, detailId);
         if (isFirstRequest){
