@@ -1,5 +1,5 @@
 class CartItem {
-  final String id;
+  final String id;//product Id
   final String cartProductId;
   final String title;
   final String thumbnail;
@@ -8,7 +8,7 @@ class CartItem {
   bool isSelected;
 
   CartItem({
-    required this.id,
+    required this.id,//product Id
     required this.cartProductId,
     required this.title,
     required this.price,
@@ -73,6 +73,16 @@ class CartProductDetail {
     required this.contentId,
     required this.optionId,
   });
+
+  factory CartProductDetail.fromJson(Map<String, dynamic> json) {
+    return CartProductDetail(
+      productTypeId: json['productTypeId'] as int,
+      quantity: json['quantity'] as int,
+      advertId: json['advertId'] as int,
+      contentId: json['contentId'] as int,
+      optionId: json['optionId'] as int,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'productTypeId': productTypeId,
