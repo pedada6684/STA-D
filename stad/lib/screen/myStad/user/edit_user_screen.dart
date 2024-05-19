@@ -150,7 +150,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
               labelText: '이메일',
               initialValue: user?.email,
               readOnly: true,
-              decoration: InputDecoration(labelText: '이메일'),
+              // decoration: InputDecoration(labelText: '이메일'),
             ),
           ],
         ),

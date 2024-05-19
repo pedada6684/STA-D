@@ -417,23 +417,30 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Widget buildPopularContentThumbnail(Map<String, dynamic> content) {
     return Stack(
       children: [
-        ShaderMask(
-          shaderCallback: (rect) {
-            return LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [mainBlack, Colors.transparent],
-              stops: [0.4, 1.0],
-            ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-          },
-          blendMode: BlendMode.dstIn,
-          child: Image.network(
-            content['thumbnailUrl'],
-            height: MediaQuery.of(context).size.height * 0.7,
-            // height: 450.0,
-            width: double.infinity,
-            fit: BoxFit.fill,
-          ),
+        // ShaderMask(
+        //   shaderCallback: (rect) {
+        //     return LinearGradient(
+        //       begin: Alignment.topCenter,
+        //       end: Alignment.bottomCenter,
+        //       colors: [mainBlack, Colors.transparent],
+        //       stops: [0.4, 1.0],
+        //     ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+        //   },
+        //   blendMode: BlendMode.dstIn,
+        //   child: Image.network(
+        //     content['thumbnailUrl'],
+        //     height: MediaQuery.of(context).size.height * 0.7,
+        //     // height: 450.0,
+        //     width: double.infinity,
+        //     fit: BoxFit.fill,
+        //   ),
+        // ),
+        Image.network(
+          content['thumbnailUrl'],
+          height: MediaQuery.of(context).size.height * 0.7,
+          // height: 450.0,
+          width: double.infinity,
+          fit: BoxFit.fill,
         ),
         Positioned(
           top: 0,
@@ -475,6 +482,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 }
 
+//지금 보는 컨텐츠
 class buildTopThumbnail extends StatelessWidget {
   const buildTopThumbnail({
     super.key,
@@ -487,33 +495,49 @@ class buildTopThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        ShaderMask(
-          shaderCallback: (rect) {
-            return LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [mainBlack, Colors.transparent],
-              stops: [0.4, 1.0],
-            ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-          },
-          blendMode: BlendMode.dstIn,
-          child: featuredContent == null
-              ? Container(
-                  color: mainWhite,
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: mainNavy,
-                    ),
+        // ShaderMask(
+        //   shaderCallback: (rect) {
+        //     return LinearGradient(
+        //       begin: Alignment.topCenter,
+        //       end: Alignment.bottomCenter,
+        //       colors: [mainBlack, Colors.transparent],
+        //       stops: [0.4, 1.0],
+        //     ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+        //   },
+        //   blendMode: BlendMode.dstIn,
+        //   child: featuredContent == null
+        //       ? Container(
+        //           color: mainWhite,
+        //           height: MediaQuery.of(context).size.height * 0.5,
+        //           child: Center(
+        //             child: CircularProgressIndicator(
+        //               color: mainNavy,
+        //             ),
+        //           ),
+        //         )
+        //       : Image.network(
+        //           featuredContent!.thumbnailUrl,
+        //           height: MediaQuery.of(context).size.height * 0.5,
+        //           width: double.infinity,
+        //           fit: BoxFit.fill,
+        //         ),
+        // ),
+        featuredContent == null
+            ? Container(
+                color: mainWhite,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: mainNavy,
                   ),
-                )
-              : Image.network(
-                  featuredContent!.thumbnailUrl,
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  width: double.infinity,
-                  fit: BoxFit.fill,
                 ),
-        ),
+              )
+            : Image.network(
+                featuredContent!.thumbnailUrl,
+                height: MediaQuery.of(context).size.height * 0.5,
+                width: double.infinity,
+                fit: BoxFit.fill,
+              ),
         Positioned(
           top: 0,
           left: 0,
