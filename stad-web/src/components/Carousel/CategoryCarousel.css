@@ -17,17 +17,23 @@
 .thumbnail-container:hover .slick-small-prev {
   opacity: 1;
   visibility: visible;
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
 }
 .xs-vid-container {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  transition: all 0.3s;
+}
+
+.xs-vid-container img:hover {
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
+  transform: scale(1.05);
 }
 .xs-vid-container img {
   border-radius: 0.5vw;
   width: 23rem;
+  transition: transform 0.3s ease;
 }
 .vidTitle {
   margin-top: 0.5rem;

@@ -19,7 +19,7 @@ public class ProductImage {
     @Column(name = "product_image_id")
     Long id;
 
-    @Column(name = "img")
+    @Column(name = "img", length = 3000)
     String img;
 
     @JsonIgnore

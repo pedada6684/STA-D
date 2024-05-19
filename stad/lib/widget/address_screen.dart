@@ -1,14 +1,15 @@
-//api 받아오기
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/providers/user_provider.dart';
-import 'package:stad/services/order_service.dart';
+import 'package:stad/services/address_service.dart';
 import 'package:stad/widget/button.dart';
 
 class AddressScreen extends StatefulWidget {
-  const AddressScreen({super.key});
+  final Function onAddressAdded;
+
+  const AddressScreen({super.key, required this.onAddressAdded});
 
   @override
   State<AddressScreen> createState() => _AddressScreenState();
@@ -77,11 +78,8 @@ class _AddressScreenState extends State<AddressScreen> {
   }
 
   void validateNumber(String input) {
-    final phonePattern = r'^01([0|1|6|7|8|9])-(\d{3,4})-(\d{4})$';
-
     setState(() {
-      isPhoneError = !RegExp(r'^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$')
-          .hasMatch(input);
+      isPhoneError = !RegExp(r'^01[016789]\d{3,4}\d{4}$').hasMatch(input);
     });
   }
 
@@ -105,76 +103,44 @@ class _AddressScreenState extends State<AddressScreen> {
     }
   }
 
-  void someFunctionToCallService() {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-
-    if (userProvider.userId != null) {
-      final orderService = OrderService();
-
-      orderService.sendAddressData(
-        userProvider.userId!,
-        _addressController.text,
-        _nameController.text,
-        _phoneController.text,
-        _adnickController.text,
+  void addUserAddress() {
+    if (isPhoneError) {
+      // 핸드폰 번호가 유효하지 않은 경우
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('유효한 핸드폰 번호를 입력해주세요.'),
+          duration: Duration(seconds: 2),
+        ),
       );
+      return;
+    }
+
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    if (userProvider.userId != null) {
+      final addressService = AddressService();
+
+      // 새로운 주소 데이터 생성
+      Map<String, dynamic> newAddress = {
+        'userId': userProvider.userId!,
+        'name': _nameController.text,
+        'phone': _phoneController.text,
+        'location': _postcodeController.text + ' ' + _addressController.text,
+        'locationNick': _adnickController.text,
+      };
+
+      try {
+        // 주소 추가
+        addressService.addAddress(newAddress).then((_) {
+          widget.onAddressAdded();
+          Navigator.pop(context);
+        });
+      } catch (e) {
+        print('Error adding address: $e');
+      }
     } else {
       print('로그인이 필요합니다.');
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: mainWhite,
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(20.0), topLeft: Radius.circular(20.0))),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16),
-        child: Column(
-          children: <Widget>[
-            Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.only(bottom: 8.0),
-              decoration: BoxDecoration(
-                color: darkGray,
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            _gap(),
-            Text(
-              '배송지 입력',
-              style: TextStyle(
-                  fontSize: 18.0, fontWeight: FontWeight.w600, color: mainNavy),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            _buildTextField(_nameController, '이름'),
-            _gap(),
-            _buildTextField(_adnickController, '배송지명'),
-            _gap(),
-            _buildTextField(_phoneController, '핸드폰 번호'),
-            _gap(),
-            _buildPostalCodeField(),
-            _gap(),
-            _buildTextField(_addressController, '기본주소', readOnly: true),
-            _gap(),
-            _buildTextField(_addressDetailController, '상세주소'),
-            _gap(),
-            _gap(),
-            CustomElevatedButton(
-              text: '완료',
-              textColor: mainWhite,
-              onPressed: isFormFilled ? someFunctionToCallService : null,
-              backgroundColor: mainNavy,
-            )
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildPostalCodeField() {
@@ -211,6 +177,7 @@ class _AddressScreenState extends State<AddressScreen> {
     String placeholder, {
     bool readOnly = false,
     bool isFixedLabel = false,
+    TextInputType keyboardType = TextInputType.text,
   }) {
     bool isError = placeholder == '핸드폰 번호' && isPhoneError;
 
@@ -219,6 +186,7 @@ class _AddressScreenState extends State<AddressScreen> {
       readOnly: readOnly,
       cursorColor: mainNavy,
       style: TextStyle(color: mainBlack),
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         labelText: placeholder,
         labelStyle: TextStyle(color: midGray),
@@ -239,7 +207,69 @@ class _AddressScreenState extends State<AddressScreen> {
                 borderSide: BorderSide(color: Colors.red, width: 2),
               )
             : null,
-        errorText: isError ? '번호를 입력해주세요.' : null,
+        errorText: isError ? '- 제외 010 0000 0000' : null,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: mainWhite,
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(20.0),
+                  topLeft: Radius.circular(20.0))),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 8.0),
+                  decoration: BoxDecoration(
+                    color: darkGray,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                _gap(),
+                Text(
+                  '배송지 입력',
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                      color: mainNavy),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                _buildTextField(_nameController, '이름'),
+                _gap(),
+                _buildTextField(_adnickController, '배송지명'),
+                _gap(),
+                _buildTextField(_phoneController, '핸드폰 번호',
+                    keyboardType: TextInputType.phone),
+                _gap(),
+                _buildPostalCodeField(),
+                _gap(),
+                _buildTextField(_addressController, '기본주소', readOnly: true),
+                _gap(),
+                _buildTextField(_addressDetailController, '상세주소'),
+                _gap(),
+                _gap(),
+                CustomElevatedButton(
+                  text: '완료',
+                  textColor: mainWhite,
+                  onPressed: isFormFilled ? addUserAddress : null,
+                  backgroundColor: mainNavy,
+                )
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

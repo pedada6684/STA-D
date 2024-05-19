@@ -16,5 +16,5 @@ public class ProductReviewInfoCommand {
     private String content;
     private Double score;
     private String reviewImg;
-
+    private String regDate;
 }

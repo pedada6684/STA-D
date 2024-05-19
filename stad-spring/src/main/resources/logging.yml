@@ -23,6 +23,13 @@ spring:
   config:
     activate:
       on-profile: prod
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: info
 
 server:
   error:

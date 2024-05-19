@@ -3,10 +3,12 @@ package com.klpc.stadspring.domain.contents.watched.service;
 import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
 import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailRepository;
 import com.klpc.stadspring.domain.contents.watched.controller.response.AddWatchingContentResponse;
+import com.klpc.stadspring.domain.contents.watched.controller.response.CheckWatchingContentResponse;
 import com.klpc.stadspring.domain.contents.watched.controller.response.ModifyWatchingContentResponse;
 import com.klpc.stadspring.domain.contents.watched.entity.WatchedContent;
 import com.klpc.stadspring.domain.contents.watched.repository.WatchedContentRepository;
 import com.klpc.stadspring.domain.contents.watched.service.command.request.AddWatchingContentCommand;
+import com.klpc.stadspring.domain.contents.watched.service.command.request.CheckWatchingContentCommand;
 import com.klpc.stadspring.domain.contents.watched.service.command.request.ModifyWatchingContentCommand;
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -64,13 +67,16 @@ public class WatchedContentService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         ContentDetail detail = detailRepository.findById(command.getDetailId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+        if (watchedContentRepository.findByUserIdAndDetailId(user.getId(), detail.getId()).isPresent()) {
+            return AddWatchingContentResponse.builder().result("시청 중인 컨텐츠가 성공적으로 생성되었습니다.").build();
+        }
 
         WatchedContent newWatchedContent = WatchedContent.createWatchedContent(
                 detail,
                 user,
-                LocalDate.now(),
+                LocalDateTime.now(),
                 false,
-                "00:00:00");
+                0L);
         watchedContentRepository.save(newWatchedContent);
 
         return AddWatchingContentResponse.builder().result("시청 중인 컨텐츠가 성공적으로 생성되었습니다.").build();
@@ -90,7 +96,7 @@ public class WatchedContentService {
         WatchedContent updatedWatchedContent = watchedContentRepository.findByUserIdAndDetailId(command.getUserId(), command.getDetailId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         updatedWatchedContent.modifyWatchedContent(
-                LocalDate.now(),
+                LocalDateTime.now(),
                 command.isStatus(),
                 command.getStopTime()
         );
@@ -102,5 +108,24 @@ public class WatchedContentService {
             return ModifyWatchingContentResponse.builder().result("시청 완료 콘텐츠가 성공적으로 생성되었습니다.").build();
         }
         return ModifyWatchingContentResponse.builder().result("컨텐츠 시청 시간이 성공적으로 저장되었습니다.").build();
+    }
+
+    /**
+     * 시청 여부 조회
+     * @param command
+     * @return
+     */
+    public CheckWatchingContentResponse checkWatchingContent(CheckWatchingContentCommand command) {
+        log.info("CheckWatchingContentCommand : " + command);
+
+        if (watchedContentRepository.findByUserIdAndDetailId(command.getUserId(), command.getDetailId()).isPresent()) {
+            return CheckWatchingContentResponse.builder()
+                    .result(true)
+                    .stopTime(watchedContentRepository.findByUserIdAndDetailId(command.getUserId(), command.getDetailId())
+                            .get()
+                            .getStopTime())
+                    .build();
+        }
+        return CheckWatchingContentResponse.builder().result(false).stopTime(0L).build();
     }
 }

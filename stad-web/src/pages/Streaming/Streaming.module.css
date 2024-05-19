@@ -37,3 +37,70 @@
 .playPause {
   width: 4.5rem;
 }
+
+.modal {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.centerControls {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  z-index: 1000;
+}
+
+.centerControls:hover {
+  transition: all 0.5s;
+  background-color: rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
+}
+
+.centerControls button {
+  border-radius: 50%;
+  border: 0;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.play {
+  filter: invert(100%) sepia(97%) saturate(0%) hue-rotate(44deg) brightness(103%) contrast(103%);
+  width: 10rem;
+}
+
+.modalContent {
+  position: relative;
+  top: 0;
+  left: 0;
+  background: rgb(0, 0, 0);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  background-color: black;
+  z-index: 2;
+}
+
+.skip {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: white;
+  background-color: black;
+  z-index: 2;
+}
+
+.screen-box::-webkit-scrollbar {
+  display: none; /* Chrome , Safari , Opera */
+}

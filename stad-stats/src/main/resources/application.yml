@@ -1,0 +1,15 @@
+server:
+  servlet:
+    context-path: '/stats'
+spring:
+  profiles:
+    group:
+      default: dev
+  config:
+    import:
+      - classpath:/jpa.yml
+      - classpath:/logging.yml
+      - classpath:/db.yml
+      - classpath:/kafka.yml
+      - classpath:/msa.yml
+      - classpath:/redis.yml

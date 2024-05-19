@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class ModifyAdvertResponse {
 
-    String result;
+    Long advertId;
 
 }

@@ -16,6 +16,7 @@ public class UpdateProductInfoCommand {
      */
 
     private Long id;
+    private String name;
     private String thumbnail;
     private Long cityDeliveryFee;
     private Long mtDeliveryFee;
