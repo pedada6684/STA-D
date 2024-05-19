@@ -103,14 +103,14 @@ public class LogController {
     @GetMapping("/total/test")
     @Operation(summary = "30일 데이터 총합", description = "30일짜리 데이터")
     public ResponseEntity<?> GetTotalLogTest(@RequestParam("advertId") Long advertId)  {
-        GetTotalLogResponse response = logService.getTotalLog(advertId);
+        GetTotalLogResponse response = logService.getTotalLogTest(advertId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/daily/click/test")
     @Operation(summary = "30일 동안 각 날짜 광고 클릭 수", description = "30일 동안 각 날짜 광고 클릭 수")
     public ResponseEntity<?> GetDailyAdvertClickTest(@RequestParam("advertId") Long advertId)  {
-        GetDailyCountResponse response = logService.getDailyAdvertClickCount(advertId);
+        GetDailyCountResponse response = logService.getDailyAdvertClickCountTest(advertId);
         log.info("success");
         return ResponseEntity.ok(response);
     }
@@ -118,21 +118,21 @@ public class LogController {
     @GetMapping("/daily/advert-video/test")
     @Operation(summary = "30일 동안 각 날짜 광고 시청 수", description = "30일 동안 각 날짜 광고 시청 수")
     public ResponseEntity<?> GetDailyAdvertVideoTest(@RequestParam("advertId") Long advertId)  {
-        GetDailyCountResponse response = logService.getDailyAdvertVideoCount(advertId);
+        GetDailyCountResponse response = logService.getDailyAdvertVideoCountTest(advertId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/daily/order/test")
     @Operation(summary = "30일 동안 각 날짜 주문 수", description = "30일 동안 각 날짜 광고 주문 수")
     public ResponseEntity<?> GetDailyOrderTest(@RequestParam("advertId") Long advertId)  {
-        GetDailyCountResponse response = logService.getDailyOrderCount(advertId);
+        GetDailyCountResponse response = logService.getDailyOrderCountTest(advertId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/daily/revenue/test")
     @Operation(summary = "30일 동안 각 날짜 수익", description = "30일 동안 각 날짜 수익")
     public ResponseEntity<?> GetDailyRevenueTest(@RequestParam("advertId") Long advertId)  {
-        GetDailyCountResponse response = logService.getDailyRevenueCount(advertId);
+        GetDailyCountResponse response = logService.getDailyRevenueCountTest(advertId);
         return ResponseEntity.ok(response);
     }
 }
