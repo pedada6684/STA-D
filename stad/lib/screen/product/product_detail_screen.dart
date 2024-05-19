@@ -96,7 +96,7 @@ class ProductDetailScreen extends StatelessWidget {
             Container(
               color: mainWhite,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 16.0),
                 child: Column(
                   children: [
@@ -121,10 +121,10 @@ class ProductDetailScreen extends StatelessWidget {
                         SizedBox(
                           width: 15.0,
                         ),
-                        Text('민형이네 김치공장')
+                        Text('SAMSUNG')
                       ],
                     ),
-                    const Row(
+                    Row(
                       children: [
                         Text(
                           '상품명',
@@ -133,21 +133,21 @@ class ProductDetailScreen extends StatelessWidget {
                         SizedBox(
                           width: 15.0,
                         ),
-                        Text('유산균 김치')
+                        Text(productInfo!.name)
                       ],
                     ),
-                    const Row(
-                      children: [
-                        Text(
-                          '원산지',
-                          style: TextStyle(fontSize: 14.0),
-                        ),
-                        SizedBox(
-                          width: 15.0,
-                        ),
-                        Text('국산(경상북도 상주시)')
-                      ],
-                    ),
+                    // const Row(
+                    //   children: [
+                    //     Text(
+                    //       '원산지',
+                    //       style: TextStyle(fontSize: 14.0),
+                    //     ),
+                    //     SizedBox(
+                    //       width: 15.0,
+                    //     ),
+                    //     Text('국산(경상북도 상주시)')
+                    //   ],
+                    // ),
                     const SizedBox(
                       height: 16.0,
                     ),
@@ -187,17 +187,17 @@ class ProductDetailScreen extends StatelessWidget {
                     ),
                     const Divider(),
                     // SizedBox(height: 20.0), // 섹션 제목과 내용 사이 간격 추가
-                    _buildInformationRow('품명 및 모델명', '민형이네 김치공장'),
+                    _buildInformationRow('품명 및 모델명', productInfo!.name),
                     const SizedBox(height: 10.0), // 각 정보 텍스트 사이 간격 추가
-                    _buildInformationRow('제조연월일', '당일 제조 후 배송'),
+                    _buildInformationRow('제조연월일', '2024.03'),
                     const SizedBox(height: 10.0),
-                    _buildInformationRow('원산지', '국산(경상북도 상주시)'),
+                    _buildInformationRow('원산지', '대한민국'),
                     const SizedBox(height: 10.0),
                     _buildInformationRow('생산자', '박지운'),
                     const SizedBox(height: 10.0),
-                    _buildInformationRow('상품 구성', '금비김치, 은비김치'),
+                    _buildInformationRow('상품 구성', '${productTypes[0].name}, ${productTypes[1].name}'),
                     const SizedBox(height: 10.0),
-                    _buildInformationRow('보관방법', '상품 수령 후 냉장보관 plz'),
+                    _buildInformationRow('보관방법', '서늘하고 건조한 곳 보관'),
                     const SizedBox(height: 10.0),
                     _buildInformationRow('소비자상담 관련 전화번호', '1577-1577'),
                   ],
