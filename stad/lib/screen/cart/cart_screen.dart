@@ -51,7 +51,6 @@ class _CartScreenState extends State<CartScreen> {
       List<ProductType> productTypes = [];
       Map<int, ProductInfo> productInfos = {};
 
-      // 각 선택된 아이템의 productId로 ProductInfo를 가져옵니다.
       for (var item in selectedItems) {
         int productId = int.parse(item.id);
         if (!productInfos.containsKey(productId)) {
@@ -219,10 +218,12 @@ class _CartScreenState extends State<CartScreen> {
                           style: TextStyle(color: midGray)),
                       Text('${item.price}원', style: TextStyle(color: midGray)),
                       if (item.option != null)
-                        Text('옵션: ${item.option!.name} (${item.option!.value}원)', style: TextStyle(color: midGray)),
+                        Text(
+                            '옵션: ${item.option!.name} (${item.option!.value}원)',
+                            style: TextStyle(color: midGray)),
                       QuantityChanger(
                         initialQuantity: item.quantity,
-                        maxQuantity: 50, // 재고에 따라 조절
+                        maxQuantity: 50,
                         onQuantityChanged: (newQuantity) {
                           Provider.of<CartProvider>(context, listen: false)
                               .updateQuantity(index, newQuantity);
