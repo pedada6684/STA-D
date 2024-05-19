@@ -266,10 +266,12 @@ public class AdvertVideoService {
         Long tmp;
         if (detailId < 247) {
             tmp = detailId % 5;
-        } else if (detailId > 256) {
+        } else if (detailId < 256) {
+            tmp = 0L;
+        } else if (detailId < 1697) {
             tmp = (detailId - 256) % 5;
         } else {
-            tmp = 0L;
+            tmp = (detailId - 1696) % 5;
         }
 
         if (tmp == 1L) {
