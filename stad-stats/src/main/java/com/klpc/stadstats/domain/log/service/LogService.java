@@ -258,7 +258,7 @@ public class LogService {
 
 
 
-    //TODO: 지훈 리포지토리 접근 코드만 고쳐서 만들어줘
+    //TODO: 지운 리포지토리 접근 코드만 고쳐서 만들어줘
 
     public GetTotalLogResponse getTotalLogTest(Long advertId) {
         LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
@@ -269,11 +269,11 @@ public class LogService {
         Object[] result = (Object[]) results[0];
 
         GetTotalLogResponse response = GetTotalLogResponse.builder().
-                totalAdvertClick(result[0] != null ? (Long) result[0] : 0L).
-                totalAdvertVideo(result[1] != null ? (Long) result[1] : 0L).
-                totalOrder(result[2] != null ? (Long) result[2] : 0L).
-                totalOrderCancel(result[2] != null ? (Long) result[3] : 0L).
-                totalRevenue(result[3] != null ? (Long) result[4] : 0L).
+                totalAdvertClick(advertClickLogRepository.findByAdvertId(advertId)).
+                totalAdvertVideo(advertVideoLogRepository.findByAdvertId(advertId)).
+                totalOrder(orderLogRepository.findByAdvertId(advertId)).
+                totalOrderCancel(orderLogRepository.findByAdvertIdCancel(advertId)).
+                totalRevenue(orderLogRepository.findByAdvertIdRevenue(advertId)).
                 build();
 
         return response;
