@@ -53,7 +53,6 @@ export default function BarChart({ title, dataType }: PieChartProps) {
             getTotal(id, accessToken)
           );
           const results = await Promise.all(promise);
-          console.log("results", results);
           // 결과 정렬 및 상위 5개 항목 선택
           const sortedResults = results
             .map((res, index) => ({
@@ -66,39 +65,12 @@ export default function BarChart({ title, dataType }: PieChartProps) {
           setSeries([
             { name: title, data: sortedResults.map((res) => res.value) },
           ]);
-          console.log("series", series);
           setLabels(sortedResults.map((res) => res.label));
         }
       } catch (error) {
         console.error("데이터 로드 실패", error);
       }
     }
-    // const advertIds = adListData.data.map((ad: adList) => ad.advertId); // map 사용해서 advertId 담아주기
-    // advertId와 title 추출
-    // const advertIds = combinedAds.map((ad: adList) => ad.advertId);
-    // const titles = combinedAds.map((ad: adList) => ad.title);
-    // console.log(advertIds);
-    // const promise = advertIds.map((id: number) =>
-    //   getTotal(id, accessToken)
-    // );
-    // const results = await Promise.all(promise); // 데이터 병렬을 위해 동기화
-    // console.log(results);
-    // const sortedResults = results
-    //   .map((res, index) => ({
-    //     value: res[dataType],
-    //     // label: adListData.data[index].title,
-    //     label: titles[index],
-    //   }))
-    //   .sort((a, b) => b.value - a.value) // 값에 따라 내림차순으로 정렬
-    //   .slice(0, 3); // 상위 5개 항목만 선택
-    // setSeries([
-    //   { name: title, data: sortedResults.map((res) => res.value) },
-    // ]);
-    // setLabels(sortedResults.map((res) => res.label));
-    // } catch (error) {
-    //   console.error("데이터 로드 실패", error);
-    // }
-    // }
     fetchData();
   }, [ads, accessToken, dataType]);
 
