@@ -29,7 +29,7 @@ logging:
       hibernate:
         type:
           descriptor:
-            sql: info
+            sql: warn
 
 server:
   error:
