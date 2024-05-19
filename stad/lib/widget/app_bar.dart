@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
-import 'package:stad/main.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
   final TextStyle? titleStyle;
   final bool showBackButton;
-  final bool showHomeButton;
   final TabController? tabController;
   final bool isLoading; // 로딩 상태 추가
   final double progressValue;
@@ -21,33 +19,34 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.tabController,
     this.isLoading = false,
     this.progressValue = 0.0,
-    this.showHomeButton = false, // 초기값 false
   });
 
   @override
   Widget build(BuildContext context) {
     List<Widget> allActions = actions ?? [];
-
-    if (showHomeButton) {
-      allActions.add(
-        Padding(
-          padding: const EdgeInsets.only(right: 16.0),
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => MyApp()),
-                (Route<dynamic> route) => false,
-              );
-            },
-            child: Image.asset(
-              'assets/image/homeIcon.png',
-              width: 20,
-              color: mainNavy,
-            ),
-          ),
-        ),
-      );
-    }
+    //
+    // if (showHomeButton) {
+    //   allActions.add(
+    //     Padding(
+    //       padding: const EdgeInsets.only(right: 16.0),
+    //       child: InkWell(
+    //         onTap: () {
+    //           // Navigator.of(context).pushAndRemoveUntil(
+    //           //   MaterialPageRoute(builder: (context) => HomeScreen()),
+    //           //   (Route<dynamic> route) => false,
+    //           // );
+    //           Provider.of<NavigationProvider>(context, listen: false)
+    //               .setSelectedIndex(0);
+    //         },
+    //         child: Image.asset(
+    //           'assets/image/homeIcon.png',
+    //           width: 20,
+    //           color: mainNavy,
+    //         ),
+    //       ),
+    //     ),
+    //   );
+    // }
 
     return AppBar(
       scrolledUnderElevation: 0,

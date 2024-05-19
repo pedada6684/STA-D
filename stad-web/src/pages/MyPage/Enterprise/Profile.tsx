@@ -1,25 +1,73 @@
 import styles from "./Profile.module.css";
 import company from "../../../assets/profile_company.png";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
+import { EnterpriseData } from "./EnterprisesEdit";
+import { profileImgUpload } from "./EnterpriseApi";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
+import { useMutation } from "react-query";
 
 interface ProfileProps {
+  data?: EnterpriseData;
   onEditClick: (e: MouseEvent<HTMLDivElement>) => void;
+  onSaveClick: (e: MouseEvent<HTMLDivElement>) => void;
+  onFileSelect: (file: File) => void;
 }
 
-export default function Profile({ onEditClick }: ProfileProps) {
+export default function Profile({
+  data,
+  onEditClick,
+  onSaveClick,
+  onFileSelect,
+}: ProfileProps) {
   const [editing, setEditing] = useState(false); // 수정 or 저장 상태관리
-  const [image, setImage] = useState(company); // 이미지 업로드 관리
+  const [image, setImage] = useState(company); // 이미지 업로드 관리(URL 상태관리)
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [fileKey, setFileKey] = useState(Date.now());
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      let img = e.target.files[0];
-      setImage(URL.createObjectURL(img));
+  useEffect(() => {
+    if (data?.profile instanceof File) {
+      const url = URL.createObjectURL(data.profile);
+      setImage(url);
+      // 이전 객체 URL을 해제
+      return () => URL.revokeObjectURL(url);
+    } else if (typeof data?.profile === "string") {
+      setImage(data.profile);
+    } else {
+      setImage(company);
+    }
+  }, [data]);
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      let profileImg = e.target.files[0]; // FileList에서 첫 번째 File 선택
+      setSelectedFile(profileImg);
+      const imgUrl = URL.createObjectURL(profileImg);
+      // 이전 객체 URL을 해제
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+
+      setPreviewUrl(imgUrl);
+      setImage(imgUrl); // 이미지 상태를 최신으로 업데이트
+      onFileSelect(profileImg);
+    } else {
+      // 파일 선택이 취소되었거나 파일이 선택되지 않았을 때 처리
+      setSelectedFile(null);
+      setPreviewUrl(""); // 미리보기 URL을 비워줌
+      setImage(company); // 기본 이미지로 설정
     }
   };
 
   const toggleEditing = (e: React.MouseEvent<HTMLDivElement>) => {
-    setEditing(!editing);
-    if (!editing) onEditClick(e); // 수정 모드 아닐 때는 onEditClick() 호출 x
+    if (editing) {
+      onSaveClick(e); // "저장" 버튼 클릭 시 이벤트
+      setEditing(false);
+    } else {
+      onEditClick(e); // "수정" 버튼 클릭 시 이벤트
+      setEditing(true);
+    }
   };
   return (
     <div className={`${styles.profile}`}>
@@ -27,13 +75,22 @@ export default function Profile({ onEditClick }: ProfileProps) {
         <div className={styles.profileSection}>
           <div className={styles.circle}>
             {editing ? (
-              <input
-                type="file"
-                name="file"
-                id="file"
-                onChange={handleImageChange}
-                className={styles.imageInput}
-              />
+              <>
+                <input
+                  key={fileKey}
+                  type="file"
+                  accept="image/*"
+                  name="file"
+                  id="file"
+                  onChange={handleImageChange}
+                  className={styles.imageInput}
+                />
+                <div className={`${styles.preview}`}>
+                  {image && (
+                    <img src={previewUrl} alt="preview-img" key={previewUrl} />
+                  )}
+                </div>
+              </>
             ) : (
               <img src={image} alt="회사 로고" className={styles.icon} />
             )}
@@ -44,7 +101,7 @@ export default function Profile({ onEditClick }: ProfileProps) {
             </label>
           )}
         </div>
-        <div className={`${styles.title}`}>회사명</div>
+        <div className={`${styles.title}`}>{data?.company}</div>
       </div>
       <div className={`${styles.edit}`} onClick={toggleEditing}>
         {editing ? "저장" : "수정"}

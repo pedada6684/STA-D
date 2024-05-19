@@ -2,8 +2,20 @@ import styles from "./TVLanding.module.css";
 import TVContainer from "../../components/Container/TVContainer";
 import logo from "../../assets/tv_STA_D.png";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../../store";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 export default function TVLanding() {
   const navigate = useNavigate();
+  const isUser = useSelector((state: RootState) => state.tvUser.users);
+  console.log(isUser);
+  useEffect(() => {
+    if (isUser.length > 0) {
+      navigate("/tv-profile");
+    } else {
+      navigate("/tv-login");
+    }
+  }, [isUser, navigate]);
   return (
     <div>
       <TVContainer>
@@ -22,9 +34,7 @@ export default function TVLanding() {
             있습니다.
           </div>
           <div className={`${styles.loginBtn}`}>
-            <button onClick={() => navigate("/tv-login")}>
-              QR 코드로 로그인하기
-            </button>
+            <button onClick={() => navigate("/tv-profile")}>로그인하기</button>
           </div>
         </div>
       </TVContainer>

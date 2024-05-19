@@ -6,16 +6,17 @@ import com.klpc.stadspring.domain.advert.controller.response.*;
 import com.klpc.stadspring.domain.advert.service.AdvertService;
 import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertRequestCommand;
 import com.klpc.stadspring.domain.advert.service.command.request.ModifyAdvertRequestCommand;
-import com.klpc.stadspring.domain.advertVideo.controller.response.ModifyVideoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -31,18 +32,19 @@ public class AdvertController {
     @ApiResponse(responseCode = "200", description = "광고가 등록 되었습니다.")
     public ResponseEntity<AddAdvertResponse> addAdvert(@RequestBody AddAdvertRequest request){
         log.info("광고 등록 Controller"+"\n"+"title : "+request.getTitle());
+        log.info("directVideoUrl : "+request.getDirectVideoUrl());
         AddAdvertRequestCommand command = AddAdvertRequestCommand.builder()
                 .userId(request.getUserId())
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
-                .type(request.getType())
+                .advertType(request.getAdvertType())
                 .directVideoUrl(request.getDirectVideoUrl())
                 .bannerImgUrl(request.getBannerImgUrl())
                 .selectedContentList(request.getSelectedContentList())
                 .advertVideoUrlList(request.getAdvertVideoUrlList())
-                .advertBannerImgUrl(request.getBannerImgUrl())
+                .advertCategory(request.getAdvertCategory())
                 .build();
         AddAdvertResponse response = advertService.addAdvert(command);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -59,11 +61,12 @@ public class AdvertController {
                 .description(request.getDescription())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
-                .type(request.getType())
+                .advertType(request.getAdvertType())
+                .advertCategory(request.getAdvertCategory())
                 .directVideoUrl(request.getDirectVideoUrl())
                 .bannerImgUrl(request.getBannerImgUrl())
                 .selectedContentList(request.getSelectedContentList())
-                .advertBannerImgUrl(request.getBannerImgUrl())
+                .advertVideoUrlList(request.getAdvertVideoUrlList())
                 .build();
         ModifyAdvertResponse response = advertService.modifyAdvert(command);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -82,9 +85,12 @@ public class AdvertController {
     @GetMapping("get")
     @Operation(summary = "광고 조회", description = "광고 조회")
     @ApiResponse(responseCode = "200", description = "광고가 조회 되었습니다.")
-    public ResponseEntity<GetAdvertResponse> getAdvert(@RequestParam("advertId") Long advertId){
-        log.info("광고 조회 Controller"+"\n"+"advertId : "+advertId);
-        GetAdvertResponse response = advertService.getAdvert(advertId);
+    public ResponseEntity<GetAdvertResponse> getAdvert(@RequestParam("advertIds") List<Long> advertIds){
+        log.info("광고 조회 Controller"+"\n"+"advertId : ");
+        for(Long advertId : advertIds) {
+            log.info(advertId+" ");
+        }
+        GetAdvertResponse response = advertService.getAdvert(advertIds);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -120,4 +126,22 @@ public class AdvertController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("get-advert-id-list")
+    @Operation(summary = "광고 아이디 리스트 조회", description = "광고 아이디 리스트 조회")
+    @ApiResponse(responseCode = "200", description = "광고 아이디 리스트가 조회 되었습니다.")
+    public ResponseEntity<GetAdvertIdListResponse> getAdvertIdList(){
+        GetAdvertIdListResponse response = advertService.GetAdvertIdList();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("get-user-advert")
+    @Operation(summary = "유저가 본 광고 조회", description = "유저가 본 광고 조회")
+    @ApiResponse(responseCode = "200", description = "유저가 본 광고가 조회 되었습니다.")
+    public ResponseEntity<GetAdvertListResponse> getAdvertListByUser(Long userId){
+
+        GetAdvertListResponse response = advertService.GetAdvertById(userId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

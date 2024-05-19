@@ -6,12 +6,12 @@ import lombok.Getter;
 @Getter
 public class AddBookmarkRequest {
     private Long userId;
-    private Long detailId;
+    private Long conceptId;
 
     public AddBookmarkRequestCommand toCommand() {
         return AddBookmarkRequestCommand.builder()
                 .userId(userId)
-                .detailId(detailId)
+                .conceptId(conceptId)
                 .build();
     }
 }

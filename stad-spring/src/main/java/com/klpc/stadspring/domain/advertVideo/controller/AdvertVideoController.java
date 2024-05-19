@@ -6,17 +6,22 @@ import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddBannerImgRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.AddVideoListRequestCommand;
 import com.klpc.stadspring.domain.advertVideo.service.command.request.ModifyVideoRequestCommand;
+import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
+import com.klpc.stadspring.global.RedisService;
+import com.klpc.stadspring.global.event.AdvertsStartEvent;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.support.ResourceRegion;
+import org.springframework.http.*;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -27,11 +32,16 @@ import java.util.List;
 public class AdvertVideoController {
 
     private final AdvertVideoService advertVideoService;
+    private final ContentDetailService detailService;
+    private final RedisService redisService;
+
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @PostMapping("/add-video-list")
     @Operation(summary = "광고 영상 업로드", description = "광고 영상 업로드")
     @ApiResponse(responseCode = "200", description = "광고 영상이 업로드 되었습니다.")
     public ResponseEntity<AddVideoListResponse> addVideoList(@RequestPart("videoList") List<MultipartFile> videoList){
+        log.info("광고 영상 업로드"+"\n"+"videoList Size : "+videoList.size());
         AddVideoListResponse response = advertVideoService.addVideoList(AddVideoListRequestCommand.builder().list(videoList).build());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -70,10 +80,39 @@ public class AdvertVideoController {
     @Operation(summary = "광고 배너 이미지 업로드", description = "광고 배너 이미지 업로드")
     @ApiResponse(responseCode = "200", description = "광고 배너 이미지가 업로드 되었습니다.")
     public ResponseEntity<AddBannerImgResponse> addBannerImg(@RequestPart("bannerImg") MultipartFile bannerImg){
+        log.info("광고 배너 이미지 업로드"+"\n"+"bannerImgName : "+bannerImg.getName());
         AddBannerImgRequestCommand command = AddBannerImgRequestCommand.builder().img(bannerImg).build();
 
         AddBannerImgResponse response = advertVideoService.addBannerImg(command);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+    @GetMapping("/get-video-list/{detailId}")
+    @Operation(summary = "송출할 광고 비디오 리스트 조회", description = "송출할 광고 비디오 리스트 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "송출할 광고 비디오 리스트 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<GetFinalAdvertVideoListResponse> getFinalVideoList(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long detailId, @RequestParam("userId") Long userId){
+        log.info("송출할 광고 비디오 리스트 조회" + "\n" + "getFinalVideoList : "+detailId);
+
+        Long conceptId = detailService.getContentDetailById(detailId).getContentConceptId();
+        GetFinalAdvertVideoListResponse response = advertVideoService.getFinalAdvertVideoList(userId, conceptId, detailId);
+        kafkaTemplate.send("adverts-start", new AdvertsStartEvent(userId, detailId, response.getAdvertIdList()));
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/streaming/{videoId}")
+    @Operation(summary = "광고 스트리밍", description = "광고 스트리밍")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "광고 스트리밍 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<ResourceRegion> streamingPublicVideo(@RequestHeader HttpHeaders httpHeaders, @PathVariable Long videoId){
+        log.info("광고 스트리밍" + "\n" + "streamingPublicVideo : "+videoId);
+
+        return advertVideoService.streamingAdvertVideo(httpHeaders, videoId);
+    }
 }

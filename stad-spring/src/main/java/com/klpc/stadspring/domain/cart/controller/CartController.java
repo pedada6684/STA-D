@@ -66,9 +66,9 @@ public class CartController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/list/{userId}")
+    @GetMapping("/list")
     @Operation(summary = "장바구니 상품 리스트 조회", description = "장바구니 상품 리스트 조회")
-    public ResponseEntity<?> getCartProductListByCartId(@PathVariable Long userId) {
+    public ResponseEntity<?> getCartProductListByCartId(@RequestParam Long userId) {
         GetCartProductListResponse response = cartService.getCartProductListByUserId(userId);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
@@ -80,10 +80,9 @@ public class CartController {
     public ResponseEntity<?> updateCartProductCount(@RequestBody UpdateCartProductCountRequest request) {
         log.info("UpdateCartProductCountRequest: "  + request);
 
-        CartProduct cartProduct = cartService.updateCartProductCount(request.toCommand());
+        GetCartProductInfoResponse response = cartService.updateCartProductCount(request.toCommand());
 
-        GetCartProductInfoResponse response = GetCartProductInfoResponse.from(cartProduct);
         // 변환된 응답을 ResponseEntity에 담아 반환
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,5 +1,4 @@
 package com.klpc.stadspring.domain.contents.concept.controller.request;
-
 import com.klpc.stadspring.domain.contents.concept.service.command.request.AddConceptRequestCommand;
 import lombok.Getter;
 

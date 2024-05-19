@@ -3,12 +3,14 @@ import 'package:stad/constant/colors.dart';
 
 class QuantityChanger extends StatefulWidget {
   final int initialQuantity;
+  final int maxQuantity;
   final Function(int) onQuantityChanged;
 
   const QuantityChanger({
     super.key,
     required this.initialQuantity,
     required this.onQuantityChanged,
+    required this.maxQuantity,
   });
 
   @override
@@ -17,26 +19,45 @@ class QuantityChanger extends StatefulWidget {
 
 class _QuantityChangerState extends State<QuantityChanger> {
   late int quantity;
+  late TextEditingController controller;
 
   @override
   void initState() {
     super.initState();
     quantity = widget.initialQuantity;
+    controller = TextEditingController(text: quantity.toString());
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void updateQuantity(String newQuantityStr) {
+    int newQuantity = int.tryParse(newQuantityStr) ?? quantity; // 기본값은 이전 수량
+    setQuantity(newQuantity);
+  }
+
+  void setQuantity(int newQuantity) {
+    int adjustedQuantity = newQuantity.clamp(1, widget.maxQuantity);
+    if (quantity != adjustedQuantity) {
+      setState(() {
+        quantity = adjustedQuantity;
+        controller.text = quantity.toString(); // 입력 필드 갱신
+      });
+      widget.onQuantityChanged(quantity);
+    }
   }
 
   void increment() {
-    setState(() {
-      quantity++;
-      widget.onQuantityChanged(quantity);
-    });
+    setQuantity(quantity + 1);
   }
 
   void decrement() {
-    if (quantity == 1) return;
-    setState(() {
-      quantity--;
-      widget.onQuantityChanged(quantity);
-    });
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
   }
 
   @override
@@ -55,14 +76,12 @@ class _QuantityChangerState extends State<QuantityChanger> {
               fontSize: 16.0, // 글자 크기를 조절합니다.
               height: 1.0, // 텍스트의 높이를 조정하여 세로 중앙 정렬이 되도록 합니다.
             ),
-            controller: TextEditingController(text: quantity.toString()),
+            controller: controller,
             keyboardType: TextInputType.number,
-            onSubmitted: (newValue) {
-              int newQuantity = int.tryParse(newValue) ?? 1;
-              setState(() {
-                quantity = newQuantity.clamp(1, 99);
-              });
-            },
+            onSubmitted: updateQuantity,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+            ),
           ),
         ),
         _buildCounterButton(Icons.add, increment),

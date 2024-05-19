@@ -1,14 +1,10 @@
 package com.klpc.stadspring.domain.product_review.controller;
 
-import com.klpc.stadspring.domain.product.controller.response.GetProductListByAdverseResponse;
-import com.klpc.stadspring.domain.product.entity.Product;
-import com.klpc.stadspring.domain.product_review.controller.request.GetProductReviewListByUserIdRequest;
 import com.klpc.stadspring.domain.product_review.controller.request.ProductReviewPostRequest;
 import com.klpc.stadspring.domain.product_review.controller.response.GetProductReviewListResponse;
 import com.klpc.stadspring.domain.product_review.controller.response.GetProductReviewResponse;
 import com.klpc.stadspring.domain.product_review.entity.ProductReview;
 import com.klpc.stadspring.domain.product_review.service.ProductReviewService;
-import com.klpc.stadspring.domain.product_review.service.command.DeleteReviewCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,8 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Slf4j
 @Tag(name = "상품 리뷰 컨트롤러", description = "Product Review Controller API")
 @RestController
@@ -33,7 +27,7 @@ public class ProductReviewController {
     private final ProductReviewService productReviewService;
 
 
-    @GetMapping("/{id}")
+    @GetMapping("")
     @Operation(summary = "리뷰 상세 조회", description = "리뷰 상세 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetProductReviewResponse.class)))
     public ResponseEntity<GetProductReviewResponse> getReviewInfo(@RequestParam("id") Long id) {
@@ -61,24 +55,24 @@ public class ProductReviewController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    public ResponseEntity<?> deleteReview(@RequestBody DeleteReviewCommand command) {
-        productReviewService.deleteReview(command);
+    public ResponseEntity<?> deleteReview(@RequestParam Long id) {
+        productReviewService.deleteReview(id);
         return ResponseEntity.ok().build();
     }
 
     // 리뷰 리스트 조회
-    @GetMapping("/list/{productId}")
+    @GetMapping("/list")
     @Operation(summary = "특정 상품에 속한 리뷰 리스트 조회", description = "특정 상품에 속한 리뷰 리스트 조회")
-    public ResponseEntity<?> getProductReviewListByAdverseId(@PathVariable Long productId) {
+    public ResponseEntity<?> getProductReviewListByAdverseId(@RequestParam Long productId) {
         GetProductReviewListResponse response = productReviewService.getReviewListByProductId(productId);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/list/user/{userId}")
+    @GetMapping("/list/user")
     @Operation(summary = "유저가 작성한 리뷰 목록", description = "유저가 작성한 리뷰 목록")
-    public ResponseEntity<?> getProductReviewListByUserId(@PathVariable Long userId) {
+    public ResponseEntity<?> getProductReviewListByUserId(@RequestParam Long userId) {
         GetProductReviewListResponse response = productReviewService.getProductReviewListByUserId(userId);
 
         // 변환된 응답을 ResponseEntity에 담아 반환

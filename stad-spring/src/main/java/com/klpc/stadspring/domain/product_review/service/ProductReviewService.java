@@ -68,9 +68,8 @@ public class ProductReviewService {
         return newReview;
     }
 
-    public void deleteReview(DeleteReviewCommand command) {
-        log.info("DeleteReviewCommand: "+command);
-        ProductReview review = productReviewRepository.findById(command.getId())
+    public void deleteReview(Long id) {
+        ProductReview review = productReviewRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
         productReviewRepository.delete(review);
     }
@@ -90,6 +89,7 @@ public class ProductReviewService {
                     .content(productReview.getContent())
                     .score(productReview.getScore())
                     .reviewImg(productReview.getReviewImg())
+                    .regDate(productReview.getRegDate())
                     .build();
 
             responseList.add(response);
@@ -111,6 +111,7 @@ public class ProductReviewService {
                     .content(productReview.getContent())
                     .score(productReview.getScore())
                     .reviewImg(productReview.getReviewImg())
+                    .regDate(productReview.getRegDate())
                     .build();
 
             responseList.add(response);
