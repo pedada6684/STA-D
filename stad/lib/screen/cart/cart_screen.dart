@@ -21,7 +21,6 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   late CartService cartService;
-  late List<CartItem> cartItems = [];
   late ProductService productService;
   bool isSelectAll = false;
 
@@ -43,42 +42,42 @@ class _CartScreenState extends State<CartScreen> {
   void navigateToOrderScreen() async {
     // 선택된 항목들만 필터링
     List<CartItem> selectedItems =
-        Provider.of<CartProvider>(context, listen: false)
-            .cartItems
-            .where((item) => item.isSelected)
-            .toList();
+    Provider.of<CartProvider>(context, listen: false)
+        .cartItems
+        .where((item) => item.isSelected)
+        .toList();
 
     if (selectedItems.isNotEmpty) {
-      List<ProductType> productTypes = selectedItems.map((item) {
-        return ProductType(
-          id: int.parse(item.id),
+      List<ProductType> productTypes = [];
+      Map<int, ProductInfo> productInfos = {};
+
+      // 각 선택된 아이템의 productId로 ProductInfo를 가져옵니다.
+      for (var item in selectedItems) {
+        int productId = int.parse(item.id);
+        if (!productInfos.containsKey(productId)) {
+          productInfos[productId] = await productService.getProductInfo(productId);
+        }
+
+        productTypes.add(ProductType(
+          id: productId,
           name: item.title,
           price: item.price,
           quantity: item.quantity,
-          // 상품 옵션 처리도 고려해야 할 수 있음
-        );
-      }).toList();
-
-      ProductInfo? productInfo = await productService.getProductInfo(3);
+        ));
+      }
 
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => OrderScreen(
-            productInfo: productInfo,
-            // 필요하다면 적절히 설정
+            productInfo: productInfos.isNotEmpty ? productInfos.values.first : null,
             productTypes: productTypes,
-            title: productInfo?.name ?? "Order Details",
-            // 혹은 다른 제목
+            title: productInfos.isNotEmpty ? productInfos.values.first.name : "Order Details",
             quantities: {for (var item in productTypes) item.id: item.quantity},
-            advertId: 1,
-            // 예시 ID, 적절한 값으로 변경 필요
-            contentId: 1,
-            // 예시 ID, 적절한 값으로 변경 필요
-            //TODO: optionIds 수정하기
-            optionIds: [],
-            // 옵션 ID 처리 필요
-            deliveryFee: 2500,// 배송료 처리
+            advertId: 1, // 예시 ID, 적절한 값으로 변경 필요
+            contentId: 1, // 예시 ID, 적절한 값으로 변경 필요
+            optionIds: selectedItems.map((item) => item.option?.id ?? -1).toList(),
+            deliveryFee: 2500, // 배송료 처리
           ),
         ),
       );
@@ -87,22 +86,6 @@ class _CartScreenState extends State<CartScreen> {
           .showSnackBar(SnackBar(content: Text("선택된 상품이 없습니다.")));
     }
   }
-
-  // void toggleItemSelection(int index) {
-  //   setState(() {
-  //     cartItems[index].isSelected = !cartItems[index].isSelected;
-  //     isSelectAll = cartItems.every((item) => item.isSelected);
-  //   });
-  // }
-  //
-  // void toggleSelectAll() {
-  //   setState(() {
-  //     isSelectAll = !isSelectAll;
-  //     for (var item in cartItems) {
-  //       item.isSelected = isSelectAll;
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -121,15 +104,15 @@ class _CartScreenState extends State<CartScreen> {
           _selectAllContainer(),
           Expanded(
             child:
-                Consumer<CartProvider>(builder: (context, cartProvider, child) {
+            Consumer<CartProvider>(builder: (context, cartProvider, child) {
               return StreamBuilder<List<CartItem>>(
                 stream: cartProvider.cartItemsStream,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
                         child: CircularProgressIndicator(
-                      color: mainNavy,
-                    ));
+                          color: mainNavy,
+                        ));
                   }
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return _buildEmptyCart();
@@ -160,7 +143,6 @@ class _CartScreenState extends State<CartScreen> {
         padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         color: mainWhite,
         child: Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
               icon: Icon(
@@ -182,7 +164,6 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Widget _buildCartItem(CartItem item, int index) {
-
     return Container(
       margin: EdgeInsets.only(top: 10.0),
       color: mainWhite,
@@ -237,6 +218,8 @@ class _CartScreenState extends State<CartScreen> {
                       Text('${item.quantity}개',
                           style: TextStyle(color: midGray)),
                       Text('${item.price}원', style: TextStyle(color: midGray)),
+                      if (item.option != null)
+                        Text('옵션: ${item.option!.name} (${item.option!.value}원)', style: TextStyle(color: midGray)),
                       QuantityChanger(
                         initialQuantity: item.quantity,
                         maxQuantity: 50, // 재고에 따라 조절
@@ -260,14 +243,14 @@ class _CartScreenState extends State<CartScreen> {
     return Consumer<CartProvider>(
       builder: (context, cartProvider, child) {
         int totalPrice =
-            cartProvider.getTotalSelectedPrice(); // 선택된 상품들의 총 금액을 계산
+        cartProvider.getTotalSelectedPrice(); // 선택된 상품들의 총 금액을 계산
         return totalPrice > 0
             ? CustomElevatedButton(
-                onPressed: navigateToOrderScreen,
-                text: '${totalPrice}원 주문하기',
-                textColor: mainWhite,
-                backgroundColor: mainNavy,
-              )
+          onPressed: navigateToOrderScreen,
+          text: '${totalPrice}원 주문하기',
+          textColor: mainWhite,
+          backgroundColor: mainNavy,
+        )
             : SizedBox.shrink();
       },
     );

@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 class LogService {
   final Dio dio = Dio();
 
-  final String logUrl = 'https://www.mystad.com/api/log';
+  final String logUrl = 'https://www.mystad.com/stats/log';
 
   Future<void> advertClickLog({
     required int advertId,
