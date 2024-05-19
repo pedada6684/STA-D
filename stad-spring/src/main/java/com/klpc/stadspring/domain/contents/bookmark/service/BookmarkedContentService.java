@@ -6,8 +6,8 @@ import com.klpc.stadspring.domain.contents.bookmark.entity.BookmarkedContent;
 import com.klpc.stadspring.domain.contents.bookmark.repository.BookmarkedContentRepository;
 import com.klpc.stadspring.domain.contents.bookmark.service.command.request.AddBookmarkRequestCommand;
 import com.klpc.stadspring.domain.contents.bookmark.service.command.request.DeleteBookmarkRequsetCommand;
-import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
-import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailRepository;
+import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
+import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
@@ -26,27 +26,27 @@ import java.util.List;
 public class BookmarkedContentService {
     private final BookmarkedContentRepository repository;
     private final UserRepository userRepository;
-    private final ContentDetailRepository detailRepository;
+    private final ContentConceptRepository conceptRepository;
 
     /**
      * userId로 북마크한 영상의 detail Id 조회
      * @param userId
      * @return
      */
-    public List<Long> getDetailIdByUserId(Long userId) {
-        List<Long> detailIdList = repository.findDetailIdByUserId(userId)
+    public List<Long> getConceptIdByUserId(Long userId) {
+        List<Long> conceptIdList = repository.findConceptIdByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        return detailIdList;
+        return conceptIdList;
     }
 
     /**
      * userId와 detailId로 북마크 유무 조회
      * @param userId
-     * @param detailId
+     * @param conceptId
      * @return
      */
-    public boolean checkBookmark(Long userId, Long detailId) {
-        if(repository.findByUserIdAndContentDetailId(userId, detailId).isPresent()) {
+    public boolean checkBookmark(Long userId, Long conceptId) {
+        if(repository.findByUserIdAndContentConceptId(userId, conceptId).isPresent()) {
             return true;
         }
         return false;
@@ -63,11 +63,11 @@ public class BookmarkedContentService {
 
         User user = userRepository.findById(command.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-        ContentDetail detail = detailRepository.findById(command.getDetailId())
+        ContentConcept concept = conceptRepository.findById(command.getConceptId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         BookmarkedContent newBookmarkedContent = BookmarkedContent.createBookmarkedContent(
-                detail,
+                concept,
                 user);
         repository.save(newBookmarkedContent);
 
@@ -79,14 +79,11 @@ public class BookmarkedContentService {
      * @param command
      * @return
      */
+    @Transactional(readOnly = false)
     public DeleteBookmarkResponse deleteBookmark(DeleteBookmarkRequsetCommand command) {
         log.info("DeleteBookmarkRequsetCommand: "+command);
-
-        BookmarkedContent bookmark = repository.findByUserIdAndContentDetailId(command.getUserId(), command.getDetailId())
-                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-
-        repository.delete(bookmark);
-
+        repository.delete(repository.findByImin(command.getUserId(), command.getConceptId())
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND)));
         return DeleteBookmarkResponse.builder().result("북마크한 컨텐츠가 성공적으로 삭제되었습니다.").build();
     }
 }

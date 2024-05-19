@@ -8,6 +8,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -21,5 +23,14 @@ public class ContentConceptRepositoryImpl implements ContentConceptRepositoryCus
                 .from(contentConcept)
                 .where(contentConcept.title.contains(keyword))
                 .fetch());
+    }
+
+    @Override
+    public Optional<ContentConcept> findByIsMovieAndTitle(boolean isMovie, String title) {
+        return Optional.ofNullable(query.select(contentConcept)
+                .from(contentConcept)
+                .where(contentConcept.isMovie.eq(isMovie)
+                        .and(contentConcept.title.eq(title)))
+                .fetchOne());
     }
 }

@@ -20,25 +20,16 @@ public class GetProductInfoResponse {
      *  상품 정보 조회
      */
 
-    private Long id;
-    private List<ProductImage> images ;
+    private Long productId;
+    private String name;
+    private List<String> images;
     private String thumbnail;
     private Long cityDeliveryFee;
     private Long mtDeliveryFee;
-    private LocalDateTime expStart;
-    private LocalDateTime expEnd;
+    private String expStart;
+    private String expEnd;
+    private List<GetProductInfoProductTypeResponse> productTypeList;
 
-    public static GetProductInfoResponse from(Product product){
-        return GetProductInfoResponse.builder()
-                .id(product.getId())
-                .images(product.getImages())
-                .thumbnail(product.getThumbnail())
-                .cityDeliveryFee(product.getCityDeliveryFee())
-                .mtDeliveryFee(product.getMtDeliveryFee())
-                .expStart(product.getExpStart())
-                .expEnd(product.getExpEnd())
-                .build();
-    }
 }
 
 

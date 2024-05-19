@@ -1,5 +1,8 @@
 package com.klpc.stadspring.domain.user.service;
 
+import com.klpc.stadspring.domain.classification.dto.UserCategoryRequest;
+import com.klpc.stadspring.domain.classification.dto.UserCategoryResponse;
+import com.klpc.stadspring.domain.classification.service.ClassificationService;
 import com.klpc.stadspring.domain.user.entity.User;
 import com.klpc.stadspring.domain.user.entity.UserLocation;
 import com.klpc.stadspring.domain.user.repository.UserLocationRepository;
@@ -13,12 +16,19 @@ import com.klpc.stadspring.global.response.exception.CustomException;
 import com.klpc.stadspring.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
+
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +40,7 @@ public class UserService {
     private final UserLocationRepository userLocationRepository;
     private final AuthTokenGenerator authTokenGenerator;
     private final RefreshTokenService refreshTokenService;
+    private final ClassificationService classificationService;
     private final S3Util s3Util;
 
 
@@ -55,6 +66,7 @@ public class UserService {
         return S3Url.toString();
     }
 
+    @Transactional(readOnly = false)
     public void withdrawUser(WithdrawUserCommand command) {
         log.info("WithdrawUserCommand: "+command);
         User user = userRepository.findById(command.getUserId())
@@ -63,6 +75,7 @@ public class UserService {
         return;
     }
 
+    @Transactional(readOnly = false)
     public User updateUserInfo(UpdateUserInfoCommand command) {
         log.info("UpdateUserInfoCommand: "+command);
         User user = findUserById(command.getUserId());
@@ -72,7 +85,9 @@ public class UserService {
         ){
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
         }
-        updateProfileImg(command.convertToUPICommand());
+        if(command.getProfile() != null && !command.getProfile().isEmpty()) {
+            updateProfileImg(command.convertToUPICommand());
+        }
         user.update(command);
         return user;
     }
@@ -118,7 +133,6 @@ public class UserService {
                         ()->joinMember(command.convertToJoinUserCommand())
                 );
 
-
         LoginResult result = LoginResult.builder()
                 .accessToken(authTokenGenerator.generateAT(user.getId()))
                 .refreshToken(authTokenGenerator.generateRT(user.getId()))
@@ -145,12 +159,87 @@ public class UserService {
         //유저 구독채널 저장
         String youtubeInfo = getUserYoutubeInfo(command.getGoogleAT());
         newMember.updateYoutubeInfo(youtubeInfo);
+
+        log.info("youtubeInfo: "+youtubeInfo);
         return newMember;
     }
 
     private String getUserYoutubeInfo(String googleAT) {
-        //TODO: 유튜브에 api통신을 통해 채널을 가져오고 pasing해 하나의 스트링으로 만드는 코드를 만들어주길 부탁
-        return null;
+        String concern = "축산물";
+        BufferedReader in = null;
+        try {
+            URL url = new URL("https://youtube.googleapis.com/youtube/v3/subscriptions?part=snippet,contentDetails&mine=true&maxResults=50");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer " + googleAT);
+
+            int responseCode = con.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) { //성공
+                in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+
+                try {
+                    // JSON 문자열을 JSONObject로 파싱
+                    JSONObject jsonObject = new JSONObject(response.toString());
+                    // "items" 배열 가져오기
+                    JSONArray itemsArray = jsonObject.getJSONArray("items");
+
+                    // "items" 배열 안의 각 객체의 "snippet" 안의 "description" 값을 한 줄로 모아서 저장할 문자열
+                    StringBuilder descriptions = new StringBuilder();
+
+                    if (itemsArray.length() != 0) {
+                        // "items" 배열 안의 각 객체에 대해 반복
+                        for (int i = 0; i < itemsArray.length(); i++) {
+                            JSONObject item = itemsArray.getJSONObject(i);
+                            JSONObject snippet = item.getJSONObject("snippet");
+                            // "description" 값을 가져와서 descriptions에 추가
+                            descriptions.append(snippet.getString("description").replaceAll("\\n", " "));
+                            // 마지막 객체인 경우 줄바꿈 없이 추가
+                            if (i < itemsArray.length() - 1) {
+                                descriptions.append(" ");
+                            }
+                        }
+                        concern = descriptions.toString();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else { // 에러 발생
+                System.out.println("GET request not worked");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        UserCategoryRequest userCategoryRequest = UserCategoryRequest.builder()
+                .userId(1L)
+                .text(concern)
+                .build();
+
+        List<UserCategoryResponse> response = classificationService.getUserCategory(userCategoryRequest);
+
+        StringBuilder sb = new StringBuilder();
+
+        for(UserCategoryResponse userCategoryResponse : response) {
+            sb.append(userCategoryResponse.getCategory()).append(" ");
+        }
+        return sb.toString();
     }
 
     public void logout(LogoutCommand command) {
@@ -185,12 +274,13 @@ public class UserService {
     public void deleteUserLocation(DeleteUserLocationCommand command) {
         log.info("DeleteUserLocationCommand: "+command);
         long cnt = userLocationRepository.deleteByIdAndUser_Id(command.getLocationId(), command.getUserId());
-        if (cnt == 0){ //삭제할 수 있는 내주소지 없음
+        if (cnt == 0){ //삭제할 수 있는 내 주소지 없음
             throw new CustomException(ErrorCode.ENTITIY_NOT_FOUND);
         }
     }
 
     public List<UserLocation> getUserLocation(GetUserLocationCommand command) {
+        log.info("GetUserLocationCommand: "+command);
         return userLocationRepository.findAllByUser_Id(command.getUserId());
     }
 }

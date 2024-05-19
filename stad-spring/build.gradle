@@ -25,14 +25,14 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-batch'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-//	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'org.springframework.kafka:spring-kafka'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //	testImplementation 'org.springframework.batch:spring-batch-test'
-//	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	//json
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 	//aws
@@ -68,6 +68,12 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.batch/spring-batch-core
 	// spring batch
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
+
+	//webClient 사용을 위한 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	//json
+	implementation 'org.json:json:20231013'
 }
 
 tasks.named('test') {

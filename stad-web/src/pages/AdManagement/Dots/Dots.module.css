@@ -1,0 +1,58 @@
+/* Dots.module.css */
+.dot {
+  width: 10px;
+  height: 10px;
+  border: 1px solid lightgray;
+  border-radius: 999px;
+  transition-duration: 1000px;
+  transition: 0.5s ease;
+  background-color: transparent;
+  background-color: #6671af;
+  position: relative;
+  z-index: 101;
+  left: 50%;
+  transform: translateX(-50%); /* X축만 조정 */
+}
+
+.on {
+  width: 33px;
+  height: 33px;
+}
+
+.boundary {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #6671af;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+}
+
+.dotContainer {
+  position: fixed;
+  top: 50%;
+  right: 60px;
+  transform: translate(0, -50%);
+  z-index: 101;
+}
+
+.dotList {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 20px;
+  height: 150px;
+  position: relative;
+}
+
+.dotLine {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1px;
+  height: 100%;
+  background-color: #6671af;
+}

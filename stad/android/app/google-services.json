@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "823385552651-asp4v6c0lgks9f118giedmg5d8rc1d5h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "stad.live.stad",
+            "certificate_hash": "7b4bd61310e94229a3b120328fa3f3c86552b4a0"
+          }
+        },
+        {
+          "client_id": "823385552651-j99iqnboi0bpga4093f5hsolkrenk73t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "stad.live.stad",
+            "certificate_hash": "304e617f7e9b1693bdb7ffa84e985756aad847da"
+          }
+        },
+        {
           "client_id": "823385552651-mqrijamj502pd7idrblmmhqsrq7u2e4m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

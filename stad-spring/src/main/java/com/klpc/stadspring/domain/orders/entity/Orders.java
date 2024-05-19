@@ -25,10 +25,6 @@ public class Orders {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    private Long contentId;
-
-    private Long advertId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -37,14 +33,10 @@ public class Orders {
     private List<OrderProduct> orderProducts;
 
     public static Orders createToOrders(
-            User user,
-            Long contentId,
-            Long advertId
+            User user
     ){
         Orders orders = new Orders();
         orders.user=user;
-        orders.advertId=advertId;
-        orders.contentId=contentId;
         orders.status=OrderStatus.ORDER;
         orders.orderDate=LocalDateTime.now();
         return orders;

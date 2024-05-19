@@ -1,0 +1,13 @@
+spring:
+  config:
+    activate:
+      on-profile: dev, default
+  kafka:
+    bootstrap-servers: localhost:10002
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  kafka:
+    bootstrap-servers: kafka-1:10001

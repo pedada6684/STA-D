@@ -1,6 +1,7 @@
 package com.klpc.stadspring.domain.contents.detail.entity;
 
 import com.klpc.stadspring.domain.contents.bookmark.entity.BookmarkedContent;
+import com.klpc.stadspring.domain.contents.labelRelationship.entity.ContentLabelRelationship;
 import com.klpc.stadspring.domain.contents.watched.entity.WatchedContent;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -19,16 +20,18 @@ public class ContentDetail {
     private Long id;
     private Long contentConceptId;
     private Integer episode;
+    @Column(length = 3000)
     private String videoUrl;
+    @Column(columnDefinition = "text")
     private String summary;
-
-    @OneToMany(mappedBy = "contentDetail")
-    private List<BookmarkedContent> bookmarkedContentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "contentDetail")
     private List<WatchedContent> watchedContentList = new ArrayList<>();
 
-    public static ContentDetail createContentDetail (
+    @OneToMany(mappedBy = "contentDetail")
+    private List<ContentLabelRelationship> contentLabelRelationshipList = new ArrayList<>();
+
+    public static ContentDetail createSeriesDetail (
             Long contentConceptId,
             int episode,
             String videoUrl,
@@ -39,6 +42,17 @@ public class ContentDetail {
         contentDetail.episode = episode;
         contentDetail.videoUrl = videoUrl;
         contentDetail.summary = summary;
+
+        return contentDetail;
+    }
+
+    public static ContentDetail createMovieDetail (
+            Long contentConceptId,
+            String videoUrl
+    ) {
+        ContentDetail contentDetail = new ContentDetail();
+        contentDetail.contentConceptId = contentConceptId;
+        contentDetail.videoUrl = videoUrl;
 
         return contentDetail;
     }

@@ -29,17 +29,25 @@ public class ProductOption {
     String name;
 
     @Column(name = "value")
-    String value;
+    Long value;
 
     public static ProductOption createNewOption(
             ProductType productType,
             String name,
-            String value
+            Long value
     ) {
         ProductOption productOption = new ProductOption();
         productOption.productType = productType;
         productOption.name = name;
         productOption.value = value;
         return productOption;
+    }
+
+    public void modifyOption(
+            String name,
+            Long value
+    ){
+        this.name=name;
+        this.value=value;
     }
 }

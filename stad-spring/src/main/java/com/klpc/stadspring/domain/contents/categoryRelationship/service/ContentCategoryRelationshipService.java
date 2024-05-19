@@ -1,12 +1,6 @@
 package com.klpc.stadspring.domain.contents.categoryRelationship.service;
 
-import com.klpc.stadspring.domain.contents.category.entity.ContentCategory;
-import com.klpc.stadspring.domain.contents.category.repository.ContentCategoryRepository;
-import com.klpc.stadspring.domain.contents.categoryRelationship.entity.ContentCategoryRelationship;
 import com.klpc.stadspring.domain.contents.categoryRelationship.repository.ContentCategoryRelationshipRepository;
-import com.klpc.stadspring.domain.contents.categoryRelationship.service.command.request.AddCategoryRelationshipRequestCommand;
-import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
-import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;

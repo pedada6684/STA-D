@@ -30,7 +30,7 @@ public class ProductType {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @OneToMany(mappedBy = "productType", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    @OneToMany(mappedBy = "productType")
     private List<ProductOption> productOptions;
 
     @OneToMany(mappedBy = "productType", cascade = CascadeType.REMOVE,  orphanRemoval = true)
@@ -38,6 +38,7 @@ public class ProductType {
     private List<CartProduct> cartProduct;
 
     @OneToMany(mappedBy = "productType")
+    @JsonIgnore
     private List<OrderProduct> orderProduct;
 
     @Column(name = "name")
@@ -48,6 +49,9 @@ public class ProductType {
 
     @Column(name = "quantity")
     private Long quantity;
+
+    @Column(name = "status")
+    private Boolean status;
 
     public static ProductType createNewProductType(
             Product product,
@@ -60,10 +64,26 @@ public class ProductType {
         productType.name = name;
         productType.price = price;
         productType.quantity = quantity;
+        productType.status = true;
         return productType;
+    }
+
+    public void modifyProductType(
+            String name,
+            Long price,
+            Long quantity
+    ){
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.status = true;
     }
 
     public void modifyQuantity(Long cnt){
         this.quantity += cnt;
+    }
+
+    public void deleteProductType(ProductType productType) {
+        productType.status = false;
     }
 }

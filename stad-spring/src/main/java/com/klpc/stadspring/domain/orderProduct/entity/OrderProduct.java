@@ -20,6 +20,8 @@ public class OrderProduct {
 
     private Long cnt;
 
+    private Long optionId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orders_id")
     private Orders orders;
@@ -28,9 +30,10 @@ public class OrderProduct {
     @JoinColumn(name = "product_type_id")
     private ProductType productType;
 
-    public static OrderProduct createToOrderProduct(Long cnt){
+    public static OrderProduct createToOrderProduct(Long cnt, Long optionId){
         OrderProduct orderProduct = new OrderProduct();
         orderProduct.cnt=cnt;
+        orderProduct.optionId=optionId;
         return orderProduct;
     }
 
