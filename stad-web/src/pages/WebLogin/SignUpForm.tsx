@@ -39,6 +39,7 @@ export default function SignUpForm() {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [pwConfirmMessage, setPwConfirmMessage] = useState("");
+  const [validatePw, setValidatePw] = useState("");
   // 리액트 쿼리의 useMutation 훅 사용
   const mutation = useMutation(postSignUp, {
     onSuccess: (data) => {
@@ -78,12 +79,45 @@ export default function SignUpForm() {
       setFormData({ ...formData, phone: newPhone });
     };
 
+  // 비밀번호 정규식
+  let regPass = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    // 비밀번호 확인 필드만 따로 변경 감지 시켜주기
-    if (name === "passwordConfirm") {
+    // // 비밀번호 확인 필드만 따로 변경 감지 시켜주기
+    // if (name === "passwordConfirm") {
+    //   setPasswordConfirm(value);
+    //   // 비밀번호와 비밀번호 확인 입력이 동시에 검증
+    //   if (formData.password !== value) {
+    //     setPwConfirmMessage("비밀번호가 일치하지 않습니다.");
+    //   } else {
+    //     setPwConfirmMessage("");
+    //   }
+    // } else {
+    //   setFormData((prevState) => ({
+    //     ...prevState,
+    //     [name]: value,
+    //   }));
+    // }
+    if (name === "password") {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+
+      if (regPass.test(value)) {
+        setValidatePw("유효한 비밀번호입니다.");
+      } else {
+        setValidatePw("비밀번호가 유효하지 않습니다.");
+      }
+
+      if (value !== passwordConfirm) {
+        setPwConfirmMessage("비밀번호가 일치하지 않습니다.");
+      } else {
+        setPwConfirmMessage("");
+      }
+    } else if (name === "passwordConfirm") {
       setPasswordConfirm(value);
-      // 비밀번호와 비밀번호 확인 입력이 동시에 검증
       if (formData.password !== value) {
         setPwConfirmMessage("비밀번호가 일치하지 않습니다.");
       } else {
@@ -174,20 +208,23 @@ export default function SignUpForm() {
               />
             </div>
           </div>
-          <div className={styles.item}>
-            <div className={styles.title}>
-              비밀번호<span>*</span>
+          <div className={`${styles.item} ${styles.pwConfirm}`}>
+            <div className={`${styles.items}`}>
+              <div className={styles.title}>
+                비밀번호<span>*</span>
+              </div>
+              <div className={styles.inputContainer}>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="비밀번호 (영문, 숫자, 특수기호 조합으로 8-20자리 이상 입력해주세요.)"
+                  required
+                />
+              </div>
             </div>
-            <div className={styles.inputContainer}>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="비밀번호 (영문, 숫자, 특수문자 조합 8~16자리)"
-                required
-              />
-            </div>
+            {validatePw && <div className={styles.error}>{validatePw}</div>}
           </div>
           <div className={`${styles.item} ${styles.pwConfirm}`}>
             <div className={`${styles.items}`}>
