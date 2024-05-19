@@ -5,7 +5,7 @@ import com.klpc.stadstream.domain.advertVideo.entity.Advert;
 import com.klpc.stadstream.domain.advertVideo.repository.AdvertRepository;
 import com.klpc.stadstream.domain.advertVideo.service.AdvertVideoService;
 import com.klpc.stadstream.global.RedisService;
-import com.klpc.stadstream.global.event.AdvertStartEvnet;
+import com.klpc.stadstream.global.event.AdvertStartEvent;
 import com.klpc.stadstream.global.response.ErrorCode;
 import com.klpc.stadstream.global.response.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,7 +48,7 @@ public class AdvertVideoController {
         if (isFirstRequest){
             Advert advert = advertRepository.findFirstByAdvertVideos_Id(videoId)
                     .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
-            kafkaTemplate.send("advert-watch-log", new AdvertStartEvnet(videoId, advert.getId(), userId, contentId));
+            kafkaTemplate.send("advert-watch-log", new AdvertStartEvent(videoId, advert.getId(), userId, contentId));
         }
         return resourceRegionResponseEntity;
     }
