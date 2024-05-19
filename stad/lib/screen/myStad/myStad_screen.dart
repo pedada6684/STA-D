@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
-import 'package:stad/main.dart';
 import 'package:stad/providers/user_provider.dart';
-import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/qr_screen.dart';
 import 'package:stad/screen/myStad/shop/myaddress_screen.dart';
 import 'package:stad/screen/myStad/shop/myorder_scren.dart';
 import 'package:stad/screen/myStad/shop/myreview_screen.dart';
 import 'package:stad/screen/myStad/stad/mycommercial_screen.dart';
+import 'package:stad/screen/myStad/user/edit_user_screen.dart';
+import 'package:stad/services/user_service.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
 
@@ -29,6 +30,7 @@ class _MyStadScreenState extends State<MyStadScreen> {
     super.initState();
     Future.microtask(
         () => Provider.of<UserProvider>(context, listen: false).fetchUser());
+
   }
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -37,12 +39,10 @@ class _MyStadScreenState extends State<MyStadScreen> {
     try {
       await _googleSignIn.signOut();
       final storage = FlutterSecureStorage();
-      await storage.delete(key: 'accessToken');
-      await storage.delete(key: 'refreshToken');
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => MyApp()),
-          (Route<dynamic> route) => false);
+      await storage.deleteAll();
+      if (mounted) {
+        GoRouter.of(context).go('/login');
+      }
     } catch (error) {
       print('로그아웃 실패: $error');
     }
@@ -155,26 +155,9 @@ class _MyStadScreenState extends State<MyStadScreen> {
               color: mainGray,
             ),
             _buildHeadListTile(
-                title: '로그아웃',
-                onTap: () {
-                  _handleSignout().then((_) {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyApp()),
-                        (Route<dynamic> route) => false);
-                  });
-                }),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginScreen(),
-                  ),
-                );
-              },
-              child: Text('로그인'),
-            )
+              title: '로그아웃',
+              onTap: _handleSignout,
+            ),
           ],
         ),
       ),
@@ -220,16 +203,6 @@ class UserInfoContainer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Align(
-                    //   alignment: Alignment.topRight,
-                    //   child: TextButton(
-                    //     onPressed: () {},
-                    //     child: Text(
-                    //       '내 정보 수정하기',
-                    //       style: TextStyle(color: mainNavy),
-                    //     ),
-                    //   ),
-                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 4.0),
@@ -279,7 +252,16 @@ class UserInfoContainer extends StatelessWidget {
                             ],
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    Provider<UserService>.value(
+                                  value: Provider.of<UserService>(context,
+                                      listen: false),
+                                  child: EditUserScreen(),
+                                ),
+                              ));
+                            },
                             icon: Icon(
                               Icons.chevron_right,
                               color: darkGray,

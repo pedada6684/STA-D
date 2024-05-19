@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  stad-main: http://localhost:8080/api
+server:
+  port: 8082
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  stad-main: http://stad-spring:8080/api
+server:
+  port: 8080

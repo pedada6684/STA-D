@@ -8,6 +8,7 @@ import com.klpc.stadspring.domain.productType.entity.ProductType;
 import com.klpc.stadspring.domain.product_review.entity.ProductReview;
 import jakarta.persistence.*;
 import lombok.*;
+import org.bytedeco.opencv.presets.opencv_core;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,13 +24,12 @@ public class Product {
     @Column(name = "product_id")
     private Long id;
 
-    // 추후 제거하고 DTO 설정으로 교체할것
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "advert_id")
     private Advert advert;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE,  orphanRemoval = true)
+    @OneToMany(mappedBy = "product")
     private List<ProductImage> images;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE,  orphanRemoval = true)
@@ -37,6 +37,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE,  orphanRemoval = true)
     private List<ProductReview> productReview;
+
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "thumbnail")
     private String thumbnail;
@@ -53,9 +56,13 @@ public class Product {
     @Column(name = "exp_end")
     private LocalDateTime expEnd;
 
+    @Column(name = "status")
+    private Boolean status;
+
     public static Product createNewProduct(
             Advert advert,
             String thumbnail,
+            String name,
             Long cityDeliveryFee,
             Long mtDeliveryFee,
             LocalDateTime expStart,
@@ -68,13 +75,35 @@ public class Product {
         product.mtDeliveryFee = mtDeliveryFee;
         product.expStart = expStart;
         product.expEnd = expEnd;
+        product.name = name;
+        product.status = true;
         return product;
+    }
+
+    public void modifyProduct(
+            String thumbnail,
+            String name,
+            Long cityDeliveryFee,
+            Long mtDeliveryFee,
+            LocalDateTime expStart,
+            LocalDateTime expEnd
+    ) {
+        this.thumbnail = thumbnail;
+        this.cityDeliveryFee = cityDeliveryFee;
+        this.mtDeliveryFee = mtDeliveryFee;
+        this.expStart = expStart;
+        this.expEnd = expEnd;
+        this.name = name;
     }
 
     public void update(UpdateProductInfoCommand command) {
         if (command.getThumbnail() != null) {
             this.thumbnail = command.getThumbnail();
         }
+    }
+
+    public void deleteProduct(Product product) {
+        product.status = false;
     }
 
     public void updateProductThumbnail(String thumbnail) {

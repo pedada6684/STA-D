@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  margin-right: 5rem;
+}
+
+.mainText {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 3rem;
+}
+.subText {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.subText div {
+  margin: 1rem 0;
+}
+
+.logo {
+  width: 5rem;
+}
+.subText div span {
+  margin: 0 0.3rem;
+}
+.qr svg {
+  width: 20rem;
+  height: 20rem;
+}

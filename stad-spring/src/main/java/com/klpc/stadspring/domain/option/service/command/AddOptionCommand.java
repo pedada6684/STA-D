@@ -11,6 +11,6 @@ public class AddOptionCommand {
      */
     Long productTypeId;
     String name;
-    String value;
+    Long value;
 
 }

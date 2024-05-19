@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin-top: 2rem;
+  margin: 2rem 4rem 0 4rem;
 }
 .item {
   border: 1px solid #565656;
@@ -26,6 +26,20 @@
   color: #ff1a1a;
 }
 
+.overlayButton img,
+.deleteButton img,
+.videoOverlay img,
+.deleteVidButton img,
+.deleteImgButton img {
+  width: 2rem;
+}
+.input3 {
+  width: 100%;
+  border: 0;
+  background-color: transparent;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
 .input,
 .contents {
   width: 95%;
@@ -55,6 +69,7 @@
 .sellPeriod,
 .priceContainer,
 .sellContainer,
+.optionInput,
 .city,
 .jejuMountain {
   display: flex;
@@ -65,7 +80,9 @@
   border-bottom: 1px solid #afb0b4;
   padding-bottom: 1rem;
 }
-
+.wrapper {
+  display: flex;
+}
 .adBanner,
 .merDesImages,
 .sellPeriod,
@@ -78,18 +95,130 @@
 .videoContainer,
 .imageContainer,
 .priceContainer,
-.sellContainer {
+.sellContainer,
+.imageListContainer {
   margin-left: 3rem;
   width: 80%;
 }
+.overlayButton,
+.videoOverlay,
+.deleteButton,
+.deleteVidButton,
+.deleteImgButton {
+  border: 0;
+  background-color: transparent;
+}
+
+.videoOverlay {
+  display: flex;
+  padding-top: 2rem;
+  margin-left: 1rem;
+}
+
+.imageContainer,
+.imageListContainer {
+  display: flex;
+  flex-direction: column;
+}
+.imageListContainer {
+  display: flex;
+}
+.imagePreviewContainer {
+  margin: 0 1rem;
+}
+
+.imageContainer {
+  display: flex;
+}
+.thumb {
+  display: flex;
+}
 
 .video,
-.image {
+.image,
+.bImage {
   border: 1px dashed #afb0b4;
+}
+.video {
+  display: flex;
   width: 10rem;
   height: 10rem;
 }
-.videoInput,
+
+.afterUpload {
+  display: flex;
+}
+.bImage {
+  width: 100%;
+  height: 20rem;
+}
+.image {
+  width: 10rem;
+  height: 10rem;
+}
+.cccc {
+  display: flex;
+}
+.prev {
+  display: flex;
+  position: relative;
+}
+.preview {
+  width: 10rem;
+  height: 10rem;
+}
+
+.videoPrev,
+.imagePrev {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.imgPrev,
+.bannerImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: absolute;
+}
+
+.videoPreview {
+  width: 10rem;
+  height: 10rem;
+  display: flex;
+  margin-right: 2rem;
+}
+
+.imagePreview {
+  width: 20rem;
+  height: 20rem;
+  display: flex;
+  margin-right: 1rem;
+}
+
+.overlayButton {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.deleteButton {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+.deleteVidButton {
+  display: flex;
+  padding-top: 1.3rem;
+  padding-right: 1rem;
+}
+
+.deleteImgButton {
+  display: flex;
+  padding-right: 1rem;
+  z-index: 2;
+}
+.delte .videoInput,
 .imageInput {
   display: none;
 }
@@ -104,10 +233,41 @@
   cursor: pointer;
   width: 3rem;
 }
+
 .buttonContainer {
   display: flex;
-  justify-content: space-around;
-  margin: 5rem;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative; /* 툴팁을 위한 상대 위치 */
+}
+.buttonContainer div {
+  display: flex;
+  margin-bottom: 1rem;
+  justify-content: flex-end;
+  position: relative; /* 툴팁을 위한 상대 위치 */
+}
+
+.tooltip {
+  position: absolute;
+  right: 0;
+  color: #00127a;
+  padding: 0.8rem;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap; /* 문구가 길 경우 한 줄로 표시 */
+}
+
+.enrollButtonContainer:hover .adTool {
+  visibility: visible;
+  opacity: 1;
+}
+
+.directAdButtonContainer:hover .merTool {
+  visibility: visible;
+  opacity: 1;
 }
 .bond {
   display: flex;
@@ -126,4 +286,177 @@
 .modalTitle {
   font-size: 1.8rem;
   margin-bottom: 2rem;
+}
+.productContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem;
+}
+
+.productContainer > div {
+  flex: 1;
+}
+
+.option {
+  display: flex;
+  /* justify-content: center */
+  align-items: center;
+}
+.optionContainer {
+  display: flex;
+}
+
+.optionContainer > div {
+  flex: 1;
+}
+.optionWrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.productInput {
+  position: relative;
+  width: 100%;
+  margin: 0.5rem 1rem;
+}
+
+.productWrapper {
+  display: flex;
+}
+
+.input2 {
+  font-size: 1rem;
+  color: #565656;
+  width: 100%;
+  border: none;
+  /* border-bottom: solid #aaaaaa 1px; */
+  padding-bottom: 0.8rem;
+  padding-left: 0.8rem;
+  position: relative;
+  background: none;
+  z-index: 5;
+}
+
+.input2::placeholder {
+  color: #aaaaaa;
+}
+
+.input2:focus {
+  outline: none;
+}
+
+.productWrapper {
+  display: flex;
+}
+
+.productInput span {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0%;
+  background-color: #666;
+  width: 0;
+  height: 0.125rem;
+  border-radius: 0.125rem;
+  transition: 0.5s;
+}
+
+.input2:focus ~ span,
+.input2:valid ~ span {
+  width: 100%;
+}
+
+.productInput label {
+  position: absolute;
+  color: #aaa;
+  left: 0.8rem;
+  font-size: 1.25rem;
+  bottom: 0.5rem;
+  transition: all 0.2s;
+}
+
+.input2:focus ~ label,
+.input2:valid ~ label {
+  font-size: 1rem;
+  bottom: 2.5rem;
+  color: #666;
+  font-weight: bold;
+}
+.icon {
+  width: 3rem;
+}
+.closeBtn,
+.removeOptionBtn {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.removeOptionBtn img {
+  width: 2rem;
+}
+.addBtn {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0.5rem 0;
+  /* margin: 0.5rem 1rem; */
+}
+.optionAdd {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  width: 8rem;
+  border: 0;
+  background-color: #00127a;
+  border-radius: 1rem;
+  color: #fff;
+  cursor: pointer;
+}
+.optionAdd img {
+  width: 1rem;
+}
+
+.detailO {
+  display: flex;
+}
+.optionContainer {
+  margin-left: 1rem;
+}
+.detailO {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+}
+.tt {
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+  padding-bottom: 1rem;
+}
+.optionWrapper {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+  border-bottom: 1px solid #565656;
+}
+.addProductBtn {
+  margin-top: 2rem;
+  padding: 1rem;
+  color: #00127a;
+  font-size: 1.1rem;
+  border-radius: 1rem;
+  background-color: transparent;
+  cursor: pointer;
+  border: 2px solid #00127a;
+}
+.borderR {
+  border-right: 1px solid #aaa;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
 }

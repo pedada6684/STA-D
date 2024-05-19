@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:introduction_screen/introduction_screen.dart';
+import 'package:onboarding_animation/onboarding_animation.dart';
 import 'package:stad/constant/colors.dart';
-import 'package:stad/screen/home/home_screen.dart';
+import 'package:go_router/go_router.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -11,93 +11,111 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  final introKey = GlobalKey<IntroductionScreenState>();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white.withOpacity(.9),
+      body: OnBoardingAnimation(
+        controller: PageController(initialPage: 0),
+        pages: [
+          _GetCardsContent(
+            image: 'assets/image/ad_mockup.png',
+            title: 'advertising',
+            cardContent: '사용자 맞춤형 광고와 콘텐츠 맞춤형 광고!',
+            button: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: TextButton(
+                onPressed: () => context.go('/login'),
+                child: Text('STA:D 로그인하기',
+                    style: TextStyle(
+                        color: mainNavy,
+                        fontFamily: 'LogoFont',
+                        fontSize: 18.0)),
+              ),
+            ),
+          ),
+          _GetCardsContent(
+            image: 'assets/image/ad_mockup.png',
+            title: 'get',
+            cardContent: '시청과 쇼핑을 하나로!',
+            button: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: TextButton(
+                onPressed: () => context.go('/login'),
+                child: Text('STA:D 로그인하기',
+                    style: TextStyle(
+                        color: mainNavy,
+                        fontFamily: 'LogoFont',
+                        fontSize: 18.0)),
+              ),
+            ),
+          ),
+        ],
+        indicatorDotHeight: 7.0,
+        indicatorDotWidth: 7.0,
+        indicatorType: IndicatorType.expandingDots,
+        indicatorPosition: IndicatorPosition.bottomCenter,
+        indicatorSwapType: SwapType.normal,
+        // onDone: () => context.go('/login'),
+        // done: const Text("STA:D", style: TextStyle(fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
+}
+
+class _GetCardsContent extends StatelessWidget {
+  final String image, title, cardContent;
+  final Widget? button;
+
+  const _GetCardsContent({
+    Key? key,
+    this.image = '',
+    this.title = '',
+    this.cardContent = '',
+    this.button,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return IntroductionScreen(
-      key: introKey,
-      pages: [
-        PageViewModel(
-          titleWidget: Column(
-            children: [
-              SizedBox(
-                height: 60.0,
-              ),
-              Text(
-                'advertising',
-                style: TextStyle(
-                  fontSize: 44,
-                  fontWeight: FontWeight.bold,
-                  color: mainNavy,
-                  fontFamily: 'LogoFont',
-                ),
-              ),
-            ],
-          ),
-          bodyWidget: Column(
-            children: [
-              SizedBox(height: 60),
-              Image.asset('assets/image/ad_mockup.png', width: 350),
-              SizedBox(height: 40),
-              Text(
-                '사용자 맞춤형 광고와 콘텐츠 맞춤형 광고',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 18, color: mainNavy, fontWeight: FontWeight.w600),
-              ),
-            ],
-          ),
-          decoration: PageDecoration(
-            pageColor: mainWhite,
-          ),
-        ),
-        PageViewModel(
-          titleWidget: Column(
-            children: [
-              SizedBox(height: 60),
-              Text(
-                'get',
-                style: TextStyle(
-                  fontSize: 44,
-                  fontWeight: FontWeight.bold,
-                  color: mainNavy,
-                  fontFamily: 'LogoFont',
-                ),
-              ),
-            ],
-          ),
-          bodyWidget: Column(
-            children: [
-              SizedBox(height: 60),
-              Image.asset('assets/image/ad_mockup.png', width: 350),
-              SizedBox(height: 40),
-              Text(
-                '광고 중인 상품 바로 구매하기',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 18, color: mainNavy, fontWeight: FontWeight.w600),
-              ),
-            ],
-          ),
-          decoration: PageDecoration(
-            pageColor: mainWhite,
-          ),
-        ),
-      ],
-      showNextButton: true,
-      showBackButton: true,
-      next: Icon(Icons.arrow_forward_ios_rounded, size: 20.0),
-      back: Icon(Icons.arrow_back_ios_rounded, size: 20.0),
-      onDone: () => Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomeScreen())),
-      done: Text(
-        'Done',
-        style: TextStyle(
-            color: mainNavy, fontSize: 18.0, fontWeight: FontWeight.bold),
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(20.0)),
       ),
-      globalBackgroundColor: mainWhite,
-      curve: Curves.ease,
+      child: Padding(
+        padding: const EdgeInsets.all(11.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 44,
+                fontWeight: FontWeight.bold,
+                color: mainNavy,
+                fontFamily: 'LogoFont',
+              ),
+            ),
+            ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+              child: Image.asset(image, width: 350),
+            ),
+            Column(
+              children: [
+                Text(
+                  cardContent,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: mainNavy,
+                      fontWeight: FontWeight.w600),
+                ),
+                if (button != null) button!,
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

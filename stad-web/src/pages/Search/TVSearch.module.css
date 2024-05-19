@@ -1,0 +1,59 @@
+.inputContainer {
+  margin-top: 5vh;
+  width: 75vw;
+  display: flex;
+  justify-content: center;
+  left: 10%;
+  position: relative;
+}
+
+.Input {
+  border: 2px solid #bbb;
+  width: 100%;
+  padding: 1.8vh 2vw;
+  border-radius: 50px;
+  font-size: 1.3rem;
+}
+
+.inputContainer img {
+  position: absolute;
+  margin: 0;
+  top: 2vh;
+  right: 1.5vw;
+  width: 25px;
+  height: 25px;
+}
+
+.inputContainer button {
+  border: 0;
+}
+
+.inputContainer button:hover {
+  cursor: pointer;
+}
+.gridContainer {
+  display: flex;
+  flex-flow: wrap;
+  margin-top: 2rem;
+  justify-content: center;
+}
+.thumbnail {
+  padding: 1rem;
+  border-radius: 10px;
+}
+.thumbnail img {
+  width: 20rem;
+  border-radius: 10px;
+}
+.title {
+  color: #dddddd;
+  font-size: 1.2rem;
+}
+.noContent {
+  display: flex;
+  justify-content: center;
+  margin-top: 5rem;
+  font-size: 2rem;
+  left: 10%;
+  color: #bbb;
+}

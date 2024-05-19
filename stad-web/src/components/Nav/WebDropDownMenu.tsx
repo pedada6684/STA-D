@@ -17,8 +17,8 @@ export function MerchanDropDownMenu() {
   return (
     <>
       <ul className={styles.dropDownMenu}>
-        <li onClick={() => navigate("/ad-enroll/mer-enroll")}>상품관리</li>
-        <li onClick={() => navigate("/review")}>리뷰관리</li>
+        <li onClick={() => navigate("/pro-management")}>상품관리</li>
+        {/* <li onClick={() => navigate("/review")}>리뷰관리</li> */}
       </ul>
     </>
   );

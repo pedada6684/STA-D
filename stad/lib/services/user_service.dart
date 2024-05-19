@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +9,15 @@ import 'package:provider/provider.dart';
 import 'package:stad/main.dart';
 import 'package:stad/models/user_model.dart';
 import 'package:stad/providers/user_provider.dart';
+import 'package:stad/services/user_secure_storage.dart';
 
 class UserService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email', 'https://www.googleapis.com/auth/youtube.readonly'],
+  );
   final Dio dio = Dio();
-  final EmUrl = Uri.parse('http://192.168.0.9:8080/api/v1/auth/applogin');
+  final EmUrl = Uri.parse('http://192.168.31.202:8080/api/v1/auth/applogin');
   final locUrl = Uri.parse('http://10.0.2.2:8080/api/v1/auth/applogin');
 
   Future<void> signInWithGoogle(BuildContext context) async {
@@ -42,12 +46,8 @@ class UserService {
       bool profileSent =
           await sendUserProfile(context, user, googleAuth.accessToken);
       if (profileSent) {
-        await Provider.of<UserProvider>(context, listen: false)
-            .setUser(userModel);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MyApp()),
-        );
+        Provider.of<UserProvider>(context, listen: false).setUser(userModel);
+        context.go('/home');
       } else {
         // 에러 처리 로직
         print('Failed to send user profile');
@@ -61,7 +61,11 @@ class UserService {
         UserModel.fromFirebaseUser(user, googleAccessToken).toJson();
     try {
       final response = await dio.post(
-          EmUrl as String,
+        // 'http://172.29.40.139:8080/api/v1/auth/applogin',
+        'https://www.mystad.com/api/v1/auth/applogin',
+        // 'http://192.168.31.190:8080/api/v1/auth/applogin',
+        // 'http://192.168.0.9:8080/api/v1/auth/applogin',
+        // 'http://192.168.0.129:8080/api/v1/auth/applogin',
         data: json.encode(userProfile),
         options: Options(
             followRedirects: false, validateStatus: (status) => status! < 500),
@@ -74,6 +78,8 @@ class UserService {
 
         Map<String, dynamic> payload = Jwt.parseJwt(token);
         int userId = int.tryParse(payload['sub'] as String) ?? 0;
+        await AuthService().saveUserId(userId.toString());
+
         Provider.of<UserProvider>(context, listen: false).setUserId(userId);
         Provider.of<UserProvider>(context, listen: false)
             .setCookie(response.headers['Set-Cookie']![0]);
@@ -82,6 +88,106 @@ class UserService {
       }
     } catch (e) {
       print('Error sending user profile: $e');
+    }
+    return false;
+  }
+
+  Future<bool> updateUserProfile(BuildContext context, String? nickname,
+      String? phone, String? profileImagePath) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    UserModel currentUser = userProvider.user!;
+
+    String finalNickname =
+        nickname?.isNotEmpty == true ? nickname! : currentUser.nickname ?? '';
+    String finalPhone =
+        phone?.isNotEmpty == true ? phone! : currentUser.phone ?? '';
+
+    Map<String, dynamic> updateData = {
+      "userId": userProvider.userId,
+      "name":currentUser.name,
+      "nickname": finalNickname,
+      "phone": finalPhone,
+      "company":null,
+      "comNo":null,
+      "department":null,
+      "password":null,
+    };
+
+    FormData formData = FormData.fromMap(updateData);
+
+    if (profileImagePath != null && profileImagePath.isNotEmpty) {
+      formData.files.add(
+        MapEntry(
+            "profile",
+            await MultipartFile.fromFile(profileImagePath, filename: "profile_pic.png")
+        ),
+      );
+    }
+
+    print(formData);
+
+    //TODO 수정합시다 잘 안되요ㅗㅇ
+    try {
+      final response = await dio.post(
+        'https://www.mystad.com/api/user/update',
+        // 'http://192.168.31.190:8080/api/user/update',
+        // 'http://172.29.40.139:8080/api/user/update',
+        data: formData,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${userProvider.token}',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        UserModel updatedUser = UserModel.fromJson(response.data);
+        Provider.of<UserProvider>(context, listen: false).setUser(updatedUser);
+        return true;
+      } else {
+        print('Update failed with status code: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Error updating user profile: $e');
+      return false;
+    }
+  }
+
+  //프로필 사진 업데이트
+  Future<bool> updateProfileImage(
+      BuildContext context, String profileImagePath) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    FormData formData = FormData.fromMap({
+      "userId": userProvider.userId,
+      "profile": await MultipartFile.fromFile(profileImagePath,
+          filename: "profile_pic.png"),
+    });
+
+    try {
+      final response = await dio.post(
+        // 'http://192.168.31.190:8080/api/user/profile',
+        // 'http://172.29.40.139:8080/api/user/profile',
+        'https://www.mystad.com/api/user/profile',
+        data: formData,
+        options: Options(
+          headers: {
+            'Cookie': userProvider.cookie,
+            'Authorization': 'Bearer ${userProvider.token}',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        // Assuming the response contains the updated profile picture URL
+        UserModel updatedUser = userProvider.user!
+            .copyWith(profilePicture: response.data['profileImgUrl']);
+        userProvider.setUser(updatedUser);
+        return true;
+      }
+    } catch (e) {
+      print('Error updating profile image: $e');
+      return false;
     }
     return false;
   }

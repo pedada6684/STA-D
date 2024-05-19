@@ -1,0 +1,75 @@
+.dropDownContainer {
+  position: relative;
+}
+.dropBtn {
+  width: 10rem;
+  border: 1px solid #eee;
+  padding: 0 1rem;
+  background-color: #141414;
+  color: #eee;
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+.dropBtn:hover {
+  background-color: transparent;
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
+}
+
+.dropBtn {
+  display: flex;
+  justify-content: space-between;
+}
+.dropBtn div img {
+  align-items: center;
+  margin-top: 0.3rem;
+  width: 2rem;
+}
+
+.dropdownMenu {
+  position: absolute;
+  overflow: hidden;
+  max-height: 0;
+  transition: all 0.3s ease-in-out; /* 트랜지션 효과 추가 */
+  opacity: 0;
+}
+
+.dropdownMenu.open {
+  max-height: 50rem; /* 필요에 따라 적절한 값으로 설정 */
+  opacity: 1;
+}
+
+.dropdownContent {
+  list-style-type: none;
+  display: grid;
+  background-color: #141414;
+  color: #eee;
+  padding: 0.3rem;
+}
+
+.seriesContent {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.movieContent {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.seriesLi {
+  padding: 0.3rem;
+  margin: 0.2rem 0.1rem;
+}
+
+.movieLi {
+  padding: 0.5rem;
+  margin: 0.2rem;
+}
+.dropdownLi {
+  display: flex;
+}
+
+.dropdownLi:hover {
+  text-decoration: underline;
+  cursor: url("https://i.ibb.co/r6S6LyY/hover-Vector.png"), auto;
+}

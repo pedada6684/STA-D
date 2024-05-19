@@ -1,5 +1,6 @@
 package com.klpc.stadspring.global.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,29 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setEnableTransactionSupport(true);
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<String, Long> redisTemplateForAdQueue() {
+        RedisTemplate<String , Long> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setEnableTransactionSupport(true);
+        return redisTemplate;
+    }
+
+    @Bean
+    @Qualifier("redisTemplateDefault")
+    public RedisTemplate<String, String> redisTemplateDefault() {
+        RedisTemplate<String , String> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
         redisTemplate.setEnableTransactionSupport(true);
         return redisTemplate;
     }

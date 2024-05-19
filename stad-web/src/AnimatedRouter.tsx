@@ -23,25 +23,108 @@ import TVMovie from "./pages/Category/TVMovie";
 import TVSearch from "./pages/Search/TVSearch";
 import VideoDetail from "./pages/Streaming/VideoDetail";
 import Streaming from "./pages/Streaming/Streaming";
+import ProductManagement from "./pages/ProductManagement/ProductManagement";
+import { useSelector } from "react-redux";
+import { RootState } from "./store";
+import RequireAuth from "./pages/WebLogin/RequireAuth";
+import AdDetail from "./pages/AdEdit/AdDetail";
+import MerchandiseDetail from "./pages/AdEdit/MerchandiseDetail";
+import DigitalDetail from "./pages/AdEdit/DigitalDetail";
+import { useEffect } from "react";
 export default function AnimatedRouter() {
   const location = useLocation();
+  const isTvRouter = location.pathname.includes("tv");
 
+  useEffect(() => {
+    if (isTvRouter) {
+      document.body.classList.add("tv-scroll-container");
+    } else {
+      document.body.classList.remove("tv-scroll-container");
+    }
+  }, [isTvRouter]);
   return (
     <TransitionGroup>
-      <CSSTransition key={location.key} timeout={300} classNames="fade">
-        <Routes>
+      <CSSTransition key="fixed" timeout={300} classNames="fade">
+        <Routes location={location}>
           <Route path="/web-login" element={<WebLogin />} />
           <Route path="/web-signUp" element={<SignUp />} />
           <Route path="/loading" element={<LandingPage />} />
           <Route path="/web-main" element={<WebMain />} />
-          <Route path="/my-page" element={<MyPage />}>
-            <Route path="enterprise" element={<EnterprisePage />} />
-            <Route path="enroll-list" element={<EnrolledGoodsList />} />
-            <Route path="enroll-adList" element={<EnrolledAdList />} />
+          <Route
+            path="/my-page"
+            element={
+              <RequireAuth>
+                <MyPage />
+              </RequireAuth>
+            }
+          >
+            <Route
+              path="enterprise"
+              element={
+                <RequireAuth>
+                  <EnterprisePage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="enroll-list"
+              element={
+                <RequireAuth>
+                  <EnrolledGoodsList />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="enroll-adList"
+              element={
+                <RequireAuth>
+                  <EnrolledAdList />
+                </RequireAuth>
+              }
+            />
             <Route path="review" element={<Review />} />
           </Route>
-          <Route path="/ad-management" element={<AdManagement />} />
-          <Route path="/ad-enroll/*" element={<AdEnroll />} />
+          <Route
+            path="/ads/:id/*"
+            element={
+              <RequireAuth>
+                <AdDetail />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/ad-management"
+            element={
+              <RequireAuth>
+                <AdManagement />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/pro-management"
+            element={
+              <RequireAuth>
+                <ProductManagement />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/ad-enroll/*"
+            element={
+              <RequireAuth>
+                <AdEnroll />
+              </RequireAuth>
+            }
+          />
+            <Route
+                path="/modify-merchandise"
+                element={
+                    <RequireAuth>
+                        <MerchandiseDetail />
+                    </RequireAuth>
+                }
+            />
+            <Route path="/modify-nonMerchandise" element={<RequireAuth><DigitalDetail/></RequireAuth>}/>
           {/* ---------------- 스트리밍 서비스 관련 router ------------------ */}
           <Route path="/tv-login" element={<TvLogin />} />
           <Route path="/tv-landing" element={<TVLanding />} />

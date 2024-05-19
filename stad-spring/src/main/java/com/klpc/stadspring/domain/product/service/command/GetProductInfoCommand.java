@@ -16,6 +16,7 @@ public class GetProductInfoCommand {
      */
 
     private Long id;
+    private String name;
     private List<String> images;
     private String thumbnail;
     private Long cityDeliveryFee;
@@ -25,12 +26,12 @@ public class GetProductInfoCommand {
 
     public static GetProductInfoResponse ConvertProductInfoCommand(Product product){
         return GetProductInfoResponse.builder()
-                .id(product.getId())
+                .productId(product.getId())
                 .thumbnail(product.getThumbnail())
                 .cityDeliveryFee(product.getCityDeliveryFee())
                 .mtDeliveryFee(product.getMtDeliveryFee())
-                .expStart(product.getExpStart())
-                .expEnd(product.getExpEnd())
+                .expStart(product.getExpStart().toLocalDate().toString())
+                .expEnd(product.getExpEnd().toLocalDate().toString())
                 .build();
     }
 }

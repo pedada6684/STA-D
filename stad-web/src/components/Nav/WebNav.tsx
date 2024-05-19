@@ -5,9 +5,7 @@ import { MouseEvent, useEffect, useState } from "react";
 import { AdDropDownMenu, MerchanDropDownMenu } from "./WebDropDownMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import axios from "axios";
 import { userActions } from "../../store/user";
-import { jwtDecode } from "jwt-decode";
 import { useQuery } from "react-query";
 import { GetLogout, GetUser } from "../../pages/WebLogin/LoginApi";
 import { tokenActions } from "../../store/token";
@@ -50,6 +48,12 @@ export default function WebNav() {
       navigate("/my-page");
     }
   };
+  const handleDashboard = (e: MouseEvent<HTMLDivElement>) => {
+    navigate("/ad-management");
+  };
+  const handleEnroll = (e: MouseEvent<HTMLDivElement>) => {
+    navigate("/ad-enroll");
+  };
 
   const handleLogout = async (e: MouseEvent<HTMLButtonElement>) => {
     const res = await GetLogout(accessToken);
@@ -70,15 +74,13 @@ export default function WebNav() {
       <div className={styles.menus}>
         <ul className={styles.navMenu}>
           <li className={styles.dropDown}>
-            <div className={styles.dropDownTitle}>광고</div>
-            <div>
-              <AdDropDownMenu />
+            <div className={styles.dropDownTitle} onClick={handleEnroll}>
+              광고·상품 등록
             </div>
           </li>
           <li className={styles.dropDown}>
-            <div className={styles.dropDownTitle}>상품</div>
-            <div>
-              <MerchanDropDownMenu />
+            <div className={styles.dropDownTitle} onClick={handleDashboard}>
+              대시보드
             </div>
           </li>
         </ul>

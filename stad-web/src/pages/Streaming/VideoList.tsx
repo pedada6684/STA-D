@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./VideoList.module.css";
 import { Video } from "../Category/TVDetail";
+import { searchProps } from "../Search/TVSearch";
 interface VideoListProps {
-  items: Video[]; // 올바른 타입 지정
+  items: searchProps[];
 }
 export default function VideoList({ items = [] }: VideoListProps) {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function VideoList({ items = [] }: VideoListProps) {
         <div
           className={`${styles.thumbnail}`}
           key={index}
-          onClick={() => navigate(`/tv/${data.id}`)}
+          onClick={() => navigate(`/tv/${data.conceptId}`)}
         >
           <img src={data.thumbnailUrl} alt="영상 썸네일" />
           <div className={`${styles.title}`}>{data.title}</div>

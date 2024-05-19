@@ -1,22 +1,26 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:stad/constant/animation/animated_indexed_stack.dart';
 import 'package:stad/firebase_options.dart';
-import 'package:stad/models/cart_model.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/cart/cart_screen.dart';
 import 'package:stad/screen/home/home_screen.dart';
 import 'package:stad/screen/home/onboarding_screen.dart';
-import 'package:stad/screen/home/splash_video_screen.dart';
+import 'package:stad/screen/login/login_screen.dart';
 import 'package:stad/screen/myStad/myStad_screen.dart';
+import 'package:stad/screen/myStad/qr_screen.dart';
+import 'package:stad/screen/order/payment_result_screen.dart';
+import 'package:stad/services/user_service.dart';
 import 'package:stad/widget/bottom_bar.dart';
 
 import 'providers/cart_provider.dart';
+import 'screen/home/splash_video_screen.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Flutter 엔진, 위젯 트리 바인딩
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -28,14 +32,95 @@ Future<void> main() async {
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  late final GoRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    _router = GoRouter(
+      debugLogDiagnostics: true,
+      initialLocation: '/splash',
+      navigatorKey: MyApp.navigatorKey,
+      routes: [
+        GoRoute(
+          path: '/splash',
+          builder: (context, state) => const SplashVideoScreen(),
+        ),
+        GoRoute(
+          path: '/onboarding',
+          builder: (context, state) => const OnboardingScreen(),
+        ),
+        GoRoute(
+          path: '/login',
+          builder: (context, state) => LoginScreen(),
+        ),
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => MainNavigation(),
+        ),
+        GoRoute(
+          path: '/done',
+          builder: (BuildContext context, GoRouterState state) {
+            final data = state.extra as Map<String, dynamic>;
+            return PaymentResultScreen(
+              result: data['result'],
+              products: data['products'],
+              userId: data['userId'],
+            );
+          },
+        ),
+        GoRoute(path: '/qr', builder: (context, state) => QRScreen())
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        Provider(create: (_) => UserService()),
+        ChangeNotifierProvider(create: (context) => CartProvider()),
+      ],
+      child: MaterialApp.router(
+        routerDelegate: _router.routerDelegate,
+        routeInformationParser: _router.routeInformationParser,
+        routeInformationProvider: _router.routeInformationProvider,
+        title: 'STA:D',
+        theme: ThemeData(
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            },
+          ),
+          fontFamily: 'MainFont',
+        ),
+        debugShowCheckedModeBanner: false,
+      ),
+    );
+  }
+}
+
+class MainNavigation extends StatefulWidget {
+  const MainNavigation({super.key});
+
+  @override
+  State<MainNavigation> createState() => _MainNavigationState();
+}
+
+class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
+  final List<Widget> _widgetOptions = [
     HomeScreen(),
     CartScreen(),
     MyStadScreen(),
@@ -49,59 +134,18 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(
-          create: (context) => CartModel()
-            ..addItem(CartItem(
-              id: '1',
-              title: '더미 상품 1',
-              price: 9900,
-              thumbnail: 'path/to/thumbnail1',
-              quantity: 1,
-              isSelected: true,
-            ))
-            ..addItem(CartItem(
-              id: '2',
-              title: '더미 상품 2',
-              price: 12500,
-              thumbnail: 'path/to/thumbnail2',
-              quantity: 2,
-              isSelected: true,
-            )),
-        ),
-      ],
-      child: MaterialApp(
-        title: 'STA:D',
-        theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          pageTransitionsTheme: PageTransitionsTheme(
-            builders: {
-              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            },
-          ),
-          fontFamily: 'MainFont',
-        ),
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: AnimatedIndexedStack(
-            index: _selectedIndex,
-            children: _widgetOptions,
-          ),
-          bottomNavigationBar: Consumer<CartModel>(
-            // Consumer 위젯 사용
-            builder: (context, cart, child) {
-              print('장바그니 항목 수 ${cart.itemCount}');
-              return CustomBottomNavigationBar(
-                selectedIndex: _selectedIndex,
-                onItemSelected: _onItemTapped,
-                cartItemCount: cart.itemCount, // CartModel로부터 장바구니 아이템 수를 가져옴
-              );
-            },
-          ),
-        ),
-        // home: SplashVideoScreen(),
+    return Scaffold(
+      body: AnimatedIndexedStack(
+        index: _selectedIndex,
+        children: _widgetOptions,
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }
