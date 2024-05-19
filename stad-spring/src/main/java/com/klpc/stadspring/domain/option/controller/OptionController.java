@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.annotation.OnReadError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +28,9 @@ public class OptionController {
 
     private final OptionService optionService;
 
-    @GetMapping("/list/{productTypeId}")
+    @GetMapping("/list")
     @Operation(summary = "특정 상품의 옵션 리스트 조회", description = "특정 광고에 속한 상품들의 리스트를 조회합니다.")
-    public ResponseEntity<?> getOptionList(@PathVariable Long productTypeId) {
+    public ResponseEntity<?> getOptionList(@RequestParam Long productTypeId) {
         GetOptionListByProductIdResponse response = optionService.getOptionList(productTypeId);
 
         // 변환된 응답을 ResponseEntity에 담아 반환
@@ -46,6 +47,7 @@ public class OptionController {
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
     public ResponseEntity<?> addNewOption(@RequestBody AddOptionRequest request) {
+        log.info("AddOptionRequest: "+ request);
         try {
             optionService.addProductOption(request.toCommand());
 
@@ -62,9 +64,9 @@ public class OptionController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류")
     })
-    public ResponseEntity<?> deleteOption(@RequestBody DeleteOptionRequest request) {
+    public ResponseEntity<?> deleteOption(@RequestParam Long id) {
         try {
-            optionService.deleteOption(request.toCommand());
+            optionService.deleteOption(id);
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {

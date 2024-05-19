@@ -1,0 +1,37 @@
+.Wrapper {
+  display: grid;
+  height: 100%;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+}
+.container {
+  display: flex;
+  padding-top: 2rem;
+  padding-left: 1rem;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  margin-right: 2rem;
+  padding: 0.3rem;
+}
+.w {
+  background-color: white;
+}
+.icon {
+  width: 2rem;
+}
+.title {
+  color: #bdbdbd;
+  font-weight: 500;
+  font-size: 1rem;
+}
+.value {
+  margin-top: 1rem;
+  font-weight: bold;
+  font-size: 1.8rem;
+}

@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:stad/constant/colors.dart';
+import 'package:stad/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key});
+  final ProductInfo? productInfo;
+  final List<ProductType>? productTypes;
+  final String? title;
+  final int? quantities;
+  final int? totalPrice;
+
+  const ProductCard({
+    super.key,
+    this.productInfo,
+    this.productTypes,
+    this.title,
+    this.quantities,
+    this.totalPrice,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,42 +27,50 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '제조사 명',
-              style: TextStyle(
-                  fontSize: 14.0,
-                  color: mainBlack,
-                  fontWeight: FontWeight.w600),
-            ),
+            if (productInfo != null)
+              Text(
+                productInfo!.name,
+                style: TextStyle(
+                    fontSize: 14.0,
+                    color: mainBlack,
+                    fontWeight: FontWeight.w600),
+              ),
             SizedBox(
               height: 10.0,
             ),
-            Row(
-              children: [
-                Image.asset(
-                  'assets/image/product.png',
-                  width: 120.0,
-                ),
-                SizedBox(
-                  width: 16.0,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('상품명임',
-                        style: TextStyle(fontSize: 14.0, color: mainBlack)),
-                    Text('상품선택',
-                        style: TextStyle(fontSize: 12.0, color: midGray)),
-                    Text('옵션선택',
-                        style: TextStyle(fontSize: 12.0, color: midGray)),
-                    Text('수량',
-                        style: TextStyle(fontSize: 12.0, color: midGray)),
-                    Text('얼마얼마 원',
-                        style: TextStyle(fontSize: 14.0, color: mainBlack)),
-                  ],
-                ),
-              ],
-            )
+            if (productInfo != null && productTypes != null) ...[
+              Row(
+                children: [
+                  Image.network(
+                    productInfo!.thumbnail,
+                    width: 120.0,
+                  ),
+                  SizedBox(
+                    width: 16.0,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title!,
+                          style: TextStyle(fontSize: 14.0, color: mainBlack)),
+                      Text(productTypes!.first.name,
+                          style: TextStyle(fontSize: 12.0, color: midGray)),
+                      if (productTypes != null &&
+                          productTypes!.first.productOptions != [])
+                        Text('옵션선택',
+                            style: TextStyle(fontSize: 12.0, color: midGray)),
+                      Text(quantities.toString(),
+                          style: TextStyle(fontSize: 12.0, color: midGray)),
+                      Text('${totalPrice.toString()} 원',
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              color: mainBlack,
+                              fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ],
+              )
+            ]
           ],
         ),
       ),

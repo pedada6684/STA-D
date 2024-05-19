@@ -4,11 +4,13 @@ import loadingSlice from "./loading";
 import userSlice from "./user";
 import { persistReducer, persistStore } from "redux-persist";
 import tokenSlice, { tokenActions } from "./token";
+import toggleSlice from "./toggle";
+import tvUserSlice from "./tvUser";
 
 const persistConfig = {
   key: "root",
   storage,
-  whiteList: ["loading", "user", "token"],
+  whiteList: ["loading", "user", "token", "toggle", "tvUser"],
 };
 
 // 초기화 방지를 위한 redux-persist
@@ -16,6 +18,8 @@ const rootReducer = combineReducers({
   loading: loadingSlice.reducer,
   user: userSlice.reducer,
   token: tokenSlice.reducer,
+  toggle: toggleSlice.reducer,
+  tvUser: tvUserSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

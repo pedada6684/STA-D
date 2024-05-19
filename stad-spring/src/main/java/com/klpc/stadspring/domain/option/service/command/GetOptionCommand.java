@@ -7,5 +7,5 @@ import lombok.Data;
 @Builder
 public class GetOptionCommand {
     String name;
-    String value;
+    Long value;
 }

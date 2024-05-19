@@ -4,23 +4,22 @@ import com.klpc.stadspring.domain.advert.entity.Advert;
 import com.klpc.stadspring.domain.advert.repository.AdvertRepository;
 import com.klpc.stadspring.domain.advert.service.AdvertService;
 import com.klpc.stadspring.domain.advert.service.command.request.AddAdvertRequestCommand;
-import com.klpc.stadspring.domain.advertVideo.service.AdvertVideoService;
 import com.klpc.stadspring.domain.contents.category.service.ContentCategoryService;
 import com.klpc.stadspring.domain.contents.category.service.command.request.AddCategoryRequestCommand;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepository;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
+import com.klpc.stadspring.domain.contents.concept.service.ContentConceptParsingService;
 import com.klpc.stadspring.domain.contents.concept.service.command.request.AddConceptRequestCommand;
+import com.klpc.stadspring.domain.contents.detail.service.ContentDetailParsingService;
 import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
 import com.klpc.stadspring.domain.contents.detail.service.command.request.AddDetailRequestCommand;
 import com.klpc.stadspring.domain.orders.service.OrdersService;
 import com.klpc.stadspring.domain.orders.service.command.request.AddOrderRequestCommand;
+import com.klpc.stadspring.domain.orders.service.command.request.AddOrdersProductTypeRequestCommand;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.product.repository.ProductRepository;
-import com.klpc.stadspring.domain.product.service.ProductServiceImpl;
-import com.klpc.stadspring.domain.product.service.command.AddProductCommand;
 import com.klpc.stadspring.domain.productType.entity.ProductType;
-import com.klpc.stadspring.domain.productType.repository.ProductTypeRepository;
 import com.klpc.stadspring.domain.productType.service.ProductTypeService;
 import com.klpc.stadspring.domain.productType.service.command.AddProductTypeCommand;
 import com.klpc.stadspring.domain.user.entity.User;
@@ -28,11 +27,13 @@ import com.klpc.stadspring.domain.user.repository.UserRepository;
 import com.klpc.stadspring.domain.user.service.UserService;
 import com.klpc.stadspring.domain.user.service.command.JoinCompanyUserCommand;
 import com.klpc.stadspring.domain.user.service.command.JoinUserCommand;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,17 +48,31 @@ public class DummyGenerator {
     private final AdvertService advertService;
     private final AdvertRepository advertRepository;
     private final UserRepository userRepository;
-    private final ProductServiceImpl productService;
     private final ProductRepository productRepository;
     private final ProductTypeService productTypeService;
     private final ContentConceptRepository contentConceptRepository;
     private final ContentConceptService contentConceptService;
     private final ContentCategoryService contentCategoryService;
-    private final ContentDetailService contentDetailService;
+    private final ContentDetailParsingService contentDetailParsingService;
+    private final ContentConceptParsingService contentConceptParsingService;
     private final OrdersService ordersService;
+    private final ContentDetailService contentDetailService;
+    private final Environment environment;
 
-    @PostConstruct
+//    @EventListener(ApplicationReadyEvent.class)
+    @Transactional
     public void createDummy(){
+        log.info("DummyGenerator start");
+
+        //서버에서 작동하지 않음
+        String[] activeProfiles = environment.getActiveProfiles();
+        for (String activeProfile : activeProfiles) {
+            if (activeProfile.equals("prod")){
+                log.info("DummyGenerator doesn't work in prod");
+                return;
+            }
+        }
+
         createContent();
         User normalUser = createDummyUsers();
         createDummyCompanyUsers();
@@ -118,6 +133,34 @@ public class DummyGenerator {
         contentDetailService.addDetail(detailCommand1);
     }
 
+//        public void createContent() {
+//        String conceptFilePath = "src/main/resources/crawl.json";
+//
+//        try {
+//            // JSON 파일을 파싱하고 저장하는 메서드 호출
+//            contentConceptParsingService.parseAndSaveJson(conceptFilePath);
+//            // 성공 시, 필요한 경우 성공 메시지 로깅
+//            System.out.println("Content successfully parsed and saved from file: " + conceptFilePath);
+//        } catch (Exception e) {
+//            // 일반적인 예외 처리
+//            System.err.println("An unexpected error occurred while parsing the JSON file: " + conceptFilePath);
+//            e.printStackTrace();
+//        }
+//
+//
+//        String detailFilePath = "src/main/resources/crawl_detail.json";
+//        try {
+//            contentDetailParsingService.parseAndSaveJson(detailFilePath);
+//            // 성공 시, 필요한 경우 성공 메시지 로깅
+//            System.out.println("Content successfully parsed and saved from file: " + detailFilePath);
+//        } catch (Exception e) {
+//            // 일반적인 예외 처리
+//            System.err.println("An unexpected error occurred while parsing the JSON file: " + detailFilePath);
+//            e.printStackTrace();
+//        }
+//    }
+
+
     /**
      * 유저 생성
      */
@@ -141,7 +184,7 @@ public class DummyGenerator {
                 .nickname("Pawn")
                 .name("Pawn")
                 .email("Pawn@Pawn.com")
-                .profileImage("https://thechessworld.com/wp-content/uploads/2012/08/pawn1.jpg")
+                .profileImage("https://people.com/thmb/YIww0u4m8icR9vnhychZVxZecFs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(701x0:703x2)/freddie-mercury-3-f480f4ef58b145c7871f123c8b2d3aae.jpg")
                 .googleAT("")
                 .build();
         userService.joinMember(command1);
@@ -185,17 +228,17 @@ public class DummyGenerator {
         advertVideoUrlList1.add("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/71cc0506891f4de4aa5bc28389e971c9videoList");
 
         AddAdvertRequestCommand command1 = AddAdvertRequestCommand.builder()
-                .userId(user1.getId())
+                .userId(user2.getId())
                 .title("유산균 김치")
                 .description("발효된 Super Food 김치")
                 .startDate(LocalDateTime.parse("2024-04-25T00:00:00"))
                 .endDate(LocalDateTime.parse("2025-04-25T00:00:00"))
-                .type("NOTPRODUCT")
+                .advertType("PRODUCT")
                 .directVideoUrl("")
-                .bannerImgUrl("https://contents.codetree.ai/homepage/images/company/SSAFY_logo.png")
+                .bannerImgUrl("https://img.khan.co.kr/lady/r/1100xX/2023/03/08/news-p.v1.20230308.9abb9311c8ee43c6b181dd72e08fa534.png")
                 .selectedContentList(contentList)
                 .advertVideoUrlList(advertVideoUrlList1)
-                .category("개발")
+                .advertCategory("푸드")
                 .build();
 
 
@@ -205,17 +248,17 @@ public class DummyGenerator {
         advertVideoUrlList2.add("https://ssafy-stad.s3.ap-northeast-2.amazonaws.com/AdvertVideo/71cc0506891f4de4aa5bc28389e971c9videoList");
 
         AddAdvertRequestCommand command2 = AddAdvertRequestCommand.builder()
-                .userId(user2.getId())
+                .userId(user1.getId())
                 .title("싸피 12기")
                 .description("개발자로 취업할 수 있는 절호의 기회")
                 .startDate(LocalDateTime.parse("2024-04-25T00:00:00"))
                 .endDate(LocalDateTime.parse("2025-04-25T00:00:00"))
-                .type("product")
-                .directVideoUrl("")
-                .bannerImgUrl("https://img.khan.co.kr/lady/r/1100xX/2023/03/08/news-p.v1.20230308.9abb9311c8ee43c6b181dd72e08fa534.png")
+                .advertType("NOTPRODUCT")
+                .directVideoUrl("https://www.ssafy.com/ksp/servlet/swp.content.controller.SwpContentServlet?p_process=select-content-view&p_menu_cd=M0307&p_content_cd=C0307&gad_source=1&gclid=CjwKCAjwrcKxBhBMEiwAIVF8rNcbofIU9So7-M2nvl4LIlRg_YOU5R3mox3ws6r398qEcnMdWDBMVhoCmH4QAvD_BwE")
+                .bannerImgUrl("https://contents.codetree.ai/homepage/images/company/SSAFY_logo.png")
                 .selectedContentList(contentList2)
                 .advertVideoUrlList(advertVideoUrlList2)
-                .category("푸드")
+                .advertCategory("개발")
                 .build();
 
         advertService.addAdvert(command1);
@@ -230,7 +273,8 @@ public class DummyGenerator {
 
         Product kimchi = Product.createNewProduct(
                 advert,
-                "금비김치",
+                "https://cdn.imweb.me/thumbnail/20200415/6b6e035658bac.png",
+                "우리 아이가 좋아하는 맛있는 김치",
                 2500L,
                 5000L,
                 LocalDateTime.parse("2024-04-25T00:00:00"),
@@ -259,18 +303,20 @@ public class DummyGenerator {
     }
 
     public void addOrders(User user, ProductType productType, Long contentId, Long advertId){
-        AddOrderRequestCommand command1 = AddOrderRequestCommand.builder()
-                .userId(user.getId())
+
+        List<AddOrdersProductTypeRequestCommand> productTypeList = new ArrayList<>();
+        AddOrdersProductTypeRequestCommand ptRequestCommand = AddOrdersProductTypeRequestCommand.builder()
                 .productTypeId(productType.getId())
-                .productTypeCnt(Math.max(productType.getQuantity()-10,1))
+                .productCnt(Math.max(productType.getQuantity()-10,1))
                 .contentId(contentId)
                 .advertId(advertId)
-                .name("이태경")
-                .phoneNumber("010-4124-2572")
-                .locationName("집")
-                .location("대전광역시 유성구 구암동678-2")
-                .locationDetail("206호")
-                .locationNum("46271")
+                .optionId(null)
+                .build();
+        productTypeList.add(ptRequestCommand);
+
+        AddOrderRequestCommand command1 = AddOrderRequestCommand.builder()
+                .userId(user.getId())
+                .addOrdersProductTypeRequestCommands(productTypeList)
                 .build();
         ordersService.addOrders(command1);
     }

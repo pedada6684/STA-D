@@ -16,19 +16,10 @@ public class BookmarkedContentRepositoryImpl implements BookmarkedContentReposit
     private final JPAQueryFactory query;
 
     @Override
-    public Optional<List<Long>> findDetailIdByUserId(Long userId) {
-        return Optional.ofNullable(query.select(bookmarkedContent.contentDetail.id)
+    public Optional<List<Long>> findConceptIdByUserId(Long userId) {
+        return Optional.ofNullable(query.select(bookmarkedContent.contentConcept.id)
                 .from(bookmarkedContent)
                 .where(bookmarkedContent.user.id.eq(userId))
                 .fetch());
-    }
-
-    @Override
-    public Optional<BookmarkedContent> findByUserIdAndContentDetailId(Long userId, Long contentId) {
-        return Optional.ofNullable(query.select(bookmarkedContent)
-                .from(bookmarkedContent)
-                .where(bookmarkedContent.user.id.eq(userId)
-                        .and(bookmarkedContent.contentDetail.id.eq(contentId)))
-                .fetchOne());
     }
 }

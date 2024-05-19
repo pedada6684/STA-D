@@ -8,7 +8,7 @@ public class ModifyWatchingContentRequest {
     private Long userId;
     private Long detailId;
     private boolean status;
-    private String stopTime;
+    private Long stopTime;
 
     public ModifyWatchingContentCommand toCommand() {
         return ModifyWatchingContentCommand.builder()

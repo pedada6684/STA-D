@@ -39,7 +39,9 @@ public class Advert {
     @Column(length = 3000)
     private String bannerImgUrl;
 
-    private String category;
+    private String advertCategory;
+
+    private Boolean status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -59,33 +61,27 @@ public class Advert {
             String description,
             LocalDateTime startDate,
             LocalDateTime endDate,
-            String advertCategory,
+            String advertType,
             String directVideoUrl,
             String bannerImgUrl,
             User user,
-            String category
-//            List<AdvertVideo> advertVideos,
-//            List<SelectedContent> selectedContents,
-//            List<Product> products
+            String advertCategory
             ){
         Advert advert = new Advert();
         advert.title=title;
         advert.description=description;
         advert.startDate=startDate;
         advert.endDate=endDate;
-        if(advertCategory.equals("PRODUCT"))
+        if(advertType.equals("PRODUCT"))
             advert.advertType=AdvertType.PRODUCT;
         else
             advert.advertType=AdvertType.NOTPRODUCT;
-        if(advert.directVideoUrl!=null && !advert.directVideoUrl.isBlank())
+        if(directVideoUrl!=null && !directVideoUrl.isBlank())
             advert.directVideoUrl=directVideoUrl;
         advert.bannerImgUrl=bannerImgUrl;
         advert.user=user;
-        advert.category=category;
-//        advert.advertVideos=advertVideos;
-//        advert.selectedContents=selectedContents;
-//        advert.products=products;
-
+        advert.advertCategory=advertCategory;
+        advert.status=true;
         return advert;
     }
 
@@ -97,18 +93,23 @@ public class Advert {
             String advertCategory,
             String directVideoUrl,
             String bannerImgUrl,
-            String category
+            String advertType
     ){
         this.title=title;
         this.description=description;
         this.startDate=startDate;
         this.endDate=endDate;
-        if(advertCategory.equals("PRODUCT"))
+        if(advertType.equals("PRODUCT"))
             this.advertType=AdvertType.PRODUCT;
         else
             this.advertType=AdvertType.NOTPRODUCT;
         this.directVideoUrl = directVideoUrl;
         this.bannerImgUrl=bannerImgUrl;
-        this.category=category;
+        this.advertCategory=advertCategory;
+        this.status=true;
+    }
+
+    public void deleteAdvert(){
+        this.status=false;
     }
 }

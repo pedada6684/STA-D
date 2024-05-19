@@ -2,6 +2,7 @@ package com.klpc.stadspring.domain.cart.service;
 
 import com.klpc.stadspring.domain.advert.service.command.response.GetAdvertResponseCommand;
 import com.klpc.stadspring.domain.cart.controller.request.CartProductPostRequest;
+import com.klpc.stadspring.domain.cart.controller.response.GetCartProductInfoResponse;
 import com.klpc.stadspring.domain.cart.controller.response.GetCartProductListResponse;
 import com.klpc.stadspring.domain.cart.entity.CartProduct;
 import com.klpc.stadspring.domain.cart.repository.CartProductRepository;
@@ -9,6 +10,8 @@ import com.klpc.stadspring.domain.cart.service.command.AddProductToCartCommand;
 import com.klpc.stadspring.domain.cart.service.command.DeleteProductInCartCommand;
 import com.klpc.stadspring.domain.cart.service.command.GetCartProductCommand;
 import com.klpc.stadspring.domain.cart.service.command.UpdateCartProductCountCommand;
+import com.klpc.stadspring.domain.option.entity.ProductOption;
+import com.klpc.stadspring.domain.option.repository.OptionRepository;
 import com.klpc.stadspring.domain.product.entity.Product;
 import com.klpc.stadspring.domain.productType.entity.ProductType;
 import com.klpc.stadspring.domain.productType.repository.ProductTypeRepository;
@@ -34,6 +37,7 @@ public class CartService {
     private final CartProductRepository cartProductRepository;
     private final UserRepository userRepository;
     private final ProductTypeRepository productTypeRepository;
+    private final OptionRepository optionRepository;
 
     @Transactional
     public List<CartProduct> addProductToCart(AddProductToCartCommand command) {
@@ -53,8 +57,9 @@ public class CartService {
                     user,
                     cartProductPostRequest.getQuantity(),
                     cartProductPostRequest.getAdvertId(),
-                    cartProductPostRequest.getContentId()
-            );
+                    cartProductPostRequest.getContentId(),
+                    cartProductPostRequest.getOptionId()
+                    );
             cartProductRepository.save(newCartProduct);
             addedProducts.add(newCartProduct);
         }
@@ -77,11 +82,26 @@ public class CartService {
         List<GetCartProductCommand> responseList = new ArrayList<>();
 
         for(CartProduct cartProduct : cartProductList){
+
+            ProductOption productOption;
+
+            if(cartProduct.getOptionId() != -1) {
+                productOption = optionRepository.findById(cartProduct.getOptionId())
+                        .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+            } else {
+                productOption = null;
+            }
+
             GetCartProductCommand response = GetCartProductCommand.builder()
+                    .cartProductId(cartProduct.getId())
+                    .productId(cartProduct.getProductType().getProduct().getId())
+                    .productName(cartProduct.getProductType().getProduct().getName())
                     .productType(cartProduct.getProductType())
                     .quantity(cartProduct.getQuantity())
                     .advertId(cartProduct.getAdvertId())
                     .contentId(cartProduct.getContentId())
+                    .thumbnail(cartProduct.getProductType().getProduct().getThumbnail())
+                    .option(productOption)
                     .build();
 
             responseList.add(response);
@@ -89,21 +109,54 @@ public class CartService {
         return GetCartProductListResponse.builder().cartProductList(responseList).build();
     }
 
-    public CartProduct getCartProduct(Long cartProductId){
+    public GetCartProductInfoResponse getCartProduct(Long cartProductId) {
+        CartProduct cartProduct = cartProductRepository.findById(cartProductId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        ProductOption productOption = optionRepository.findById(cartProduct.getOptionId())
+                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+
+        GetCartProductInfoResponse response = GetCartProductInfoResponse.builder()
+                .cartProductId(cartProduct.getId())
+                .productId(cartProduct.getProductType().getProduct().getId())
+                .productName(cartProduct.getProductType().getProduct().getName())
+                .productType(cartProduct.getProductType())
+                .quantity(cartProduct.getQuantity())
+                .advertId(cartProduct.getAdvertId())
+                .contentId(cartProduct.getContentId())
+                .thumbnail(cartProduct.getProductType().getProduct().getThumbnail())
+                .option(productOption)
+                .build();
+
+        return response;
+    }
+
+    public CartProduct getCartProductOne(Long cartProductId) {
         CartProduct cartProduct = cartProductRepository.findById(cartProductId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
 
         return cartProduct;
     }
 
-    public CartProduct updateCartProductCount(UpdateCartProductCountCommand command) {
+    public GetCartProductInfoResponse updateCartProductCount(UpdateCartProductCountCommand command) {
         log.info("UpdateCartProductCountCommand: " + command);
 
-        CartProduct cartProduct = getCartProduct(command.getCartProductId());
+        CartProduct cartProduct = getCartProductOne(command.getCartProductId());
         cartProduct.setQuantity(command.getQuantity());
 
         cartProductRepository.save(cartProduct);
 
-        return cartProduct;
+        GetCartProductInfoResponse response = GetCartProductInfoResponse.builder()
+                .cartProductId(cartProduct.getId())
+                .productId(cartProduct.getProductType().getProduct().getId())
+                .productType(cartProduct.getProductType())
+                .quantity(cartProduct.getQuantity())
+                .advertId(cartProduct.getAdvertId())
+                .contentId(cartProduct.getContentId())
+                .thumbnail(cartProduct.getProductType().getProduct().getThumbnail())
+                .option(null)
+                .build();
+
+        return response;
     }
 }

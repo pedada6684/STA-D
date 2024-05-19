@@ -1,13 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stad/Payment.dart';
 import 'package:stad/constant/colors.dart';
 import 'package:stad/models/delivery_address_model.dart';
+import 'package:stad/models/product_model.dart';
+import 'package:stad/providers/user_provider.dart';
+import 'package:stad/services/address_service.dart';
 import 'package:stad/widget/address_screen.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
 import 'package:stad/widget/product_card.dart';
 
 class OrderScreen extends StatefulWidget {
-  const OrderScreen({super.key});
+  final ProductInfo? productInfo;
+  final List<ProductType>? productTypes;
+  final String? title;
+  final int deliveryFee;
+  final Map<int, int> quantities;
+  final List<int> optionIds;
+  final int advertId;
+  final int contentId;
+
+  const OrderScreen({
+    super.key,
+    this.productInfo,
+    this.productTypes,
+    this.title,
+    this.deliveryFee = 2500,
+    required this.quantities,
+    required this.advertId,
+    required this.contentId,
+    required this.optionIds,
+  });
 
   @override
   State<OrderScreen> createState() => _OrderScreenState();
@@ -16,39 +40,94 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   String? selectedProduct;
   bool isExpanded = false;
-  String? deliveryAddress; //배송지 주소 저장
+  List<DeliveryAddress> deliveryAddresses = [];
+  DeliveryAddress? selectedDeliveryAddress;
+  int deliveryFee = 0;
 
-  List<DeliveryAddress> deliveryAddresses = [
-    DeliveryAddress(
-      name: "박지운",
-      phone: "010-1000-1000",
-      location: "(34153) 대전광역시 유성구 대학로 124",
-      locationNick: "집",
-    ),
-    DeliveryAddress(
-      name: "최은희",
-      phone: "010-2000-2000",
-      location: "(12345) 서울특별시 강남구 테헤란로 123",
-      locationNick: "은희집",
-    ),
-    DeliveryAddress(
-      name: "이태경",
-      phone: "010-2000-2000",
-      location: "(12345) 서울특별시 강남구 테헤란로 123",
-      locationNick: "태경집",
-    ),
-  ];
+  int calculateTotalPrice() {
+    int total = 0;
+    widget.productTypes?.forEach((product) {
+      int quantity = widget.quantities[product.id] ?? 0;
+      total += product.price * quantity;
+    });
+    return total;
+  }
 
   @override
   void initState() {
     super.initState();
-    selectedDeliveryAddress = deliveryAddresses.first;
+    fetchDeliveryAddresses();
   }
 
-  DeliveryAddress? selectedDeliveryAddress;
+  void refreshAddresses() {
+    fetchDeliveryAddresses();
+  }
+
+  void fetchDeliveryAddresses() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    if (userProvider.userId != null) {
+      AddressService addressService = AddressService();
+      try {
+        var fetchedAddresses =
+            await addressService.fetchAddresses(userProvider.userId!);
+        setState(() {
+          deliveryAddresses = fetchedAddresses;
+          selectedDeliveryAddress =
+              deliveryAddresses.isNotEmpty ? deliveryAddresses.first : null;
+        });
+      } catch (e) {
+        print("Failed to fetch addresses: $e");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    int totalPrice = calculateTotalPrice();
+    int deliveryFee =
+        totalPrice >= 30000 ? 0 : widget.productInfo!.cityDeliveryFee;
+    String name = widget.productInfo!.name;
+
+    void navigateToPayment(int totalPrice, UserProvider userProvider) {
+      if (selectedDeliveryAddress != null) {
+        String fullAddress = selectedDeliveryAddress!.location;
+        String postcode =
+            fullAddress.substring(0, 5); // First 5 characters are the postcode
+        String addressDetail =
+            fullAddress.substring(6); // Rest is the detailed address
+
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Payment(
+              advertId: widget.advertId,
+              contentId: widget.contentId,
+              optionIds: widget.optionIds,
+              quantities: widget.quantities,
+              productTypes: widget.productTypes ?? [],
+              // productInfo: widget.productInfo,
+              pg: 'html5_inicis',
+              payMethod: 'card',
+              name: name,
+              merchantUid: 'mid_${DateTime.now().millisecondsSinceEpoch}',
+              amount: totalPrice,
+              buyerName: userProvider.user?.name ?? 'Guest',
+              buyerTel: userProvider.user?.phone ?? '010-0000-0000',
+              buyerEmail: userProvider.user?.email ?? 'example@example.com',
+              buyerAddr: addressDetail,
+              buyerPostcode: postcode,
+              appScheme: 'example',
+              cardQuota: [2, 3]),
+        ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            "배송지를 추가해주세요.",
+            style: TextStyle(color: mainWhite),
+          ),
+          backgroundColor: mainBlack.withOpacity(0.7),
+        ));
+      }
+    }
+
     return Scaffold(
       backgroundColor: mainWhite,
       appBar: const CustomAppBar(
@@ -62,90 +141,9 @@ class _OrderScreenState extends State<OrderScreen> {
             const divider(),
             _buildSelectAds(context),
             const divider(),
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
-              color: mainWhite, // 배경색 설정
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '결제금액',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 20.0), // 텍스트 사이의 간격
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '주문금액',
-                        style: TextStyle(fontSize: 16.0),
-                      ),
-                      Text(
-                        '53,400 원', // 예시 금액
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8.0),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '상품할인금액',
-                          style: TextStyle(fontSize: 14.0, color: midGray),
-                        ),
-                        Text(
-                          '19,500 원', // 예시 금액
-                          style: TextStyle(fontSize: 14.0, color: midGray),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 8.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '배송비',
-                          style: TextStyle(fontSize: 14.0, color: midGray),
-                        ),
-                        Text(
-                          '0 원', // 예시 금액
-                          style: TextStyle(fontSize: 14.0, color: midGray),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    height: 40,
-                    color: mainBlack,
-                  ), // 구분선
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '총 결제금액',
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        '53,400 원', // 예시 금액
-                        style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            _buildTotalPrice(
+              totalPrice: totalPrice,
+              deliveryFee: deliveryFee,
             ),
           ],
         ),
@@ -157,10 +155,8 @@ class _OrderScreenState extends State<OrderScreen> {
             text: '결제하기',
             textColor: mainWhite,
             backgroundColor: mainNavy,
-            onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => ProductCard()));
-            },
+            onPressed: () => navigateToPayment(
+                totalPrice, Provider.of<UserProvider>(context, listen: false)),
           ),
         ),
       ),
@@ -187,8 +183,13 @@ class _OrderScreenState extends State<OrderScreen> {
                     showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20.0),
+                                topRight: Radius.circular(20.0))),
                         useSafeArea: true,
-                        builder: (_) => const AddressScreen());
+                        builder: (_) =>
+                            AddressScreen(onAddressAdded: refreshAddresses));
                   },
                   child: const Text(
                     '배송지추가',
@@ -204,7 +205,10 @@ class _OrderScreenState extends State<OrderScreen> {
                 ? _buildDeliveryAddressButtons()
                 : const Padding(
                     padding: EdgeInsets.all(16.0),
-                    child: Text('배송지를 추가해주세요.'),
+                    child: Text(
+                      '배송지를 추가해주세요.',
+                      style: TextStyle(color: darkGray),
+                    ),
                   ),
             if (selectedDeliveryAddress != null)
               Padding(
@@ -253,12 +257,25 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
           child: ExpansionTile(
-            title: Text(
-              selectedProduct ?? '주문 상품',
-              style: const TextStyle(
-                  color: mainBlack,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  selectedProduct ?? '주문 상품',
+                  style: const TextStyle(
+                      color: mainBlack,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0),
+                ),
+                Text(
+                  isExpanded ? '' : widget.productInfo?.name ?? '',
+                  style: const TextStyle(color: mainBlack, fontSize: 14.0),
+                  overflow: (widget.productInfo?.name?.length ?? 0) > 10
+                      ? TextOverflow.ellipsis
+                      : null, // Apply ellipsis based on text length
+                  maxLines: 1,
+                ),
+              ],
             ),
             trailing: Icon(
               isExpanded
@@ -271,10 +288,18 @@ class _OrderScreenState extends State<OrderScreen> {
                 isExpanded = expanded;
               });
             },
-            children: const <Widget>[
-              //백에서 받아오기
-              ProductCard(),
-            ],
+            children: widget.productTypes?.map((productType) {
+                  int quantity = widget.quantities[productType.id] ?? 0;
+                  int totalPrice = quantity * productType.price;
+                  return ProductCard(
+                    productInfo: widget.productInfo,
+                    productTypes: [productType],
+                    title: '상세 항목',
+                    quantities: quantity,
+                    totalPrice: totalPrice,
+                  );
+                }).toList() ??
+                [],
           ),
         ),
       ),
@@ -295,7 +320,7 @@ class _OrderScreenState extends State<OrderScreen> {
               label: Text(
                 address.locationNick,
                 style: TextStyle(
-                  color: isSelected ? mainWhite : mainNavy, // 조건부 색상 지정
+                  color: isSelected ? mainWhite : mainNavy,
                 ),
               ),
               showCheckmark: false,
@@ -312,6 +337,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   () {
                     if (selected) {
                       selectedDeliveryAddress = address;
+                      print(address.location);
                     }
                   },
                 );
@@ -319,6 +345,102 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
           );
         }).toList(),
+      ),
+    );
+  }
+}
+
+class _buildTotalPrice extends StatelessWidget {
+  final int totalPrice;
+  final int deliveryFee;
+
+  const _buildTotalPrice({
+    super.key,
+    required this.totalPrice,
+    required this.deliveryFee,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
+      color: mainWhite,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '결제금액',
+            style: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 20.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '주문금액',
+                style: TextStyle(fontSize: 16.0),
+              ),
+              Text(
+                '${totalPrice.toString()} 원',
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          SizedBox(height: 8.0),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '상품할인금액',
+                  style: TextStyle(fontSize: 14.0, color: midGray),
+                ),
+                Text(
+                  '0 원',
+                  style: TextStyle(fontSize: 14.0, color: midGray),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 8.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '배송비',
+                  style: TextStyle(fontSize: 14.0, color: midGray),
+                ),
+                Text(
+                  '${deliveryFee.toString()} 원',
+                  style: TextStyle(fontSize: 14.0, color: midGray),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 40,
+            color: mainBlack,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '총 결제금액',
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+              ),
+              Text(
+                '${deliveryFee + totalPrice} 원',
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

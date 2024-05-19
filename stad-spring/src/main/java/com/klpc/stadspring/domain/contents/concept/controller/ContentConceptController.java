@@ -3,14 +3,10 @@ package com.klpc.stadspring.domain.contents.concept.controller;
 import com.klpc.stadspring.domain.contents.category.entity.ContentCategory;
 import com.klpc.stadspring.domain.contents.category.service.ContentCategoryService;
 import com.klpc.stadspring.domain.contents.categoryRelationship.service.ContentCategoryRelationshipService;
-import com.klpc.stadspring.domain.contents.concept.controller.response.GetCategoryAndConceptsListResponse;
-import com.klpc.stadspring.domain.contents.concept.controller.response.GetConceptListResponse;
-import com.klpc.stadspring.domain.contents.concept.controller.response.GetConceptResponse;
-import com.klpc.stadspring.domain.contents.concept.controller.response.GetCategoryAndConceptsResponse;
+import com.klpc.stadspring.domain.contents.concept.controller.response.*;
 import com.klpc.stadspring.domain.contents.concept.entity.ContentConcept;
 import com.klpc.stadspring.domain.contents.concept.service.ContentConceptService;
-import com.klpc.stadspring.domain.contents.detail.entity.ContentDetail;
-import com.klpc.stadspring.domain.contents.detail.service.ContentDetailService;
+import com.klpc.stadspring.domain.contents.concept.service.command.response.GetUpdatedContentResponseCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -32,7 +28,6 @@ public class ContentConceptController {
     private final ContentConceptService conceptService;
     private final ContentCategoryService categoryService;
     private final ContentCategoryRelationshipService categoryRelationshipService;
-    private final ContentDetailService detailService;
 
     @GetMapping("/series")
     @Operation(summary = "시리즈 메인 영상 목록", description = "시리즈 메인 영상 목록")
@@ -51,8 +46,7 @@ public class ContentConceptController {
             List<Long> contentIdList = categoryRelationshipService.getConceptIdByCategory(aLong);
             List<GetConceptResponse> contentResponseList = new ArrayList<>();
             for (Long value : contentIdList) {
-                ContentDetail detail = detailService.getContentDetailById(value);
-                ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
+                ContentConcept concept = conceptService.getContentConceptById(value);
 
                 contentResponseList.add(GetConceptResponse.from(concept));
             }
@@ -101,8 +95,7 @@ public class ContentConceptController {
             List<Long> contentIdList = categoryRelationshipService.getConceptIdByCategory(aLong);
             List<GetConceptResponse> contentResponseList = new ArrayList<>();
             for (Long value : contentIdList) {
-                ContentDetail detail = detailService.getContentDetailById(value);
-                ContentConcept concept = conceptService.getContentConceptById(detail.getContentConceptId());
+                ContentConcept concept = conceptService.getContentConceptById(value);
 
                 contentResponseList.add(GetConceptResponse.from(concept));
             }
@@ -150,5 +143,35 @@ public class ContentConceptController {
             responseList.add(GetConceptResponse.from(contentConcept));
         }
         return ResponseEntity.ok(responseList);
+    }
+
+    @GetMapping("/all")
+    @Operation(summary = "콘텐츠 전체 조회", description = "콘텐츠 전체 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "콘텐츠 전체 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<GetAllConceptListResponse> getAllContentList() {
+        log.info("콘텐츠 전체 조회" + "\n" + "getAllContentList");
+
+        GetAllConceptListResponse response = conceptService.getAllContentList();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/updated")
+    @Operation(summary = "최신 영상 목록", description = "최신 영상 목록")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "최신 영상 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 형식"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류")
+    })
+    ResponseEntity<GetUpdatedContentResponse> getUpdatedContent() {
+        log.info("최신 영상 목록 조회" + "\n" + "getUpdatedContent");
+
+        List<GetUpdatedContentResponseCommand> responseList = conceptService.getUpdatedContent();
+        GetUpdatedContentResponse response = GetUpdatedContentResponse.from(responseList);
+        return ResponseEntity.ok(response);
     }
 }

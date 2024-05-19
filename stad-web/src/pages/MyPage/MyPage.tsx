@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import Container from "../../components/Container/Container";
 import WebNav from "../../components/Nav/WebNav";
 import Sidebar from "../../components/Sidebar/Sidebar";
@@ -19,11 +19,13 @@ export default function MyPage() {
   const [activeTab, setActiveTab] = useState<tab>("enterprise");
   const handleClickTab = (tab: tab) => (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    console.log("Tab clicked:", tab); // 클릭된 탭 로그
     setActiveTab(tab);
-    navigate(`${tab}`);
+    navigate(`/my-page/${tab}`);
   };
 
   function renderComponent() {
+    console.log("Rendering component for tab:", activeTab);
     switch (activeTab) {
       case "enterprise":
         return <EnterprisePage />;
@@ -31,8 +33,6 @@ export default function MyPage() {
         return <EnrolledAdList />;
       case "enroll-list":
         return <EnrolledGoodsList />;
-      case "review":
-        return <Review />;
     }
   }
   return (
