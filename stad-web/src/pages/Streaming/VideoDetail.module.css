@@ -87,6 +87,7 @@
   color: #c8c8c8;
   display: flex;
   margin-bottom: 0.5rem;
+  margin-top: 1.5rem;
 }
 .staff span:first-child {
   flex: 1 1 10%;
