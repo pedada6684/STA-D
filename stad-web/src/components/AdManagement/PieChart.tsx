@@ -51,16 +51,16 @@ export default function PieChart({ title, dataType }: PieChartProps) {
           // const adListData = await getAdList(userId, accessToken); // 유저 광고 리스트 조회
           // console.log("광고 리스트 조회 성공 파이", adListData);
           const advertIds = combinedAds.map((ad: adList) => ad.advertId); // map 사용해서 advertId 담아주기
+          console.log(advertIds);
           const titles = combinedAds.map((ad: adList) => ad.title);
           // const promise = advertIds.map((id: number) => {
           //   console.log(id);
           //   getTotal(id, accessToken);
           // });
-          const promises = advertIds.map((id: number) => {
-            console.log("Fetching total for advertId:", id);
-            getTotal(id, accessToken);
-          });
-          const results = await Promise.all(promises); // 데이터 병렬을 위해 동기
+          const promises = advertIds.map((id: number) =>
+            getTotal(id, accessToken)
+          );
+          const results = await Promise.all(promises);
           console.log("------------------");
           console.log("각 광고의 총합 데이터 조회 성공", results);
 
@@ -74,27 +74,33 @@ export default function PieChart({ title, dataType }: PieChartProps) {
             .sort((a, b) => b.value - a.value) // 값에 따라 내림차순으로 정렬
             .slice(0, 5); // 상위 5개 항목만 선택
           console.log("sortedResults?", sortedResults);
-          if (sortedResults.length > 0) {
-            setSeries(sortedResults.map((res) => res.value));
-            setLabels(sortedResults.map((res) => res.label));
-            setLoading(false);
-          } else {
-            setSeries([0]);
-            setLabels(["No Data"]);
-          }
+
+          // 상태 업데이트 전 로그 출력
+          console.log("Updating series and labels");
+          console.log(
+            "Series to set:",
+            sortedResults.map((res) => res.value)
+          );
+          console.log(
+            "Labels to set:",
+            sortedResults.map((res) => res.label)
+          );
+
+          setSeries(sortedResults.map((res) => res.value));
+          setLabels(sortedResults.map((res) => res.label));
         }
       } catch (error) {
         console.error("데이터 로드 실패", error);
-        setSeries([0]);
-        setLabels(["No Data"]);
-      } finally {
-        setLoading(false);
       }
     }
     fetchData();
   }, [ads, accessToken, dataType]);
 
-  const chartOptions: ApexCharts.ApexOptions = {
+  useEffect(() => {
+    console.log("Series updated:", series);
+  }, [series]);
+
+  const options: ApexCharts.ApexOptions = {
     chart: {
       type: "donut",
       height: 300,
@@ -114,7 +120,7 @@ export default function PieChart({ title, dataType }: PieChartProps) {
     },
     colors: ["#3552F2", "#6D81F2", "#A0ACF2", "#C9D3F2", "#C9CCD8"],
     dataLabels: {
-      enabled: false,
+      enabled: true,
     },
     stroke: {
       width: 0, // 테두리 제거
@@ -124,7 +130,7 @@ export default function PieChart({ title, dataType }: PieChartProps) {
     plotOptions: {
       pie: {
         donut: {
-          size: "70%", // 내부 반경 크기 조절
+          size: "50%", // 내부 반경 크기 조절
           labels: {
             show: true,
             name: {
@@ -160,10 +166,11 @@ export default function PieChart({ title, dataType }: PieChartProps) {
       <div className={`${styles.title}`}>{title}</div>
       <div className={`${styles.pieContainer}`}>
         <ReactApexChart
-          options={chartOptions}
+          options={options}
           series={series}
           type="donut"
-          width={350}
+          width={400}
+          height={400}
         />
       </div>
     </div>
