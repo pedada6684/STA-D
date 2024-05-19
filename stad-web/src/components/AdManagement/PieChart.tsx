@@ -58,7 +58,7 @@ export default function PieChart({ title, dataType }: PieChartProps) {
           // });
           const promises = advertIds.map((id: number) => {
             console.log("Fetching total for advertId:", id);
-            return getTotal(id, accessToken);
+            getTotal(id, accessToken);
           });
           const results = await Promise.all(promises); // 데이터 병렬을 위해 동기
           console.log("------------------");
@@ -94,13 +94,6 @@ export default function PieChart({ title, dataType }: PieChartProps) {
     fetchData();
   }, [ads, accessToken, dataType]);
 
-  if (loading || isLoading) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
   const chartOptions: ApexCharts.ApexOptions = {
     chart: {
       type: "donut",
