@@ -83,6 +83,31 @@ export function SelectContentsBox({
     return <div>Loading...</div>;
   }
 
+  const customStyles = {
+    multiValue: (provided: any) => ({
+      ...provided,
+      backgroundColor: "white",
+      border: "1px solid gray",
+    }),
+    multiValueLabel: (provided: any) => ({
+      ...provided,
+      color: "#000",
+    }),
+    multiValueRemove: (provided: any) => ({
+      ...provided,
+      // color: "#ff0000",
+      cursor: "pointer",
+      // ":hover": {
+      //   backgroundColor: "#ff0000",
+      //   color: "white",
+      // },
+    }),
+    input: (provided: any) => ({
+      ...provided,
+      padding: "10px", // 패딩을 원하는 만큼 조정하세요
+    }),
+  };
+
   // 데이터가 준비된 후에는 옵션을 렌더링합니다.
   return (
     <Select
@@ -93,6 +118,7 @@ export function SelectContentsBox({
       onChange={handleContentBox}
       className="basic-multi-select"
       classNamePrefix="select"
+      styles={customStyles}
     />
   );
 }
@@ -115,18 +141,18 @@ export function SelectAdCategory({
     if (initialCategory) {
       const mainCategoryValue = initialCategory.charAt(0); // 앞글자 추출해서 대분류 카테고리
       const mainCategoryOption = SelectAdMainCategory.find(
-          (option) => option.value === mainCategoryValue
+        (option) => option.value === mainCategoryValue
       );
       if (mainCategoryOption) {
         setSelectMainCategory(mainCategoryOption);
       }
       const subCategoryOptions = SelectAdSubCategory[mainCategoryValue];
       const subCategoryOption = subCategoryOptions.find(
-          (option) => option.value === initialCategory
+        (option) => option.value === initialCategory
       );
       if (subCategoryOption) setSelectSubCategory(subCategoryOption);
     }
-  },[initialCategory]);
+  }, [initialCategory]);
 
   const [selectMainCategory, setSelectMainCategory] =
     useState<OptionType | null>(null);
@@ -146,9 +172,9 @@ export function SelectAdCategory({
     if (selectedOption) {
       setCategory(selectedOption.value);
       setSelectSubCategory(selectedOption);
-     console.log(selectedOption.value);
-     console.log(selectedOption);
-     console.log(selectSubCategory);
+      console.log(selectedOption.value);
+      console.log(selectedOption);
+      console.log(selectSubCategory);
     } else {
       setCategory(null);
     }
