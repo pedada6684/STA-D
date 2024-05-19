@@ -52,31 +52,39 @@ class _CartScreenState extends State<CartScreen> {
       Map<int, ProductInfo> productInfos = {};
 
       for (var item in selectedItems) {
-        int productId = int.parse(item.id);
-        if (!productInfos.containsKey(productId)) {
-          productInfos[productId] = await productService.getProductInfo(productId);
+        int advertId = item.advertId;
+        if (!productInfos.containsKey(advertId)) {
+          productInfos[advertId] =
+          await productService.getProductInfo(advertId);
         }
 
-        productTypes.add(ProductType(
-          id: productId,
+        ProductType productType = ProductType(
+          id: int.parse(item.id),//productId
           name: item.title,
           price: item.price,
           quantity: item.quantity,
-        ));
+          productOptions: [], // 빈 목록으로 초기화합니다.
+        );
+
+        productTypes.add(productType);
       }
 
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => OrderScreen(
-            productInfo: productInfos.isNotEmpty ? productInfos.values.first : null,
+            productInfo:
+            productInfos.isNotEmpty ? productInfos.values.first : null,
             productTypes: productTypes,
-            title: productInfos.isNotEmpty ? productInfos.values.first.name : "Order Details",
+            title: productInfos.isNotEmpty
+                ? productInfos.values.first.name
+                : "Order Details",
             quantities: {for (var item in productTypes) item.id: item.quantity},
-            advertId: 1, // 예시 ID, 적절한 값으로 변경 필요
-            contentId: 1, // 예시 ID, 적절한 값으로 변경 필요
-            optionIds: selectedItems.map((item) => item.option?.id ?? -1).toList(),
-            deliveryFee: 2500, // 배송료 처리
+            advertId: selectedItems.first.advertId,
+            contentId: selectedItems.first.contentId,
+            optionIds:
+            selectedItems.map((item) => item.option?.id ?? -1).toList(),
+            deliveryFee: 2500,
           ),
         ),
       );
