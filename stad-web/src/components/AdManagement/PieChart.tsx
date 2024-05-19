@@ -48,21 +48,15 @@ export default function PieChart({ title, dataType }: PieChartProps) {
           if (userId !== 1) {
             combinedAds = [exampleAd, ...ads.data];
           }
-          // const adListData = await getAdList(userId, accessToken); // 유저 광고 리스트 조회
-          // console.log("광고 리스트 조회 성공 파이", adListData);
+
           const advertIds = combinedAds.map((ad: adList) => ad.advertId); // map 사용해서 advertId 담아주기
           console.log(advertIds);
           const titles = combinedAds.map((ad: adList) => ad.title);
-          // const promise = advertIds.map((id: number) => {
-          //   console.log(id);
-          //   getTotal(id, accessToken);
-          // });
+
           const promises = advertIds.map((id: number) =>
             getTotal(id, accessToken)
           );
           const results = await Promise.all(promises);
-          console.log("------------------");
-          console.log("각 광고의 총합 데이터 조회 성공", results);
 
           //데이터 pie chart 형식에 맞게 변환
 
@@ -73,18 +67,6 @@ export default function PieChart({ title, dataType }: PieChartProps) {
             }))
             .sort((a, b) => b.value - a.value) // 값에 따라 내림차순으로 정렬
             .slice(0, 5); // 상위 5개 항목만 선택
-          console.log("sortedResults?", sortedResults);
-
-          // 상태 업데이트 전 로그 출력
-          console.log("Updating series and labels");
-          console.log(
-            "Series to set:",
-            sortedResults.map((res) => res.value)
-          );
-          console.log(
-            "Labels to set:",
-            sortedResults.map((res) => res.label)
-          );
 
           setSeries(sortedResults.map((res) => res.value));
           setLabels(sortedResults.map((res) => res.label));
