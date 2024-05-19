@@ -10,6 +10,7 @@ import com.klpc.stadspring.domain.contents.concept.repository.ContentConceptRepo
 import com.klpc.stadspring.domain.contents.concept.service.command.request.AddConceptRequestCommand;
 import com.klpc.stadspring.domain.contents.concept.service.command.response.GetAllConceptResponseCommand;
 import com.klpc.stadspring.domain.contents.concept.service.command.response.GetUpdatedContentResponseCommand;
+import com.klpc.stadspring.domain.contents.detail.repository.ContentDetailRepository;
 import com.klpc.stadspring.global.response.ErrorCode;
 import com.klpc.stadspring.global.response.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ContentConceptService {
     public final ContentConceptRepository repository;
+    public final ContentDetailRepository detailRepository;
     public final ContentCategoryRelationshipRepository relationshipRepository;
     public final ContentCategoryRepository categoryRepository;
 
@@ -36,7 +38,7 @@ public class ContentConceptService {
      */
     public ContentConcept getContentConceptById(Long id) {
         ContentConcept contentConcept = repository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.ENTITIY_NOT_FOUND));
+                .orElse(repository.findById(detailRepository.findById(id).get().getContentConceptId()).get());
         return contentConcept;
     }
 
