@@ -1,15 +1,70 @@
 .container {
+  margin: 4rem 8rem 0 8rem;
+  display: grid;
+  row-gap: 1.5rem;
+}
+.enroll {
   display: flex;
   flex-direction: column;
-  margin: 2rem 4rem 0 4rem;
+  gap: 1rem;
 }
 
+.enrollText {
+  color: rgb(15, 19, 23);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 2rem;
+}
+
+.enrollLine {
+  width: auto;
+  height: 2px;
+  background-color: rgb(15, 19, 23);
+  color: #0f1317;
+}
+.item {
+  /* border: 1px solid #565656; */
+  /* margin-bottom: 1rem; */
+  /* padding: 1rem; */
+  /* width: 100%; */
+  display: grid;
+  min-height: 3rem;
+  align-items: center;
+  grid-template-columns: 20rem auto;
+  margin-bottom: 2rem;
+}
+.title {
+  color: rgb(44, 50, 59);
+  font-size: 1.2rem;
+  font-weight: 700;
+  width: 30rem;
+  line-height: 2rem;
+  padding-bottom: 2rem;
+}
+
+.title2 {
+  color: rgb(44, 50, 59);
+  font-size: 1.2rem;
+  font-weight: 700;
+  width: 30rem;
+  line-height: 2rem;
+}
+.deliveryWrapper {
+  display: flex;
+  flex-direction: column;
+}
 .input {
   width: 95%;
   border: 1px solid #d9d9d9;
-  background-color: #f4f4f4;
   padding: 1rem 0 1rem 1rem;
   border-radius: 5px;
+}
+
+.deliInput {
+  width: 20rem;
+  border: 0;
+  border-bottom: 1px solid #d9d9d9;
+  background-color: transparent;
 }
 
 .caution {
@@ -26,46 +81,94 @@
 .sellPeriod,
 .priceContainer,
 .sellContainer,
-.optionInput,
-.city,
-.jejuMountain {
+.optionInput {
   display: flex;
 }
 .adBanner,
 .merDesImages,
-.sellPeriod,
-.jejuMountain {
+.sellPeriod {
   padding-top: 2rem;
 }
 
-.subTitle {
-  width: 10%;
+.city,
+.jejuMountain {
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
-.subTitle span {
+.city {
+  margin-bottom: 2rem;
+}
+.title span,
+.title2 span {
   color: #ff1a1a;
 }
+.priceContainer {
+  margin-left: 3rem;
+  width: 80%;
+}
 
+.imagePreviewWrapper {
+  width: 20rem;
+  height: 20rem;
+}
+.subTitle {
+  display: flex;
+  align-items: center;
+  width: 20%;
+}
 .videoContainer,
-.imageContainer,
-.priceContainer,
 .sellContainer,
 .imageListContainer {
   margin-left: 3rem;
   width: 80%;
 }
 .image {
-  width: 10rem;
-  height: 10rem;
+  width: 100%;
+  height: 30rem;
+  object-fit: contain;
 }
 .video,
 .image,
-.bImage {
+.bImage,
+.videoOverlay {
   border: 1px dashed #afb0b4;
 }
 
+.plusImg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.detailImagesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem; /* 이미지 간의 간격 조정 */
+}
+
+.detailImage {
+  width: 20rem;
+  height: auto;
+  object-fit: cover;
+  position: relative;
+}
+
+.preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .imagePreviewContainer {
-  margin: 0 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .prev {
@@ -74,10 +177,12 @@
 }
 
 .preview {
-  width: 10rem;
+  /* width: 10rem; */
   display: flex;
-  margin-right: 2rem;
-  height: 10rem;
+  justify-content: center;
+  align-items: center;
+  /* margin-right: 2rem; */
+  /* height: 10rem; */
 }
 .imageInput {
   display: none;
@@ -96,24 +201,34 @@
 }
 .overlayButton img,
 .deleteButton img,
-.videoOverlay img,
 .deleteImgButton img {
   width: 2rem;
 }
 
-.overlayButton,
-.videoOverlay,
-.deleteButton,
+.videoOverlay img {
+  width: 3rem;
+}
 .deleteImgButton {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: white;
+  width: 2rem;
+  height: 2rem;
+  z-index: 2;
+  cursor: pointer;
+  border: 1px solid gray;
+}
+.overlayButton,
+.deleteButton {
   border: 0;
   background-color: transparent;
 }
 
-.deleteImgButton {
-  display: flex;
-  padding-top: 1.3rem;
-  padding-right: 1rem;
-}
 .deleteButton {
   position: absolute;
   left: 0;
@@ -126,7 +241,10 @@
 }
 .videoOverlay {
   display: flex;
-  padding-top: 2rem;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: transparent;
 }
 
 .afterUpload {
@@ -138,7 +256,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-left: 1rem;
 }
 
@@ -257,7 +375,7 @@
 }
 .optionWrapper {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   margin-left: 1rem;
   margin-bottom: 1rem;
 }
@@ -277,6 +395,7 @@
   border-right: 1px solid #aaa;
 }
 .tt {
+  width: 7rem;
   font-size: 0.9rem;
   margin-right: 0.5rem;
   padding-bottom: 1rem;
