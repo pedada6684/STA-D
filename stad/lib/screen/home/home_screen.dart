@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     int? userId = Provider.of<UserProvider>(context, listen: false).userId;
     if (userId != null) {
       var contentProvider =
-          Provider.of<ContentProvider>(context, listen: false);
+      Provider.of<ContentProvider>(context, listen: false);
       contentProvider
           .fetchCurrentOrPopularContent(userId)
           .then((contentDetailId) {
@@ -57,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     AdService adService = AdService();
     try {
       List<Advert> fetchedAdverts =
-          await adService.getAdvertsByContentId(contentId);
+      await adService.getAdvertsByContentId(contentId);
       setState(() {
         adverts = fetchedAdverts;
       });
@@ -70,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     AdService adService = AdService();
     try {
       List<Advert> fetchedContentRelatedAds =
-          await adService.getAdvertsByContentId(contentId);
+      await adService.getAdvertsByContentId(contentId);
       setState(() {
         contentRelatedAds = fetchedContentRelatedAds;
       });
@@ -130,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     int? userId = Provider.of<UserProvider>(context, listen: false).userId;
     if (userId != null) {
       var contentProvider =
-          Provider.of<ContentProvider>(context, listen: false);
+      Provider.of<ContentProvider>(context, listen: false);
       contentProvider
           .fetchCurrentOrPopularContent(userId)
           .then((contentDetailId) {
@@ -150,32 +152,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     return Scaffold(
       backgroundColor: mainWhite,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50.0),
-        child: AppBar(
-          scrolledUnderElevation: 0,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: const Text(
-            'STA:D',
-            style: TextStyle(
-              color: mainWhite,
-              fontSize: 40.0,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'LogoFont',
-              shadows: <Shadow>[
-                Shadow(
-                  offset: Offset(0.0, 1.0),
-                  blurRadius: 3.0,
-                  color: Color.fromARGB(150, 0, 0, 0),
-                ),
-              ],
-            ),
-          ),
-          centerTitle: true,
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: mainNavy,
+        title: Text(
+          'STA:D',
+          style: TextStyle(
+              color: mainWhite, fontFamily: 'LogoFont', fontSize: 32.0),
         ),
       ),
-      extendBodyBehindAppBar: true,
       body: RefreshIndicator(
         onRefresh: _handleRefresh,
         child: Consumer<ContentProvider>(
@@ -199,26 +184,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             isScrollControlled: true,
                             builder: (BuildContext context) =>
                                 ContentDetailBottomSheet(
-                              title: featuredContent.title,
-                              imagePath: featuredContent.thumbnailUrl,
-                              synopsis: featuredContent.description,
-                              seasonInfo:
+                                  title: featuredContent.title,
+                                  imagePath: featuredContent.thumbnailUrl,
+                                  synopsis: featuredContent.description,
+                                  seasonInfo:
                                   '${featuredContent.releaseYear} | ${featuredContent.audienceAge} | ${featuredContent.playtime}',
-                              additionalText:
+                                  additionalText:
                                   '크리에이터 : ${featuredContent.creator}\n출연 : ${featuredContent.cast}',
-                              detailId: currentContentId,
-                            ),
+                                  detailId: currentContentId,
+                                ),
                           );
                         }
                       },
-                      child:
-                          buildTopThumbnail(featuredContent: featuredContent),
+                      child: buildTopThumbnail(featuredContent: featuredContent),
                     )
                   else if (popularContents.isNotEmpty)
                     buildPopularContentCarousel(popularContents)
                   else
                     Center(child: CircularProgressIndicator()),
-                  // SizedBox(height: 20.0),
                   Column(
                     children: [
                       if (adverts.isNotEmpty)
@@ -242,10 +225,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             contentRelatedAdverts.cast<Advert>(),
                             currentContentId,
                             userId!,
-                            '컨텐츠 관련 광고')
+                            '컨텐츠 관련 광고'),
+                      buildImageCarousel(),
                     ],
                   ),
-                  // SizedBox(height: 20.0),
                 ],
               ),
             );
@@ -260,32 +243,31 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     return CarouselSlider(
       items: adverts
           .map((advert) => AdvertisingCard(
-                bannerImgUrl: advert.bannerImgUrl,
-                buttonText: title,
-                subText: advert.title,
-                onPressed: () {
-                  print('지금 보는 광고의 id :$currentContentId');
-                  advertClickLog(advert.advertId, 0, currentContentId, userId);
-                  if (advert.directVideoUrl != 'No URL') {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => WebViewScreen(
-                              title: advert.title,
-                              url: advert.directVideoUrl!,
-                            )));
-                  } else {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProductScreen(
-                              advertId: advert.advertId,
-                              contentId: currentContentId,
-                              title: advert.title,
-                              description: advert.description,
-                            )));
-                  }
-                },
-              ))
+        bannerImgUrl: advert.bannerImgUrl,
+        buttonText: title,
+        subText: advert.title,
+        onPressed: () {
+          print('지금 보는 광고의 id :$currentContentId');
+          advertClickLog(advert.advertId, 0, currentContentId, userId);
+          if (advert.directVideoUrl != 'No URL') {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => WebViewScreen(
+                  title: advert.title,
+                  url: advert.directVideoUrl!,
+                )));
+          } else {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ProductScreen(
+                  advertId: advert.advertId,
+                  contentId: currentContentId,
+                  title: advert.title,
+                  description: advert.description,
+                )));
+          }
+        },
+      ))
           .toList(),
       options: CarouselOptions(
-        // height: MediaQuery.of(context).size.height * 0.6,
         autoPlay: true,
         autoPlayInterval: Duration(seconds: 3),
         autoPlayAnimationDuration: Duration(milliseconds: 800),
@@ -313,9 +295,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             if (ad.directVideoUrl != 'No URL') {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => WebViewScreen(
-                        title: ad.title,
-                        url: ad.directVideoUrl!,
-                      )));
+                    title: ad.title,
+                    url: ad.directVideoUrl!,
+                  )));
             } else {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProductScreen(
@@ -337,9 +319,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 print(ad.directVideoUrl);
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => WebViewScreen(
-                          title: ad.title,
-                          url: ad.directVideoUrl!,
-                        )));
+                      title: ad.title,
+                      url: ad.directVideoUrl!,
+                    )));
               } else {
                 print(ad.directVideoUrl);
                 Navigator.of(context).push(MaterialPageRoute(
@@ -356,7 +338,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         );
       }).toList(),
       options: CarouselOptions(
-        // height: MediaQuery.of(context).size.height * 0.6,
         autoPlay: true,
         autoPlayInterval: Duration(seconds: 3),
         autoPlayAnimationDuration: Duration(milliseconds: 800),
@@ -379,28 +360,62 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       List<Map<String, dynamic>> popularContents) {
     return CarouselSlider(
       items: popularContents.map((content) {
-        return GestureDetector(
-          onTap: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (BuildContext context) => ContentDetailBottomSheet(
-                title: '${content['title']} | ${content['episode']}',
-                imagePath: content['thumbnailUrl'],
-                synopsis: content['description'],
-                seasonInfo:
-                    '${content['releaseYear']} | ${content['audienceAge']} | ${content['playtime']}',
-                additionalText:
-                    '크리에이터 : ${content['creator']}\n출연 : ${content['cast']}',
-                detailId: content['detailId'],
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.network(
+              content['thumbnailUrl'],
+              fit: BoxFit.cover,
+            ),
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+              child: Container(
+                color: Colors.black.withOpacity(0.2),
               ),
-            );
-          },
-          child: buildPopularContentThumbnail(content),
+            ),
+            GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (BuildContext context) => ContentDetailBottomSheet(
+                    title: '${content['title']} | ${content['episode']}',
+                    imagePath: content['thumbnailUrl'],
+                    synopsis: content['description'],
+                    seasonInfo:
+                    '${content['releaseYear']} | ${content['audienceAge']} | ${content['playtime']}',
+                    additionalText:
+                    '크리에이터 : ${content['creator']}\n출연 : ${content['cast']}',
+                    detailId: content['detailId'],
+                  ),
+                );
+              },
+              child: buildPopularContentThumbnail(content),
+            ),
+            Positioned(
+              top: 35,
+              left: 25,
+              child: Text(
+                'STA:D 인기 컨텐츠',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: mainWhite,
+                  shadows: <Shadow>[
+                    Shadow(
+                      offset: Offset(0.0, 0.8),
+                      blurRadius: 3.0,
+                      color: Color.fromARGB(150, 0, 0, 0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         );
       }).toList(),
       options: CarouselOptions(
-        height: MediaQuery.of(context).size.height * 0.7,
+        height: MediaQuery.of(context).size.height * 0.4,
         autoPlay: true,
         autoPlayInterval: Duration(seconds: 3),
         autoPlayAnimationDuration: Duration(milliseconds: 800),
@@ -415,74 +430,53 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Widget buildPopularContentThumbnail(Map<String, dynamic> content) {
-    return Stack(
-      children: [
-        // ShaderMask(
-        //   shaderCallback: (rect) {
-        //     return LinearGradient(
-        //       begin: Alignment.topCenter,
-        //       end: Alignment.bottomCenter,
-        //       colors: [mainBlack, Colors.transparent],
-        //       stops: [0.4, 1.0],
-        //     ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-        //   },
-        //   blendMode: BlendMode.dstIn,
-        //   child: Image.network(
-        //     content['thumbnailUrl'],
-        //     height: MediaQuery.of(context).size.height * 0.7,
-        //     // height: 450.0,
-        //     width: double.infinity,
-        //     fit: BoxFit.fill,
-        //   ),
-        // ),
-        Image.network(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 80.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10.0),
+        child: Image.network(
           content['thumbnailUrl'],
-          height: MediaQuery.of(context).size.height * 0.7,
-          // height: 450.0,
           width: double.infinity,
-          fit: BoxFit.fill,
+          fit: BoxFit.contain,
         ),
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            height: 100,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [mainBlack.withOpacity(0.2), Colors.transparent],
-                stops: [0.0, 0.5],
-              ),
+      ),
+    );
+  }
+
+  Widget buildImageCarousel() {
+    return CarouselSlider(
+      items: [
+        'assets/image/banner1.png',
+        'assets/image/banner2.png',
+        'assets/image/banner3.png',
+      ].map((imagePath) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: Image.asset(
+              imagePath,
+              fit: BoxFit.cover,
+              width: double.infinity,
             ),
           ),
-        ),
-        const Positioned(
-          bottom: 35,
-          left: 25,
-          child: Text(
-            'STA:D 인기 콘텐츠',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: mainWhite,
-              shadows: <Shadow>[
-                Shadow(
-                  offset: Offset(0.0, 0.8),
-                  blurRadius: 3.0,
-                  color: Color.fromARGB(150, 0, 0, 0),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
+        );
+      }).toList(),
+      options: CarouselOptions(
+        autoPlay: true,
+        autoPlayInterval: Duration(seconds: 3),
+        autoPlayAnimationDuration: Duration(milliseconds: 800),
+        enableInfiniteScroll: true,
+        aspectRatio: 16 / 9,
+        viewportFraction: 1,
+        enlargeCenterPage: true,
+        scrollDirection: Axis.horizontal,
+      ),
+      carouselController: _controller,
     );
   }
 }
 
-//지금 보는 컨텐츠
 class buildTopThumbnail extends StatelessWidget {
   const buildTopThumbnail({
     super.key,
@@ -493,87 +487,66 @@ class buildTopThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // ShaderMask(
-        //   shaderCallback: (rect) {
-        //     return LinearGradient(
-        //       begin: Alignment.topCenter,
-        //       end: Alignment.bottomCenter,
-        //       colors: [mainBlack, Colors.transparent],
-        //       stops: [0.4, 1.0],
-        //     ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-        //   },
-        //   blendMode: BlendMode.dstIn,
-        //   child: featuredContent == null
-        //       ? Container(
-        //           color: mainWhite,
-        //           height: MediaQuery.of(context).size.height * 0.5,
-        //           child: Center(
-        //             child: CircularProgressIndicator(
-        //               color: mainNavy,
-        //             ),
-        //           ),
-        //         )
-        //       : Image.network(
-        //           featuredContent!.thumbnailUrl,
-        //           height: MediaQuery.of(context).size.height * 0.5,
-        //           width: double.infinity,
-        //           fit: BoxFit.fill,
-        //         ),
-        // ),
-        featuredContent == null
-            ? Container(
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.4,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          featuredContent == null
+              ? Container(
+            color: mainWhite,
+            child: Center(
+              child: CircularProgressIndicator(
+                color: mainNavy,
+              ),
+            ),
+          )
+              : Image.network(
+            featuredContent!.thumbnailUrl,
+            fit: BoxFit.cover,
+          ),
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+            child: Container(
+              color: Colors.black.withOpacity(0.2),
+            ),
+          ),
+          featuredContent != null
+              ? Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 80.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Image.network(
+                  featuredContent!.thumbnailUrl,
+                  width: double.infinity,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          )
+              : Container(),
+          Positioned(
+            top: 35,
+            left: 25,
+            child: Text(
+              '지금 보는 컨텐츠',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
                 color: mainWhite,
-                height: MediaQuery.of(context).size.height * 0.5,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: mainNavy,
+                shadows: <Shadow>[
+                  Shadow(
+                    offset: Offset(0.0, 0.8),
+                    blurRadius: 3.0,
+                    color: Color.fromARGB(150, 0, 0, 0),
                   ),
-                ),
-              )
-            : Image.network(
-                featuredContent!.thumbnailUrl,
-                height: MediaQuery.of(context).size.height * 0.5,
-                width: double.infinity,
-                fit: BoxFit.fill,
-              ),
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            height: 100,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [mainBlack.withOpacity(0.2), Colors.transparent],
-                stops: [0.0, 0.5],
+                ],
               ),
             ),
           ),
-        ),
-        Positioned(
-          bottom: 35,
-          left: 25,
-          child: Text(
-            '지금 보는 컨텐츠',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: mainWhite,
-              shadows: <Shadow>[
-                Shadow(
-                  offset: Offset(0.0, 0.8),
-                  blurRadius: 3.0,
-                  color: Color.fromARGB(150, 0, 0, 0),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -1,31 +1,36 @@
 class CartItem {
-  final String id;//product Id
+  final String id; //product Id
   final String cartProductId;
   final String title;
   final String thumbnail;
   final int price;
   int quantity;
   bool isSelected;
+  final CartProductOption? option;
 
   CartItem({
-    required this.id,//product Id
+    required this.id, //product Id
     required this.cartProductId,
     required this.title,
     required this.price,
     required this.thumbnail,
     this.quantity = 1,
     this.isSelected = false,
+    this.option,
   });
 
   // JSON에서 CartItem 객체를 생성하는 factory 생성자
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
-      id: json['productType']['id'].toString(),
+      id: json['productId'].toString(),
       cartProductId: json['cartProductId'].toString(),
       title: json['productType']['name'],
       thumbnail: json['thumbnail'],
       price: json['productType']['price'] as int,
       quantity: json['quantity'] as int,
+      option: json['option'] != null
+          ? CartProductOption.fromJson(json['option'])
+          : null,
     );
   }
 
@@ -38,12 +43,39 @@ class CartItem {
       'thumbnail': thumbnail,
       'title': title,
       'price': price,
+      'option': option?.toJson(),
     };
   }
 
   void toggleSelection() {
     isSelected = !isSelected;
   }
+}
+
+class CartProductOption {
+  final int id;
+  final String name;
+  final int value;
+
+  CartProductOption({
+    required this.id,
+    required this.name,
+    required this.value,
+  });
+
+  factory CartProductOption.fromJson(Map<String, dynamic> json) {
+    return CartProductOption(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      value: json['value'] as int,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'value': value,
+      };
 }
 
 class CartProduct {
