@@ -7,6 +7,8 @@ class CartItem {
   int quantity;
   bool isSelected;
   final CartProductOption? option;
+  final int advertId;
+  final int contentId;
 
   CartItem({
     required this.id, //product Id
@@ -14,6 +16,8 @@ class CartItem {
     required this.title,
     required this.price,
     required this.thumbnail,
+    required this.advertId,
+    required this.contentId,
     this.quantity = 1,
     this.isSelected = false,
     this.option,
@@ -31,6 +35,8 @@ class CartItem {
       option: json['option'] != null
           ? CartProductOption.fromJson(json['option'])
           : null,
+      advertId: json['advertId'] as int, // 추가
+      contentId: json['contentId'] as int, // 추가
     );
   }
 
@@ -44,6 +50,8 @@ class CartItem {
       'title': title,
       'price': price,
       'option': option?.toJson(),
+      'advertId': advertId, // 추가
+      'contentId': contentId, // 추가
     };
   }
 

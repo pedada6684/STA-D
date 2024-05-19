@@ -96,8 +96,7 @@ class ProductDetailScreen extends StatelessWidget {
             Container(
               color: mainWhite,
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
                 child: Column(
                   children: [
                     const Row(
@@ -195,7 +194,10 @@ class ProductDetailScreen extends StatelessWidget {
                     const SizedBox(height: 10.0),
                     _buildInformationRow('생산자', '박지운'),
                     const SizedBox(height: 10.0),
-                    _buildInformationRow('상품 구성', '${productTypes[0].name}, ${productTypes[1].name}'),
+                    _buildInformationRow(
+                      '상품 구성',
+                      productTypes.map((type) => type.name).join(', '),
+                    ),
                     const SizedBox(height: 10.0),
                     _buildInformationRow('보관방법', '서늘하고 건조한 곳 보관'),
                     const SizedBox(height: 10.0),
