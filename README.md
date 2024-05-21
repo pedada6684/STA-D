@@ -573,22 +573,11 @@ ___
 ### TV 서비스
 <table style="width: 100%; text-align: center; border-collapse: collapse;" >
   <tr>
-    <td style="text-align: center;"><h3>로그인</h3><img src="docs/src/usecase/로그인.gif" width="85%"></td>
-    <td style="text-align: center;"><h3>내주변 베리어프리 장소 표시</h3><img src="docs/src/usecase/배리어프리마커.gif" width="85%"></td>
+    <td style="text-align: center; width: 50%;"><h3>VOD 검색</h3><img src="docs/src/usecase/검색.gif" width="85%"></td>
+    <td style="text-align: center; width: 50%;"><h3>VOD 찜하기</h3><img src="docs/src/usecase/찜하기.gif" width="85%"></td>
   </tr>
   <tr>
-    <td style="text-align: center;"><h3>베리어프리 장소 검색하기</h3><img src="docs/src/usecase/배리어프리장소검색.gif" width="85%"></td>
-    <td style="text-align: center;"><h3>베리어프리 리뷰 작성하기</h3><img src="docs/src/usecase/리뷰작성하기.gif" width="85%"></td>
-  </tr>
-  <tr>
-    <td style="text-align: center;"><h3>장소 즐겨찾기, 내가 쓴 글 열람</h3><img src="docs/src/usecase/즐겨찾기기능.gif" width="85%"></td>
-    <td style="text-align: center;"><h3>도보 길찾기</h3><img src="docs/src/usecase/도보길찾기추천경로.gif" width="85%"></td>
-  </tr>
-  <tr>
-    <td style="text-align: center;"><h3>대중교통 길찾기</h3><img src="docs/src/usecase/대중교통길찾기.gif" width="85%"></td>
-    <td style="text-align: center;"><h3>택시 요금 길찾기 & 요금안내</h3><img src="docs/src/usecase/택시예상요금안내.gif" width="85%"></td>
-  </tr>
-  <tr>
-    <td style="text-align: center;"><h3>장애인 콜택시 전화 연결</h3><img src="docs/src/usecase/휠체어택시전화연결.gif" width="85%"></td>
+    <td style="text-align: center;"><h3>VOD 카테고리 조회</h3><img src="docs/src/usecase/시리즈별.gif" width="85%"></td>
+    <td style="text-align: center;"><h3>시리즈 상세 정보 조회</h3><img src="docs/src/usecase/시리즈상세정보.gif" width="85%"></td>
   </tr>
 </table>
