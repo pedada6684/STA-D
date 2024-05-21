@@ -8,7 +8,7 @@ import { getAdList } from "../Select/userAdvertAPI";
 import { adList } from "../Select/SelectAdListBox";
 import { getTotal } from "./DashboardAPI";
 import { useQuery } from "react-query";
-interface SeriesType {
+export interface SeriesType {
   name?: string;
   data: number[];
 }

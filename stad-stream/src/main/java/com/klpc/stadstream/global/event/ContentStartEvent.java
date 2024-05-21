@@ -5,11 +5,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ContentStartEvnet {
+public class ContentStartEvent {
     private Long userId;
     private Long contentId;
 
-    public ContentStartEvnet(Long userId, Long contentId) {
+    public ContentStartEvent(Long userId, Long contentId) {
         this.userId = userId;
         this.contentId = contentId;
     }

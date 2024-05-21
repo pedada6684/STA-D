@@ -1,0 +1,16 @@
+.collapsibleText {
+  color: #fff;
+  display: inline; /* inline으로 설정하여 텍스트와 버튼이 한 줄에 오도록 함 */
+  margin-bottom: 5rem;
+}
+
+.readMore {
+  color: #d9d9d9;
+  cursor: pointer;
+  margin-left: 5px;
+  display: inline; /* inline으로 설정하여 텍스트와 버튼이 한 줄에 오도록 함 */
+}
+
+.readMore:hover {
+  text-decoration: underline;
+}
