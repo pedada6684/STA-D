@@ -68,7 +68,8 @@
 }
 
 .play {
-  filter: invert(100%) sepia(97%) saturate(0%) hue-rotate(44deg) brightness(103%) contrast(103%);
+  filter: invert(100%) sepia(97%) saturate(0%) hue-rotate(44deg)
+    brightness(103%) contrast(103%);
   width: 10rem;
 }
 
@@ -85,20 +86,26 @@
 
 .timer {
   position: absolute;
-  top: 0;
-  left: 0;
+  bottom: 4rem;
+  right: 30px;
+  height: 2rem;
+  padding: 1rem;
   color: white;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.4);
   z-index: 2;
 }
 
 .skip {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 20px;
+  width: 5rem;
+  right: 50px;
+  border-radius: 0.5vw;
+  padding: 0.5rem;
   color: white;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.4);
   z-index: 2;
+  border: 1px solid gray;
 }
 
 .screen-box::-webkit-scrollbar {

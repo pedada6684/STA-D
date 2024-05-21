@@ -38,12 +38,12 @@ class _ProductScreenState extends State<ProductScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _productService = ProductService();
-    _loadProductData();
+    _loadProductData(widget.advertId);
   }
 
-  void _loadProductData() async {
+  void _loadProductData(int advertId) async {
     try {
-      _productInfo = await _productService.getProductInfo(3);
+      _productInfo = await _productService.getProductInfo(advertId);
       // _productInfo = await _productService.getProductInfo(widget.advertId);
       _productTypes =
           await _productService.getProductTypeList(_productInfo!.id);

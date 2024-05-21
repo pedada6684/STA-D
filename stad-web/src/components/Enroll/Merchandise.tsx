@@ -157,14 +157,14 @@ export default function Merchandise() {
     const dataList = await productDetailImgUpload(imgList);
     console.log("상품 상세 이미지:", dataList);
     // setDetailImages(dataList.data);
-    setDetailImages(prevImages => [...prevImages, ...dataList.data]);
+    setDetailImages((prevImages) => [...prevImages, ...dataList.data]);
     setGoodsFormData((prevState) => ({
       ...prevState,
       imgs: dataList.data,
     }));
     console.log("이미지 리스트 추가", dataList);
     // setDetailImagePreviews(dataList.data);
-    setDetailImagePreviews(prevImages => [...prevImages, ...dataList.data]);
+    setDetailImagePreviews((prevImages) => [...prevImages, ...dataList.data]);
     console.log(detailImagePreviews);
   };
 
@@ -287,48 +287,39 @@ export default function Merchandise() {
   useEffect(() => {
     setGoodsFormData((prevState) => ({
       ...prevState,
-      imgs: detailImagePreviews
+      imgs: detailImagePreviews,
     }));
   }, [detailImagePreviews]);
 
   return (
     <div className={`${styles.container}`}>
-      <ItemContainer>
-        <TitleContainer>
-          <NameContainer>
-            상품제목<span>*</span>
-          </NameContainer>
-          <ToggleButton />
-        </TitleContainer>
-        {isMerTitleExpanded && (
+      <div className={`${styles.enroll}`}>
+        <span className={`${styles.enrollText}`}>상품 등록</span>
+        <div className={`${styles.enrollLine}`} />
+        <div className={`${styles.item}`}>
+          <span className={`${styles.title} ${styles.title1}`}>
+            상품명<span>*</span>
+          </span>
           <InputContainer>
-            <div>
-              <input
-                type="text"
-                name="name"
-                onChange={handleChange}
-                className={`${styles.input}`}
-                required
-              />
-            </div>
+            <input
+              type="text"
+              name="name"
+              onChange={handleChange}
+              className={`${styles.input}`}
+              required
+            />
             <div className={`${styles.caution}`}>
               * 가이드에 맞지않은 상품제목 입력 시 별도 고지없이 제재 될 수
               있습니다.
             </div>
           </InputContainer>
-        )}
-      </ItemContainer>
-      <ItemContainer>
-        <TitleContainer>
-          <NameContainer>
-            상품 이미지 등록<span>*</span>
-          </NameContainer>
-          <ToggleButton />
-        </TitleContainer>
-        {isMerThumbnailExpanded && (
+        </div>
+        <div className={`${styles.item}`}>
+          <span className={`${styles.title}`}>
+            상품 대표 이미지 등록<span>*</span>
+          </span>
           <InputContainer>
             <div className={`${styles.merImage}`}>
-              <div className={`${styles.subTitle}`}>상품 대표 이미지</div>
               <div
                 className={`${styles.imageContainer} ${styles.inputContainer}`}
               >
@@ -390,171 +381,134 @@ export default function Merchandise() {
                 </div>
               </div>
             </div>
-            <div className={`${styles.merDesImages}`}>
-              <div className={`${styles.subTitle}`}>상품 설명 내용 이미지</div>
-              <div className={`${styles.imageContainer}`}>
-                {/* {Array.from({ length: 1 }).map((_, index) => (
-                  <div key={index} className={`${styles.imageUploadContainer}`}>
-                    {detailImagePreviews[index] ? (
-                      <div className={`${styles.imagePreviewContainer}`}>
-                        <img
-                          className={`${styles.preview}`}
-                          src={detailImagePreviews[index]}
-                          alt={`Detail ${index + 1}`}
-                        />
-                      </div>
-                    ) : (
-                      <div className={`${styles.image}`}>
-                        <input
-                          type="file"
-                          name={`detailImage-${index}`}
-                          id={`detailImage-${index}`}
-                          multiple
-                          required
-                          accept="image/gif, image/jpeg, image/jpg, image/png"
-                          onChange={(e) => handleDetailImg(e)}
-                          className={`${styles.imageInput} ${styles.input}`}
-                        />
-                        <label
-                          htmlFor={`detailImage-${index}`}
-                          className={`${styles.btnUpload}`}
+          </InputContainer>
+        </div>
+        <div className={`${styles.item}`}>
+          <span className={`${styles.title}`}>
+            상품 설명 내용 이미지 등록<span>*</span>
+          </span>
+          <div className={`${styles.imageContainer}`}>
+            <div
+              className={
+                detailImagePreviews.length > 0
+                  ? `${styles.detailImagesGrid}`
+                  : `${styles.image}`
+              }
+            >
+              {detailImagePreviews.length > 0 ? (
+                <>
+                  {detailImagePreviews.map((url, index) => (
+                    <div
+                      key={index}
+                      className={`${styles.imagePreviewWrapper}`}
+                    >
+                      <div className={styles.imagePreviewContainer}>
+                        <button
+                          onClick={() => handleDetailImgDelete(index)}
+                          className={`${styles.deleteImgButton}`}
                         >
-                          <img src={plus} alt="업로드" />
-                        </label>
+                          <img src={close} alt="Delete" />
+                        </button>
+                        <img
+                          src={url}
+                          alt={`Detail ${index + 1}`}
+                          className={styles.preview}
+                        />
                       </div>
-                    )}
-                  </div>
-                ))} */}
-                <div
-                  className={
-                    detailImagePreviews.length > 0
-                      ? `${styles.afterUpload}`
-                      : `${styles.image}`
-                  }
-                >
-                  {detailImagePreviews.length > 0 ? (
-                    <>
-                      {detailImagePreviews.map((url, index) => (
-                        <div key={index}>
-                          <div className={styles.imagePreviewContainer}>
-                            <button
-                              onClick={() => handleDetailImgDelete(index)}
-                              className={`${styles.deleteImgButton}`}
-                            >
-                              <img src={close} alt="Delete" />
-                            </button>
-                            <img
-                              src={url}
-                              alt={`Detail ${index + 1}`}
-                              className={styles.preview}
-                            />
-                          </div>
-                        </div>
-                      ))}
+                    </div>
+                  ))}
 
-                      <button
-                        className={styles.videoOverlay}
-                        onClick={() =>
-                          fileImagesInputRef.current &&
-                          fileImagesInputRef.current.click()
-                        }
-                      >
-                        <img src={edit} alt="Edit image" />
-                      </button>
-                      <input
-                        ref={fileImagesInputRef}
-                        type="file"
-                        name={`detailImage`}
-                        id={`detailImage`}
-                        multiple
-                        required
-                        accept="image/gif, image/jpeg, image/jpg, image/png"
-                        onChange={(e) => handleDetailImg(e)}
-                        className={styles.imageInput}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <input
-                        type="file"
-                        name="detailImage-0"
-                        id="detailImage-0"
-                        multiple
-                        required
-                        accept="image/gif, image/jpeg, image/jpg, image/png"
-                        onChange={(e) => handleDetailImg(e)}
-                        className={styles.imageInput}
-                      />
-                      <label
-                        htmlFor="detailImage-0"
-                        className={styles.btnUpload}
-                      >
-                        <img src={plus} alt="Upload" />
-                      </label>
-                    </>
-                  )}
-                </div>
-                <div className={`${styles.caution}`}>
-                  * 가이드에 맞지않은 상품 이미지 등록 시 별도 고지없이 제재 될
-                  수 있습니다.
-                </div>
-              </div>
+                  <button
+                    className={styles.videoOverlay}
+                    onClick={() =>
+                      fileImagesInputRef.current &&
+                      fileImagesInputRef.current.click()
+                    }
+                  >
+                    <img
+                      className={`${styles.plusImg}`}
+                      src={plus}
+                      alt="Edit image"
+                    />
+                  </button>
+                  <input
+                    ref={fileImagesInputRef}
+                    type="file"
+                    name={`detailImage`}
+                    id={`detailImage`}
+                    multiple
+                    required
+                    accept="image/gif, image/jpeg, image/jpg, image/png"
+                    onChange={(e) => handleDetailImg(e)}
+                    className={styles.imageInput}
+                  />
+                </>
+              ) : (
+                <>
+                  <input
+                    type="file"
+                    name="detailImage-0"
+                    id="detailImage-0"
+                    multiple
+                    required
+                    accept="image/gif, image/jpeg, image/jpg, image/png"
+                    onChange={(e) => handleDetailImg(e)}
+                    className={styles.imageInput}
+                  />
+                  <label htmlFor="detailImage-0" className={styles.btnUpload}>
+                    <img src={plus} alt="Upload" />
+                  </label>
+                </>
+              )}
             </div>
-          </InputContainer>
-        )}
-      </ItemContainer>
-      <ItemContainer>
-        <TitleContainer>
-          <NameContainer>
+            <div className={`${styles.caution}`}>
+              * 가이드에 맞지않은 상품 이미지 등록 시 별도 고지없이 제재 될 수
+              있습니다.
+            </div>
+          </div>
+        </div>
+
+        <div className={`${styles.item}`}>
+          <span className={`${styles.title2}`}>
             배송비<span>*</span>
-          </NameContainer>
-          <ToggleButton />
-        </TitleContainer>
-        {isMerShipPriceExpanded && (
+          </span>
           <InputContainer>
-            <div className={`${styles.city}`}>
-              <div className={`${styles.subTitle}`}>
-                도심지역<span>*</span>
+            <div className={`${styles.deliveryWrapper}`}>
+              <div className={`${styles.city}`}>
+                <div className={`${styles.subTitle}`}>도심지역</div>
+                <div className={`${styles.priceContainer}`}>
+                  <input
+                    type="number"
+                    name="cityDeliveryFee"
+                    onChange={handleChange}
+                    className={`${styles.deliInput}`}
+                    required
+                    placeholder="숫자만 입력"
+                  />
+                  <div className={`${styles.letter}`}>원</div>
+                </div>
               </div>
-              <div className={`${styles.priceContainer}`}>
-                <input
-                  type="number"
-                  name="cityDeliveryFee"
-                  onChange={handleChange}
-                  className={`${styles.input}`}
-                  required
-                  placeholder="숫자만 입력"
-                />
-                <div className={`${styles.letter}`}>원</div>
-              </div>
-            </div>
-            <div className={`${styles.jejuMountain}`}>
-              <div className={`${styles.subTitle}`}>
-                제주, 산간지역<span>*</span>
-              </div>
-              <div className={`${styles.priceContainer}`}>
-                <input
-                  type="number"
-                  name="mtDeliveryFee"
-                  onChange={handleChange}
-                  className={`${styles.input}`}
-                  required
-                  placeholder="숫자만 입력"
-                />
-                <div className={`${styles.letter}`}>원</div>
+              <div className={`${styles.jejuMountain}`}>
+                <div className={`${styles.subTitle}`}>제주, 산간지역</div>
+                <div className={`${styles.priceContainer}`}>
+                  <input
+                    type="number"
+                    name="mtDeliveryFee"
+                    onChange={handleChange}
+                    className={`${styles.deliInput}`}
+                    required
+                    placeholder="숫자만 입력"
+                  />
+                  <div className={`${styles.letter}`}>원</div>
+                </div>
               </div>
             </div>
           </InputContainer>
-        )}
-      </ItemContainer>
-      <ItemContainer>
-        <TitleContainer>
-          <NameContainer>
-            유통기한<span>*</span>
-          </NameContainer>
-          <ToggleButton />
-        </TitleContainer>
-        {isExpDateExpanded && (
+        </div>
+        <div className={`${styles.item}`}>
+          <span className={`${styles.title2}`}>
+            소비기한<span>*</span>
+          </span>
           <InputContainer>
             <div className={`${styles.calendar}`}>
               <DateRange
@@ -565,16 +519,11 @@ export default function Merchandise() {
               />
             </div>
           </InputContainer>
-        )}
-      </ItemContainer>
-      <ItemContainer>
-        <TitleContainer>
-          <NameContainer>
+        </div>
+        <div className={`${styles.item}`}>
+          <span className={`${styles.title2}`}>
             상품 추가<span>*</span>
-          </NameContainer>
-          <ToggleButton />
-        </TitleContainer>
-        {isMerAddExpanded && (
+          </span>
           <InputContainer>
             {products.map((product, index) => (
               <div key={product.id} className={`${styles.productContainer}`}>
@@ -694,14 +643,14 @@ export default function Merchandise() {
               상품 추가
             </button>
           </InputContainer>
-        )}
-      </ItemContainer>
+        </div>
 
-      <EnrollButton
-        goodsFormData={goodsFormData}
-        formData={formData}
-        from="merchandise"
-      />
+        <EnrollButton
+          goodsFormData={goodsFormData}
+          formData={formData}
+          from="merchandise"
+        />
+      </div>
     </div>
   );
 }

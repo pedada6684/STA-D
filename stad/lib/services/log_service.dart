@@ -3,10 +3,7 @@ import 'package:dio/dio.dart';
 class LogService {
   final Dio dio = Dio();
 
-  // final String logUrl = 'http://192.168.31.202:8080/api/log';
-  // final String logUrl = 'http://192.168.0.9:8080/api/log';
-  // final String logUrl = 'http://172.29.40.139:8080/api/log';
-  final String logUrl = 'https://www.mystad.com/api/log';
+  final String logUrl = 'https://www.mystad.com/stats/log';
 
   Future<void> advertClickLog({
     required int advertId,
