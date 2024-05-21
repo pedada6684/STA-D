@@ -1,9 +1,11 @@
-> STA:D 슬로건 같은거
+> 당신만을 위한 맞춤형 미디어, STA:D
 ---
 <img src="https://github.com/B107-Young/Teddybear/assets/118621835/dd277c7b-2802-4ceb-acd4-ef5176ac1ca9" alt="logo" width="30%" height="30%">
+
 ---
+
 ###  📅 프로젝트 진행기간
-2024.04.15(월) ~ 2024.05.20(월) (30일간 진행)  
+2024.04.08(월) ~ 2024.05.20(월) (30일간 진행)  
 SSAFY 10기 2학기 자율 프로젝트 - STA:D
 
 --- 
@@ -14,21 +16,17 @@ FAST(Free Advertising Streaming TV) 서비스는 새로운 차세대 케이블�
 기존의 FAST 서비스에 추가적인 기능들을 더해 새로운 형태의 FAST 서비스를 개발하고자 했습니다.
 
 1. 스마트폰과 IoT
-
-스마트폰을 비롯한 모바일 기기들은 IoT 시대에서 모든 사물에 닿을 수 있는 리모컨의 기능을 합니다.
-우리는 스마트폰을 어떤 기기와 연결할지 고민했고, 한국 가구의 95.4%가 보유한 필수 가전인 TV에 연결하기로 했습니다.
-TV를 스마트폰에 연동하여 사용자가 TV의 정보를 스마트폰에서 확인하고 쉽게 활용할 수 있도록 크로스 디바이스 서비스를 기획했습니다.
+   * 스마트폰을 비롯한 모바일 기기들은 IoT 시대에서 모든 사물에 닿을 수 있는 리모컨의 기능을 합니다.
+   * TV를 스마트폰에 연동하여 사용자가 TV의 정보를 스마트폰에서 확인하고 쉽게 활용할 수 있도록 크로스 디바이스 서비스를 기획했습니다.
 
 2. FAST 서비스와 모바일 연동
-
-FAST 서비스는 구독료 없이 광고를 시청하여 무료로 콘텐츠를 이용할 수 있는 미디어 서비스로, 삼성, LG 등 많은 기업이 참여하고 있으며 시장 규모가 성장할 것으로 예상됩니다.
-우리는 이 프로젝트에서 FAST(Free Advertising Streaming TV) 서비스와 모바일을 연동하고자 했습니다.
+   * FAST 서비스는 구독료 없이 광고를 시청하여 무료로 콘텐츠를 이용할 수 있는 미디어 서비스로, 시장 규모가 성장할 것으로 예상됩니다.
+   * FAST(Free Advertising Streaming TV) 서비스와 모바일을 연동함으로써 더욱 편리하고 향상된 고객 경험을 제공하고자 했습니다.
 
 3. 맞춤 광고와 시너지
-
-우리는 FAST 서비스의 개인 맞춤 광고를 모바일과 연결했을 때 얻어지는 시너지를 고려했습니다.
-사용자는 맞춤 광고를 모바일에서 확인하여 정보를 얻고 쉽게 구매로 이어지는 새로운 고객 경험을 얻을 수 있습니다.
-FAST 서비스 제공 기업은 광고비 외에도 쇼핑 서비스를 통한 판매 수수료라는 수입원을 추가하여 BM의 다각화를 이루고 사업의 안정성을 높일 수 있습니다.
+   * FAST 서비스의 개인 맞춤 광고를 모바일과 연결했을 때 얻어지는 시너지를 고려했습니다.
+   * 사용자는 맞춤 광고를 모바일에서 확인하여 정보를 얻고 쉽게 구매로 이어지는 새로운 고객 경험을 얻을 수 있습니다.
+   * FAST 서비스 제공 기업은 광고비 외에도 쇼핑 서비스를 통한 판매 수수료라는 수입원을 추가하여 BM의 다각화를 이루고 사업의 안정성을 높일 수 있습니다.
 
 ___
 ### 🚀 프로젝트 소개
@@ -299,7 +297,7 @@ ___
 └─util
 ```
 
-#### Alter
+#### Alert
 ```sh
 ├─domain
 │  ├─alert
@@ -341,23 +339,15 @@ ___
 #### stats
 ```shell
 ├─domain
-│  ├─log
-│  │  ├─controller
-│  │  │  ├─event
-│  │  │  ├─request
-│  │  │  └─response
-│  │  ├─entity
-│  │  ├─repository
-│  │  └─service
-│  │      └─command
-│  └─tmp
-│      ├─controller
-│      │  ├─request
-│      │  └─response
-│      ├─entity
-│      ├─repository
-│      └─service
-│          └─command
+│  └─log
+│    ├─controller
+│    │  ├─event
+│    │  ├─request
+│    │  └─response
+│    ├─entity
+│    ├─repository
+│    └─service
+│        └─command
 └─global
     ├─batch
     ├─config
@@ -491,12 +481,11 @@ ___
 - [ERD](docs/프로젝트%20산출물/ERD.md)
 - [API 명세서](docs/프로젝트%20산출물/API명세서.md)
 - [BE 코드 컨벤션](docs/프로젝트%20산출물/BE코드컨벤션.md)
-- [포팅메뉴얼](docs/프로젝트%20산출물/포팅메뉴얼.md)
 ---
 ### 프로젝트 결과물
 
-- [중간 발표자료](docs/프로젝트%20결과물/중간발표.md)
-- [최종 발표자료](docs/프로젝트%20결과물/최종발표.md)
+- [중간 발표자료](docs/프로젝트%20발표자료/중간발표.md)
+- [최종 발표자료](docs/프로젝트%20발표자료/최종발표.md)
 
 ---
 
@@ -505,14 +494,14 @@ ___
 
 <table style="width: 100%; text-align: center;">
   <tr>
-    <td style="text-align: center;"><img src="docs/src/이재신.png" width="110"><br><strong>이재신</strong><br>🍪Back-end<br>💎Team Leader</td>
-    <td style="text-align: center;"><img src="docs/src/신유진.png" width="110"><br><strong>신유진</strong><br>💟Back-end</td>
-    <td style="text-align: center;"><img src="docs/src/이민형.png" width="110"><br><strong>이민형</strong><br>🧗‍♂️Back-end<br>🧔Survey Leader</td>
+    <td style="text-align: center;"><img src="docs/src/이태경.jpeg" width="110"><br><strong>이태경</strong><br>🍪Back-end<br>💎Team Leader</td>
+    <td style="text-align: center;"><img src="docs/src/최은희.png" width="110"><br><strong>최은희</strong><br>💟Back-end</td>
+    <td style="text-align: center;"><img src="docs/src/이민형.png" width="110"><br><strong>이민형</strong><br>🧗‍♂️Back-end</td>
   </tr>
   <tr>
-    <td style="text-align: center;"><img src="docs/src/이태경.png" width="110"><br><strong>이태경</strong><br>🍖Back-end<br>🎥UCC 제작</td>
-    <td style="text-align: center;"><img src="docs/src/김은지.png" width="110"><br><strong>김은지</strong><br>🌹Front-end<br></td>
-    <td style="text-align: center;"><img src="docs/src/서민지.png" width="110"><br><strong>서민지</strong><br>🍞Front-end</td>
+    <td style="text-align: center;"><img src="docs/src/박지운.jpg" width="110"><br><strong>박지운</strong><br>🍖Back-end</td>
+    <td style="text-align: center;"><img src="docs/src/김은지.jpg" width="110"><br><strong>김은지</strong><br>🌹Front-end<br></td>
+    <td style="text-align: center;"><img src="docs/src/이서윤.jpg" width="110"><br><strong>이서윤</strong><br>🍞Front-end</td>
   </tr>
 </table>
 
