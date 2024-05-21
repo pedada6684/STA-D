@@ -115,7 +115,6 @@ class _AddressScreenState extends State<AddressScreen> {
       return;
     }
 
-
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     if (userProvider.userId != null) {
       final addressService = AddressService();
@@ -251,7 +250,7 @@ class _AddressScreenState extends State<AddressScreen> {
                 _buildTextField(_adnickController, '배송지명'),
                 _gap(),
                 _buildTextField(_phoneController, '핸드폰 번호',
-                    keyboardType: TextInputType.phone),
+                    keyboardType: TextInputType.number),
                 _gap(),
                 _buildPostalCodeField(),
                 _gap(),

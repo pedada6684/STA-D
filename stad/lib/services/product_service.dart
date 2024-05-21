@@ -1,15 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:stad/constant/api.dart';
 import 'package:stad/models/product_model.dart';
 
 class ProductService {
   final Dio _dio = Dio();
 
-  // final String _baseUrl = svApi;
-
-  // final String _baseUrl = 'http://192.168.31.202:8080/api';
-  // final String _baseUrl = 'http://192.168.0.9:8080/api';
-  // final String _baseUrl = 'http://172.29.40.139:8080/api';
   final String _baseUrl = 'https://www.mystad.com/api';
 
   ProductService() {
@@ -47,17 +41,13 @@ class ProductService {
         var productList = responseData['productList'] as List; // List로 명시적 형 변환
 
         print(productList);
-        print(productList);
-        print(productList);
+
 
         if (productList.isNotEmpty) {
           var firstProduct = productList[0]
               as Map<String, dynamic>; // Map<String, dynamic>로 명시적 형 변환
           print(firstProduct);
-          print(firstProduct);
-          print(firstProduct);
-          print(firstProduct);
-          print(firstProduct);
+  
 
           return ProductInfo.fromJson(firstProduct);
         } else {
@@ -78,8 +68,7 @@ class ProductService {
   Future<List<ProductType>> getProductTypeList(int productId) async {
     try {
       final response =
-          await _dio.get('/type/list', queryParameters: {'productId': 2});
-      // await _dio.get('/type/list', queryParameters: {'productId': productId});
+          await _dio.get('/type/list', queryParameters: {'productId': productId});
       print('광고 상품 타입 리스트 response :${response.data}');
       if (response.statusCode == 200) {
         List<dynamic> typeList = response.data['list'];

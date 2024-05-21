@@ -1,4 +1,5 @@
 class Content {
+  final int contentId;
   final String title;
   final String thumbnailUrl;
   final String playtime;
@@ -9,6 +10,7 @@ class Content {
   final String description;
 
   Content({
+    required this.contentId,
     required this.title,
     required this.thumbnailUrl,
     required this.playtime,
@@ -21,6 +23,7 @@ class Content {
 
   factory Content.fromJson(Map<String, dynamic> json) {
     return Content(
+      contentId: json['contentId'] ?? -1,
       title: json['title'] ?? '',
       thumbnailUrl: json['thumbnailUrl'] ?? '',
       playtime: json['playtime'] ?? '',
@@ -34,6 +37,7 @@ class Content {
 
   Map<String, dynamic> toJson() {
     return {
+      'contentId': contentId,
       'title': title,
       'thumbnailUrl': thumbnailUrl,
       'playtime': playtime,
