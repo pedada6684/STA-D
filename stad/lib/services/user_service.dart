@@ -1,14 +1,15 @@
 import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
-import 'package:stad/main.dart';
 import 'package:stad/models/user_model.dart';
 import 'package:stad/providers/user_provider.dart';
+import 'package:stad/services/alert_service.dart';
 import 'package:stad/services/user_secure_storage.dart';
 
 class UserService {
@@ -17,6 +18,7 @@ class UserService {
     scopes: ['email', 'https://www.googleapis.com/auth/youtube.readonly'],
   );
   final Dio dio = Dio();
+  final AlertService alertService = AlertService();
   final EmUrl = Uri.parse('http://192.168.31.202:8080/api/v1/auth/applogin');
   final locUrl = Uri.parse('http://10.0.2.2:8080/api/v1/auth/applogin');
 
@@ -61,11 +63,7 @@ class UserService {
         UserModel.fromFirebaseUser(user, googleAccessToken).toJson();
     try {
       final response = await dio.post(
-        // 'http://172.29.40.139:8080/api/v1/auth/applogin',
         'https://www.mystad.com/api/v1/auth/applogin',
-        // 'http://192.168.31.190:8080/api/v1/auth/applogin',
-        // 'http://192.168.0.9:8080/api/v1/auth/applogin',
-        // 'http://192.168.0.129:8080/api/v1/auth/applogin',
         data: json.encode(userProfile),
         options: Options(
             followRedirects: false, validateStatus: (status) => status! < 500),
@@ -130,8 +128,6 @@ class UserService {
     try {
       final response = await dio.post(
         'https://www.mystad.com/api/user/update',
-        // 'http://192.168.31.190:8080/api/user/update',
-        // 'http://172.29.40.139:8080/api/user/update',
         data: formData,
         options: Options(
           headers: {
@@ -166,8 +162,6 @@ class UserService {
 
     try {
       final response = await dio.post(
-        // 'http://192.168.31.190:8080/api/user/profile',
-        // 'http://172.29.40.139:8080/api/user/profile',
         'https://www.mystad.com/api/user/profile',
         data: formData,
         options: Options(
@@ -185,17 +179,45 @@ class UserService {
         userProvider.setUser(updatedUser);
         return true;
       }
-    } catch (e) {
-      print('Error updating profile image: $e');
+    } on DioException catch (e) {
+      print('Error updating profile image: ${e.response}');
       return false;
     }
     return false;
   }
 
   Future<void> signOut(BuildContext context) async {
-    await _googleSignIn.signOut();
-    await _firebaseAuth.signOut();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final userId = userProvider.userId;
 
-    Provider.of<UserProvider>(context, listen: false).clearUser();
+    try {
+      await _googleSignIn.signOut();
+      await _firebaseAuth.signOut();
+
+      // 서버 로그아웃 요청 보내기
+      await dio.post(
+        'https://www.mystad.com/api/user/logout?userId=$userId',
+        options: Options(
+          headers: {
+            'Cookie': userProvider.cookie,
+            'Authorization': 'Bearer ${userProvider.token}',
+          },
+        ),
+      );
+
+      // SSE 연결 해제
+      alertService.disconnect();
+
+      // 사용자 정보 삭제
+      userProvider.clearUser();
+
+      // Secure Storage 정보 삭제
+      await AuthService().deleteToken();
+
+      // 로그인 페이지로 이동
+      GoRouter.of(context).go('/login');
+    } catch (error) {
+      print('로그아웃 실패: $error');
+    }
   }
 }

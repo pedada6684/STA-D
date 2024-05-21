@@ -51,14 +51,13 @@ export default function DigitalDetail() {
 
   return (
     <div className={`${styles.container}`}>
-      <div className={`${styles.item}`}>
-        <div className={`${styles.title}`}>
-          <div className={`${styles.name}`}>
+      <div className={`${styles.enroll}`}>
+        <span className={`${styles.enrollText}`}>직접 광고 수정</span>
+        <div className={`${styles.enrollLine}`} />
+        <div className={`${styles.item}`}>
+          <span className={`${styles.title}`}>
             메인링크<span>*</span>
-          </div>
-          <ToggleButton />
-        </div>
-        {!isDigitalMainExpanded && (
+          </span>
           <InputContainer>
             <div className={`${styles.linkUrl}`}>
               <div className={`${styles.subTitle}`}>연결 URL</div>
@@ -74,11 +73,9 @@ export default function DigitalDetail() {
               </div>
             </div>
           </InputContainer>
-        )}
+        </div>
+        <DigitalModifyButton formData={formData} />
       </div>
-      <DigitalModifyButton
-        formData={formData}
-      />
     </div>
   );
 }

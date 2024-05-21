@@ -5,9 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stad/constant/colors.dart';
-import 'package:stad/models/user_model.dart';
 import 'package:stad/providers/user_provider.dart';
-import 'package:stad/screen/myStad/myStad_screen.dart';
 import 'package:stad/services/user_service.dart';
 import 'package:stad/widget/app_bar.dart';
 import 'package:stad/widget/button.dart';
@@ -130,30 +128,29 @@ class _EditUserScreenState extends State<EditUserScreen> {
                 radius: 60,
               ),
             ),
-            TextFormField(
+            CustomTextFormField(
+              labelText: '이름',
               initialValue: user?.name,
               readOnly: true,
-              decoration: InputDecoration(labelText: '이름'),
             ),
-            TextFormField(
+            CustomTextFormField(
+              labelText: '닉네임',
               controller: _nicknameController,
-              readOnly: false,
-              decoration: InputDecoration(labelText: '닉네임'),
             ),
-            TextFormField(
+            CustomTextFormField(
+              labelText: '전화번호',
               controller: _phoneController,
-              decoration: InputDecoration(labelText: '전화번호'),
-              keyboardType: TextInputType.number, // 키보드 타입을 숫자로 설정
+              keyboardType: TextInputType.number,
               inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly, // 숫자만 입력 허용
+                FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(10), // 글자수 제한
               ],
             ),
-            // 기타 정보들을 읽기 전용 필드로 표시
-            TextFormField(
+            CustomTextFormField(
+              labelText: '이메일',
               initialValue: user?.email,
               readOnly: true,
-              decoration: InputDecoration(labelText: '이메일'),
+              // decoration: InputDecoration(labelText: '이메일'),
             ),
           ],
         ),
@@ -169,6 +166,47 @@ class _EditUserScreenState extends State<EditUserScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CustomTextFormField extends StatelessWidget {
+  final String labelText;
+  final bool readOnly;
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final String? initialValue;
+
+  const CustomTextFormField({
+    Key? key,
+    required this.labelText,
+    this.readOnly = false,
+    this.controller,
+    this.keyboardType,
+    this.inputFormatters,
+    this.initialValue,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      initialValue: controller == null ? initialValue : null,
+      readOnly: readOnly,
+      decoration: InputDecoration(
+          labelText: labelText,
+          labelStyle: TextStyle(color: midGray),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: midGray),
+          ),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: mainNavy, width: 2))),
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
+      cursorColor: mainNavy,
+      style: TextStyle(color: mainBlack),
     );
   }
 }

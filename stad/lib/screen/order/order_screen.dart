@@ -26,7 +26,7 @@ class OrderScreen extends StatefulWidget {
     this.productInfo,
     this.productTypes,
     this.title,
-    this.deliveryFee = 2500,
+    required this.deliveryFee,
     required this.quantities,
     required this.advertId,
     required this.contentId,
