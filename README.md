@@ -80,15 +80,18 @@ ___
 
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">  
 <img src="https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white"> 
-<img src="https://img.shields.io/badge/h3-1E54B7.svg?style=for-the-badge&logo=h3&logoColor=white">  
+<img src="https://img.shields.io/badge/apachekafka-231F20.svg?style=for-the-badge&logo=apachekafka&logoColor=white">  
 <img src="https://img.shields.io/badge/springdatajpa-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
-<img src="https://img.shields.io/badge/h2database-231F20?style=for-the-badge&logo=h2database&logoColor=white"> 
+<img src="https://img.shields.io/badge/springbatch-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
+<img src="https://img.shields.io/badge/fastapi-009688?style=for-the-badge&logo=fastapi&logoColor=white"> 
 <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
 
 - ##### FrontEnd
 <img src="https://img.shields.io/badge/flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white">  
+<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white">  
 <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white">
 <img src="https://img.shields.io/badge/dart-0175C2?style=for-the-badge&logo=dart&logoColor=white">
+<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
 
 
 #### CI/CD
@@ -100,11 +103,12 @@ ___
 
 #### 협업 툴
 <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white"> <img src="https://img.shields.io/badge/jirasoftware-0052CC?style=for-the-badge&logo=jirasoftware&logoColor=white"> <img src="https://img.shields.io/badge/gerrit-0058CC?style=for-the-badge&logo=gerrit&logoColor=white"> <img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white"> <img src="https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white">
+
 ---
 ### 백엔드 디렉토리 구조
  ```sh
 ├─domain
-│  ├─bookmarkPlace
+│  ├─advert
 │  │  ├─controller
 │  │  │  ├─request
 │  │  │  └─response
@@ -114,36 +118,7 @@ ___
 │  │      └─command
 │  │          ├─request
 │  │          └─response
-│  ├─busInfo
-│  │  ├─entity
-│  │  └─repository
-│  ├─busRouteInfo
-│  │  ├─entity
-│  │  └─repository
-│  ├─busStop
-│  │  ├─entity
-│  │  └─repository
-│  ├─member
-│  │  ├─controller
-│  │  │  ├─request
-│  │  │  └─response
-│  │  ├─entity
-│  │  ├─repository
-│  │  └─service
-│  │      └─command
-│  ├─metroInfo
-│  │  ├─entity
-│  │  └─repository
-│  ├─place
-│  │  ├─controller
-│  │  │  ├─request
-│  │  │  └─response
-│  │  ├─entity
-│  │  ├─repository
-│  │  └─service
-│  │      └─command
-│  │          └─Request
-│  ├─review
+│  ├─advertVideo
 │  │  ├─controller
 │  │  │  ├─request
 │  │  │  └─response
@@ -153,11 +128,163 @@ ___
 │  │      └─command
 │  │          ├─request
 │  │          └─response
-│  ├─stationInfo
+│  ├─cart
+│  │  ├─controller
+│  │  │  ├─request
+│  │  │  └─response
+│  │  ├─entity
+│  │  ├─repository
+│  │  └─service
+│  │      └─command
+│  ├─classification
+│  │  ├─controller
+│  │  ├─dto
+│  │  └─service
+│  ├─contents
+│  │  ├─bookmark
+│  │  │  ├─controller
+│  │  │  │  ├─request
+│  │  │  │  └─response
+│  │  │  ├─entity
+│  │  │  ├─repository
+│  │  │  │  ├─custom
+│  │  │  │  └─impl
+│  │  │  └─service
+│  │  │      └─command
+│  │  │          └─request
+│  │  ├─category
+│  │  │  ├─controller
+│  │  │  │  └─response
+│  │  │  ├─entity
+│  │  │  ├─repository
+│  │  │  │  ├─custom
+│  │  │  │  └─impl
+│  │  │  └─service
+│  │  │      └─command
+│  │  │          └─request
+│  │  ├─categoryRelationship
+│  │  │  ├─entity
+│  │  │  ├─repository
+│  │  │  │  ├─custom
+│  │  │  │  └─impl
+│  │  │  └─service
+│  │  ├─concept
+│  │  │  ├─controller
+│  │  │  │  ├─request
+│  │  │  │  └─response
+│  │  │  ├─entity
+│  │  │  ├─repository
+│  │  │  │  ├─custom
+│  │  │  │  └─impl
+│  │  │  └─service
+│  │  │      └─command
+│  │  │          ├─request
+│  │  │          └─response
+│  │  ├─detail
+│  │  │  ├─controller
+│  │  │  │  ├─request
+│  │  │  │  └─response
+│  │  │  ├─entity
+│  │  │  ├─repository
+│  │  │  │  ├─custom
+│  │  │  │  └─impl
+│  │  │  └─service
+│  │  │      └─command
+│  │  │          ├─request
+│  │  │          └─response
+│  │  ├─label
+│  │  │  ├─entity
+│  │  │  ├─repository
+│  │  │  └─service
+│  │  │      └─command
+│  │  │          └─request
+│  │  ├─labelRelationship
+│  │  │  ├─entity
+│  │  │  └─repository
+│  │  └─watched
+│  │      ├─controller
+│  │      │  ├─request
+│  │      │  └─response
+│  │      ├─entity
+│  │      ├─repository
+│  │      │  ├─custom
+│  │      │  └─impl
+│  │      └─service
+│  │          └─command
+│  │              └─request
+│  ├─image
+│  │  ├─product_image
+│  │  │  ├─controller
+│  │  │  │  ├─request
+│  │  │  │  └─response
+│  │  │  ├─entity
+│  │  │  ├─repository
+│  │  │  └─service
+│  │  │      └─command
+│  │  └─review_image
+│  │      └─entity
+│  ├─option
+│  │  ├─controller
+│  │  │  ├─request
+│  │  │  └─response
+│  │  ├─entity
+│  │  ├─repository
+│  │  └─service
+│  │      └─command
+│  ├─orderProduct
+│  │  ├─contoller
+│  │  ├─entity
+│  │  ├─repository
+│  │  └─service
+│  ├─orders
+│  │  ├─controller
+│  │  │  ├─request
+│  │  │  └─response
+│  │  ├─entity
+│  │  ├─repository
+│  │  └─service
+│  │      └─command
+│  │          ├─request
+│  │          └─response
+│  ├─product
+│  │  ├─controller
+│  │  │  ├─request
+│  │  │  └─response
+│  │  ├─entity
+│  │  ├─repository
+│  │  └─service
+│  │      └─command
+│  ├─productType
+│  │  ├─controller
+│  │  │  ├─request
+│  │  │  └─response
+│  │  ├─entity
+│  │  ├─repository
+│  │  └─service
+│  │      └─command
+│  ├─product_review
+│  │  ├─controller
+│  │  │  ├─request
+│  │  │  └─response
+│  │  ├─entity
+│  │  ├─repository
+│  │  └─service
+│  │      └─command
+│  ├─selectedContent
+│  │  ├─entity
+│  │  ├─repository
+│  │  └─service
+│  ├─study
 │  │  ├─entity
 │  │  └─repository
-│  └─stationStopInfo
+│  └─user
+│      ├─controller
+│      │  ├─request
+│      │  └─response
 │      ├─entity
+│      ├─repository
+│      └─service
+│          └─command
 ├─global
 │  ├─api
 │  │  ├─response
@@ -165,93 +292,175 @@ ___
 │  │      └─command
 │  ├─auth
 │  │  ├─controller
+│  │  │  ├─request
 │  │  │  └─response
-│  │  ├─dto
-│  │  │  └─memberInfo
 │  │  ├─jwt
-│  │  ├─oauth
 │  │  └─service
 │  ├─config
-│  │  └─service
+│  ├─event
+│  ├─Interceptor
 │  └─response
 │      └─exception
 └─util
-
 ```
 
+#### Alter
+```sh
+├─domain
+│  ├─alert
+│  │  └─controller
+│  │      └─event
+│  ├─connect
+│  │  ├─controller
+│  │  │  └─request
+│  │  ├─entity
+│  │  ├─repository
+│  │  └─service
+│  │      └─command
+│  └─user
+│      ├─entity
+│      └─service
+│          └─dto
+└─global
+    ├─config
+    ├─entity
+    ├─response
+    │  └─exception
+    └─service
+        └─command
+```
+
+#### python
+```shell
+├─common
+│  └─__pycache__
+├─dto
+│  └─__pycache__
+├─models
+├─router
+│  └─__pycache__
+├─service
+│  └─__pycache__
+└─__pycache__
+```
+#### stats
+```shell
+├─domain
+│  ├─log
+│  │  ├─controller
+│  │  │  ├─event
+│  │  │  ├─request
+│  │  │  └─response
+│  │  ├─entity
+│  │  ├─repository
+│  │  └─service
+│  │      └─command
+│  └─tmp
+│      ├─controller
+│      │  ├─request
+│      │  └─response
+│      ├─entity
+│      ├─repository
+│      └─service
+│          └─command
+└─global
+    ├─batch
+    ├─config
+    └─response
+        └─exception
+```
+#### stream
+```shell
+├─domain
+│  ├─advertVideo
+│  │  ├─controller
+│  │  ├─entity
+│  │  ├─repository
+│  │  └─service
+│  └─contents
+│      └─detail
+│          ├─controller
+│          │  └─response
+│          ├─entity
+│          ├─repository
+│          └─service
+└─global
+    ├─config
+    ├─event
+    └─response
+        └─exception
+```
+
+
 ### 프론트 디렉토리 구조
+#### Web
+```sh
+├─assets
+├─components
+│  ├─AdManagement
+│  ├─Arrow
+│  ├─Button
+│  ├─Calendar
+│  ├─Carousel
+│  ├─Container
+│  ├─Enroll
+│  ├─Keyboard
+│  ├─Modal
+│  ├─Nav
+│  ├─Select
+│  └─Sidebar
+├─pages
+│  ├─AdEdit
+│  ├─AdEnroll
+│  ├─AdManagement
+│  │  ├─All
+│  │  └─Dots
+│  ├─Category
+│  ├─Landing
+│  ├─Main
+│  ├─MyPage
+│  │  ├─Enterprise
+│  │  └─SalesManagement
+│  ├─ProductManagement
+│  ├─Review
+│  ├─Search
+│  ├─Streaming
+│  ├─TVLogin
+│  └─WebLogin
+└─store
+```
+
+#### App
 ```sh
 ├─lib
-│  │  main.dart
-│  │
-│  ├─component
-│  │      appBar.dart
-│  │      bottomBar.dart
-│  │      facility_button.dart
-│  │      mapsearch_result_list.dart
-│  │      map_markers.dart
-│  │
-│  ├─const
-│  │      color.dart
-│  │
-│  ├─provider
-│  │      location_provider.dart
-│  │      user_provider.dart
-│  │
+│  ├─constant
+│  │  └─animation
+│  ├─model
+│  │  └─pg
+│  │      ├─danal
+│  │      ├─daou
+│  │      ├─kcp
+│  │      ├─naver
+│  │      ├─settle
+│  │      └─tosspayments
+│  ├─models
 │  ├─providers
-│  │      text_provider.dart
-│  │
 │  ├─screen
-│  │  │  home_screen.dart
-│  │  │
-│  │  ├─directions
-│  │  │      bus_path_map.dart
-│  │  │      directionssearch_result_list.dart
-│  │  │      directions_screen.dart
-│  │  │      taxi_path_map.dart
-│  │  │      transit_path_map.dart
-│  │  │      wheel_path_map.dart
-│  │  │
+│  │  ├─advert
+│  │  ├─cart
+│  │  ├─error
+│  │  ├─home
 │  │  ├─login
-│  │  │      login_platform.dart
-│  │  │      login_screen.dart
-│  │  │
-│  │  ├─map
-│  │  │      mapresult_screen.dart
-│  │  │      map_screen.dart
-│  │  │
-│  │  ├─mypage
-│  │  │      myfavorite_screen.dart
-│  │  │      mypage_screen.dart
-│  │  │      myplace_screen.dart
-│  │  │      myreview_screen.dart
-│  │  │
-│  │  ├─place
-│  │  │      placedetail_screen.dart
-│  │  │
-│  │  ├─review
-│  │  │      review_screen.dart
-│  │  │
-│  │  └─search
-│  │          mapresult_screen.dart
-│  │          search_screen.dart
-│  │
-│  └─services
-│          barrierfree_service.dart
-│          bookmarkPlace_service.dart
-│          location_service.dart
-│          place_service.dart
-│          review_service.dart
-│          search_service.dart
-│          secure_storage_service.dart
-│          taxipath_service.dart
-│          test_service.dart
-│          transitpath_service.dart
-│          wheelpath_service.dart
-│
+│  │  ├─myStad
+│  │  │  ├─shop
+│  │  │  ├─stad
+│  │  │  └─user
+│  │  ├─order
+│  │  ├─product
+│  │  └─review
+│  ├─services
+│  └─widget
 └─test
-        widget_test.dart
-
 ```
 
 ---
