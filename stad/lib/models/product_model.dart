@@ -34,8 +34,9 @@ class ProductInfo {
     return ProductInfo(
       id: json['id'] ?? 0,
       name: json['name'] ?? '광고상품',
-      images: (json['images'] as List<dynamic>? ?? []).map((i) =>
-          ProductImage.fromJson(i)).toList(),
+      images: (json['images'] as List<dynamic>? ?? [])
+          .map((i) => ProductImage.fromJson(i))
+          .toList(),
       thumbnail: json['thumbnail'] ?? 'default_thumbnail.png',
       cityDeliveryFee: json['cityDeliveryFee'] ?? 0,
       mtDeliveryFee: json['mtDeliveryFee'] ?? 0,
@@ -99,16 +100,19 @@ class ProductType {
 }
 
 class ProductOption {
+  final int id;
   final String name;
   final int value;
 
   ProductOption({
+    required this.id,
     required this.name,
     required this.value,
   });
 
   factory ProductOption.fromJson(Map<String, dynamic> json) {
     return ProductOption(
+      id: json['id'] as int,
       name: json['name'] as String,
       value: json['value'] as int,
     );
@@ -116,6 +120,7 @@ class ProductOption {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'name': name,
       'value': value,
     };

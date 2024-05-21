@@ -74,28 +74,23 @@ export default function Digital() {
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.item}`}>
-        <div className={`${styles.title}`}>
-          <div className={`${styles.name}`}>
-            메인링크<span>*</span>
-          </div>
-          <ToggleButton />
-        </div>
-        {!isDigitalMainExpanded && (
-          <InputContainer>
-            <div className={`${styles.linkUrl}`}>
-              <div className={`${styles.subTitle}`}>연결 URL</div>
-              <div>
-                <input
-                  type="text"
-                  name="directVideoUrl"
-                  onChange={handleChange}
-                  className={`${styles.input}`}
-                  required
-                />
-              </div>
+        <span className={`${styles.title}`}>
+          메인링크<span>*</span>
+        </span>
+        <InputContainer>
+          <div className={`${styles.linkUrl}`}>
+            <div className={`${styles.subTitle}`}>연결 URL</div>
+            <div>
+              <input
+                type="text"
+                name="directVideoUrl"
+                onChange={handleChange}
+                className={`${styles.input}`}
+                required
+              />
             </div>
-          </InputContainer>
-        )}
+          </div>
+        </InputContainer>
       </div>
       <EnrollButton
         goodsFormData={goodsFormData}

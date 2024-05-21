@@ -12,4 +12,7 @@ import java.util.Optional;
 public interface AdvertClickLogRepository extends JpaRepository<AdvertClickLog, Long> {
     @Query("SELECT COUNT(a) FROM AdvertClickLog a WHERE a.advertId = :advertId AND a.regDate >= :oneHourAgo")
     Optional<Long> countAddClickLogByAdvertId(@Param("advertId") Long advertId, @Param("oneHourAgo") LocalDateTime oneHourAgo );
+
+    @Query("SELECT COUNT(a) FROM AdvertClickLog a WHERE a.advertId = :advertId")
+    Long findByAdvertId(Long advertId);
 }

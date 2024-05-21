@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:stad/constant/animation/animated_indexed_stack.dart';
 import 'package:stad/firebase_options.dart';
+import 'package:stad/providers/contents_provider.dart';
 import 'package:stad/providers/user_provider.dart';
 import 'package:stad/screen/cart/cart_screen.dart';
 import 'package:stad/screen/home/home_screen.dart';
@@ -89,6 +90,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => UserProvider()),
         Provider(create: (_) => UserService()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (context) => ContentProvider()),
       ],
       child: MaterialApp.router(
         routerDelegate: _router.routerDelegate,
