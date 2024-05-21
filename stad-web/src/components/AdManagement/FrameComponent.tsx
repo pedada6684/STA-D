@@ -21,17 +21,23 @@ export default function FrameComponent({
   const iconWrapper = iconContainer
     ? `${styles.iconWrapper} ${styles[iconContainer]}`
     : styles.iconWrapper;
+
+  // 숫자 포맷 함수
+  const formatNumber = (num?: number) => {
+    if (num === undefined) return "";
+    return new Intl.NumberFormat().format(num);
+  };
   // unit 값에 따라 다르게 렌더링
   const valueDisplay =
     unit === "건" ? (
       <>
-        {value}
+        {formatNumber(value)}
         <span>{unit}</span>
       </>
     ) : (
       <>
         <span>{unit}</span>
-        {value}
+        {formatNumber(value)}
       </>
     );
   return (

@@ -7,8 +7,7 @@ class Advert {
   final String type;
   final String directVideoUrl;
   final String bannerImgUrl;
-  final List<int> selectedContentList;
-  final List<String> advertVideoUrlList;
+
   final String category;
 
   Advert({
@@ -20,24 +19,34 @@ class Advert {
     required this.type,
     required this.directVideoUrl,
     required this.bannerImgUrl,
-    required this.selectedContentList,
-    required this.advertVideoUrlList,
     required this.category,
   });
 
   factory Advert.fromJson(Map<String, dynamic> json) {
     return Advert(
       advertId: json['advertId'] as int,
-      title: json['title'] ?? 'Default title', // Null 대체
+      title: json['title'] ?? 'Default title',
       description: json['description'] ?? 'No description provided',
       startDate: json['startDate'] ?? 'Unknown',
       endDate: json['endDate'] ?? 'Unknown',
       type: json['type'] ?? 'No type',
       directVideoUrl: json['directVideoUrl'] ?? 'No URL',
       bannerImgUrl: json['bannerImgUrl'] ?? 'assets/default.png',
-      selectedContentList: (json['selectedContentList'] as List<dynamic>?)?.map((id) => id as int).toList() ?? [],
-      advertVideoUrlList: (json['advertVideoUrlList'] as List<dynamic>?)?.map((url) => url as String).toList() ?? [],
-      category: json['category'] ?? 'Uncategorized',
+      category: json['advertCategory'] ?? 'Uncategorized',
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'advertId': advertId,
+      'title': title,
+      'description': description,
+      'startDate': startDate,
+      'endDate': endDate,
+      'type': type,
+      'directVideoUrl': directVideoUrl,
+      'bannerImgUrl': bannerImgUrl,
+      'category': category,
+    };
   }
 }

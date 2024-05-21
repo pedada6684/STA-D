@@ -19,7 +19,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         controller: PageController(initialPage: 0),
         pages: [
           _GetCardsContent(
-            image: 'assets/image/ad_mockup.png',
+            image: 'assets/image/ad.png',
             title: 'advertising',
             cardContent: '사용자 맞춤형 광고와 콘텐츠 맞춤형 광고!',
             button: Padding(
@@ -35,7 +35,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
           _GetCardsContent(
-            image: 'assets/image/ad_mockup.png',
+            image: 'assets/image/get.png',
             title: 'get',
             cardContent: '시청과 쇼핑을 하나로!',
             button: Padding(
