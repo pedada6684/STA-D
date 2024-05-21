@@ -53,7 +53,7 @@ public class SseEmitters {
 			}
 			notifcation.readNotification();
 		}
-		notificationRepository.save(notifcation);
+//		notificationRepository.save(notifcation);
 		return emitter;
 	}
 

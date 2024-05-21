@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import play from "../../assets/mdi_play.png";
-
 import Loading from "../../components/Loading";
 import styles from "./Streaming.module.css";
 import backIcon from "../../assets/material-symbols_arrow-back.png";
@@ -30,13 +29,12 @@ export default function Streaming() {
   const [conceptId, setConceptId] = useState(0); // 1분 타이머
 
   const videoRef = useRef<ReactPlayer | null>(null);
-  const hiddenPlayerRef = useRef<ReactPlayer | null>(null); // 숨겨진 ReactPlayer의 참조
+  const hiddenPlayerRef = useRef<HTMLVideoElement | null>(null); // 변경된 부분
   const { videoId } = useParams<{ videoId: string }>();
   const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.token.accessToken);
   const userId = useSelector((state: RootState) => state.tvUser.selectedProfile?.userId);
   const detailId = Number(videoId);
-  const [isMainVideoLoaded, setIsMainVideoLoaded] = useState(false); // 메인 비디오 로드 상태
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -166,11 +164,10 @@ export default function Streaming() {
 
   // 광고 재생 중 메인 비디오 미리 로드
   useEffect(() => {
-    if (isModalOpen && !isMainVideoLoaded) {
-      hiddenPlayerRef.current?.getInternalPlayer()?.load();
-      setIsMainVideoLoaded(true);
+    if (isModalOpen) {
+      hiddenPlayerRef.current?.load();
     }
-  }, [isModalOpen, isMainVideoLoaded]);
+  }, [isModalOpen]);
 
   // 현재 동영상 인덱스에 해당하는 URL 가져오기
   const currentVideoUrl = `https://www.mystad.com/stream/advert-video/${userId}/${advertIds[currentVideoIndex]}/${detailId}`;
@@ -241,13 +238,12 @@ export default function Streaming() {
         </div>
       )}
 
-      {isModalOpen && ( //광고 시간동안 메인 컨텐츠 로딩
-        <ReactPlayer 
-          url={videoUrl}
-          playing={false}
-          width="0"
-          height="0"
+      {isModalOpen && (
+        <video
+          src={videoUrl}
+          preload="auto"
           ref={hiddenPlayerRef}
+          style={{ display: "none" }}
         />
       )}
     </div>

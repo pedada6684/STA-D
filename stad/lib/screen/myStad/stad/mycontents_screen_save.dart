@@ -43,7 +43,7 @@ class _MyContentsScreenState extends State<MyContentsScreen> {
                 title: keys[index],
                 imagePath: values[index],
                 seasonInfo: 'Season 1, Episode 4',
-                synopsis: 'John Wick must navigate...',
+                synopsis: 'John Wick must navigate...', detailId: 1,
               ),
             ),
             child: GridTile(

@@ -16,4 +16,7 @@ public interface AdvertVideoLogRepository extends JpaRepository<AdvertVideoLog, 
 
     @Query("SELECT DISTINCT a.advertId FROM AdvertVideoLog a WHERE a.userId = :userId")
     Optional<List<Long>> getAdvertVideoIdByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT COUNT(a) FROM AdvertVideoLog a WHERE a.advertId = :advertId")
+    Long findByAdvertId(Long advertId);
 }
