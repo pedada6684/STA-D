@@ -4,7 +4,15 @@ import GetOrder from "../../../components/AdManagement/GetOrder";
 import PieChart from "../../../components/AdManagement/PieChart";
 import BarChart from "../../../components/AdManagement/BarChart";
 import Frame from "../../../components/AdManagement/Frame";
+import { useEffect, useState } from "react";
 export default function AllOrder({ advertId }: AdvertIdProps) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // 차트 로드 순서 제어
+    }, 20000); // 300ms 지연
+
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <div className={`${styles.etcContainer}`}>
       <div className={`${styles.chartWrapper}`}>

@@ -25,11 +25,7 @@ spring:
       on-profile: prod
 logging:
   level:
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql: warn
+    root: warn
 
 server:
   error:

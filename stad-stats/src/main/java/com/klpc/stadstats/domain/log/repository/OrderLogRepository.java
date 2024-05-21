@@ -19,4 +19,13 @@ public interface OrderLogRepository extends JpaRepository<OrderLog, Long> {
     // 1시간 동안의 수익
     @Query("SELECT SUM(o.price) FROM OrderLog o WHERE o.advertId = :advertId AND o.regDate >= :oneHourAgo")
     Optional<Long> sumClicksByAdvertIdAndDateRange(@Param("advertId") Long advertId, @Param("oneHourAgo") LocalDateTime oneHourAgo);
+
+    @Query("SELECT COUNT(o) FROM OrderLog o WHERE o.advertId = :advertId AND o.status = TRUE")
+    Long findByAdvertId(@Param("advertId") Long advertId);
+
+    @Query("SELECT COUNT(o) FROM OrderLog o WHERE o.advertId = :advertId AND o.status = FALSE")
+    Long findByAdvertIdCancel(@Param("advertId") Long advertId);
+
+    @Query("SELECT SUM(o.price) FROM OrderLog o WHERE o.advertId = :advertId")
+    Long findByAdvertIdRevenue(@Param("advertId") Long advertId);
 }

@@ -1,13 +1,13 @@
+import React, { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { useEffect, useState } from "react";
 import { getAdList } from "../Select/userAdvertAPI";
 import { getTotal } from "./DashboardAPI";
 import { adList } from "../Select/SelectAdListBox";
 import ReactApexChart from "react-apexcharts";
 import styles from "./ChartData.module.css";
-import Loading from "../Loading";
 import { useQuery } from "react-query";
+
 export interface TotalResponse {
   totalAdvertVideo: number;
   totalAdvertClick: number;
@@ -15,12 +15,13 @@ export interface TotalResponse {
   totalOrderCancel: number;
   totalRevenue: number;
 }
+
 export interface PieChartProps {
   title: string;
   dataType: keyof TotalResponse;
 }
 
-export default function PieChart({ title, dataType }: PieChartProps) {
+const PieChart: React.FC<PieChartProps> = ({ title, dataType }) => {
   const accessToken = useSelector(
     (state: RootState) => state.token.accessToken
   );
@@ -28,120 +29,112 @@ export default function PieChart({ title, dataType }: PieChartProps) {
   const [series, setSeries] = useState<number[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const { data: ads, isLoading } = useQuery(
-    ["adsListData", userId, accessToken],
+  const { data: pieAds } = useQuery(
+    ["adsListPieData", userId, accessToken],
     () => getAdList(userId, accessToken),
-    {
-      enabled: !!userId,
-    }
+    { enabled: !!userId }
   );
-  const exampleAd: adList = {
-    advertId: 1,
-    title: "예시데이터",
-  };
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        if (ads && ads.data) {
-          setLoading(true);
-          let combinedAds = ads.data;
-          if (userId !== 1) {
-            combinedAds = [exampleAd, ...ads.data];
-          }
 
-          const advertIds = combinedAds.map((ad: adList) => ad.advertId); // map 사용해서 advertId 담아주기
-          console.log(advertIds);
-          const titles = combinedAds.map((ad: adList) => ad.title);
+  const exampleAd: adList = { advertId: 1, title: "예시데이터" };
 
-          const promises = advertIds.map((id: number) =>
-            getTotal(id, accessToken)
-          );
-          const results = await Promise.all(promises);
+  const fetchData = useCallback(async () => {
+    if (!pieAds || !pieAds.data) return;
 
-          //데이터 pie chart 형식에 맞게 변환
-
-          const sortedResults = results
-            .map((res, index) => ({
-              value: res[dataType],
-              label: titles[index],
-            }))
-            .sort((a, b) => b.value - a.value) // 값에 따라 내림차순으로 정렬
-            .slice(0, 5); // 상위 5개 항목만 선택
-
-          setSeries(sortedResults.map((res) => res.value));
-          setLabels(sortedResults.map((res) => res.label));
-        }
-      } catch (error) {
-        console.error("데이터 로드 실패", error);
+    try {
+      let combinedAds = pieAds.data;
+      if (userId !== 1) {
+        combinedAds = [exampleAd, ...pieAds.data];
       }
+
+      const advertIds = combinedAds.map((ad: adList) => ad.advertId);
+      const titles = combinedAds.map((ad: adList) => ad.title);
+
+      const promises = advertIds.map((id: number) => getTotal(id, accessToken));
+      const results = await Promise.all(promises);
+      // 데이터 검사 시작
+      console.log("Fetched Results:", results);
+      results.forEach((res, index) => {
+        console.log(`Result for ${titles[index]}:`, res);
+        if (!res || typeof res[dataType] !== "number") {
+          console.error(`Invalid data for ${titles[index]}:`, res);
+        }
+      });
+      // 데이터 검사 종료
+      const sortedResults = results
+        .map((res, index) => ({
+          value: res ? res[dataType] : 0,
+          label: titles[index],
+        }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 5);
+
+      setSeries(sortedResults.map((res) => res.value));
+      setLabels(sortedResults.map((res) => res.label));
+    } catch (error) {
+      console.error("데이터 로드 실패", error);
+    } finally {
+      setLoading(false);
     }
-    fetchData();
-  }, [ads, accessToken, dataType]);
+  }, [pieAds, userId, accessToken, dataType]);
 
   useEffect(() => {
-    console.log("Series updated:", series);
-  }, [series]);
+    fetchData();
+  }, [fetchData]);
 
   const options: ApexCharts.ApexOptions = {
     chart: {
-      type: "donut",
+      type: "pie",
       height: 300,
-      animations: {
-        enabled: true,
-        easing: "easeinout",
-        speed: 800,
-        animateGradually: {
-          enabled: true,
-          delay: 150,
-        },
-        dynamicAnimation: {
-          enabled: true,
-          speed: 350,
-        },
-      },
+      // animations: {
+      //   enabled: true,
+      //   easing: "easeinout",
+      //   speed: 800,
+      //   animateGradually: {
+      //     enabled: true,
+      //     delay: 150,
+      //   },
+      //   dynamicAnimation: {
+      //     enabled: true,
+      //     speed: 350,
+      //   },
+      // },
     },
     colors: ["#3552F2", "#6D81F2", "#A0ACF2", "#C9D3F2", "#C9CCD8"],
     dataLabels: {
       enabled: true,
     },
     stroke: {
-      width: 0, // 테두리 제거
+      width: 0,
     },
-
     labels: labels,
     plotOptions: {
       pie: {
         donut: {
-          size: "50%", // 내부 반경 크기 조절
-          labels: {
-            show: true,
-            name: {
-              show: true,
-            },
-            value: {
-              show: true,
-            },
-          },
+          size: "50%",
         },
       },
     },
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          chart: { width: 200 },
-          legend: {
-            show: true,
-            position: "left", // Set legend to the left side
-            horizontalAlign: "center", // Center horizontally in the space it occupies
-            verticalAlign: "middle", // Center vertically
-            offsetX: 0,
-            offsetY: 0,
-          },
-        },
-      },
-    ],
+    // responsive: [
+    //   {
+    //     breakpoint: 480,
+    //     options: {
+    //       chart: { width: 200 },
+    //       legend: {
+    //         show: true,
+    //         position: "left",
+    //         horizontalAlign: "center",
+    //         verticalAlign: "middle",
+    //         offsetX: 0,
+    //         offsetY: 0,
+    //       },
+    //     },
+    //   },
+    // ],
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={`${styles.container} ${styles.pie}`}>
@@ -150,11 +143,13 @@ export default function PieChart({ title, dataType }: PieChartProps) {
         <ReactApexChart
           options={options}
           series={series}
-          type="donut"
-          width={400}
-          height={400}
+          type="pie"
+          width={350}
+          height={350}
         />
       </div>
     </div>
   );
-}
+};
+
+export default PieChart;
