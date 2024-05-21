@@ -33,31 +33,31 @@ ___
 + STA:D는 개인 맞춤형 광고와 콘텐츠 스트리밍을 제공하며, 모바일 앱과 웹 플랫폼을 통해 사용자와 기업 간의 상호작용을 최적화하는 통합 미디어 서비스입니다.
 
 ---
-### 🔎 베프 - 개요
+### 🔎 STAD - 개요
 
-베프 - 휠체어 사용자를 위한 교통앱 서비스
+**STA:D** - OTT 이용시 맞춤형 광고 제공부터 결제까지 가능한 All-in-One 플랫폼
 
-베프는 휠체어 사용자들이 이동 시 겪는 어려움을 해결해 자유로운 이동을 가능하게 합니다.
+#### 주요 기능 :
+- 버퍼링 없는 대용량 파일 스트리밍
+- 사용자 맞춤형 광고 제공
+- 광고주를 위한 광고 통계 대시보드 제공
+- TV와 휴대폰 디바이스 간 정보 공유
+- 다양한 PG사, 결제 수단 제공
 
-#### 베프의 주요 기능 : 
-- 길찾기 서비스
-- 배리어프리 장소 안내
-- 택시 서비스
-
-**베프와 함께 장애물 없는 하루를 시작하세요!**
+**지금 보는 광고가 궁금하다면? STA:D**
 
 
 --- 
 
 ### 🚩 프로젝트 목표
-- 휠체어 사용자를 위한 교통 앱 서비스를 개발합니다.
-- 계단이 없는 경로를 추천하며, 경사도가 높은 경우 돌아갈 수 있는 경로를 추천합니다.
-- 주로 이용하는 장애인 콜택시의 예상 요금을 확인할 수 있도록 합니다.
-- 역할을 분담하여 서비스를 코드로  **구현**하고  **배포**합니다.
-- 구현하는 과정에서 Front-end와 Back-end가  **협업**하는 과정을 이해합니다.
+- 사용자 맞춤형 광고 제공하고, 버퍼링 없이 대용량 파일을 스트리밍하는 OTT 서비스를 개발합니다.
+- 광고주를 위해 광고 통계 대시보드를, 사용자를 위해 다양한 결제 수단을 제공합니다.
+- TV와 휴대폰 디바이스 간에 시청중인 광고와 콘텐츠 정보를 공유합니다.
+- 역할을 분담하여 서비스를 코드로 **구현**하고  **배포**합니다.
+- 구현하는 과정에서 Front-end와 Back-end가 **협업**하는 과정을 이해합니다.
 - RESTful API를 직접 설계하고 API를 통한 HTTP 통신을 겪으며 협업 능력을 기릅니다.
-- 자신이 맡은 부분을 남에게 설명할 수 있는 의사소통 능력을 기릅니다.
-- 단순히 구현 후 끝나는 것이 아닌  **코드 리뷰**와  **피드백**을 통해 함께 성장합니다.
+- 자신이 맡은 부분을 설명할 수 있는 의사소통 능력을 기릅니다.
+- 단순 구현으로 끝나는 것이 아닌 **코드 리뷰**와 **피드백**을 통해 함께 성장합니다.
 
 ---
 ### 기술스택
@@ -70,7 +70,6 @@ ___
 #### 개발
 
 - ##### BackEnd & Database
-
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">  
 <img src="https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white"> 
 <img src="https://img.shields.io/badge/apachekafka-231F20.svg?style=for-the-badge&logo=apachekafka&logoColor=white">  
@@ -81,11 +80,13 @@ ___
 
 - ##### FrontEnd
 <img src="https://img.shields.io/badge/flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white">  
-<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white">  
+<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white">
+<img src="https://img.shields.io/badge/reactquery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white">
 <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white">
 <img src="https://img.shields.io/badge/dart-0175C2?style=for-the-badge&logo=dart&logoColor=white">
 <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
-
+<img src="https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white">
+<img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">
 
 #### CI/CD
 <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white">
@@ -95,7 +96,12 @@ ___
 <img src="https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white">
 
 #### 협업 툴
-<img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white"> <img src="https://img.shields.io/badge/jirasoftware-0052CC?style=for-the-badge&logo=jirasoftware&logoColor=white"> <img src="https://img.shields.io/badge/gerrit-0058CC?style=for-the-badge&logo=gerrit&logoColor=white"> <img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white"> <img src="https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white">
+<img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white"> 
+<img src="https://img.shields.io/badge/jirasoftware-0052CC?style=for-the-badge&logo=jirasoftware&logoColor=white"> 
+<img src="https://img.shields.io/badge/gerrit-0058CC?style=for-the-badge&logo=gerrit&logoColor=white"> 
+<img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white"> 
+<img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white"> 
+<img src="https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white">
 
 ---
 ### 백엔드 디렉토리 구조
@@ -450,25 +456,35 @@ ___
 
 ---
 ## 주요 기능
-### 1. 길찾기 서비스
+**1. 스트리밍 서비스**
 
-**출발지, 도착지 입력 후 휠체어, 전동휠체어, 목발 중 이동 수단을 선택하고 대중교통, 택시, 도보에 대한 경로 및 예상 시간 제공**
-- **대중교통**:  현재 시간을 기준으로 도착하는 가장 빠른 저상버스와 지하철 정보를 이용한 경로 및 예상 시간
-- **택시**: 택시 경로 제공 및 예상 시간
-- **도보**: 계단이 없는 일반 경로와 고도를 고려한 추천 경로 및 휠체어, 전동휠체어, 목발에 따른 예상 시간
+**버퍼링 없는 대용량 파일 스트리밍을 위해 동영상을 1MB 단위로 나눠 전송**
+- **HttpRange**: 클라이언트가 요청한 특정 시점부터 재생할 수 있도록 시작지점에 대한 정보 전달
+- **ResourceRegion**: 버퍼링을 최소화하기 위해 시작지점부터 1MB씩 응답
+- **Redis**: 다운로드할 url 조회 과정에서 DB connection을 Redis의 Cache를 이용하여 속도 최대 2배 단축
+- **Prefetch**: 광고 재생 시간에 백그라운드 다운로드를 통해 콘텐츠 버퍼를 60MB 확보
 
-### 2. 배리어프리 장소 안내
+**2. 맞춤형 광고 제공**
 
-**대전의 배리어프리 장소에 대한 승강기, 주차 시설, 장애인 화장실, 접근로, 경사로, 출입문 정보를 제공**
-- **장소 목록**: 위치와 카테고리별 배리어프리 장소 마커 확인 가능
-- **상세 정보**: 장소 검색 후 장소에 대한 상세 정보와 배리어프리 정보 확인
-- **리뷰 및 즐겨찾기**: 배리어프리에 대한 리뷰 작성 및 즐겨찾기 기능 제공
+**사용자의 최근 시청 영상을 기반으로 맞춤형 광고 제공**
+- **Word2Vector**: 텍스트에서 단어를 벡터로 추출하여 벡터 간 유사도를 반영
+- **LSTM**: 이전 입력 데이터를 기억해 다음 출력값을 결정
+- **AD Queue**: YouTube 구독채널 정보 및 최근 시청 영상을 활용한 추천
 
-### 3. 택시 서비스
+**3. 대시보드**
 
-**장애인 콜택시에 대한 예상 요금과 콜택시를 호출 기능**
-- **장애인 콜택시 예상 요금**: 장애인 콜택시 요금 기준으로 대전 시내 및 시계 요금 계산 후 예상 요금 제시
-- **콜택시 호출**: 전화를 통한 콜택시 호출 기능
+**광고주가 게시한 광고에 대한 신뢰도 높고 효율적인 통계 자료를 빠르게 제공**
+- **Spring Batch**: 광고주에게 광고와 판매에 대한 통계 데이터 제공
+- **성능 개선**: SpringBatch 로그 기록 자동화를 통해 기존 방식보다 160배 성능 향상
+
+**4. 크로스 디바이스**
+
+**SSE connect 정보를 Event 송신 방식으로 TV와 휴대폰 간에 공유**
+
+**5. 결제 서비스**
+
+**다양한 PG사와 결제 수단 제공**
+- **PortOne API**: 사업자 번호 없이 테스트 환경으로 다양한 PG사와 결제 수단을 도입하고 실제 결제부터 자동 환불까지 가능
 
 
 ---
@@ -506,8 +522,55 @@ ___
 </table>
 
 ---
-## hBAF 서비스 화면
+## STA:D 서비스 화면
 
+### 기업 WEB
+<table style="width: 100%; text-align: center; border-collapse: collapse;" >
+  <tr>
+    <td style="text-align: center;"><h3>로그인</h3><img src="docs/src/usecase/stad_web_login-ezgif.com-resize.gif" width="85%"></td>
+    <td style="text-align: center;"><h3>광고 & 상품 추가</h3><img src="docs/src/usecase/addadvertproduct-ezgif.com-resize.gif" width="85%"></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><h3>광고 & 상품 조회</h3><img src="docs/src/usecase/checkadvertproduct-ezgif.com-resize.gif" width="85%"></td>
+    <td style="text-align: center;"><h3>광고 & 상품 수정</h3><img src="docs/src/usecase/modifyadvert-ezgif.com-resize.gif" width="85%"></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><h3>광고 & 상품 대시보드</h3><img src="docs/src/usecase/dashboard-ezgif.com-resize.gif" width="85%"></td>
+  </tr>
+</table>
+
+### 크로스디바이스 서비스
+<table style="width: 100%; text-align: center; border-collapse: collapse;" >
+  <tr>
+    <td style="text-align: center;"><h3>QR 로그인</h3><img src="docs/src/usecase/qr로그인.gif" width="85%"></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><h3>콘텐츠 재생시 앱연동</h3><img src="docs/src/usecase/tv에서컨텐츠재생시앱화면컨텐츠썸네일로변경.gif" width="85%"></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><h3>앱에서 컨텐츠 재생 명령</h3><img src="docs/src/usecase/앱에서TV로재생명령.gif" width="85%"></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><h3>앱에서 컨텐츠 정보 조회</h3><img src="docs/src/usecase/지금보는컨텐츠app에서정보조회.gif" width="85%"></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><h3>앱에서 광고 상품 구매페이지 이동</h3><img src="docs/src/usecase/지금나오는광고상품구매페이지로이동.gif" width="85%"></td>
+  </tr>
+</table>
+
+### APP 서비스
+<table style="width: 100%; text-align: center; border-collapse: collapse;" >
+  <tr>
+    <td style="text-align: center; width: 50%;"><h3>로그인</h3><img src="docs/src/usecase/앱main및구글로그인.gif"></td>
+    <td style="text-align: center; width: 50%;"><h3>배송지 추가</h3><img src="docs/src/usecase/배송지추가.gif" width="85%"></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><h3>장바구니 담기</h3><img src="docs/src/usecase/장바구니담기.gif" width="85%"></td>
+    <td style="text-align: center;"><h3>장바구니 상품 결제</h3><img src="docs/src/usecase/장바구니상품결제.gif" width="85%"></td>
+  </tr>
+</table>
+
+### TV 서비스
 <table style="width: 100%; text-align: center; border-collapse: collapse;" >
   <tr>
     <td style="text-align: center;"><h3>로그인</h3><img src="docs/src/usecase/로그인.gif" width="85%"></td>
