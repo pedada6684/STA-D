@@ -86,7 +86,9 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
           quantity: quantities[product.id] ?? 0,
           advertId: widget.advertId,
           contentId: widget.contentId,
-          optionId: optionIds.isNotEmpty ? optionIds[0] : -1,
+          optionId: optionIds.isNotEmpty
+              ? optionIds[selectedProducts.indexOf(product)]
+              : -1,
         );
       }).toList();
 
@@ -137,7 +139,9 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
     setState(() {
       quantities[product.id] = 1;
       selectedProducts.add(product);
+      print('product to string : ${product.toString()}');
       optionIds.add(optionId);
+      print(optionId);
     });
   }
 
@@ -161,12 +165,13 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
       int optionIndex = widget
           .productTypes[selectedProductIndex!].productOptions
           .indexWhere((o) => o.name == option);
-      int optionId = widget.productTypes[selectedProductIndex!]
-          .productOptions[optionIndex].value;
+      int optionId = widget
+          .productTypes[selectedProductIndex!].productOptions[optionIndex].id;
       setState(() {
         selectedOption = option;
         selectedOptionIndex = optionIndex;
         addProduct(widget.productTypes[selectedProductIndex!], optionId);
+        print('selectOption $optionId');
         isOptionExpanded = false;
       });
     }
@@ -181,7 +186,7 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
             productInfo: widget.productInfo,
             productTypes: selectedProducts,
             quantities: quantities,
-            deliveryFee: 2500,
+            deliveryFee: widget.productInfo!.cityDeliveryFee,
             title: widget.title,
             optionIds: optionIds,
             advertId: widget.advertId,
@@ -316,6 +321,7 @@ class _ProductOptionBottomSheetState extends State<ProductOptionBottomSheet> {
                   children: [
                     ProductDetails(
                       productType: product,
+                      // optionId: 1, // 옵션 ID를 전달
                       optionId: optionIds[productIndex], // 옵션 ID를 전달
                       onCancel: () {
                         setState(() {
@@ -369,7 +375,7 @@ class ProductDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     String optionText = productType.productOptions
         .firstWhere((opt) => opt.value == optionId,
-            orElse: () => ProductOption(name: "", value: -1))
+            orElse: () => ProductOption(name: "", value: 0, id: 0))
         .name;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

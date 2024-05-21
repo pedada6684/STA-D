@@ -29,17 +29,17 @@ class AdvertisingCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
               child: Container(
-                height: 140, // 이미지 높이 지정
+                height: 200, // 이미지 높이 지정
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
                     Image.network(bannerImgUrl, fit: BoxFit.cover),
-                    BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
-                      child: Container(
-                        color: Colors.black.withOpacity(0.1),
-                      ),
-                    ),
+                    // BackdropFilter(
+                    //   filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+                    //   child: Container(
+                    //     color: Colors.black.withOpacity(0.1),
+                    //   ),
+                    // ),
                     Positioned(
                       bottom: 10,
                       left: 15,
@@ -52,7 +52,7 @@ class AdvertisingCard extends StatelessWidget {
                               buttonText,
                               style: TextStyle(
                                 color: mainWhite,
-                                fontSize: 18.0,
+                                fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
                                 shadows: <Shadow>[
                                   Shadow(
@@ -67,7 +67,7 @@ class AdvertisingCard extends StatelessWidget {
                               subText,
                               style: TextStyle(
                                 color: mainWhite,
-                                fontSize: 14.0,
+                                fontSize: 12.0,
 
                                 shadows: <Shadow>[
                                   Shadow(
@@ -86,6 +86,7 @@ class AdvertisingCard extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: 20.0,)
           ],
         ),
       ),
