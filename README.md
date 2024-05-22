@@ -561,7 +561,7 @@ ___
 ### APP 서비스
 <table style="width: 100%; text-align: center; border-collapse: collapse;" >
   <tr>
-    <td style="text-align: center; width: 50%;"><h3>로그인</h3><img src="docs/src/usecase/앱main및구글로그인.gif"></td>
+    <td style="text-align: center; width: 50%;"><h3>로그인</h3><img src="docs/src/usecase/앱main및구글로그인.gif" width="85%"></td>
     <td style="text-align: center; width: 50%;"><h3>배송지 추가</h3><img src="docs/src/usecase/배송지추가.gif" width="85%"></td>
   </tr>
   <tr>
