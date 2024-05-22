@@ -9,10 +9,15 @@ import { SmallNextArrow, SmallPrevArrow } from "../Arrow/Arrow";
 import Slider from "react-slick";
 
 export default function SaveCarousel() {
-  // const tvUserId = useSelector((state: RootState) => state.tvUser.userId);
-  const tvUserId = 1;
+  const userId = useSelector(
+    (state: RootState) => state.tvUser.selectedProfile?.userId
+  );
   const navigate = useNavigate();
-  const { data: saveData, isLoading } = useQuery<CarouselVideoProps[]>("saveList", () => GetSaveWatching(tvUserId));
+  const { data: saveData, isLoading } = useQuery<CarouselVideoProps[]>(
+    "saveList",
+    () => GetSaveWatching(userId!),
+    { enabled: !!userId }
+  );
   if (isLoading)
     return (
       <div>
