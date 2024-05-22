@@ -110,8 +110,8 @@
 }
 
 .imagePreviewWrapper {
-  width: 20rem;
-  height: 20rem;
+  /* width: 20rem;
+  height: 20rem; */
 }
 .subTitle {
   display: flex;
